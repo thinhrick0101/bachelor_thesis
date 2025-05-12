@@ -871,9 +871,9 @@ def main():
     use_checkpoint = True  # Use gradient checkpointing to save memory
 
     # Training hyperparameters - enhanced configuration
-    batch_size = 256  # Balanced batch size
+    batch_size = 64  # Balanced batch size
     seq_length = 512  # Longer sequences for better context
-    num_epochs = 100  # More epochs for better convergence
+    num_epochs = 25  # More epochs for better convergence
     learning_rate = 3e-4  # Optimized learning rate
     weight_decay = 0.1  # Strong weight decay for better regularization
     label_smoothing = 0.1  # Label smoothing for better regularization
