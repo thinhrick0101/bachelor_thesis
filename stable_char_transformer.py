@@ -922,9 +922,6 @@ def main():
     use_mixed_precision = True
     warmup_epochs = 2  # Increased warmup period
 
-    # Calculate warmup steps
-    warmup_steps = len(train_batches) * warmup_epochs
-
     # Load data
     print("Loading data...")
     text = load_data(data_path, data_url)
@@ -956,6 +953,9 @@ def main():
     val_batches = create_batches(val_data, batch_size, seq_length)
     print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
+    # Calculate warmup steps after creating batches
+    warmup_steps = len(train_batches) * warmup_epochs
+
     # Create enhanced model with stochastic depth
     model = EnhancedCharTransformer(
         vocab_size=tokenizer.vocab_size,
@@ -968,7 +968,7 @@ def main():
         activation_dropout=activation_dropout,
         token_dropout=token_dropout,
         use_checkpoint=use_checkpoint,
-        stochastic_depth_prob=stochastic_depth_prob  # Added parameter
+        stochastic_depth_prob=stochastic_depth_prob
     )
 
     # Move model to device
