@@ -1,0 +1,50 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.2 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 997, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 906, in main
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py:906: UserWarning: Failed to initialize NumPy: _ARRAY_API not found (Triggered internally at  ../torch/csrc/utils/tensor_numpy.cpp:68.)
+  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 997, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 941, in main
+    model, (train_losses, val_losses) = train_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 657, in train_model
+    outputs = model(inputs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 392, in forward
+    x = block(x, src_mask=mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 253, in forward
+    src = src + checkpoint(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 237, in checkpoint
+    return _checkpoint_without_reentrant(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 383, in _checkpoint_without_reentrant
+    output = function(*args)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 254, in <lambda>
+    lambda x, mask: self._attention_block(x, mask),
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 232, in _attention_block
+    src2, _ = self.self_attn(src2, src2, src2, attn_mask=src_mask, need_weights=False)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1153, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 5179, in multi_head_attention_forward
+    attn_output, attn_output_weights = _scaled_dot_product_attention(q, k, v, attn_mask, dropout_p)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 4858, in _scaled_dot_product_attention
+    attn = dropout(attn, p=dropout_p)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 1252, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+RuntimeError: CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 10.57 GiB total capacity; 6.30 GiB already allocated; 1.39 GiB free; 8.34 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

@@ -1,0 +1,22 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 3000000 characters for training
+Vocabulary size: 1337 characters
+Creating batches...
+Created 82 training batches and 9 validation batches
+Model Parameters: 64,232,274 trainable out of 64,232,274 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 4 steps
+Effective batch size: 256
+Epoch 1/25, Batch 10/82, Loss: 7.2120
+Epoch 1/25, Batch 20/82, Loss: 6.6625
+Epoch 1/25, Batch 30/82, Loss: 5.9442
+Epoch 1/25, Batch 40/82, Loss: 5.6640
+Epoch 1/25, Batch 50/82, Loss: 5.4186
+Epoch 1/25, Batch 60/82, Loss: 5.2151
+Epoch 1/25, Batch 70/82, Loss: 5.0719
+Epoch 1/25, Batch 80/82, Loss: 4.8787

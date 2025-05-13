@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 12, in <module>
+    from torch.amp import autocast, GradScaler  # For mixed precision training
+ImportError: cannot import name 'GradScaler' from 'torch.amp' (/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/amp/__init__.py)

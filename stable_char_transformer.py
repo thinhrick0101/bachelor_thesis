@@ -9,7 +9,7 @@ import random
 import os
 import gzip
 import urllib.request
-from torch.amp import autocast, GradScaler  # For mixed precision training
+from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 
 class CharacterTokenizer:
@@ -586,6 +586,8 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Move model to device
+
+
     model = model.to(device)
     print(f"Training on device: {device}")
 
@@ -652,7 +654,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
             # Forward pass with mixed precision if enabled
             if use_amp:
-                with autocast(device_type='cuda'):
+                with autocast():
                     # Forward pass
                     outputs = model(inputs)
 
@@ -748,7 +750,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
                     # Forward pass (use autocast for consistency if mixed precision is enabled)
                     if use_amp:
-                        with autocast(device_type='cuda'):
+                        with autocast():
                             outputs = model(inputs)
 
                             # Reshape for loss calculation
@@ -873,7 +875,7 @@ def main():
     # Training hyperparameters - enhanced configuration
     batch_size = 64  # Balanced batch size
     seq_length = 512  # Longer sequences for better context
-    num_epochs = 25  # More epochs for better convergence
+    num_epochs = 100  # More epochs for better convergence
     learning_rate = 3e-4  # Optimized learning rate
     weight_decay = 0.1  # Strong weight decay for better regularization
     label_smoothing = 0.1  # Label smoothing for better regularization
@@ -886,7 +888,7 @@ def main():
     print(f"Data loaded: {len(text)} characters")
 
     # Limit the data size for training
-    max_chars = 3000000  # Use more data for better learning
+    max_chars = 10000000  # Use more data for better learning
     if len(text) > max_chars:
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
@@ -962,10 +964,10 @@ def main():
     prompt = "The quick brown fox"
     generated_text = model.generate(
         prompt=prompt,
-        max_length=200,
+        max_length=500,
         temperature=0.6,  # Lower temperature for more coherent text
-        top_k=50,  # Increased top_k for more diversity
-        top_p=0.92,  # Balanced top_p for coherence and diversity
+        top_k=5,  # Increased top_k for more diversity
+        top_p=0.95,  # Balanced top_p for coherence and diversity
         repetition_penalty=1.2,  # Add repetition penalty to avoid loops
         tokenizer=tokenizer,
         device=device
@@ -982,7 +984,7 @@ def main():
     for temp in [0.5, 0.7, 0.9]:
         generated_text = model.generate(
             prompt=prompt,
-            max_length=100,
+            max_length=500,
             temperature=temp,
             top_k=50,
             top_p=0.92,

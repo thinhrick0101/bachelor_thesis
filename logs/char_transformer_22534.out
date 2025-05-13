@@ -1,0 +1,74 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 10000000 characters for training
+Vocabulary size: 2102 characters
+Creating batches...
+Created 274 training batches and 30 validation batches
+Model Parameters: 64,624,719 trainable out of 64,624,719 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 4 steps
+Effective batch size: 256
+Epoch 1/100, Batch 10/274, Loss: 7.6217
+Epoch 1/100, Batch 20/274, Loss: 7.4668
+Epoch 1/100, Batch 30/274, Loss: 7.0493
+Epoch 1/100, Batch 40/274, Loss: 6.7882
+Epoch 1/100, Batch 50/274, Loss: 6.3851
+Epoch 1/100, Batch 60/274, Loss: 6.1692
+Epoch 1/100, Batch 70/274, Loss: 5.9634
+Epoch 1/100, Batch 80/274, Loss: 5.8752
+Epoch 1/100, Batch 90/274, Loss: 5.7329
+Epoch 1/100, Batch 100/274, Loss: 5.6302
+Epoch 1/100, Batch 110/274, Loss: 5.4640
+Epoch 1/100, Batch 120/274, Loss: 5.4645
+Epoch 1/100, Batch 130/274, Loss: 5.2957
+Epoch 1/100, Batch 140/274, Loss: 5.2181
+Epoch 1/100, Batch 150/274, Loss: 5.0773
+Epoch 1/100, Batch 160/274, Loss: 5.0144
+Epoch 1/100, Batch 170/274, Loss: 4.7857
+Epoch 1/100, Batch 180/274, Loss: 4.6912
+Epoch 1/100, Batch 190/274, Loss: 4.5554
+Epoch 1/100, Batch 200/274, Loss: 4.4302
+Epoch 1/100, Batch 210/274, Loss: 4.2640
+Epoch 1/100, Batch 220/274, Loss: 4.2348
+Epoch 1/100, Batch 230/274, Loss: 4.0900
+Epoch 1/100, Batch 240/274, Loss: 4.0060
+Epoch 1/100, Batch 250/274, Loss: 3.9667
+Epoch 1/100, Batch 260/274, Loss: 3.9159
+Epoch 1/100, Batch 270/274, Loss: 3.8006
+New best model with validation loss: 3.8272, perplexity: 45.93
+Epoch 1/100, Loss: 5.3346, Perplexity: 207.40, Val Loss: 3.8272, Val Perplexity: 45.93, Time: 1814.31s
+Epoch 2/100, Batch 10/274, Loss: 3.8140
+Epoch 2/100, Batch 20/274, Loss: 3.7563
+Epoch 2/100, Batch 30/274, Loss: 3.7757
+Epoch 2/100, Batch 40/274, Loss: 3.7508
+Epoch 2/100, Batch 50/274, Loss: 3.7069
+Epoch 2/100, Batch 60/274, Loss: 3.7016
+Epoch 2/100, Batch 70/274, Loss: 3.6868
+Epoch 2/100, Batch 80/274, Loss: 3.6832
+Epoch 2/100, Batch 90/274, Loss: 3.6432
+Epoch 2/100, Batch 100/274, Loss: 3.6283
+Epoch 2/100, Batch 110/274, Loss: 3.5904
+Epoch 2/100, Batch 120/274, Loss: 3.6433
+Epoch 2/100, Batch 130/274, Loss: 3.5922
+Epoch 2/100, Batch 140/274, Loss: 3.5977
+Epoch 2/100, Batch 150/274, Loss: 3.5611
+Epoch 2/100, Batch 160/274, Loss: 3.6071
+Epoch 2/100, Batch 170/274, Loss: 3.5556
+Epoch 2/100, Batch 180/274, Loss: 3.5371
+Epoch 2/100, Batch 190/274, Loss: 3.5400
+Epoch 2/100, Batch 200/274, Loss: 3.5196
+Epoch 2/100, Batch 210/274, Loss: 3.5037
+Epoch 2/100, Batch 220/274, Loss: 3.5373
+Epoch 2/100, Batch 230/274, Loss: 3.5177
+Epoch 2/100, Batch 240/274, Loss: 3.5283
+Epoch 2/100, Batch 250/274, Loss: 3.5306
+Epoch 2/100, Batch 260/274, Loss: 3.5326
+Epoch 2/100, Batch 270/274, Loss: 3.4871
+New best model with validation loss: 3.4822, perplexity: 32.53
+Epoch 2/100, Loss: 3.6141, Perplexity: 37.12, Val Loss: 3.4822, Val Perplexity: 32.53, Time: 1799.22s
+Epoch 3/100, Batch 10/274, Loss: 3.5213
+Epoch 3/100, Batch 20/274, Loss: 3.4893

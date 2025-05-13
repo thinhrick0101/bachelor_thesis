@@ -1,0 +1,1712 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 6000000 characters for training
+Vocabulary size: 1737 characters
+Creating batches...
+Created 164 training batches and 18 validation batches
+Model Parameters: 64,437,474 trainable out of 64,437,474 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 4 steps
+Effective batch size: 256
+Epoch 1/100, Batch 10/164, Loss: 7.4187
+Epoch 1/100, Batch 20/164, Loss: 7.1403
+Epoch 1/100, Batch 30/164, Loss: 6.5603
+Epoch 1/100, Batch 40/164, Loss: 6.2984
+Epoch 1/100, Batch 50/164, Loss: 5.9169
+Epoch 1/100, Batch 60/164, Loss: 5.7372
+Epoch 1/100, Batch 70/164, Loss: 5.5650
+Epoch 1/100, Batch 80/164, Loss: 5.4938
+Epoch 1/100, Batch 90/164, Loss: 5.2839
+Epoch 1/100, Batch 100/164, Loss: 5.1670
+Epoch 1/100, Batch 110/164, Loss: 5.0421
+Epoch 1/100, Batch 120/164, Loss: 4.8958
+Epoch 1/100, Batch 130/164, Loss: 4.7777
+Epoch 1/100, Batch 140/164, Loss: 4.6082
+Epoch 1/100, Batch 150/164, Loss: 4.5604
+Epoch 1/100, Batch 160/164, Loss: 4.4075
+New best model with validation loss: 4.2554, perplexity: 70.49
+Epoch 1/100, Loss: 5.5985, Perplexity: 270.02, Val Loss: 4.2554, Val Perplexity: 70.49, Time: 214.51s
+Epoch 2/100, Batch 10/164, Loss: 4.2269
+Epoch 2/100, Batch 20/164, Loss: 4.1137
+Epoch 2/100, Batch 30/164, Loss: 4.0082
+Epoch 2/100, Batch 40/164, Loss: 4.0367
+Epoch 2/100, Batch 50/164, Loss: 3.9489
+Epoch 2/100, Batch 60/164, Loss: 3.8717
+Epoch 2/100, Batch 70/164, Loss: 3.8086
+Epoch 2/100, Batch 80/164, Loss: 3.8457
+Epoch 2/100, Batch 90/164, Loss: 3.7593
+Epoch 2/100, Batch 100/164, Loss: 3.6985
+Epoch 2/100, Batch 110/164, Loss: 3.7125
+Epoch 2/100, Batch 120/164, Loss: 3.6594
+Epoch 2/100, Batch 130/164, Loss: 3.6497
+Epoch 2/100, Batch 140/164, Loss: 3.6128
+Epoch 2/100, Batch 150/164, Loss: 3.6407
+Epoch 2/100, Batch 160/164, Loss: 3.6095
+New best model with validation loss: 3.5232, perplexity: 33.89
+Epoch 2/100, Loss: 3.8373, Perplexity: 46.40, Val Loss: 3.5232, Val Perplexity: 33.89, Time: 215.06s
+Epoch 3/100, Batch 10/164, Loss: 3.5977
+Epoch 3/100, Batch 20/164, Loss: 3.5458
+Epoch 3/100, Batch 30/164, Loss: 3.5609
+Epoch 3/100, Batch 40/164, Loss: 3.5770
+Epoch 3/100, Batch 50/164, Loss: 3.5768
+Epoch 3/100, Batch 60/164, Loss: 3.5578
+Epoch 3/100, Batch 70/164, Loss: 3.5277
+Epoch 3/100, Batch 80/164, Loss: 3.5717
+Epoch 3/100, Batch 90/164, Loss: 3.5208
+Epoch 3/100, Batch 100/164, Loss: 3.5213
+Epoch 3/100, Batch 110/164, Loss: 3.5292
+Epoch 3/100, Batch 120/164, Loss: 3.5065
+Epoch 3/100, Batch 130/164, Loss: 3.4878
+Epoch 3/100, Batch 140/164, Loss: 3.4941
+Epoch 3/100, Batch 150/164, Loss: 3.4981
+Epoch 3/100, Batch 160/164, Loss: 3.4966
+New best model with validation loss: 3.4149, perplexity: 30.41
+Epoch 3/100, Loss: 3.5406, Perplexity: 34.49, Val Loss: 3.4149, Val Perplexity: 30.41, Time: 215.83s
+Epoch 4/100, Batch 10/164, Loss: 3.5207
+Epoch 4/100, Batch 20/164, Loss: 3.4635
+Epoch 4/100, Batch 30/164, Loss: 3.4726
+Epoch 4/100, Batch 40/164, Loss: 3.4667
+Epoch 4/100, Batch 50/164, Loss: 3.4933
+Epoch 4/100, Batch 60/164, Loss: 3.4816
+Epoch 4/100, Batch 70/164, Loss: 3.4471
+Epoch 4/100, Batch 80/164, Loss: 3.4896
+Epoch 4/100, Batch 90/164, Loss: 3.4477
+Epoch 4/100, Batch 100/164, Loss: 3.4572
+Epoch 4/100, Batch 110/164, Loss: 3.4541
+Epoch 4/100, Batch 120/164, Loss: 3.4438
+Epoch 4/100, Batch 130/164, Loss: 3.4184
+Epoch 4/100, Batch 140/164, Loss: 3.4382
+Epoch 4/100, Batch 150/164, Loss: 3.4303
+Epoch 4/100, Batch 160/164, Loss: 3.4329
+New best model with validation loss: 3.3495, perplexity: 28.49
+Epoch 4/100, Loss: 3.4616, Perplexity: 31.87, Val Loss: 3.3495, Val Perplexity: 28.49, Time: 216.02s
+Epoch 5/100, Batch 10/164, Loss: 3.4623
+Epoch 5/100, Batch 20/164, Loss: 3.4050
+Epoch 5/100, Batch 30/164, Loss: 3.4180
+Epoch 5/100, Batch 40/164, Loss: 3.4034
+Epoch 5/100, Batch 50/164, Loss: 3.4255
+Epoch 5/100, Batch 60/164, Loss: 3.4135
+Epoch 5/100, Batch 70/164, Loss: 3.3801
+Epoch 5/100, Batch 80/164, Loss: 3.4328
+Epoch 5/100, Batch 90/164, Loss: 3.3880
+Epoch 5/100, Batch 100/164, Loss: 3.3984
+Epoch 5/100, Batch 110/164, Loss: 3.3898
+Epoch 5/100, Batch 120/164, Loss: 3.3858
+Epoch 5/100, Batch 130/164, Loss: 3.3573
+Epoch 5/100, Batch 140/164, Loss: 3.3790
+Epoch 5/100, Batch 150/164, Loss: 3.3604
+Epoch 5/100, Batch 160/164, Loss: 3.3674
+New best model with validation loss: 3.2798, perplexity: 26.57
+Epoch 5/100, Loss: 3.4020, Perplexity: 30.03, Val Loss: 3.2798, Val Perplexity: 26.57, Time: 215.11s
+Epoch 6/100, Batch 10/164, Loss: 3.4133
+Epoch 6/100, Batch 20/164, Loss: 3.3422
+Epoch 6/100, Batch 30/164, Loss: 3.3531
+Epoch 6/100, Batch 40/164, Loss: 3.3412
+Epoch 6/100, Batch 50/164, Loss: 3.3674
+Epoch 6/100, Batch 60/164, Loss: 3.3532
+Epoch 6/100, Batch 70/164, Loss: 3.3241
+Epoch 6/100, Batch 80/164, Loss: 3.3547
+Epoch 6/100, Batch 90/164, Loss: 3.3273
+Epoch 6/100, Batch 100/164, Loss: 3.3402
+Epoch 6/100, Batch 110/164, Loss: 3.3250
+Epoch 6/100, Batch 120/164, Loss: 3.3237
+Epoch 6/100, Batch 130/164, Loss: 3.2991
+Epoch 6/100, Batch 140/164, Loss: 3.3147
+Epoch 6/100, Batch 150/164, Loss: 3.2961
+Epoch 6/100, Batch 160/164, Loss: 3.3067
+New best model with validation loss: 3.1981, perplexity: 24.49
+Epoch 6/100, Loss: 3.3381, Perplexity: 28.16, Val Loss: 3.1981, Val Perplexity: 24.49, Time: 216.21s
+Epoch 7/100, Batch 10/164, Loss: 3.3502
+Epoch 7/100, Batch 20/164, Loss: 3.2790
+Epoch 7/100, Batch 30/164, Loss: 3.3186
+Epoch 7/100, Batch 40/164, Loss: 3.2721
+Epoch 7/100, Batch 50/164, Loss: 3.3056
+Epoch 7/100, Batch 60/164, Loss: 3.2994
+Epoch 7/100, Batch 70/164, Loss: 3.2617
+Epoch 7/100, Batch 80/164, Loss: 3.2941
+Epoch 7/100, Batch 90/164, Loss: 3.2667
+Epoch 7/100, Batch 100/164, Loss: 3.2773
+Epoch 7/100, Batch 110/164, Loss: 3.2674
+Epoch 7/100, Batch 120/164, Loss: 3.2699
+Epoch 7/100, Batch 130/164, Loss: 3.2252
+Epoch 7/100, Batch 140/164, Loss: 3.2580
+Epoch 7/100, Batch 150/164, Loss: 3.2293
+Epoch 7/100, Batch 160/164, Loss: 3.2598
+New best model with validation loss: 3.1272, perplexity: 22.81
+Epoch 7/100, Loss: 3.2786, Perplexity: 26.54, Val Loss: 3.1272, Val Perplexity: 22.81, Time: 215.32s
+Epoch 8/100, Batch 10/164, Loss: 3.2933
+Epoch 8/100, Batch 20/164, Loss: 3.2234
+Epoch 8/100, Batch 30/164, Loss: 3.2403
+Epoch 8/100, Batch 40/164, Loss: 3.2068
+Epoch 8/100, Batch 50/164, Loss: 3.2473
+Epoch 8/100, Batch 60/164, Loss: 3.2359
+Epoch 8/100, Batch 70/164, Loss: 3.2055
+Epoch 8/100, Batch 80/164, Loss: 3.2388
+Epoch 8/100, Batch 90/164, Loss: 3.2096
+Epoch 8/100, Batch 100/164, Loss: 3.2224
+Epoch 8/100, Batch 110/164, Loss: 3.2125
+Epoch 8/100, Batch 120/164, Loss: 3.2123
+Epoch 8/100, Batch 130/164, Loss: 3.1592
+Epoch 8/100, Batch 140/164, Loss: 3.1976
+Epoch 8/100, Batch 150/164, Loss: 3.1763
+Epoch 8/100, Batch 160/164, Loss: 3.2147
+New best model with validation loss: 3.0685, perplexity: 21.51
+Epoch 8/100, Loss: 3.2216, Perplexity: 25.07, Val Loss: 3.0685, Val Perplexity: 21.51, Time: 214.87s
+Epoch 9/100, Batch 10/164, Loss: 3.2423
+Epoch 9/100, Batch 20/164, Loss: 3.1680
+Epoch 9/100, Batch 30/164, Loss: 3.1925
+Epoch 9/100, Batch 40/164, Loss: 3.1466
+Epoch 9/100, Batch 50/164, Loss: 3.1869
+Epoch 9/100, Batch 60/164, Loss: 3.1840
+Epoch 9/100, Batch 70/164, Loss: 3.1549
+Epoch 9/100, Batch 80/164, Loss: 3.1735
+Epoch 9/100, Batch 90/164, Loss: 3.1451
+Epoch 9/100, Batch 100/164, Loss: 3.1758
+Epoch 9/100, Batch 110/164, Loss: 3.1557
+Epoch 9/100, Batch 120/164, Loss: 3.1525
+Epoch 9/100, Batch 130/164, Loss: 3.1065
+Epoch 9/100, Batch 140/164, Loss: 3.1525
+Epoch 9/100, Batch 150/164, Loss: 3.1160
+Epoch 9/100, Batch 160/164, Loss: 3.1333
+New best model with validation loss: 3.0018, perplexity: 20.12
+Epoch 9/100, Loss: 3.1672, Perplexity: 23.74, Val Loss: 3.0018, Val Perplexity: 20.12, Time: 215.11s
+Epoch 10/100, Batch 10/164, Loss: 3.2024
+Epoch 10/100, Batch 20/164, Loss: 3.1218
+Epoch 10/100, Batch 30/164, Loss: 3.1323
+Epoch 10/100, Batch 40/164, Loss: 3.0920
+Epoch 10/100, Batch 50/164, Loss: 3.1337
+Epoch 10/100, Batch 60/164, Loss: 3.1267
+Epoch 10/100, Batch 70/164, Loss: 3.1024
+Epoch 10/100, Batch 80/164, Loss: 3.1310
+Epoch 10/100, Batch 90/164, Loss: 3.0945
+Epoch 10/100, Batch 100/164, Loss: 3.1355
+Epoch 10/100, Batch 110/164, Loss: 3.1171
+Epoch 10/100, Batch 120/164, Loss: 3.1128
+Epoch 10/100, Batch 130/164, Loss: 3.0525
+Epoch 10/100, Batch 140/164, Loss: 3.1076
+Epoch 10/100, Batch 150/164, Loss: 3.0644
+Epoch 10/100, Batch 160/164, Loss: 3.0806
+New best model with validation loss: 2.9571, perplexity: 19.24
+Epoch 10/100, Loss: 3.1168, Perplexity: 22.57, Val Loss: 2.9571, Val Perplexity: 19.24, Time: 215.21s
+Epoch 11/100, Batch 10/164, Loss: 3.1550
+Epoch 11/100, Batch 20/164, Loss: 3.0859
+Epoch 11/100, Batch 30/164, Loss: 3.0999
+Epoch 11/100, Batch 40/164, Loss: 3.0478
+Epoch 11/100, Batch 50/164, Loss: 3.0877
+Epoch 11/100, Batch 60/164, Loss: 3.1093
+Epoch 11/100, Batch 70/164, Loss: 3.0579
+Epoch 11/100, Batch 80/164, Loss: 3.0861
+Epoch 11/100, Batch 90/164, Loss: 3.0468
+Epoch 11/100, Batch 100/164, Loss: 3.1156
+Epoch 11/100, Batch 110/164, Loss: 3.0655
+Epoch 11/100, Batch 120/164, Loss: 3.0710
+Epoch 11/100, Batch 130/164, Loss: 3.0125
+Epoch 11/100, Batch 140/164, Loss: 3.0682
+Epoch 11/100, Batch 150/164, Loss: 3.0240
+Epoch 11/100, Batch 160/164, Loss: 3.0396
+New best model with validation loss: 2.9140, perplexity: 18.43
+Epoch 11/100, Loss: 3.0721, Perplexity: 21.59, Val Loss: 2.9140, Val Perplexity: 18.43, Time: 215.20s
+Epoch 12/100, Batch 10/164, Loss: 3.1094
+Epoch 12/100, Batch 20/164, Loss: 3.0404
+Epoch 12/100, Batch 30/164, Loss: 3.0418
+Epoch 12/100, Batch 40/164, Loss: 2.9920
+Epoch 12/100, Batch 50/164, Loss: 3.0418
+Epoch 12/100, Batch 60/164, Loss: 3.0341
+Epoch 12/100, Batch 70/164, Loss: 3.0028
+Epoch 12/100, Batch 80/164, Loss: 3.0461
+Epoch 12/100, Batch 90/164, Loss: 3.0112
+Epoch 12/100, Batch 100/164, Loss: 3.1120
+Epoch 12/100, Batch 110/164, Loss: 3.0186
+Epoch 12/100, Batch 120/164, Loss: 3.0292
+Epoch 12/100, Batch 130/164, Loss: 2.9696
+Epoch 12/100, Batch 140/164, Loss: 3.0198
+Epoch 12/100, Batch 150/164, Loss: 2.9779
+Epoch 12/100, Batch 160/164, Loss: 3.0004
+New best model with validation loss: 2.8647, perplexity: 17.54
+Epoch 12/100, Loss: 3.0304, Perplexity: 20.71, Val Loss: 2.8647, Val Perplexity: 17.54, Time: 216.16s
+Epoch 13/100, Batch 10/164, Loss: 3.1376
+Epoch 13/100, Batch 20/164, Loss: 3.0061
+Epoch 13/100, Batch 30/164, Loss: 3.0021
+Epoch 13/100, Batch 40/164, Loss: 2.9601
+Epoch 13/100, Batch 50/164, Loss: 3.0109
+Epoch 13/100, Batch 60/164, Loss: 2.9995
+Epoch 13/100, Batch 70/164, Loss: 2.9685
+Epoch 13/100, Batch 80/164, Loss: 2.9948
+Epoch 13/100, Batch 90/164, Loss: 2.9678
+Epoch 13/100, Batch 100/164, Loss: 2.9981
+Epoch 13/100, Batch 110/164, Loss: 2.9798
+Epoch 13/100, Batch 120/164, Loss: 2.9848
+Epoch 13/100, Batch 130/164, Loss: 2.9223
+Epoch 13/100, Batch 140/164, Loss: 2.9887
+Epoch 13/100, Batch 150/164, Loss: 2.9387
+Epoch 13/100, Batch 160/164, Loss: 2.9598
+New best model with validation loss: 2.8254, perplexity: 16.87
+Epoch 13/100, Loss: 2.9905, Perplexity: 19.90, Val Loss: 2.8254, Val Perplexity: 16.87, Time: 216.11s
+Epoch 14/100, Batch 10/164, Loss: 3.0304
+Epoch 14/100, Batch 20/164, Loss: 2.9628
+Epoch 14/100, Batch 30/164, Loss: 2.9748
+Epoch 14/100, Batch 40/164, Loss: 2.9128
+Epoch 14/100, Batch 50/164, Loss: 2.9627
+Epoch 14/100, Batch 60/164, Loss: 2.9627
+Epoch 14/100, Batch 70/164, Loss: 2.9426
+Epoch 14/100, Batch 80/164, Loss: 2.9632
+Epoch 14/100, Batch 90/164, Loss: 2.9343
+Epoch 14/100, Batch 100/164, Loss: 2.9647
+Epoch 14/100, Batch 110/164, Loss: 2.9484
+Epoch 14/100, Batch 120/164, Loss: 2.9419
+Epoch 14/100, Batch 130/164, Loss: 2.8911
+Epoch 14/100, Batch 140/164, Loss: 2.9439
+Epoch 14/100, Batch 150/164, Loss: 2.9080
+Epoch 14/100, Batch 160/164, Loss: 2.9219
+New best model with validation loss: 2.7995, perplexity: 16.44
+Epoch 14/100, Loss: 2.9546, Perplexity: 19.19, Val Loss: 2.7995, Val Perplexity: 16.44, Time: 216.03s
+Epoch 15/100, Batch 10/164, Loss: 2.9872
+Epoch 15/100, Batch 20/164, Loss: 2.9309
+Epoch 15/100, Batch 30/164, Loss: 2.9367
+Epoch 15/100, Batch 40/164, Loss: 2.8824
+Epoch 15/100, Batch 50/164, Loss: 2.9226
+Epoch 15/100, Batch 60/164, Loss: 2.9195
+Epoch 15/100, Batch 70/164, Loss: 2.8990
+Epoch 15/100, Batch 80/164, Loss: 2.9354
+Epoch 15/100, Batch 90/164, Loss: 2.9010
+Epoch 15/100, Batch 100/164, Loss: 2.9226
+Epoch 15/100, Batch 110/164, Loss: 2.9205
+Epoch 15/100, Batch 120/164, Loss: 2.9103
+Epoch 15/100, Batch 130/164, Loss: 2.8570
+Epoch 15/100, Batch 140/164, Loss: 2.9053
+Epoch 15/100, Batch 150/164, Loss: 2.8691
+Epoch 15/100, Batch 160/164, Loss: 2.8895
+New best model with validation loss: 2.7639, perplexity: 15.86
+Epoch 15/100, Loss: 2.9181, Perplexity: 18.51, Val Loss: 2.7639, Val Perplexity: 15.86, Time: 214.75s
+Epoch 16/100, Batch 10/164, Loss: 2.9664
+Epoch 16/100, Batch 20/164, Loss: 2.8930
+Epoch 16/100, Batch 30/164, Loss: 2.8965
+Epoch 16/100, Batch 40/164, Loss: 2.8387
+Epoch 16/100, Batch 50/164, Loss: 2.9580
+Epoch 16/100, Batch 60/164, Loss: 2.8926
+Epoch 16/100, Batch 70/164, Loss: 2.8703
+Epoch 16/100, Batch 80/164, Loss: 2.8932
+Epoch 16/100, Batch 90/164, Loss: 2.8672
+Epoch 16/100, Batch 100/164, Loss: 2.8946
+Epoch 16/100, Batch 110/164, Loss: 2.8757
+Epoch 16/100, Batch 120/164, Loss: 2.8899
+Epoch 16/100, Batch 130/164, Loss: 2.8306
+Epoch 16/100, Batch 140/164, Loss: 2.8757
+Epoch 16/100, Batch 150/164, Loss: 2.8330
+Epoch 16/100, Batch 160/164, Loss: 2.8529
+New best model with validation loss: 2.7373, perplexity: 15.45
+Epoch 16/100, Loss: 2.8888, Perplexity: 17.97, Val Loss: 2.7373, Val Perplexity: 15.45, Time: 215.27s
+Epoch 17/100, Batch 10/164, Loss: 2.9258
+Epoch 17/100, Batch 20/164, Loss: 2.8612
+Epoch 17/100, Batch 30/164, Loss: 2.8711
+Epoch 17/100, Batch 40/164, Loss: 2.8187
+Epoch 17/100, Batch 50/164, Loss: 2.8637
+Epoch 17/100, Batch 60/164, Loss: 2.8593
+Epoch 17/100, Batch 70/164, Loss: 2.8393
+Epoch 17/100, Batch 80/164, Loss: 2.8604
+Epoch 17/100, Batch 90/164, Loss: 2.8374
+Epoch 17/100, Batch 100/164, Loss: 2.8657
+Epoch 17/100, Batch 110/164, Loss: 2.8662
+Epoch 17/100, Batch 120/164, Loss: 2.8495
+Epoch 17/100, Batch 130/164, Loss: 2.7936
+Epoch 17/100, Batch 140/164, Loss: 2.8400
+Epoch 17/100, Batch 150/164, Loss: 2.8069
+Epoch 17/100, Batch 160/164, Loss: 2.8455
+New best model with validation loss: 2.7056, perplexity: 14.96
+Epoch 17/100, Loss: 2.8550, Perplexity: 17.37, Val Loss: 2.7056, Val Perplexity: 14.96, Time: 214.63s
+Epoch 18/100, Batch 10/164, Loss: 2.8992
+Epoch 18/100, Batch 20/164, Loss: 2.8419
+Epoch 18/100, Batch 30/164, Loss: 2.8377
+Epoch 18/100, Batch 40/164, Loss: 2.7887
+Epoch 18/100, Batch 50/164, Loss: 2.8189
+Epoch 18/100, Batch 60/164, Loss: 2.8232
+Epoch 18/100, Batch 70/164, Loss: 2.8186
+Epoch 18/100, Batch 80/164, Loss: 2.8300
+Epoch 18/100, Batch 90/164, Loss: 2.8124
+Epoch 18/100, Batch 100/164, Loss: 2.8267
+Epoch 18/100, Batch 110/164, Loss: 2.8271
+Epoch 18/100, Batch 120/164, Loss: 2.8248
+Epoch 18/100, Batch 130/164, Loss: 2.7663
+Epoch 18/100, Batch 140/164, Loss: 2.9240
+Epoch 18/100, Batch 150/164, Loss: 2.7897
+Epoch 18/100, Batch 160/164, Loss: 2.9292
+New best model with validation loss: 2.6765, perplexity: 14.53
+Epoch 18/100, Loss: 2.8267, Perplexity: 16.89, Val Loss: 2.6765, Val Perplexity: 14.53, Time: 213.71s
+Epoch 19/100, Batch 10/164, Loss: 2.8690
+Epoch 19/100, Batch 20/164, Loss: 2.8104
+Epoch 19/100, Batch 30/164, Loss: 2.8064
+Epoch 19/100, Batch 40/164, Loss: 2.7556
+Epoch 19/100, Batch 50/164, Loss: 2.8094
+Epoch 19/100, Batch 60/164, Loss: 2.7883
+Epoch 19/100, Batch 70/164, Loss: 2.7817
+Epoch 19/100, Batch 80/164, Loss: 2.8028
+Epoch 19/100, Batch 90/164, Loss: 2.7764
+Epoch 19/100, Batch 100/164, Loss: 2.8025
+Epoch 19/100, Batch 110/164, Loss: 2.7909
+Epoch 19/100, Batch 120/164, Loss: 2.8009
+Epoch 19/100, Batch 130/164, Loss: 2.7364
+Epoch 19/100, Batch 140/164, Loss: 2.7920
+Epoch 19/100, Batch 150/164, Loss: 2.7679
+Epoch 19/100, Batch 160/164, Loss: 2.7727
+New best model with validation loss: 2.6450, perplexity: 14.08
+Epoch 19/100, Loss: 2.8006, Perplexity: 16.45, Val Loss: 2.6450, Val Perplexity: 14.08, Time: 215.10s
+Epoch 20/100, Batch 10/164, Loss: 2.8448
+Epoch 20/100, Batch 20/164, Loss: 2.7857
+Epoch 20/100, Batch 30/164, Loss: 2.7811
+Epoch 20/100, Batch 40/164, Loss: 2.7231
+Epoch 20/100, Batch 50/164, Loss: 2.7878
+Epoch 20/100, Batch 60/164, Loss: 2.7590
+Epoch 20/100, Batch 70/164, Loss: 2.7626
+Epoch 20/100, Batch 80/164, Loss: 2.7802
+Epoch 20/100, Batch 90/164, Loss: 2.7531
+Epoch 20/100, Batch 100/164, Loss: 2.7707
+Epoch 20/100, Batch 110/164, Loss: 2.7633
+Epoch 20/100, Batch 120/164, Loss: 2.7612
+Epoch 20/100, Batch 130/164, Loss: 2.7101
+Epoch 20/100, Batch 140/164, Loss: 2.7619
+Epoch 20/100, Batch 150/164, Loss: 2.8344
+Epoch 20/100, Batch 160/164, Loss: 2.7402
+New best model with validation loss: 2.6160, perplexity: 13.68
+Epoch 20/100, Loss: 2.7687, Perplexity: 15.94, Val Loss: 2.6160, Val Perplexity: 13.68, Time: 214.84s
+Epoch 21/100, Batch 10/164, Loss: 2.8210
+Epoch 21/100, Batch 20/164, Loss: 2.7583
+Epoch 21/100, Batch 30/164, Loss: 2.7572
+Epoch 21/100, Batch 40/164, Loss: 2.7215
+Epoch 21/100, Batch 50/164, Loss: 2.7399
+Epoch 21/100, Batch 60/164, Loss: 2.7360
+Epoch 21/100, Batch 70/164, Loss: 2.7330
+Epoch 21/100, Batch 80/164, Loss: 2.7497
+Epoch 21/100, Batch 90/164, Loss: 2.7220
+Epoch 21/100, Batch 100/164, Loss: 2.7445
+Epoch 21/100, Batch 110/164, Loss: 2.7282
+Epoch 21/100, Batch 120/164, Loss: 2.7769
+Epoch 21/100, Batch 130/164, Loss: 2.6856
+Epoch 21/100, Batch 140/164, Loss: 2.7235
+Epoch 21/100, Batch 150/164, Loss: 2.6911
+Epoch 21/100, Batch 160/164, Loss: 2.7224
+New best model with validation loss: 2.5857, perplexity: 13.27
+Epoch 21/100, Loss: 2.7411, Perplexity: 15.50, Val Loss: 2.5857, Val Perplexity: 13.27, Time: 213.90s
+Epoch 22/100, Batch 10/164, Loss: 2.7855
+Epoch 22/100, Batch 20/164, Loss: 2.7279
+Epoch 22/100, Batch 30/164, Loss: 2.7243
+Epoch 22/100, Batch 40/164, Loss: 2.6783
+Epoch 22/100, Batch 50/164, Loss: 2.7044
+Epoch 22/100, Batch 60/164, Loss: 2.7233
+Epoch 22/100, Batch 70/164, Loss: 2.7188
+Epoch 22/100, Batch 80/164, Loss: 2.7089
+Epoch 22/100, Batch 90/164, Loss: 2.6982
+Epoch 22/100, Batch 100/164, Loss: 2.7149
+Epoch 22/100, Batch 110/164, Loss: 2.6995
+Epoch 22/100, Batch 120/164, Loss: 2.7152
+Epoch 22/100, Batch 130/164, Loss: 2.6536
+Epoch 22/100, Batch 140/164, Loss: 2.6979
+Epoch 22/100, Batch 150/164, Loss: 2.6763
+Epoch 22/100, Batch 160/164, Loss: 2.6854
+New best model with validation loss: 2.5547, perplexity: 12.87
+Epoch 22/100, Loss: 2.7098, Perplexity: 15.03, Val Loss: 2.5547, Val Perplexity: 12.87, Time: 214.73s
+Epoch 23/100, Batch 10/164, Loss: 2.7555
+Epoch 23/100, Batch 20/164, Loss: 2.7134
+Epoch 23/100, Batch 30/164, Loss: 2.7096
+Epoch 23/100, Batch 40/164, Loss: 2.6495
+Epoch 23/100, Batch 50/164, Loss: 2.7482
+Epoch 23/100, Batch 60/164, Loss: 2.7020
+Epoch 23/100, Batch 70/164, Loss: 2.6843
+Epoch 23/100, Batch 80/164, Loss: 2.6910
+Epoch 23/100, Batch 90/164, Loss: 2.6631
+Epoch 23/100, Batch 100/164, Loss: 2.6761
+Epoch 23/100, Batch 110/164, Loss: 2.6674
+Epoch 23/100, Batch 120/164, Loss: 2.6873
+Epoch 23/100, Batch 130/164, Loss: 2.6332
+Epoch 23/100, Batch 140/164, Loss: 2.6725
+Epoch 23/100, Batch 150/164, Loss: 2.6477
+Epoch 23/100, Batch 160/164, Loss: 2.6534
+New best model with validation loss: 2.5215, perplexity: 12.45
+Epoch 23/100, Loss: 2.6840, Perplexity: 14.64, Val Loss: 2.5215, Val Perplexity: 12.45, Time: 214.96s
+Epoch 24/100, Batch 10/164, Loss: 2.7179
+Epoch 24/100, Batch 20/164, Loss: 2.6901
+Epoch 24/100, Batch 30/164, Loss: 2.6728
+Epoch 24/100, Batch 40/164, Loss: 2.6344
+Epoch 24/100, Batch 50/164, Loss: 2.6514
+Epoch 24/100, Batch 60/164, Loss: 2.6543
+Epoch 24/100, Batch 70/164, Loss: 2.6569
+Epoch 24/100, Batch 80/164, Loss: 2.6566
+Epoch 24/100, Batch 90/164, Loss: 2.6377
+Epoch 24/100, Batch 100/164, Loss: 2.7156
+Epoch 24/100, Batch 110/164, Loss: 2.6467
+Epoch 24/100, Batch 120/164, Loss: 2.6657
+Epoch 24/100, Batch 130/164, Loss: 2.6049
+Epoch 24/100, Batch 140/164, Loss: 2.6405
+Epoch 24/100, Batch 150/164, Loss: 2.6170
+Epoch 24/100, Batch 160/164, Loss: 2.7282
+New best model with validation loss: 2.4978, perplexity: 12.16
+Epoch 24/100, Loss: 2.6579, Perplexity: 14.27, Val Loss: 2.4978, Val Perplexity: 12.16, Time: 215.50s
+Epoch 25/100, Batch 10/164, Loss: 2.6912
+Epoch 25/100, Batch 20/164, Loss: 2.6536
+Epoch 25/100, Batch 30/164, Loss: 2.6556
+Epoch 25/100, Batch 40/164, Loss: 2.5930
+Epoch 25/100, Batch 50/164, Loss: 2.6154
+Epoch 25/100, Batch 60/164, Loss: 2.6417
+Epoch 25/100, Batch 70/164, Loss: 2.6246
+Epoch 25/100, Batch 80/164, Loss: 2.6248
+Epoch 25/100, Batch 90/164, Loss: 2.6107
+Epoch 25/100, Batch 100/164, Loss: 2.6322
+Epoch 25/100, Batch 110/164, Loss: 2.6749
+Epoch 25/100, Batch 120/164, Loss: 2.6626
+Epoch 25/100, Batch 130/164, Loss: 2.5689
+Epoch 25/100, Batch 140/164, Loss: 2.6232
+Epoch 25/100, Batch 150/164, Loss: 2.5991
+Epoch 25/100, Batch 160/164, Loss: 2.6089
+New best model with validation loss: 2.4755, perplexity: 11.89
+Epoch 25/100, Loss: 2.6326, Perplexity: 13.91, Val Loss: 2.4755, Val Perplexity: 11.89, Time: 214.22s
+Epoch 26/100, Batch 10/164, Loss: 2.6724
+Epoch 26/100, Batch 20/164, Loss: 2.6386
+Epoch 26/100, Batch 30/164, Loss: 2.6273
+Epoch 26/100, Batch 40/164, Loss: 2.5846
+Epoch 26/100, Batch 50/164, Loss: 2.5842
+Epoch 26/100, Batch 60/164, Loss: 2.6233
+Epoch 26/100, Batch 70/164, Loss: 2.6230
+Epoch 26/100, Batch 80/164, Loss: 2.5972
+Epoch 26/100, Batch 90/164, Loss: 2.5952
+Epoch 26/100, Batch 100/164, Loss: 2.6286
+Epoch 26/100, Batch 110/164, Loss: 2.7264
+Epoch 26/100, Batch 120/164, Loss: 2.6177
+Epoch 26/100, Batch 130/164, Loss: 2.5644
+Epoch 26/100, Batch 140/164, Loss: 2.6005
+Epoch 26/100, Batch 150/164, Loss: 2.5700
+Epoch 26/100, Batch 160/164, Loss: 2.5886
+New best model with validation loss: 2.4559, perplexity: 11.66
+Epoch 26/100, Loss: 2.6105, Perplexity: 13.61, Val Loss: 2.4559, Val Perplexity: 11.66, Time: 214.75s
+Epoch 27/100, Batch 10/164, Loss: 2.6339
+Epoch 27/100, Batch 20/164, Loss: 2.6282
+Epoch 27/100, Batch 30/164, Loss: 2.5992
+Epoch 27/100, Batch 40/164, Loss: 2.5483
+Epoch 27/100, Batch 50/164, Loss: 2.5668
+Epoch 27/100, Batch 60/164, Loss: 2.5752
+Epoch 27/100, Batch 70/164, Loss: 2.5959
+Epoch 27/100, Batch 80/164, Loss: 2.5823
+Epoch 27/100, Batch 90/164, Loss: 2.6432
+Epoch 27/100, Batch 100/164, Loss: 2.5780
+Epoch 27/100, Batch 110/164, Loss: 2.5747
+Epoch 27/100, Batch 120/164, Loss: 2.6012
+Epoch 27/100, Batch 130/164, Loss: 2.5178
+Epoch 27/100, Batch 140/164, Loss: 2.5688
+Epoch 27/100, Batch 150/164, Loss: 2.5451
+Epoch 27/100, Batch 160/164, Loss: 2.5596
+New best model with validation loss: 2.4346, perplexity: 11.41
+Epoch 27/100, Loss: 2.5868, Perplexity: 13.29, Val Loss: 2.4346, Val Perplexity: 11.41, Time: 216.14s
+Epoch 28/100, Batch 10/164, Loss: 2.6143
+Epoch 28/100, Batch 20/164, Loss: 2.6007
+Epoch 28/100, Batch 30/164, Loss: 2.6061
+Epoch 28/100, Batch 40/164, Loss: 2.6759
+Epoch 28/100, Batch 50/164, Loss: 2.5435
+Epoch 28/100, Batch 60/164, Loss: 2.5605
+Epoch 28/100, Batch 70/164, Loss: 2.5744
+Epoch 28/100, Batch 80/164, Loss: 2.5519
+Epoch 28/100, Batch 90/164, Loss: 2.5534
+Epoch 28/100, Batch 100/164, Loss: 2.5637
+Epoch 28/100, Batch 110/164, Loss: 2.5582
+Epoch 28/100, Batch 120/164, Loss: 2.5840
+Epoch 28/100, Batch 130/164, Loss: 2.5082
+Epoch 28/100, Batch 140/164, Loss: 2.5549
+Epoch 28/100, Batch 150/164, Loss: 2.5284
+Epoch 28/100, Batch 160/164, Loss: 2.5553
+New best model with validation loss: 2.4183, perplexity: 11.23
+Epoch 28/100, Loss: 2.5681, Perplexity: 13.04, Val Loss: 2.4183, Val Perplexity: 11.23, Time: 216.00s
+Epoch 29/100, Batch 10/164, Loss: 2.5935
+Epoch 29/100, Batch 20/164, Loss: 2.5865
+Epoch 29/100, Batch 30/164, Loss: 2.5596
+Epoch 29/100, Batch 40/164, Loss: 2.5124
+Epoch 29/100, Batch 50/164, Loss: 2.5222
+Epoch 29/100, Batch 60/164, Loss: 2.5515
+Epoch 29/100, Batch 70/164, Loss: 2.5688
+Epoch 29/100, Batch 80/164, Loss: 2.5470
+Epoch 29/100, Batch 90/164, Loss: 2.5489
+Epoch 29/100, Batch 100/164, Loss: 2.5601
+Epoch 29/100, Batch 110/164, Loss: 2.5430
+Epoch 29/100, Batch 120/164, Loss: 2.5774
+Epoch 29/100, Batch 130/164, Loss: 2.4957
+Epoch 29/100, Batch 140/164, Loss: 2.5340
+Epoch 29/100, Batch 150/164, Loss: 2.5188
+Epoch 29/100, Batch 160/164, Loss: 2.5414
+New best model with validation loss: 2.4045, perplexity: 11.07
+Epoch 29/100, Loss: 2.5510, Perplexity: 12.82, Val Loss: 2.4045, Val Perplexity: 11.07, Time: 215.68s
+Epoch 30/100, Batch 10/164, Loss: 2.6664
+Epoch 30/100, Batch 20/164, Loss: 2.5594
+Epoch 30/100, Batch 30/164, Loss: 2.5835
+Epoch 30/100, Batch 40/164, Loss: 2.5654
+Epoch 30/100, Batch 50/164, Loss: 2.5106
+Epoch 30/100, Batch 60/164, Loss: 2.5299
+Epoch 30/100, Batch 70/164, Loss: 2.5373
+Epoch 30/100, Batch 80/164, Loss: 2.5269
+Epoch 30/100, Batch 90/164, Loss: 2.5550
+Epoch 30/100, Batch 100/164, Loss: 2.5639
+Epoch 30/100, Batch 110/164, Loss: 2.5208
+Epoch 30/100, Batch 120/164, Loss: 2.5436
+Epoch 30/100, Batch 130/164, Loss: 2.4648
+Epoch 30/100, Batch 140/164, Loss: 2.5219
+Epoch 30/100, Batch 150/164, Loss: 2.5021
+Epoch 30/100, Batch 160/164, Loss: 2.5182
+New best model with validation loss: 2.3916, perplexity: 10.93
+Epoch 30/100, Loss: 2.5351, Perplexity: 12.62, Val Loss: 2.3916, Val Perplexity: 10.93, Time: 215.32s
+Epoch 31/100, Batch 10/164, Loss: 2.5675
+Epoch 31/100, Batch 20/164, Loss: 2.5427
+Epoch 31/100, Batch 30/164, Loss: 2.5357
+Epoch 31/100, Batch 40/164, Loss: 2.4776
+Epoch 31/100, Batch 50/164, Loss: 2.4962
+Epoch 31/100, Batch 60/164, Loss: 2.5872
+Epoch 31/100, Batch 70/164, Loss: 2.5293
+Epoch 31/100, Batch 80/164, Loss: 2.5230
+Epoch 31/100, Batch 90/164, Loss: 2.5073
+Epoch 31/100, Batch 100/164, Loss: 2.5173
+Epoch 31/100, Batch 110/164, Loss: 2.4961
+Epoch 31/100, Batch 120/164, Loss: 2.5464
+Epoch 31/100, Batch 130/164, Loss: 2.4515
+Epoch 31/100, Batch 140/164, Loss: 2.5211
+Epoch 31/100, Batch 150/164, Loss: 2.4917
+Epoch 31/100, Batch 160/164, Loss: 2.6049
+New best model with validation loss: 2.3781, perplexity: 10.78
+Epoch 31/100, Loss: 2.5205, Perplexity: 12.43, Val Loss: 2.3781, Val Perplexity: 10.78, Time: 213.87s
+Epoch 32/100, Batch 10/164, Loss: 2.5454
+Epoch 32/100, Batch 20/164, Loss: 2.5309
+Epoch 32/100, Batch 30/164, Loss: 2.5182
+Epoch 32/100, Batch 40/164, Loss: 2.4620
+Epoch 32/100, Batch 50/164, Loss: 2.4811
+Epoch 32/100, Batch 60/164, Loss: 2.4973
+Epoch 32/100, Batch 70/164, Loss: 2.5019
+Epoch 32/100, Batch 80/164, Loss: 2.4863
+Epoch 32/100, Batch 90/164, Loss: 2.4856
+Epoch 32/100, Batch 100/164, Loss: 2.4945
+Epoch 32/100, Batch 110/164, Loss: 2.5231
+Epoch 32/100, Batch 120/164, Loss: 2.5182
+Epoch 32/100, Batch 130/164, Loss: 2.4490
+Epoch 32/100, Batch 140/164, Loss: 2.4930
+Epoch 32/100, Batch 150/164, Loss: 2.4800
+Epoch 32/100, Batch 160/164, Loss: 2.4960
+New best model with validation loss: 2.3644, perplexity: 10.64
+Epoch 32/100, Loss: 2.5017, Perplexity: 12.20, Val Loss: 2.3644, Val Perplexity: 10.64, Time: 215.43s
+Epoch 33/100, Batch 10/164, Loss: 2.5344
+Epoch 33/100, Batch 20/164, Loss: 2.5241
+Epoch 33/100, Batch 30/164, Loss: 2.4956
+Epoch 33/100, Batch 40/164, Loss: 2.4661
+Epoch 33/100, Batch 50/164, Loss: 2.4645
+Epoch 33/100, Batch 60/164, Loss: 2.4783
+Epoch 33/100, Batch 70/164, Loss: 2.4877
+Epoch 33/100, Batch 80/164, Loss: 2.5322
+Epoch 33/100, Batch 90/164, Loss: 2.4725
+Epoch 33/100, Batch 100/164, Loss: 2.4760
+Epoch 33/100, Batch 110/164, Loss: 2.4728
+Epoch 33/100, Batch 120/164, Loss: 2.5638
+Epoch 33/100, Batch 130/164, Loss: 2.4330
+Epoch 33/100, Batch 140/164, Loss: 2.4792
+Epoch 33/100, Batch 150/164, Loss: 2.4648
+Epoch 33/100, Batch 160/164, Loss: 2.4723
+New best model with validation loss: 2.3544, perplexity: 10.53
+Epoch 33/100, Loss: 2.4898, Perplexity: 12.06, Val Loss: 2.3544, Val Perplexity: 10.53, Time: 215.42s
+Epoch 34/100, Batch 10/164, Loss: 2.5231
+Epoch 34/100, Batch 20/164, Loss: 2.5033
+Epoch 34/100, Batch 30/164, Loss: 2.4909
+Epoch 34/100, Batch 40/164, Loss: 2.4409
+Epoch 34/100, Batch 50/164, Loss: 2.4496
+Epoch 34/100, Batch 60/164, Loss: 2.4899
+Epoch 34/100, Batch 70/164, Loss: 2.6128
+Epoch 34/100, Batch 80/164, Loss: 2.4670
+Epoch 34/100, Batch 90/164, Loss: 2.5212
+Epoch 34/100, Batch 100/164, Loss: 2.4697
+Epoch 34/100, Batch 110/164, Loss: 2.4908
+Epoch 34/100, Batch 120/164, Loss: 2.4975
+Epoch 34/100, Batch 130/164, Loss: 2.4255
+Epoch 34/100, Batch 140/164, Loss: 2.4645
+Epoch 34/100, Batch 150/164, Loss: 2.4485
+Epoch 34/100, Batch 160/164, Loss: 2.4793
+New best model with validation loss: 2.3493, perplexity: 10.48
+Epoch 34/100, Loss: 2.4778, Perplexity: 11.92, Val Loss: 2.3493, Val Perplexity: 10.48, Time: 214.85s
+Epoch 35/100, Batch 10/164, Loss: 2.5042
+Epoch 35/100, Batch 20/164, Loss: 2.5563
+Epoch 35/100, Batch 30/164, Loss: 2.4784
+Epoch 35/100, Batch 40/164, Loss: 2.4216
+Epoch 35/100, Batch 50/164, Loss: 2.4313
+Epoch 35/100, Batch 60/164, Loss: 2.4616
+Epoch 35/100, Batch 70/164, Loss: 2.4677
+Epoch 35/100, Batch 80/164, Loss: 2.4557
+Epoch 35/100, Batch 90/164, Loss: 2.4952
+Epoch 35/100, Batch 100/164, Loss: 2.4548
+Epoch 35/100, Batch 110/164, Loss: 2.4438
+Epoch 35/100, Batch 120/164, Loss: 2.4925
+Epoch 35/100, Batch 130/164, Loss: 2.4053
+Epoch 35/100, Batch 140/164, Loss: 2.5627
+Epoch 35/100, Batch 150/164, Loss: 2.4311
+Epoch 35/100, Batch 160/164, Loss: 2.4580
+New best model with validation loss: 2.3342, perplexity: 10.32
+Epoch 35/100, Loss: 2.4654, Perplexity: 11.77, Val Loss: 2.3342, Val Perplexity: 10.32, Time: 214.09s
+Epoch 36/100, Batch 10/164, Loss: 2.4905
+Epoch 36/100, Batch 20/164, Loss: 2.5485
+Epoch 36/100, Batch 30/164, Loss: 2.4630
+Epoch 36/100, Batch 40/164, Loss: 2.5534
+Epoch 36/100, Batch 50/164, Loss: 2.4239
+Epoch 36/100, Batch 60/164, Loss: 2.4480
+Epoch 36/100, Batch 70/164, Loss: 2.4564
+Epoch 36/100, Batch 80/164, Loss: 2.4395
+Epoch 36/100, Batch 90/164, Loss: 2.4620
+Epoch 36/100, Batch 100/164, Loss: 2.4458
+Epoch 36/100, Batch 110/164, Loss: 2.4351
+Epoch 36/100, Batch 120/164, Loss: 2.4689
+Epoch 36/100, Batch 130/164, Loss: 2.3915
+Epoch 36/100, Batch 140/164, Loss: 2.4422
+Epoch 36/100, Batch 150/164, Loss: 2.5088
+Epoch 36/100, Batch 160/164, Loss: 2.4424
+New best model with validation loss: 2.3285, perplexity: 10.26
+Epoch 36/100, Loss: 2.4536, Perplexity: 11.63, Val Loss: 2.3285, Val Perplexity: 10.26, Time: 215.90s
+Epoch 37/100, Batch 10/164, Loss: 2.4810
+Epoch 37/100, Batch 20/164, Loss: 2.4745
+Epoch 37/100, Batch 30/164, Loss: 2.5334
+Epoch 37/100, Batch 40/164, Loss: 2.4026
+Epoch 37/100, Batch 50/164, Loss: 2.4181
+Epoch 37/100, Batch 60/164, Loss: 2.4335
+Epoch 37/100, Batch 70/164, Loss: 2.4564
+Epoch 37/100, Batch 80/164, Loss: 2.4297
+Epoch 37/100, Batch 90/164, Loss: 2.4475
+Epoch 37/100, Batch 100/164, Loss: 2.4346
+Epoch 37/100, Batch 110/164, Loss: 2.4252
+Epoch 37/100, Batch 120/164, Loss: 2.4610
+Epoch 37/100, Batch 130/164, Loss: 2.3785
+Epoch 37/100, Batch 140/164, Loss: 2.4327
+Epoch 37/100, Batch 150/164, Loss: 2.4159
+Epoch 37/100, Batch 160/164, Loss: 2.4266
+New best model with validation loss: 2.3223, perplexity: 10.20
+Epoch 37/100, Loss: 2.4443, Perplexity: 11.52, Val Loss: 2.3223, Val Perplexity: 10.20, Time: 214.53s
+Epoch 38/100, Batch 10/164, Loss: 2.4687
+Epoch 38/100, Batch 20/164, Loss: 2.5323
+Epoch 38/100, Batch 30/164, Loss: 2.4459
+Epoch 38/100, Batch 40/164, Loss: 2.4984
+Epoch 38/100, Batch 50/164, Loss: 2.4428
+Epoch 38/100, Batch 60/164, Loss: 2.4252
+Epoch 38/100, Batch 70/164, Loss: 2.4341
+Epoch 38/100, Batch 80/164, Loss: 2.4263
+Epoch 38/100, Batch 90/164, Loss: 2.4170
+Epoch 38/100, Batch 100/164, Loss: 2.4552
+Epoch 38/100, Batch 110/164, Loss: 2.4159
+Epoch 38/100, Batch 120/164, Loss: 2.4554
+Epoch 38/100, Batch 130/164, Loss: 2.4125
+Epoch 38/100, Batch 140/164, Loss: 2.4208
+Epoch 38/100, Batch 150/164, Loss: 2.4044
+Epoch 38/100, Batch 160/164, Loss: 2.4591
+New best model with validation loss: 2.3146, perplexity: 10.12
+Epoch 38/100, Loss: 2.4350, Perplexity: 11.42, Val Loss: 2.3146, Val Perplexity: 10.12, Time: 214.88s
+Epoch 39/100, Batch 10/164, Loss: 2.4708
+Epoch 39/100, Batch 20/164, Loss: 2.4626
+Epoch 39/100, Batch 30/164, Loss: 2.4423
+Epoch 39/100, Batch 40/164, Loss: 2.3815
+Epoch 39/100, Batch 50/164, Loss: 2.3906
+Epoch 39/100, Batch 60/164, Loss: 2.4136
+Epoch 39/100, Batch 70/164, Loss: 2.4307
+Epoch 39/100, Batch 80/164, Loss: 2.4134
+Epoch 39/100, Batch 90/164, Loss: 2.4144
+Epoch 39/100, Batch 100/164, Loss: 2.5197
+Epoch 39/100, Batch 110/164, Loss: 2.4085
+Epoch 39/100, Batch 120/164, Loss: 2.4387
+Epoch 39/100, Batch 130/164, Loss: 2.3623
+Epoch 39/100, Batch 140/164, Loss: 2.4196
+Epoch 39/100, Batch 150/164, Loss: 2.3912
+Epoch 39/100, Batch 160/164, Loss: 2.5030
+New best model with validation loss: 2.3086, perplexity: 10.06
+Epoch 39/100, Loss: 2.4218, Perplexity: 11.27, Val Loss: 2.3086, Val Perplexity: 10.06, Time: 215.66s
+Epoch 40/100, Batch 10/164, Loss: 2.4395
+Epoch 40/100, Batch 20/164, Loss: 2.4415
+Epoch 40/100, Batch 30/164, Loss: 2.4193
+Epoch 40/100, Batch 40/164, Loss: 2.3689
+Epoch 40/100, Batch 50/164, Loss: 2.3807
+Epoch 40/100, Batch 60/164, Loss: 2.4006
+Epoch 40/100, Batch 70/164, Loss: 2.4136
+Epoch 40/100, Batch 80/164, Loss: 2.4060
+Epoch 40/100, Batch 90/164, Loss: 2.4054
+Epoch 40/100, Batch 100/164, Loss: 2.3982
+Epoch 40/100, Batch 110/164, Loss: 2.3941
+Epoch 40/100, Batch 120/164, Loss: 2.4686
+Epoch 40/100, Batch 130/164, Loss: 2.3509
+Epoch 40/100, Batch 140/164, Loss: 2.4050
+Epoch 40/100, Batch 150/164, Loss: 2.3850
+Epoch 40/100, Batch 160/164, Loss: 2.3999
+New best model with validation loss: 2.2982, perplexity: 9.96
+Epoch 40/100, Loss: 2.4125, Perplexity: 11.16, Val Loss: 2.2982, Val Perplexity: 9.96, Time: 214.83s
+Epoch 41/100, Batch 10/164, Loss: 2.4415
+Epoch 41/100, Batch 20/164, Loss: 2.4303
+Epoch 41/100, Batch 30/164, Loss: 2.4182
+Epoch 41/100, Batch 40/164, Loss: 2.4154
+Epoch 41/100, Batch 50/164, Loss: 2.3758
+Epoch 41/100, Batch 60/164, Loss: 2.3980
+Epoch 41/100, Batch 70/164, Loss: 2.4225
+Epoch 41/100, Batch 80/164, Loss: 2.3893
+Epoch 41/100, Batch 90/164, Loss: 2.3955
+Epoch 41/100, Batch 100/164, Loss: 2.3991
+Epoch 41/100, Batch 110/164, Loss: 2.3811
+Epoch 41/100, Batch 120/164, Loss: 2.4476
+Epoch 41/100, Batch 130/164, Loss: 2.3546
+Epoch 41/100, Batch 140/164, Loss: 2.3918
+Epoch 41/100, Batch 150/164, Loss: 2.3749
+Epoch 41/100, Batch 160/164, Loss: 2.3842
+New best model with validation loss: 2.2927, perplexity: 9.90
+Epoch 41/100, Loss: 2.4058, Perplexity: 11.09, Val Loss: 2.2927, Val Perplexity: 9.90, Time: 214.97s
+Epoch 42/100, Batch 10/164, Loss: 2.4743
+Epoch 42/100, Batch 20/164, Loss: 2.4239
+Epoch 42/100, Batch 30/164, Loss: 2.4053
+Epoch 42/100, Batch 40/164, Loss: 2.3555
+Epoch 42/100, Batch 50/164, Loss: 2.3692
+Epoch 42/100, Batch 60/164, Loss: 2.4495
+Epoch 42/100, Batch 70/164, Loss: 2.4224
+Epoch 42/100, Batch 80/164, Loss: 2.4579
+Epoch 42/100, Batch 90/164, Loss: 2.3823
+Epoch 42/100, Batch 100/164, Loss: 2.3869
+Epoch 42/100, Batch 110/164, Loss: 2.3730
+Epoch 42/100, Batch 120/164, Loss: 2.4187
+Epoch 42/100, Batch 130/164, Loss: 2.3363
+Epoch 42/100, Batch 140/164, Loss: 2.3832
+Epoch 42/100, Batch 150/164, Loss: 2.3853
+Epoch 42/100, Batch 160/164, Loss: 2.3939
+New best model with validation loss: 2.2884, perplexity: 9.86
+Epoch 42/100, Loss: 2.3977, Perplexity: 11.00, Val Loss: 2.2884, Val Perplexity: 9.86, Time: 214.32s
+Epoch 43/100, Batch 10/164, Loss: 2.4145
+Epoch 43/100, Batch 20/164, Loss: 2.4254
+Epoch 43/100, Batch 30/164, Loss: 2.3960
+Epoch 43/100, Batch 40/164, Loss: 2.3471
+Epoch 43/100, Batch 50/164, Loss: 2.3495
+Epoch 43/100, Batch 60/164, Loss: 2.3709
+Epoch 43/100, Batch 70/164, Loss: 2.3942
+Epoch 43/100, Batch 80/164, Loss: 2.3713
+Epoch 43/100, Batch 90/164, Loss: 2.3777
+Epoch 43/100, Batch 100/164, Loss: 2.3871
+Epoch 43/100, Batch 110/164, Loss: 2.3746
+Epoch 43/100, Batch 120/164, Loss: 2.4019
+Epoch 43/100, Batch 130/164, Loss: 2.3530
+Epoch 43/100, Batch 140/164, Loss: 2.3774
+Epoch 43/100, Batch 150/164, Loss: 2.3641
+Epoch 43/100, Batch 160/164, Loss: 2.3735
+New best model with validation loss: 2.2807, perplexity: 9.78
+Epoch 43/100, Loss: 2.3873, Perplexity: 10.88, Val Loss: 2.2807, Val Perplexity: 9.78, Time: 214.48s
+Epoch 44/100, Batch 10/164, Loss: 2.4140
+Epoch 44/100, Batch 20/164, Loss: 2.4092
+Epoch 44/100, Batch 30/164, Loss: 2.3860
+Epoch 44/100, Batch 40/164, Loss: 2.3300
+Epoch 44/100, Batch 50/164, Loss: 2.3676
+Epoch 44/100, Batch 60/164, Loss: 2.3663
+Epoch 44/100, Batch 70/164, Loss: 2.4052
+Epoch 44/100, Batch 80/164, Loss: 2.3686
+Epoch 44/100, Batch 90/164, Loss: 2.3680
+Epoch 44/100, Batch 100/164, Loss: 2.3724
+Epoch 44/100, Batch 110/164, Loss: 2.3561
+Epoch 44/100, Batch 120/164, Loss: 2.4019
+Epoch 44/100, Batch 130/164, Loss: 2.3180
+Epoch 44/100, Batch 140/164, Loss: 2.3606
+Epoch 44/100, Batch 150/164, Loss: 2.3674
+Epoch 44/100, Batch 160/164, Loss: 2.3815
+New best model with validation loss: 2.2766, perplexity: 9.74
+Epoch 44/100, Loss: 2.3787, Perplexity: 10.79, Val Loss: 2.2766, Val Perplexity: 9.74, Time: 215.38s
+Epoch 45/100, Batch 10/164, Loss: 2.4018
+Epoch 45/100, Batch 20/164, Loss: 2.4438
+Epoch 45/100, Batch 30/164, Loss: 2.3921
+Epoch 45/100, Batch 40/164, Loss: 2.3272
+Epoch 45/100, Batch 50/164, Loss: 2.3372
+Epoch 45/100, Batch 60/164, Loss: 2.3597
+Epoch 45/100, Batch 70/164, Loss: 2.3851
+Epoch 45/100, Batch 80/164, Loss: 2.3579
+Epoch 45/100, Batch 90/164, Loss: 2.3726
+Epoch 45/100, Batch 100/164, Loss: 2.3653
+Epoch 45/100, Batch 110/164, Loss: 2.3577
+Epoch 45/100, Batch 120/164, Loss: 2.4084
+Epoch 45/100, Batch 130/164, Loss: 2.3105
+Epoch 45/100, Batch 140/164, Loss: 2.3688
+Epoch 45/100, Batch 150/164, Loss: 2.3547
+Epoch 45/100, Batch 160/164, Loss: 2.3648
+New best model with validation loss: 2.2705, perplexity: 9.68
+Epoch 45/100, Loss: 2.3698, Perplexity: 10.70, Val Loss: 2.2705, Val Perplexity: 9.68, Time: 216.13s
+Epoch 46/100, Batch 10/164, Loss: 2.3958
+Epoch 46/100, Batch 20/164, Loss: 2.4321
+Epoch 46/100, Batch 30/164, Loss: 2.3929
+Epoch 46/100, Batch 40/164, Loss: 2.3246
+Epoch 46/100, Batch 50/164, Loss: 2.3301
+Epoch 46/100, Batch 60/164, Loss: 2.3573
+Epoch 46/100, Batch 70/164, Loss: 2.4540
+Epoch 46/100, Batch 80/164, Loss: 2.3596
+Epoch 46/100, Batch 90/164, Loss: 2.3912
+Epoch 46/100, Batch 100/164, Loss: 2.3655
+Epoch 46/100, Batch 110/164, Loss: 2.3564
+Epoch 46/100, Batch 120/164, Loss: 2.3901
+Epoch 46/100, Batch 130/164, Loss: 2.3006
+Epoch 46/100, Batch 140/164, Loss: 2.3591
+Epoch 46/100, Batch 150/164, Loss: 2.3424
+Epoch 46/100, Batch 160/164, Loss: 2.3675
+New best model with validation loss: 2.2680, perplexity: 9.66
+Epoch 46/100, Loss: 2.3635, Perplexity: 10.63, Val Loss: 2.2680, Val Perplexity: 9.66, Time: 214.95s
+Epoch 47/100, Batch 10/164, Loss: 2.3871
+Epoch 47/100, Batch 20/164, Loss: 2.4259
+Epoch 47/100, Batch 30/164, Loss: 2.3757
+Epoch 47/100, Batch 40/164, Loss: 2.3213
+Epoch 47/100, Batch 50/164, Loss: 2.3461
+Epoch 47/100, Batch 60/164, Loss: 2.3538
+Epoch 47/100, Batch 70/164, Loss: 2.3767
+Epoch 47/100, Batch 80/164, Loss: 2.3460
+Epoch 47/100, Batch 90/164, Loss: 2.3541
+Epoch 47/100, Batch 100/164, Loss: 2.3543
+Epoch 47/100, Batch 110/164, Loss: 2.3420
+Epoch 47/100, Batch 120/164, Loss: 2.3835
+Epoch 47/100, Batch 130/164, Loss: 2.2977
+Epoch 47/100, Batch 140/164, Loss: 2.3523
+Epoch 47/100, Batch 150/164, Loss: 2.3333
+Epoch 47/100, Batch 160/164, Loss: 2.3459
+New best model with validation loss: 2.2619, perplexity: 9.60
+Epoch 47/100, Loss: 2.3568, Perplexity: 10.56, Val Loss: 2.2619, Val Perplexity: 9.60, Time: 214.99s
+Epoch 48/100, Batch 10/164, Loss: 2.3831
+Epoch 48/100, Batch 20/164, Loss: 2.3882
+Epoch 48/100, Batch 30/164, Loss: 2.3722
+Epoch 48/100, Batch 40/164, Loss: 2.3071
+Epoch 48/100, Batch 50/164, Loss: 2.3131
+Epoch 48/100, Batch 60/164, Loss: 2.3390
+Epoch 48/100, Batch 70/164, Loss: 2.3645
+Epoch 48/100, Batch 80/164, Loss: 2.3366
+Epoch 48/100, Batch 90/164, Loss: 2.3474
+Epoch 48/100, Batch 100/164, Loss: 2.3441
+Epoch 48/100, Batch 110/164, Loss: 2.3380
+Epoch 48/100, Batch 120/164, Loss: 2.3719
+Epoch 48/100, Batch 130/164, Loss: 2.2943
+Epoch 48/100, Batch 140/164, Loss: 2.3353
+Epoch 48/100, Batch 150/164, Loss: 2.3266
+Epoch 48/100, Batch 160/164, Loss: 2.3449
+New best model with validation loss: 2.2599, perplexity: 9.58
+Epoch 48/100, Loss: 2.3535, Perplexity: 10.52, Val Loss: 2.2599, Val Perplexity: 9.58, Time: 213.82s
+Epoch 49/100, Batch 10/164, Loss: 2.4927
+Epoch 49/100, Batch 20/164, Loss: 2.3797
+Epoch 49/100, Batch 30/164, Loss: 2.3509
+Epoch 49/100, Batch 40/164, Loss: 2.3086
+Epoch 49/100, Batch 50/164, Loss: 2.3576
+Epoch 49/100, Batch 60/164, Loss: 2.3417
+Epoch 49/100, Batch 70/164, Loss: 2.3608
+Epoch 49/100, Batch 80/164, Loss: 2.3348
+Epoch 49/100, Batch 90/164, Loss: 2.3342
+Epoch 49/100, Batch 100/164, Loss: 2.3446
+Epoch 49/100, Batch 110/164, Loss: 2.3235
+Epoch 49/100, Batch 120/164, Loss: 2.3694
+Epoch 49/100, Batch 130/164, Loss: 2.2859
+Epoch 49/100, Batch 140/164, Loss: 2.3437
+Epoch 49/100, Batch 150/164, Loss: 2.3172
+Epoch 49/100, Batch 160/164, Loss: 2.3287
+New best model with validation loss: 2.2565, perplexity: 9.55
+Epoch 49/100, Loss: 2.3492, Perplexity: 10.48, Val Loss: 2.2565, Val Perplexity: 9.55, Time: 214.04s
+Epoch 50/100, Batch 10/164, Loss: 2.3654
+Epoch 50/100, Batch 20/164, Loss: 2.3697
+Epoch 50/100, Batch 30/164, Loss: 2.3649
+Epoch 50/100, Batch 40/164, Loss: 2.3056
+Epoch 50/100, Batch 50/164, Loss: 2.3244
+Epoch 50/100, Batch 60/164, Loss: 2.3249
+Epoch 50/100, Batch 70/164, Loss: 2.3545
+Epoch 50/100, Batch 80/164, Loss: 2.3214
+Epoch 50/100, Batch 90/164, Loss: 2.3311
+Epoch 50/100, Batch 100/164, Loss: 2.3356
+Epoch 50/100, Batch 110/164, Loss: 2.3212
+Epoch 50/100, Batch 120/164, Loss: 2.3605
+Epoch 50/100, Batch 130/164, Loss: 2.2816
+Epoch 50/100, Batch 140/164, Loss: 2.3275
+Epoch 50/100, Batch 150/164, Loss: 2.3134
+Epoch 50/100, Batch 160/164, Loss: 2.3385
+New best model with validation loss: 2.2499, perplexity: 9.49
+Epoch 50/100, Loss: 2.3387, Perplexity: 10.37, Val Loss: 2.2499, Val Perplexity: 9.49, Time: 214.49s
+Epoch 51/100, Batch 10/164, Loss: 2.3684
+Epoch 51/100, Batch 20/164, Loss: 2.3643
+Epoch 51/100, Batch 30/164, Loss: 2.3431
+Epoch 51/100, Batch 40/164, Loss: 2.3510
+Epoch 51/100, Batch 50/164, Loss: 2.3006
+Epoch 51/100, Batch 60/164, Loss: 2.3209
+Epoch 51/100, Batch 70/164, Loss: 2.3673
+Epoch 51/100, Batch 80/164, Loss: 2.3170
+Epoch 51/100, Batch 90/164, Loss: 2.3145
+Epoch 51/100, Batch 100/164, Loss: 2.3319
+Epoch 51/100, Batch 110/164, Loss: 2.3111
+Epoch 51/100, Batch 120/164, Loss: 2.3834
+Epoch 51/100, Batch 130/164, Loss: 2.2731
+Epoch 51/100, Batch 140/164, Loss: 2.3266
+Epoch 51/100, Batch 150/164, Loss: 2.3073
+Epoch 51/100, Batch 160/164, Loss: 2.3278
+New best model with validation loss: 2.2457, perplexity: 9.45
+Epoch 51/100, Loss: 2.3335, Perplexity: 10.31, Val Loss: 2.2457, Val Perplexity: 9.45, Time: 214.74s
+Epoch 52/100, Batch 10/164, Loss: 2.3878
+Epoch 52/100, Batch 20/164, Loss: 2.3577
+Epoch 52/100, Batch 30/164, Loss: 2.3371
+Epoch 52/100, Batch 40/164, Loss: 2.2788
+Epoch 52/100, Batch 50/164, Loss: 2.3053
+Epoch 52/100, Batch 60/164, Loss: 2.3237
+Epoch 52/100, Batch 70/164, Loss: 2.3542
+Epoch 52/100, Batch 80/164, Loss: 2.3093
+Epoch 52/100, Batch 90/164, Loss: 2.3904
+Epoch 52/100, Batch 100/164, Loss: 2.3225
+Epoch 52/100, Batch 110/164, Loss: 2.3058
+Epoch 52/100, Batch 120/164, Loss: 2.3530
+Epoch 52/100, Batch 130/164, Loss: 2.2702
+Epoch 52/100, Batch 140/164, Loss: 2.4145
+Epoch 52/100, Batch 150/164, Loss: 2.3009
+Epoch 52/100, Batch 160/164, Loss: 2.3416
+New best model with validation loss: 2.2454, perplexity: 9.44
+Epoch 52/100, Loss: 2.3288, Perplexity: 10.27, Val Loss: 2.2454, Val Perplexity: 9.44, Time: 214.68s
+Epoch 53/100, Batch 10/164, Loss: 2.3511
+Epoch 53/100, Batch 20/164, Loss: 2.3619
+Epoch 53/100, Batch 30/164, Loss: 2.3271
+Epoch 53/100, Batch 40/164, Loss: 2.2762
+Epoch 53/100, Batch 50/164, Loss: 2.2897
+Epoch 53/100, Batch 60/164, Loss: 2.3082
+Epoch 53/100, Batch 70/164, Loss: 2.3359
+Epoch 53/100, Batch 80/164, Loss: 2.3038
+Epoch 53/100, Batch 90/164, Loss: 2.3097
+Epoch 53/100, Batch 100/164, Loss: 2.3176
+Epoch 53/100, Batch 110/164, Loss: 2.3100
+Epoch 53/100, Batch 120/164, Loss: 2.3597
+Epoch 53/100, Batch 130/164, Loss: 2.2657
+Epoch 53/100, Batch 140/164, Loss: 2.3139
+Epoch 53/100, Batch 150/164, Loss: 2.2947
+Epoch 53/100, Batch 160/164, Loss: 2.3154
+New best model with validation loss: 2.2396, perplexity: 9.39
+Epoch 53/100, Loss: 2.3207, Perplexity: 10.18, Val Loss: 2.2396, Val Perplexity: 9.39, Time: 215.55s
+Epoch 54/100, Batch 10/164, Loss: 2.3450
+Epoch 54/100, Batch 20/164, Loss: 2.3948
+Epoch 54/100, Batch 30/164, Loss: 2.3277
+Epoch 54/100, Batch 40/164, Loss: 2.2698
+Epoch 54/100, Batch 50/164, Loss: 2.2810
+Epoch 54/100, Batch 60/164, Loss: 2.3197
+Epoch 54/100, Batch 70/164, Loss: 2.3290
+Epoch 54/100, Batch 80/164, Loss: 2.3044
+Epoch 54/100, Batch 90/164, Loss: 2.3056
+Epoch 54/100, Batch 100/164, Loss: 2.3083
+Epoch 54/100, Batch 110/164, Loss: 2.2963
+Epoch 54/100, Batch 120/164, Loss: 2.3527
+Epoch 54/100, Batch 130/164, Loss: 2.2841
+Epoch 54/100, Batch 140/164, Loss: 2.3246
+Epoch 54/100, Batch 150/164, Loss: 2.2875
+Epoch 54/100, Batch 160/164, Loss: 2.3288
+New best model with validation loss: 2.2374, perplexity: 9.37
+Epoch 54/100, Loss: 2.3170, Perplexity: 10.15, Val Loss: 2.2374, Val Perplexity: 9.37, Time: 214.70s
+Epoch 55/100, Batch 10/164, Loss: 2.3526
+Epoch 55/100, Batch 20/164, Loss: 2.3404
+Epoch 55/100, Batch 30/164, Loss: 2.3222
+Epoch 55/100, Batch 40/164, Loss: 2.2631
+Epoch 55/100, Batch 50/164, Loss: 2.2725
+Epoch 55/100, Batch 60/164, Loss: 2.3122
+Epoch 55/100, Batch 70/164, Loss: 2.3225
+Epoch 55/100, Batch 80/164, Loss: 2.3189
+Epoch 55/100, Batch 90/164, Loss: 2.3010
+Epoch 55/100, Batch 100/164, Loss: 2.3001
+Epoch 55/100, Batch 110/164, Loss: 2.2967
+Epoch 55/100, Batch 120/164, Loss: 2.3332
+Epoch 55/100, Batch 130/164, Loss: 2.2508
+Epoch 55/100, Batch 140/164, Loss: 2.4302
+Epoch 55/100, Batch 150/164, Loss: 2.2817
+Epoch 55/100, Batch 160/164, Loss: 2.3051
+New best model with validation loss: 2.2313, perplexity: 9.31
+Epoch 55/100, Loss: 2.3112, Perplexity: 10.09, Val Loss: 2.2313, Val Perplexity: 9.31, Time: 216.07s
+Epoch 56/100, Batch 10/164, Loss: 2.3333
+Epoch 56/100, Batch 20/164, Loss: 2.3323
+Epoch 56/100, Batch 30/164, Loss: 2.3223
+Epoch 56/100, Batch 40/164, Loss: 2.2721
+Epoch 56/100, Batch 50/164, Loss: 2.2635
+Epoch 56/100, Batch 60/164, Loss: 2.2942
+Epoch 56/100, Batch 70/164, Loss: 2.3514
+Epoch 56/100, Batch 80/164, Loss: 2.2953
+Epoch 56/100, Batch 90/164, Loss: 2.2895
+Epoch 56/100, Batch 100/164, Loss: 2.3006
+Epoch 56/100, Batch 110/164, Loss: 2.2748
+Epoch 56/100, Batch 120/164, Loss: 2.4316
+Epoch 56/100, Batch 130/164, Loss: 2.2547
+Epoch 56/100, Batch 140/164, Loss: 2.2977
+Epoch 56/100, Batch 150/164, Loss: 2.2949
+Epoch 56/100, Batch 160/164, Loss: 2.2958
+Epoch 56/100, Loss: 2.3075, Perplexity: 10.05, Val Loss: 2.2315, Val Perplexity: 9.31, Time: 214.59s
+Epoch 57/100, Batch 10/164, Loss: 2.3322
+Epoch 57/100, Batch 20/164, Loss: 2.3395
+Epoch 57/100, Batch 30/164, Loss: 2.3114
+Epoch 57/100, Batch 40/164, Loss: 2.2488
+Epoch 57/100, Batch 50/164, Loss: 2.3154
+Epoch 57/100, Batch 60/164, Loss: 2.2935
+Epoch 57/100, Batch 70/164, Loss: 2.3330
+Epoch 57/100, Batch 80/164, Loss: 2.3009
+Epoch 57/100, Batch 90/164, Loss: 2.2973
+Epoch 57/100, Batch 100/164, Loss: 2.2914
+Epoch 57/100, Batch 110/164, Loss: 2.2737
+Epoch 57/100, Batch 120/164, Loss: 2.3219
+Epoch 57/100, Batch 130/164, Loss: 2.2403
+Epoch 57/100, Batch 140/164, Loss: 2.2940
+Epoch 57/100, Batch 150/164, Loss: 2.2804
+Epoch 57/100, Batch 160/164, Loss: 2.2903
+New best model with validation loss: 2.2249, perplexity: 9.25
+Epoch 57/100, Loss: 2.3017, Perplexity: 9.99, Val Loss: 2.2249, Val Perplexity: 9.25, Time: 214.52s
+Epoch 58/100, Batch 10/164, Loss: 2.3173
+Epoch 58/100, Batch 20/164, Loss: 2.3286
+Epoch 58/100, Batch 30/164, Loss: 2.3365
+Epoch 58/100, Batch 40/164, Loss: 2.2607
+Epoch 58/100, Batch 50/164, Loss: 2.2682
+Epoch 58/100, Batch 60/164, Loss: 2.2845
+Epoch 58/100, Batch 70/164, Loss: 2.3113
+Epoch 58/100, Batch 80/164, Loss: 2.2929
+Epoch 58/100, Batch 90/164, Loss: 2.2879
+Epoch 58/100, Batch 100/164, Loss: 2.2912
+Epoch 58/100, Batch 110/164, Loss: 2.2749
+Epoch 58/100, Batch 120/164, Loss: 2.3160
+Epoch 58/100, Batch 130/164, Loss: 2.2543
+Epoch 58/100, Batch 140/164, Loss: 2.2857
+Epoch 58/100, Batch 150/164, Loss: 2.2734
+Epoch 58/100, Batch 160/164, Loss: 2.2881
+Epoch 58/100, Loss: 2.2967, Perplexity: 9.94, Val Loss: 2.2272, Val Perplexity: 9.27, Time: 215.14s
+Epoch 59/100, Batch 10/164, Loss: 2.3172
+Epoch 59/100, Batch 20/164, Loss: 2.3343
+Epoch 59/100, Batch 30/164, Loss: 2.3014
+Epoch 59/100, Batch 40/164, Loss: 2.2405
+Epoch 59/100, Batch 50/164, Loss: 2.2733
+Epoch 59/100, Batch 60/164, Loss: 2.2870
+Epoch 59/100, Batch 70/164, Loss: 2.3096
+Epoch 59/100, Batch 80/164, Loss: 2.2926
+Epoch 59/100, Batch 90/164, Loss: 2.2821
+Epoch 59/100, Batch 100/164, Loss: 2.2943
+Epoch 59/100, Batch 110/164, Loss: 2.2727
+Epoch 59/100, Batch 120/164, Loss: 2.3172
+Epoch 59/100, Batch 130/164, Loss: 2.2494
+Epoch 59/100, Batch 140/164, Loss: 2.2732
+Epoch 59/100, Batch 150/164, Loss: 2.2878
+Epoch 59/100, Batch 160/164, Loss: 2.3006
+New best model with validation loss: 2.2191, perplexity: 9.20
+Epoch 59/100, Loss: 2.2929, Perplexity: 9.90, Val Loss: 2.2191, Val Perplexity: 9.20, Time: 215.54s
+Epoch 60/100, Batch 10/164, Loss: 2.3340
+Epoch 60/100, Batch 20/164, Loss: 2.3155
+Epoch 60/100, Batch 30/164, Loss: 2.3000
+Epoch 60/100, Batch 40/164, Loss: 2.2460
+Epoch 60/100, Batch 50/164, Loss: 2.2751
+Epoch 60/100, Batch 60/164, Loss: 2.2823
+Epoch 60/100, Batch 70/164, Loss: 2.3213
+Epoch 60/100, Batch 80/164, Loss: 2.3030
+Epoch 60/100, Batch 90/164, Loss: 2.2715
+Epoch 60/100, Batch 100/164, Loss: 2.3226
+Epoch 60/100, Batch 110/164, Loss: 2.2720
+Epoch 60/100, Batch 120/164, Loss: 2.3237
+Epoch 60/100, Batch 130/164, Loss: 2.3008
+Epoch 60/100, Batch 140/164, Loss: 2.2763
+Epoch 60/100, Batch 150/164, Loss: 2.2604
+Epoch 60/100, Batch 160/164, Loss: 2.2843
+New best model with validation loss: 2.2190, perplexity: 9.20
+Epoch 60/100, Loss: 2.2895, Perplexity: 9.87, Val Loss: 2.2190, Val Perplexity: 9.20, Time: 214.42s
+Epoch 61/100, Batch 10/164, Loss: 2.3104
+Epoch 61/100, Batch 20/164, Loss: 2.3219
+Epoch 61/100, Batch 30/164, Loss: 2.3001
+Epoch 61/100, Batch 40/164, Loss: 2.2395
+Epoch 61/100, Batch 50/164, Loss: 2.2504
+Epoch 61/100, Batch 60/164, Loss: 2.2771
+Epoch 61/100, Batch 70/164, Loss: 2.2974
+Epoch 61/100, Batch 80/164, Loss: 2.3354
+Epoch 61/100, Batch 90/164, Loss: 2.2867
+Epoch 61/100, Batch 100/164, Loss: 2.3209
+Epoch 61/100, Batch 110/164, Loss: 2.3791
+Epoch 61/100, Batch 120/164, Loss: 2.3066
+Epoch 61/100, Batch 130/164, Loss: 2.2251
+Epoch 61/100, Batch 140/164, Loss: 2.2748
+Epoch 61/100, Batch 150/164, Loss: 2.3686
+Epoch 61/100, Batch 160/164, Loss: 2.2777
+Epoch 61/100, Loss: 2.2871, Perplexity: 9.85, Val Loss: 2.2218, Val Perplexity: 9.22, Time: 214.46s
+Epoch 62/100, Batch 10/164, Loss: 2.3202
+Epoch 62/100, Batch 20/164, Loss: 2.3143
+Epoch 62/100, Batch 30/164, Loss: 2.2900
+Epoch 62/100, Batch 40/164, Loss: 2.2329
+Epoch 62/100, Batch 50/164, Loss: 2.2451
+Epoch 62/100, Batch 60/164, Loss: 2.2721
+Epoch 62/100, Batch 70/164, Loss: 2.4725
+Epoch 62/100, Batch 80/164, Loss: 2.2690
+Epoch 62/100, Batch 90/164, Loss: 2.3393
+Epoch 62/100, Batch 100/164, Loss: 2.2768
+Epoch 62/100, Batch 110/164, Loss: 2.2571
+Epoch 62/100, Batch 120/164, Loss: 2.3167
+Epoch 62/100, Batch 130/164, Loss: 2.2293
+Epoch 62/100, Batch 140/164, Loss: 2.2779
+Epoch 62/100, Batch 150/164, Loss: 2.2619
+Epoch 62/100, Batch 160/164, Loss: 2.2729
+New best model with validation loss: 2.2151, perplexity: 9.16
+Epoch 62/100, Loss: 2.2809, Perplexity: 9.79, Val Loss: 2.2151, Val Perplexity: 9.16, Time: 214.90s
+Epoch 63/100, Batch 10/164, Loss: 2.3070
+Epoch 63/100, Batch 20/164, Loss: 2.3124
+Epoch 63/100, Batch 30/164, Loss: 2.2978
+Epoch 63/100, Batch 40/164, Loss: 2.3231
+Epoch 63/100, Batch 50/164, Loss: 2.2445
+Epoch 63/100, Batch 60/164, Loss: 2.2675
+Epoch 63/100, Batch 70/164, Loss: 2.2956
+Epoch 63/100, Batch 80/164, Loss: 2.2658
+Epoch 63/100, Batch 90/164, Loss: 2.2666
+Epoch 63/100, Batch 100/164, Loss: 2.2715
+Epoch 63/100, Batch 110/164, Loss: 2.2577
+Epoch 63/100, Batch 120/164, Loss: 2.3197
+Epoch 63/100, Batch 130/164, Loss: 2.2214
+Epoch 63/100, Batch 140/164, Loss: 2.2670
+Epoch 63/100, Batch 150/164, Loss: 2.2551
+Epoch 63/100, Batch 160/164, Loss: 2.2995
+New best model with validation loss: 2.2122, perplexity: 9.14
+Epoch 63/100, Loss: 2.2772, Perplexity: 9.75, Val Loss: 2.2122, Val Perplexity: 9.14, Time: 215.44s
+Epoch 64/100, Batch 10/164, Loss: 2.3064
+Epoch 64/100, Batch 20/164, Loss: 2.3082
+Epoch 64/100, Batch 30/164, Loss: 2.2843
+Epoch 64/100, Batch 40/164, Loss: 2.2209
+Epoch 64/100, Batch 50/164, Loss: 2.2352
+Epoch 64/100, Batch 60/164, Loss: 2.2679
+Epoch 64/100, Batch 70/164, Loss: 2.3620
+Epoch 64/100, Batch 80/164, Loss: 2.2567
+Epoch 64/100, Batch 90/164, Loss: 2.2596
+Epoch 64/100, Batch 100/164, Loss: 2.2657
+Epoch 64/100, Batch 110/164, Loss: 2.2479
+Epoch 64/100, Batch 120/164, Loss: 2.3029
+Epoch 64/100, Batch 130/164, Loss: 2.2226
+Epoch 64/100, Batch 140/164, Loss: 2.2701
+Epoch 64/100, Batch 150/164, Loss: 2.2483
+Epoch 64/100, Batch 160/164, Loss: 2.2612
+New best model with validation loss: 2.2092, perplexity: 9.11
+Epoch 64/100, Loss: 2.2748, Perplexity: 9.73, Val Loss: 2.2092, Val Perplexity: 9.11, Time: 215.13s
+Epoch 65/100, Batch 10/164, Loss: 2.2977
+Epoch 65/100, Batch 20/164, Loss: 2.3018
+Epoch 65/100, Batch 30/164, Loss: 2.2812
+Epoch 65/100, Batch 40/164, Loss: 2.2221
+Epoch 65/100, Batch 50/164, Loss: 2.2502
+Epoch 65/100, Batch 60/164, Loss: 2.2636
+Epoch 65/100, Batch 70/164, Loss: 2.2855
+Epoch 65/100, Batch 80/164, Loss: 2.2648
+Epoch 65/100, Batch 90/164, Loss: 2.2542
+Epoch 65/100, Batch 100/164, Loss: 2.2586
+Epoch 65/100, Batch 110/164, Loss: 2.2504
+Epoch 65/100, Batch 120/164, Loss: 2.3232
+Epoch 65/100, Batch 130/164, Loss: 2.2059
+Epoch 65/100, Batch 140/164, Loss: 2.3547
+Epoch 65/100, Batch 150/164, Loss: 2.2403
+Epoch 65/100, Batch 160/164, Loss: 2.2668
+New best model with validation loss: 2.2086, perplexity: 9.10
+Epoch 65/100, Loss: 2.2709, Perplexity: 9.69, Val Loss: 2.2086, Val Perplexity: 9.10, Time: 215.15s
+Epoch 66/100, Batch 10/164, Loss: 2.2964
+Epoch 66/100, Batch 20/164, Loss: 2.3038
+Epoch 66/100, Batch 30/164, Loss: 2.2736
+Epoch 66/100, Batch 40/164, Loss: 2.2136
+Epoch 66/100, Batch 50/164, Loss: 2.2363
+Epoch 66/100, Batch 60/164, Loss: 2.2507
+Epoch 66/100, Batch 70/164, Loss: 2.2889
+Epoch 66/100, Batch 80/164, Loss: 2.2559
+Epoch 66/100, Batch 90/164, Loss: 2.2573
+Epoch 66/100, Batch 100/164, Loss: 2.2585
+Epoch 66/100, Batch 110/164, Loss: 2.2426
+Epoch 66/100, Batch 120/164, Loss: 2.2917
+Epoch 66/100, Batch 130/164, Loss: 2.2097
+Epoch 66/100, Batch 140/164, Loss: 2.2589
+Epoch 66/100, Batch 150/164, Loss: 2.2530
+Epoch 66/100, Batch 160/164, Loss: 2.2586
+New best model with validation loss: 2.2041, perplexity: 9.06
+Epoch 66/100, Loss: 2.2676, Perplexity: 9.66, Val Loss: 2.2041, Val Perplexity: 9.06, Time: 215.15s
+Epoch 67/100, Batch 10/164, Loss: 2.2852
+Epoch 67/100, Batch 20/164, Loss: 2.2946
+Epoch 67/100, Batch 30/164, Loss: 2.2790
+Epoch 67/100, Batch 40/164, Loss: 2.2268
+Epoch 67/100, Batch 50/164, Loss: 2.2326
+Epoch 67/100, Batch 60/164, Loss: 2.2522
+Epoch 67/100, Batch 70/164, Loss: 2.3534
+Epoch 67/100, Batch 80/164, Loss: 2.2612
+Epoch 67/100, Batch 90/164, Loss: 2.2832
+Epoch 67/100, Batch 100/164, Loss: 2.2590
+Epoch 67/100, Batch 110/164, Loss: 2.2458
+Epoch 67/100, Batch 120/164, Loss: 2.2951
+Epoch 67/100, Batch 130/164, Loss: 2.2272
+Epoch 67/100, Batch 140/164, Loss: 2.2572
+Epoch 67/100, Batch 150/164, Loss: 2.2360
+Epoch 67/100, Batch 160/164, Loss: 2.3654
+New best model with validation loss: 2.2029, perplexity: 9.05
+Epoch 67/100, Loss: 2.2635, Perplexity: 9.62, Val Loss: 2.2029, Val Perplexity: 9.05, Time: 214.51s
+Epoch 68/100, Batch 10/164, Loss: 2.2915
+Epoch 68/100, Batch 20/164, Loss: 2.2939
+Epoch 68/100, Batch 30/164, Loss: 2.2636
+Epoch 68/100, Batch 40/164, Loss: 2.2130
+Epoch 68/100, Batch 50/164, Loss: 2.2262
+Epoch 68/100, Batch 60/164, Loss: 2.2411
+Epoch 68/100, Batch 70/164, Loss: 2.2960
+Epoch 68/100, Batch 80/164, Loss: 2.2522
+Epoch 68/100, Batch 90/164, Loss: 2.2499
+Epoch 68/100, Batch 100/164, Loss: 2.2502
+Epoch 68/100, Batch 110/164, Loss: 2.2701
+Epoch 68/100, Batch 120/164, Loss: 2.3160
+Epoch 68/100, Batch 130/164, Loss: 2.2078
+Epoch 68/100, Batch 140/164, Loss: 2.2454
+Epoch 68/100, Batch 150/164, Loss: 2.2401
+Epoch 68/100, Batch 160/164, Loss: 2.2876
+New best model with validation loss: 2.1992, perplexity: 9.02
+Epoch 68/100, Loss: 2.2619, Perplexity: 9.60, Val Loss: 2.1992, Val Perplexity: 9.02, Time: 214.48s
+Epoch 69/100, Batch 10/164, Loss: 2.2769
+Epoch 69/100, Batch 20/164, Loss: 2.2823
+Epoch 69/100, Batch 30/164, Loss: 2.2679
+Epoch 69/100, Batch 40/164, Loss: 2.2090
+Epoch 69/100, Batch 50/164, Loss: 2.2217
+Epoch 69/100, Batch 60/164, Loss: 2.2468
+Epoch 69/100, Batch 70/164, Loss: 2.3006
+Epoch 69/100, Batch 80/164, Loss: 2.2448
+Epoch 69/100, Batch 90/164, Loss: 2.2547
+Epoch 69/100, Batch 100/164, Loss: 2.2531
+Epoch 69/100, Batch 110/164, Loss: 2.2330
+Epoch 69/100, Batch 120/164, Loss: 2.2827
+Epoch 69/100, Batch 130/164, Loss: 2.2080
+Epoch 69/100, Batch 140/164, Loss: 2.2589
+Epoch 69/100, Batch 150/164, Loss: 2.2368
+Epoch 69/100, Batch 160/164, Loss: 2.2453
+New best model with validation loss: 2.1981, perplexity: 9.01
+Epoch 69/100, Loss: 2.2574, Perplexity: 9.56, Val Loss: 2.1981, Val Perplexity: 9.01, Time: 215.13s
+Epoch 70/100, Batch 10/164, Loss: 2.2816
+Epoch 70/100, Batch 20/164, Loss: 2.2861
+Epoch 70/100, Batch 30/164, Loss: 2.2642
+Epoch 70/100, Batch 40/164, Loss: 2.2054
+Epoch 70/100, Batch 50/164, Loss: 2.2203
+Epoch 70/100, Batch 60/164, Loss: 2.2376
+Epoch 70/100, Batch 70/164, Loss: 2.2804
+Epoch 70/100, Batch 80/164, Loss: 2.2357
+Epoch 70/100, Batch 90/164, Loss: 2.2623
+Epoch 70/100, Batch 100/164, Loss: 2.2579
+Epoch 70/100, Batch 110/164, Loss: 2.2358
+Epoch 70/100, Batch 120/164, Loss: 2.2824
+Epoch 70/100, Batch 130/164, Loss: 2.1997
+Epoch 70/100, Batch 140/164, Loss: 2.2467
+Epoch 70/100, Batch 150/164, Loss: 2.2173
+Epoch 70/100, Batch 160/164, Loss: 2.2637
+New best model with validation loss: 2.1952, perplexity: 8.98
+Epoch 70/100, Loss: 2.2540, Perplexity: 9.53, Val Loss: 2.1952, Val Perplexity: 8.98, Time: 215.45s
+Epoch 71/100, Batch 10/164, Loss: 2.2716
+Epoch 71/100, Batch 20/164, Loss: 2.2736
+Epoch 71/100, Batch 30/164, Loss: 2.2624
+Epoch 71/100, Batch 40/164, Loss: 2.2069
+Epoch 71/100, Batch 50/164, Loss: 2.2188
+Epoch 71/100, Batch 60/164, Loss: 2.2375
+Epoch 71/100, Batch 70/164, Loss: 2.2679
+Epoch 71/100, Batch 80/164, Loss: 2.2502
+Epoch 71/100, Batch 90/164, Loss: 2.2365
+Epoch 71/100, Batch 100/164, Loss: 2.2500
+Epoch 71/100, Batch 110/164, Loss: 2.2277
+Epoch 71/100, Batch 120/164, Loss: 2.2714
+Epoch 71/100, Batch 130/164, Loss: 2.2047
+Epoch 71/100, Batch 140/164, Loss: 2.2443
+Epoch 71/100, Batch 150/164, Loss: 2.2289
+Epoch 71/100, Batch 160/164, Loss: 2.2397
+Epoch 71/100, Loss: 2.2508, Perplexity: 9.50, Val Loss: 2.1981, Val Perplexity: 9.01, Time: 215.44s
+Epoch 72/100, Batch 10/164, Loss: 2.2734
+Epoch 72/100, Batch 20/164, Loss: 2.3963
+Epoch 72/100, Batch 30/164, Loss: 2.2712
+Epoch 72/100, Batch 40/164, Loss: 2.1971
+Epoch 72/100, Batch 50/164, Loss: 2.2242
+Epoch 72/100, Batch 60/164, Loss: 2.2470
+Epoch 72/100, Batch 70/164, Loss: 2.2750
+Epoch 72/100, Batch 80/164, Loss: 2.2404
+Epoch 72/100, Batch 90/164, Loss: 2.2494
+Epoch 72/100, Batch 100/164, Loss: 2.2428
+Epoch 72/100, Batch 110/164, Loss: 2.2312
+Epoch 72/100, Batch 120/164, Loss: 2.2730
+Epoch 72/100, Batch 130/164, Loss: 2.1982
+Epoch 72/100, Batch 140/164, Loss: 2.2412
+Epoch 72/100, Batch 150/164, Loss: 2.2272
+Epoch 72/100, Batch 160/164, Loss: 2.2594
+Epoch 72/100, Loss: 2.2489, Perplexity: 9.48, Val Loss: 2.1962, Val Perplexity: 8.99, Time: 215.14s
+Epoch 73/100, Batch 10/164, Loss: 2.2669
+Epoch 73/100, Batch 20/164, Loss: 2.2824
+Epoch 73/100, Batch 30/164, Loss: 2.2616
+Epoch 73/100, Batch 40/164, Loss: 2.1931
+Epoch 73/100, Batch 50/164, Loss: 2.2144
+Epoch 73/100, Batch 60/164, Loss: 2.2293
+Epoch 73/100, Batch 70/164, Loss: 2.2600
+Epoch 73/100, Batch 80/164, Loss: 2.2320
+Epoch 73/100, Batch 90/164, Loss: 2.2419
+Epoch 73/100, Batch 100/164, Loss: 2.2441
+Epoch 73/100, Batch 110/164, Loss: 2.2182
+Epoch 73/100, Batch 120/164, Loss: 2.2624
+Epoch 73/100, Batch 130/164, Loss: 2.1904
+Epoch 73/100, Batch 140/164, Loss: 2.2412
+Epoch 73/100, Batch 150/164, Loss: 2.2209
+Epoch 73/100, Batch 160/164, Loss: 2.2378
+New best model with validation loss: 2.1933, perplexity: 8.96
+Epoch 73/100, Loss: 2.2456, Perplexity: 9.45, Val Loss: 2.1933, Val Perplexity: 8.96, Time: 215.55s
+Epoch 74/100, Batch 10/164, Loss: 2.2697
+Epoch 74/100, Batch 20/164, Loss: 2.2751
+Epoch 74/100, Batch 30/164, Loss: 2.2506
+Epoch 74/100, Batch 40/164, Loss: 2.1859
+Epoch 74/100, Batch 50/164, Loss: 2.2027
+Epoch 74/100, Batch 60/164, Loss: 2.2252
+Epoch 74/100, Batch 70/164, Loss: 2.2510
+Epoch 74/100, Batch 80/164, Loss: 2.2313
+Epoch 74/100, Batch 90/164, Loss: 2.3041
+Epoch 74/100, Batch 100/164, Loss: 2.2361
+Epoch 74/100, Batch 110/164, Loss: 2.2205
+Epoch 74/100, Batch 120/164, Loss: 2.2717
+Epoch 74/100, Batch 130/164, Loss: 2.1976
+Epoch 74/100, Batch 140/164, Loss: 2.3902
+Epoch 74/100, Batch 150/164, Loss: 2.2202
+Epoch 74/100, Batch 160/164, Loss: 2.2382
+New best model with validation loss: 2.1904, perplexity: 8.94
+Epoch 74/100, Loss: 2.2448, Perplexity: 9.44, Val Loss: 2.1904, Val Perplexity: 8.94, Time: 215.04s
+Epoch 75/100, Batch 10/164, Loss: 2.2645
+Epoch 75/100, Batch 20/164, Loss: 2.2793
+Epoch 75/100, Batch 30/164, Loss: 2.2470
+Epoch 75/100, Batch 40/164, Loss: 2.1900
+Epoch 75/100, Batch 50/164, Loss: 2.2037
+Epoch 75/100, Batch 60/164, Loss: 2.2242
+Epoch 75/100, Batch 70/164, Loss: 2.2589
+Epoch 75/100, Batch 80/164, Loss: 2.2299
+Epoch 75/100, Batch 90/164, Loss: 2.2341
+Epoch 75/100, Batch 100/164, Loss: 2.3375
+Epoch 75/100, Batch 110/164, Loss: 2.2119
+Epoch 75/100, Batch 120/164, Loss: 2.2660
+Epoch 75/100, Batch 130/164, Loss: 2.1823
+Epoch 75/100, Batch 140/164, Loss: 2.2300
+Epoch 75/100, Batch 150/164, Loss: 2.2574
+Epoch 75/100, Batch 160/164, Loss: 2.2334
+New best model with validation loss: 2.1873, perplexity: 8.91
+Epoch 75/100, Loss: 2.2392, Perplexity: 9.39, Val Loss: 2.1873, Val Perplexity: 8.91, Time: 215.53s
+Epoch 76/100, Batch 10/164, Loss: 2.2647
+Epoch 76/100, Batch 20/164, Loss: 2.2750
+Epoch 76/100, Batch 30/164, Loss: 2.2652
+Epoch 76/100, Batch 40/164, Loss: 2.1897
+Epoch 76/100, Batch 50/164, Loss: 2.2007
+Epoch 76/100, Batch 60/164, Loss: 2.2282
+Epoch 76/100, Batch 70/164, Loss: 2.2569
+Epoch 76/100, Batch 80/164, Loss: 2.2165
+Epoch 76/100, Batch 90/164, Loss: 2.2309
+Epoch 76/100, Batch 100/164, Loss: 2.2339
+Epoch 76/100, Batch 110/164, Loss: 2.2080
+Epoch 76/100, Batch 120/164, Loss: 2.2678
+Epoch 76/100, Batch 130/164, Loss: 2.1876
+Epoch 76/100, Batch 140/164, Loss: 2.2198
+Epoch 76/100, Batch 150/164, Loss: 2.2108
+Epoch 76/100, Batch 160/164, Loss: 2.2256
+Epoch 76/100, Loss: 2.2374, Perplexity: 9.37, Val Loss: 2.1895, Val Perplexity: 8.93, Time: 215.68s
+Epoch 77/100, Batch 10/164, Loss: 2.2556
+Epoch 77/100, Batch 20/164, Loss: 2.2682
+Epoch 77/100, Batch 30/164, Loss: 2.2409
+Epoch 77/100, Batch 40/164, Loss: 2.2775
+Epoch 77/100, Batch 50/164, Loss: 2.2437
+Epoch 77/100, Batch 60/164, Loss: 2.2164
+Epoch 77/100, Batch 70/164, Loss: 2.2910
+Epoch 77/100, Batch 80/164, Loss: 2.2205
+Epoch 77/100, Batch 90/164, Loss: 2.2164
+Epoch 77/100, Batch 100/164, Loss: 2.2611
+Epoch 77/100, Batch 110/164, Loss: 2.2055
+Epoch 77/100, Batch 120/164, Loss: 2.2748
+Epoch 77/100, Batch 130/164, Loss: 2.1832
+Epoch 77/100, Batch 140/164, Loss: 2.2348
+Epoch 77/100, Batch 150/164, Loss: 2.2185
+Epoch 77/100, Batch 160/164, Loss: 2.2332
+Epoch 77/100, Loss: 2.2352, Perplexity: 9.35, Val Loss: 2.1878, Val Perplexity: 8.92, Time: 214.91s
+Epoch 78/100, Batch 10/164, Loss: 2.2535
+Epoch 78/100, Batch 20/164, Loss: 2.2682
+Epoch 78/100, Batch 30/164, Loss: 2.2385
+Epoch 78/100, Batch 40/164, Loss: 2.2278
+Epoch 78/100, Batch 50/164, Loss: 2.1910
+Epoch 78/100, Batch 60/164, Loss: 2.2211
+Epoch 78/100, Batch 70/164, Loss: 2.2502
+Epoch 78/100, Batch 80/164, Loss: 2.2151
+Epoch 78/100, Batch 90/164, Loss: 2.2240
+Epoch 78/100, Batch 100/164, Loss: 2.2211
+Epoch 78/100, Batch 110/164, Loss: 2.2124
+Epoch 78/100, Batch 120/164, Loss: 2.2563
+Epoch 78/100, Batch 130/164, Loss: 2.1945
+Epoch 78/100, Batch 140/164, Loss: 2.3066
+Epoch 78/100, Batch 150/164, Loss: 2.2073
+Epoch 78/100, Batch 160/164, Loss: 2.2304
+Epoch 78/100, Loss: 2.2340, Perplexity: 9.34, Val Loss: 2.1881, Val Perplexity: 8.92, Time: 215.51s
+Epoch 79/100, Batch 10/164, Loss: 2.2635
+Epoch 79/100, Batch 20/164, Loss: 2.2670
+Epoch 79/100, Batch 30/164, Loss: 2.2330
+Epoch 79/100, Batch 40/164, Loss: 2.2279
+Epoch 79/100, Batch 50/164, Loss: 2.2135
+Epoch 79/100, Batch 60/164, Loss: 2.2124
+Epoch 79/100, Batch 70/164, Loss: 2.2580
+Epoch 79/100, Batch 80/164, Loss: 2.2180
+Epoch 79/100, Batch 90/164, Loss: 2.2203
+Epoch 79/100, Batch 100/164, Loss: 2.2266
+Epoch 79/100, Batch 110/164, Loss: 2.2024
+Epoch 79/100, Batch 120/164, Loss: 2.2563
+Epoch 79/100, Batch 130/164, Loss: 2.1777
+Epoch 79/100, Batch 140/164, Loss: 2.2237
+Epoch 79/100, Batch 150/164, Loss: 2.2098
+Epoch 79/100, Batch 160/164, Loss: 2.2208
+Epoch 79/100, Loss: 2.2304, Perplexity: 9.30, Val Loss: 2.1883, Val Perplexity: 8.92, Time: 215.30s
+Epoch 80/100, Batch 10/164, Loss: 2.2625
+Epoch 80/100, Batch 20/164, Loss: 2.2661
+Epoch 80/100, Batch 30/164, Loss: 2.2320
+Epoch 80/100, Batch 40/164, Loss: 2.2027
+Epoch 80/100, Batch 50/164, Loss: 2.1905
+Epoch 80/100, Batch 60/164, Loss: 2.2225
+Epoch 80/100, Batch 70/164, Loss: 2.2508
+Epoch 80/100, Batch 80/164, Loss: 2.2134
+Epoch 80/100, Batch 90/164, Loss: 2.2181
+Epoch 80/100, Batch 100/164, Loss: 2.2240
+Epoch 80/100, Batch 110/164, Loss: 2.2194
+Epoch 80/100, Batch 120/164, Loss: 2.2571
+Epoch 80/100, Batch 130/164, Loss: 2.1757
+Epoch 80/100, Batch 140/164, Loss: 2.2212
+Epoch 80/100, Batch 150/164, Loss: 2.3134
+Epoch 80/100, Batch 160/164, Loss: 2.2972
+New best model with validation loss: 2.1833, perplexity: 8.88
+Epoch 80/100, Loss: 2.2277, Perplexity: 9.28, Val Loss: 2.1833, Val Perplexity: 8.88, Time: 215.40s
+Epoch 81/100, Batch 10/164, Loss: 2.2459
+Epoch 81/100, Batch 20/164, Loss: 2.3004
+Epoch 81/100, Batch 30/164, Loss: 2.2419
+Epoch 81/100, Batch 40/164, Loss: 2.1703
+Epoch 81/100, Batch 50/164, Loss: 2.1995
+Epoch 81/100, Batch 60/164, Loss: 2.2422
+Epoch 81/100, Batch 70/164, Loss: 2.2440
+Epoch 81/100, Batch 80/164, Loss: 2.2190
+Epoch 81/100, Batch 90/164, Loss: 2.2156
+Epoch 81/100, Batch 100/164, Loss: 2.2131
+Epoch 81/100, Batch 110/164, Loss: 2.1999
+Epoch 81/100, Batch 120/164, Loss: 2.2575
+Epoch 81/100, Batch 130/164, Loss: 2.1704
+Epoch 81/100, Batch 140/164, Loss: 2.2186
+Epoch 81/100, Batch 150/164, Loss: 2.2052
+Epoch 81/100, Batch 160/164, Loss: 2.2260
+New best model with validation loss: 2.1831, perplexity: 8.87
+Epoch 81/100, Loss: 2.2256, Perplexity: 9.26, Val Loss: 2.1831, Val Perplexity: 8.87, Time: 215.85s
+Epoch 82/100, Batch 10/164, Loss: 2.2436
+Epoch 82/100, Batch 20/164, Loss: 2.2738
+Epoch 82/100, Batch 30/164, Loss: 2.2362
+Epoch 82/100, Batch 40/164, Loss: 2.1702
+Epoch 82/100, Batch 50/164, Loss: 2.1902
+Epoch 82/100, Batch 60/164, Loss: 2.2114
+Epoch 82/100, Batch 70/164, Loss: 2.2409
+Epoch 82/100, Batch 80/164, Loss: 2.2101
+Epoch 82/100, Batch 90/164, Loss: 2.2209
+Epoch 82/100, Batch 100/164, Loss: 2.2232
+Epoch 82/100, Batch 110/164, Loss: 2.1967
+Epoch 82/100, Batch 120/164, Loss: 2.4066
+Epoch 82/100, Batch 130/164, Loss: 2.1632
+Epoch 82/100, Batch 140/164, Loss: 2.2177
+Epoch 82/100, Batch 150/164, Loss: 2.2045
+Epoch 82/100, Batch 160/164, Loss: 2.2175
+New best model with validation loss: 2.1822, perplexity: 8.87
+Epoch 82/100, Loss: 2.2253, Perplexity: 9.26, Val Loss: 2.1822, Val Perplexity: 8.87, Time: 215.30s
+Epoch 83/100, Batch 10/164, Loss: 2.2485
+Epoch 83/100, Batch 20/164, Loss: 2.2589
+Epoch 83/100, Batch 30/164, Loss: 2.2395
+Epoch 83/100, Batch 40/164, Loss: 2.1659
+Epoch 83/100, Batch 50/164, Loss: 2.1842
+Epoch 83/100, Batch 60/164, Loss: 2.2160
+Epoch 83/100, Batch 70/164, Loss: 2.3124
+Epoch 83/100, Batch 80/164, Loss: 2.2086
+Epoch 83/100, Batch 90/164, Loss: 2.2134
+Epoch 83/100, Batch 100/164, Loss: 2.2210
+Epoch 83/100, Batch 110/164, Loss: 2.1966
+Epoch 83/100, Batch 120/164, Loss: 2.2490
+Epoch 83/100, Batch 130/164, Loss: 2.1744
+Epoch 83/100, Batch 140/164, Loss: 2.2153
+Epoch 83/100, Batch 150/164, Loss: 2.1986
+Epoch 83/100, Batch 160/164, Loss: 2.2242
+New best model with validation loss: 2.1817, perplexity: 8.86
+Epoch 83/100, Loss: 2.2241, Perplexity: 9.25, Val Loss: 2.1817, Val Perplexity: 8.86, Time: 214.22s
+Epoch 84/100, Batch 10/164, Loss: 2.2438
+Epoch 84/100, Batch 20/164, Loss: 2.2605
+Epoch 84/100, Batch 30/164, Loss: 2.2626
+Epoch 84/100, Batch 40/164, Loss: 2.1628
+Epoch 84/100, Batch 50/164, Loss: 2.1814
+Epoch 84/100, Batch 60/164, Loss: 2.2109
+Epoch 84/100, Batch 70/164, Loss: 2.2604
+Epoch 84/100, Batch 80/164, Loss: 2.2059
+Epoch 84/100, Batch 90/164, Loss: 2.2082
+Epoch 84/100, Batch 100/164, Loss: 2.2156
+Epoch 84/100, Batch 110/164, Loss: 2.1898
+Epoch 84/100, Batch 120/164, Loss: 2.2553
+Epoch 84/100, Batch 130/164, Loss: 2.1679
+Epoch 84/100, Batch 140/164, Loss: 2.2126
+Epoch 84/100, Batch 150/164, Loss: 2.2178
+Epoch 84/100, Batch 160/164, Loss: 2.2156
+New best model with validation loss: 2.1794, perplexity: 8.84
+Epoch 84/100, Loss: 2.2201, Perplexity: 9.21, Val Loss: 2.1794, Val Perplexity: 8.84, Time: 215.07s
+Epoch 85/100, Batch 10/164, Loss: 2.2347
+Epoch 85/100, Batch 20/164, Loss: 2.2517
+Epoch 85/100, Batch 30/164, Loss: 2.2753
+Epoch 85/100, Batch 40/164, Loss: 2.1850
+Epoch 85/100, Batch 50/164, Loss: 2.1870
+Epoch 85/100, Batch 60/164, Loss: 2.2140
+Epoch 85/100, Batch 70/164, Loss: 2.2379
+Epoch 85/100, Batch 80/164, Loss: 2.2003
+Epoch 85/100, Batch 90/164, Loss: 2.2093
+Epoch 85/100, Batch 100/164, Loss: 2.2092
+Epoch 85/100, Batch 110/164, Loss: 2.2771
+Epoch 85/100, Batch 120/164, Loss: 2.2440
+Epoch 85/100, Batch 130/164, Loss: 2.1850
+Epoch 85/100, Batch 140/164, Loss: 2.2096
+Epoch 85/100, Batch 150/164, Loss: 2.2038
+Epoch 85/100, Batch 160/164, Loss: 2.2077
+New best model with validation loss: 2.1763, perplexity: 8.81
+Epoch 85/100, Loss: 2.2218, Perplexity: 9.22, Val Loss: 2.1763, Val Perplexity: 8.81, Time: 214.42s
+Epoch 86/100, Batch 10/164, Loss: 2.2590
+Epoch 86/100, Batch 20/164, Loss: 2.2500
+Epoch 86/100, Batch 30/164, Loss: 2.2283
+Epoch 86/100, Batch 40/164, Loss: 2.1665
+Epoch 86/100, Batch 50/164, Loss: 2.1782
+Epoch 86/100, Batch 60/164, Loss: 2.2036
+Epoch 86/100, Batch 70/164, Loss: 2.2376
+Epoch 86/100, Batch 80/164, Loss: 2.2173
+Epoch 86/100, Batch 90/164, Loss: 2.2091
+Epoch 86/100, Batch 100/164, Loss: 2.2224
+Epoch 86/100, Batch 110/164, Loss: 2.1929
+Epoch 86/100, Batch 120/164, Loss: 2.2446
+Epoch 86/100, Batch 130/164, Loss: 2.1631
+Epoch 86/100, Batch 140/164, Loss: 2.2198
+Epoch 86/100, Batch 150/164, Loss: 2.1923
+Epoch 86/100, Batch 160/164, Loss: 2.1995
+Epoch 86/100, Loss: 2.2189, Perplexity: 9.20, Val Loss: 2.1777, Val Perplexity: 8.83, Time: 214.89s
+Epoch 87/100, Batch 10/164, Loss: 2.2519
+Epoch 87/100, Batch 20/164, Loss: 2.2497
+Epoch 87/100, Batch 30/164, Loss: 2.2275
+Epoch 87/100, Batch 40/164, Loss: 2.1623
+Epoch 87/100, Batch 50/164, Loss: 2.1831
+Epoch 87/100, Batch 60/164, Loss: 2.2002
+Epoch 87/100, Batch 70/164, Loss: 2.2307
+Epoch 87/100, Batch 80/164, Loss: 2.2837
+Epoch 87/100, Batch 90/164, Loss: 2.2790
+Epoch 87/100, Batch 100/164, Loss: 2.2084
+Epoch 87/100, Batch 110/164, Loss: 2.1948
+Epoch 87/100, Batch 120/164, Loss: 2.2476
+Epoch 87/100, Batch 130/164, Loss: 2.1591
+Epoch 87/100, Batch 140/164, Loss: 2.2148
+Epoch 87/100, Batch 150/164, Loss: 2.2000
+Epoch 87/100, Batch 160/164, Loss: 2.2231
+Epoch 87/100, Loss: 2.2171, Perplexity: 9.18, Val Loss: 2.1770, Val Perplexity: 8.82, Time: 215.27s
+Epoch 88/100, Batch 10/164, Loss: 2.2356
+Epoch 88/100, Batch 20/164, Loss: 2.2461
+Epoch 88/100, Batch 30/164, Loss: 2.2305
+Epoch 88/100, Batch 40/164, Loss: 2.1798
+Epoch 88/100, Batch 50/164, Loss: 2.1737
+Epoch 88/100, Batch 60/164, Loss: 2.2084
+Epoch 88/100, Batch 70/164, Loss: 2.2367
+Epoch 88/100, Batch 80/164, Loss: 2.1999
+Epoch 88/100, Batch 90/164, Loss: 2.2317
+Epoch 88/100, Batch 100/164, Loss: 2.2248
+Epoch 88/100, Batch 110/164, Loss: 2.1935
+Epoch 88/100, Batch 120/164, Loss: 2.2561
+Epoch 88/100, Batch 130/164, Loss: 2.1660
+Epoch 88/100, Batch 140/164, Loss: 2.2118
+Epoch 88/100, Batch 150/164, Loss: 2.1864
+Epoch 88/100, Batch 160/164, Loss: 2.2068
+New best model with validation loss: 2.1750, perplexity: 8.80
+Epoch 88/100, Loss: 2.2152, Perplexity: 9.16, Val Loss: 2.1750, Val Perplexity: 8.80, Time: 214.72s
+Epoch 89/100, Batch 10/164, Loss: 2.2345
+Epoch 89/100, Batch 20/164, Loss: 2.2722
+Epoch 89/100, Batch 30/164, Loss: 2.3197
+Epoch 89/100, Batch 40/164, Loss: 2.1581
+Epoch 89/100, Batch 50/164, Loss: 2.2413
+Epoch 89/100, Batch 60/164, Loss: 2.1934
+Epoch 89/100, Batch 70/164, Loss: 2.2296
+Epoch 89/100, Batch 80/164, Loss: 2.1971
+Epoch 89/100, Batch 90/164, Loss: 2.2056
+Epoch 89/100, Batch 100/164, Loss: 2.2035
+Epoch 89/100, Batch 110/164, Loss: 2.2090
+Epoch 89/100, Batch 120/164, Loss: 2.2472
+Epoch 89/100, Batch 130/164, Loss: 2.1706
+Epoch 89/100, Batch 140/164, Loss: 2.2261
+Epoch 89/100, Batch 150/164, Loss: 2.2063
+Epoch 89/100, Batch 160/164, Loss: 2.2023
+New best model with validation loss: 2.1715, perplexity: 8.77
+Epoch 89/100, Loss: 2.2168, Perplexity: 9.18, Val Loss: 2.1715, Val Perplexity: 8.77, Time: 213.78s
+Epoch 90/100, Batch 10/164, Loss: 2.2344
+Epoch 90/100, Batch 20/164, Loss: 2.2404
+Epoch 90/100, Batch 30/164, Loss: 2.2660
+Epoch 90/100, Batch 40/164, Loss: 2.1584
+Epoch 90/100, Batch 50/164, Loss: 2.1736
+Epoch 90/100, Batch 60/164, Loss: 2.1976
+Epoch 90/100, Batch 70/164, Loss: 2.2270
+Epoch 90/100, Batch 80/164, Loss: 2.1939
+Epoch 90/100, Batch 90/164, Loss: 2.2264
+Epoch 90/100, Batch 100/164, Loss: 2.2071
+Epoch 90/100, Batch 110/164, Loss: 2.1903
+Epoch 90/100, Batch 120/164, Loss: 2.2388
+Epoch 90/100, Batch 130/164, Loss: 2.2388
+Epoch 90/100, Batch 140/164, Loss: 2.2098
+Epoch 90/100, Batch 150/164, Loss: 2.1923
+Epoch 90/100, Batch 160/164, Loss: 2.2063
+Epoch 90/100, Loss: 2.2130, Perplexity: 9.14, Val Loss: 2.1729, Val Perplexity: 8.78, Time: 215.80s
+Epoch 91/100, Batch 10/164, Loss: 2.2316
+Epoch 91/100, Batch 20/164, Loss: 2.2507
+Epoch 91/100, Batch 30/164, Loss: 2.2235
+Epoch 91/100, Batch 40/164, Loss: 2.1595
+Epoch 91/100, Batch 50/164, Loss: 2.1703
+Epoch 91/100, Batch 60/164, Loss: 2.2682
+Epoch 91/100, Batch 70/164, Loss: 2.2337
+Epoch 91/100, Batch 80/164, Loss: 2.1964
+Epoch 91/100, Batch 90/164, Loss: 2.2504
+Epoch 91/100, Batch 100/164, Loss: 2.2003
+Epoch 91/100, Batch 110/164, Loss: 2.1890
+Epoch 91/100, Batch 120/164, Loss: 2.2374
+Epoch 91/100, Batch 130/164, Loss: 2.1535
+Epoch 91/100, Batch 140/164, Loss: 2.1983
+Epoch 91/100, Batch 150/164, Loss: 2.2020
+Epoch 91/100, Batch 160/164, Loss: 2.2047
+Epoch 91/100, Loss: 2.2142, Perplexity: 9.15, Val Loss: 2.1721, Val Perplexity: 8.78, Time: 213.41s
+Epoch 92/100, Batch 10/164, Loss: 2.2454
+Epoch 92/100, Batch 20/164, Loss: 2.2469
+Epoch 92/100, Batch 30/164, Loss: 2.2179
+Epoch 92/100, Batch 40/164, Loss: 2.1605
+Epoch 92/100, Batch 50/164, Loss: 2.1734
+Epoch 92/100, Batch 60/164, Loss: 2.3599
+Epoch 92/100, Batch 70/164, Loss: 2.2224
+Epoch 92/100, Batch 80/164, Loss: 2.2393
+Epoch 92/100, Batch 90/164, Loss: 2.1987
+Epoch 92/100, Batch 100/164, Loss: 2.2079
+Epoch 92/100, Batch 110/164, Loss: 2.1866
+Epoch 92/100, Batch 120/164, Loss: 2.2338
+Epoch 92/100, Batch 130/164, Loss: 2.1517
+Epoch 92/100, Batch 140/164, Loss: 2.2022
+Epoch 92/100, Batch 150/164, Loss: 2.1862
+Epoch 92/100, Batch 160/164, Loss: 2.1997
+Epoch 92/100, Loss: 2.2107, Perplexity: 9.12, Val Loss: 2.1731, Val Perplexity: 8.79, Time: 215.01s
+Epoch 93/100, Batch 10/164, Loss: 2.2293
+Epoch 93/100, Batch 20/164, Loss: 2.2459
+Epoch 93/100, Batch 30/164, Loss: 2.2160
+Epoch 93/100, Batch 40/164, Loss: 2.1522
+Epoch 93/100, Batch 50/164, Loss: 2.1772
+Epoch 93/100, Batch 60/164, Loss: 2.1940
+Epoch 93/100, Batch 70/164, Loss: 2.2278
+Epoch 93/100, Batch 80/164, Loss: 2.1991
+Epoch 93/100, Batch 90/164, Loss: 2.2004
+Epoch 93/100, Batch 100/164, Loss: 2.2053
+Epoch 93/100, Batch 110/164, Loss: 2.1830
+Epoch 93/100, Batch 120/164, Loss: 2.2397
+Epoch 93/100, Batch 130/164, Loss: 2.1582
+Epoch 93/100, Batch 140/164, Loss: 2.2185
+Epoch 93/100, Batch 150/164, Loss: 2.1790
+Epoch 93/100, Batch 160/164, Loss: 2.2037
+Epoch 93/100, Loss: 2.2121, Perplexity: 9.13, Val Loss: 2.1729, Val Perplexity: 8.78, Time: 214.16s
+Epoch 94/100, Batch 10/164, Loss: 2.2246
+Epoch 94/100, Batch 20/164, Loss: 2.2520
+Epoch 94/100, Batch 30/164, Loss: 2.2385
+Epoch 94/100, Batch 40/164, Loss: 2.1548
+Epoch 94/100, Batch 50/164, Loss: 2.1923
+Epoch 94/100, Batch 60/164, Loss: 2.1977
+Epoch 94/100, Batch 70/164, Loss: 2.2220
+Epoch 94/100, Batch 80/164, Loss: 2.2862
+Epoch 94/100, Batch 90/164, Loss: 2.2986
+Epoch 94/100, Batch 100/164, Loss: 2.2024
+Epoch 94/100, Batch 110/164, Loss: 2.1806
+Epoch 94/100, Batch 120/164, Loss: 2.2386
+Epoch 94/100, Batch 130/164, Loss: 2.1476
+Epoch 94/100, Batch 140/164, Loss: 2.2006
+Epoch 94/100, Batch 150/164, Loss: 2.1826
+Epoch 94/100, Batch 160/164, Loss: 2.1938
+No improvement for 5 epochs. Early stopping.
+Loaded best model with validation loss: 2.1715, perplexity: 8.77
+
+Training visualization saved to enhanced_char_transformer_loss.png
+
+=== Generating Text ===
+Prompt: The quick brown fox
+Generated: The quick brown fox the prevailed rather than an any other methods, and the [[George States in Atlas Shrugged|George States]]. The anti-Semitic previous is a number of the [[Confederate of Atlas Shrugged#List of Atlas S
+Model saved to enhanced_char_transformer_model.pt
+
+=== Generating with Different Temperatures ===
+
+Temperature: 0.5
+Generated: The quick brown fox the war.
+*[[1950]] - [[Structure of Atlas Shrugged|section]], American football player in [[Francis
+
+Temperature: 0.7
+Generated: The quick brown fox the rest of Australia.
+*[http://www.flind.com/history/flinds/circle_technology_flinds/preserve">{{A
+
+Temperature: 0.9
+Generated: The quick brown fox the bases of round.
+*[[Role (America)|Role]] extreme were not were by a following fall of the bases
