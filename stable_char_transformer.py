@@ -279,7 +279,7 @@ class EnhancedCharTransformer(nn.Module):
     """
     def __init__(self, vocab_size, d_model, nhead, num_layers, dim_feedforward,
                  dropout=0.1, attention_dropout=0.1, activation_dropout=0.1,
-                 token_dropout=0.05, use_checkpoint=True):
+                 token_dropout=0.05, use_checkpoint=True, stochastic_depth_prob=0.1):
         super(EnhancedCharTransformer, self).__init__()
 
         # Token embedding with weight tying preparation
@@ -325,6 +325,9 @@ class EnhancedCharTransformer(nn.Module):
 
         # Token-level dropout for better generalization
         self.token_dropout = token_dropout
+
+        # Stochastic depth probability
+        self.stochastic_depth_prob = stochastic_depth_prob
 
         # Initialize parameters
         self._init_parameters()
@@ -385,7 +388,7 @@ class EnhancedCharTransformer(nn.Module):
         for i, block in enumerate(self.transformer_blocks):
             # Apply stochastic depth (higher probability of skipping later layers)
             if self.training and i > 0:
-                skip_prob = 0.05 * (i / len(self.transformer_blocks))
+                skip_prob = self.stochastic_depth_prob * (i / len(self.transformer_blocks))
                 if random.random() < skip_prob:
                     continue
 
@@ -558,9 +561,25 @@ def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 
     return optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
 
+def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, min_lr=0.0, last_epoch=-1):
+    """
+    Create a schedule with a learning rate that decreases following the values of the cosine function between the
+    initial lr set in the optimizer to min_lr, after a warmup period during which it increases linearly between 0 and the
+    initial lr set in the optimizer.
+    """
+    def lr_lambda(current_step):
+        if current_step < num_warmup_steps:
+            return float(current_step) / float(max(1, num_warmup_steps))
+        progress = float(current_step - num_warmup_steps) / float(max(1, num_training_steps - num_warmup_steps))
+        cosine_decay = 0.5 * (1.0 + math.cos(math.pi * progress))
+        return min_lr + (1.0 - min_lr) * cosine_decay
+
+    return optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
+
 def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_rate=0.0001,
-                weight_decay=0.01, warmup_steps=0, device=None, patience=3, label_smoothing=0.0,
-                gradient_accumulation_steps=1, use_mixed_precision=True):
+                weight_decay=0.01, warmup_steps=0, min_lr=0.0, device=None, patience=3, 
+                label_smoothing=0.0, gradient_accumulation_steps=1, use_mixed_precision=True,
+                use_cosine_schedule=False):
     """
     Train the model and evaluate on validation set with mixed precision and gradient accumulation
 
@@ -572,11 +591,13 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
         learning_rate: Learning rate for the optimizer
         weight_decay: Weight decay for regularization
         warmup_steps: Number of warmup steps for learning rate scheduling
+        min_lr: Minimum learning rate for the optimizer
         device: Device to use for training
         patience: Number of epochs to wait for improvement before early stopping
         label_smoothing: Label smoothing factor for regularization
         gradient_accumulation_steps: Number of steps to accumulate gradients before updating weights
         use_mixed_precision: Whether to use mixed precision training (FP16)
+        use_cosine_schedule: Whether to use cosine learning rate schedule
 
     Returns:
         Trained model and training metrics
@@ -586,8 +607,6 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Move model to device
-
-
     model = model.to(device)
     print(f"Training on device: {device}")
 
@@ -625,9 +644,27 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
     # Create learning rate scheduler
     if warmup_steps > 0:
-        scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, total_steps)
+        if use_cosine_schedule:
+            scheduler = get_cosine_schedule_with_warmup(
+                optimizer, 
+                num_warmup_steps=warmup_steps,
+                num_training_steps=total_steps,
+                min_lr=min_lr
+            )
+        else:
+            scheduler = get_linear_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=warmup_steps,
+                num_training_steps=total_steps
+            )
     else:
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=0.5,
+            patience=2,
+            min_lr=min_lr
+        )
 
     # For tracking metrics
     train_losses = []
@@ -861,26 +898,32 @@ def main():
     data_path = 'data/enwik8'
     data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
 
-    # Model hyperparameters - enhanced configuration
-    d_model = 512  # Increased embedding dimension for better representation
-    nhead = 16  # More attention heads for capturing different relationships
-    num_layers = 12  # More transformer layers for deeper context understanding
-    dim_feedforward = 2048  # Larger feed-forward dimension for more capacity
-    dropout = 0.2  # Balanced dropout for regularization
-    attention_dropout = 0.1  # Specific dropout for attention
-    activation_dropout = 0.1  # Specific dropout for activations
-    token_dropout = 0.05  # Token-level dropout for better generalization
-    use_checkpoint = True  # Use gradient checkpointing to save memory
+    # Model hyperparameters - further enhanced configuration
+    d_model = 768  # Increased from 512 for better representation
+    nhead = 12  # Adjusted for better head-dimension ratio
+    num_layers = 16  # Increased depth
+    dim_feedforward = 3072  # Increased capacity
+    dropout = 0.2
+    attention_dropout = 0.15  # Slightly increased
+    activation_dropout = 0.15
+    token_dropout = 0.1  # Increased from 0.05
+    use_checkpoint = True
+    stochastic_depth_prob = 0.1  # Added stochastic depth
 
-    # Training hyperparameters - enhanced configuration
-    batch_size = 64  # Balanced batch size
-    seq_length = 512  # Longer sequences for better context
-    num_epochs = 100  # More epochs for better convergence
-    learning_rate = 3e-4  # Optimized learning rate
-    weight_decay = 0.1  # Strong weight decay for better regularization
-    label_smoothing = 0.1  # Label smoothing for better regularization
-    gradient_accumulation_steps = 4  # Accumulate gradients for effective larger batch
-    use_mixed_precision = True  # Use mixed precision for faster training
+    # Training hyperparameters - optimized configuration
+    batch_size = 32  # Reduced for better gradient estimates
+    seq_length = 768  # Increased context window
+    num_epochs = 100
+    learning_rate = 5e-4  # Slightly increased
+    min_lr = 1e-5  # Added minimum learning rate
+    weight_decay = 0.1
+    label_smoothing = 0.1
+    gradient_accumulation_steps = 8  # Increased for larger effective batch
+    use_mixed_precision = True
+    warmup_epochs = 2  # Increased warmup period
+
+    # Calculate warmup steps
+    warmup_steps = len(train_batches) * warmup_epochs
 
     # Load data
     print("Loading data...")
@@ -888,7 +931,7 @@ def main():
     print(f"Data loaded: {len(text)} characters")
 
     # Limit the data size for training
-    max_chars = 10000000  # Use more data for better learning
+    max_chars = 15000000  # Use more data for better learning
     if len(text) > max_chars:
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
@@ -913,7 +956,7 @@ def main():
     val_batches = create_batches(val_data, batch_size, seq_length)
     print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
-    # Create enhanced model
+    # Create enhanced model with stochastic depth
     model = EnhancedCharTransformer(
         vocab_size=tokenizer.vocab_size,
         d_model=d_model,
@@ -924,7 +967,8 @@ def main():
         attention_dropout=attention_dropout,
         activation_dropout=activation_dropout,
         token_dropout=token_dropout,
-        use_checkpoint=use_checkpoint
+        use_checkpoint=use_checkpoint,
+        stochastic_depth_prob=stochastic_depth_prob  # Added parameter
     )
 
     # Move model to device
@@ -935,10 +979,7 @@ def main():
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
 
-    # Calculate warmup steps
-    warmup_steps = len(train_batches) // 2  # Warmup for half an epoch
-
-    # Train model
+    # Train model with enhanced settings
     print("\n=== Training Enhanced Character Transformer Model ===")
     model, (train_losses, val_losses) = train_model(
         model=model,
@@ -948,11 +989,13 @@ def main():
         learning_rate=learning_rate,
         weight_decay=weight_decay,
         warmup_steps=warmup_steps,
+        min_lr=min_lr,  # Added parameter
         device=device,
-        patience=5,  # Increased patience for better convergence
+        patience=8,  # Increased patience
         label_smoothing=label_smoothing,
         gradient_accumulation_steps=gradient_accumulation_steps,
-        use_mixed_precision=use_mixed_precision
+        use_mixed_precision=use_mixed_precision,
+        use_cosine_schedule=True  # Added cosine schedule
     )
 
     # Visualize results
