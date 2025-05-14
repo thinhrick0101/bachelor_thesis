@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1042, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 926, in main
+    warmup_steps = len(train_batches) * warmup_epochs
+UnboundLocalError: local variable 'train_batches' referenced before assignment
