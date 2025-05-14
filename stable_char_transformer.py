@@ -11,38 +11,7 @@ import gzip
 import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
-
-class CharacterTokenizer:
-    """
-    Simple character-level tokenizer
-    """
-    def __init__(self, text=None):
-        if text is not None:
-            self.build_vocab(text)
-        else:
-            self.char_to_idx = {}
-            self.idx_to_char = {}
-            self.vocab_size = 0
-
-    def build_vocab(self, text):
-        """Build vocabulary from text"""
-        # Get unique characters
-        chars = sorted(list(set(text)))
-        self.vocab_size = len(chars)
-
-        # Create mappings
-        self.char_to_idx = {ch: i for i, ch in enumerate(chars)}
-        self.idx_to_char = {i: ch for i, ch in enumerate(chars)}
-
-        print(f"Vocabulary size: {self.vocab_size} characters")
-
-    def encode(self, text):
-        """Convert text to a list of integers"""
-        return [self.char_to_idx[ch] for ch in text]
-
-    def decode(self, indices):
-        """Convert a list of integers to text"""
-        return ''.join([self.idx_to_char[idx] for idx in indices])
+from bpe_tokenizer import BPETokenizer  # Import BPETokenizer
 
 def load_data(data_path, data_url=None):
     """
@@ -409,12 +378,12 @@ class EnhancedCharTransformer(nn.Module):
 
         Args:
             prompt: Initial text prompt
-            max_length: Maximum length of the generated text
+            max_length: Maximum length of the generated sequence (in tokens)
             temperature: Sampling temperature (higher = more random)
             top_k: Number of highest probability tokens to keep for top-k sampling
             top_p: Cumulative probability threshold for nucleus sampling
             repetition_penalty: Penalty for repeating tokens (1.0 = no penalty)
-            tokenizer: Character tokenizer
+            tokenizer: BPE tokenizer instance
             device: Device to use for generation
 
         Returns:
@@ -456,7 +425,6 @@ class EnhancedCharTransformer(nn.Module):
                     # Check for NaN values
                     if torch.isnan(next_token_logits).any():
                         print("Warning: NaN values detected in logits. Using uniform sampling.")
-                        # Fall back to uniform sampling
                         next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
                     else:
                         # Apply repetition penalty
@@ -466,7 +434,7 @@ class EnhancedCharTransformer(nn.Module):
                                     next_token_logits[:, token_id] /= repetition_penalty
 
                         # Apply temperature with a safety check
-                        next_token_logits = next_token_logits / max(0.1, temperature)  # Prevent division by zero
+                        next_token_logits = next_token_logits / max(0.1, temperature)
 
                         # Apply top-k filtering
                         if top_k > 0:
@@ -480,10 +448,7 @@ class EnhancedCharTransformer(nn.Module):
 
                         # Apply top-p (nucleus) filtering with safety checks
                         if top_p < 1.0:
-                            # Sort logits in descending order
                             sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
-
-                            # Apply softmax with a safety check
                             sorted_probs = F.softmax(sorted_logits, dim=-1)
 
                             # Check for NaN values
@@ -492,7 +457,6 @@ class EnhancedCharTransformer(nn.Module):
                                 next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
                                 continue
 
-                            # Calculate cumulative probabilities
                             cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
 
                             # Create mask for tokens to remove
@@ -527,6 +491,10 @@ class EnhancedCharTransformer(nn.Module):
 
                     # Add the new token to past tokens for repetition penalty
                     past_tokens.add(next_token.item())
+
+                    # Check if we've generated an end token
+                    if next_token.item() == tokenizer.encoder.get('</s>', -1):
+                        break
 
                     # Append the next token to the generated sequence
                     generated = torch.cat((generated, next_token), dim=1)
@@ -898,29 +866,30 @@ def main():
     data_path = 'data/enwik8'
     data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
 
-    # Model hyperparameters - further enhanced configuration
-    d_model = 768  # Increased from 512 for better representation
-    nhead = 12  # Adjusted for better head-dimension ratio
-    num_layers = 16  # Increased depth
-    dim_feedforward = 3072  # Increased capacity
+    # Model hyperparameters - adjusted for BPE tokenization
+    d_model = 768
+    nhead = 12
+    num_layers = 16
+    dim_feedforward = 3072
     dropout = 0.2
-    attention_dropout = 0.15  # Slightly increased
+    attention_dropout = 0.15
     activation_dropout = 0.15
-    token_dropout = 0.1  # Increased from 0.05
+    token_dropout = 0.1
     use_checkpoint = True
-    stochastic_depth_prob = 0.1  # Added stochastic depth
+    stochastic_depth_prob = 0.1
+    vocab_size = 8000  # Increased vocab size for BPE tokenization
 
-    # Training hyperparameters - optimized configuration
-    batch_size = 32  # Reduced for better gradient estimates
-    seq_length = 768  # Increased context window
+    # Training hyperparameters
+    batch_size = 32
+    seq_length = 512  # Reduced sequence length since tokens represent larger units
     num_epochs = 100
-    learning_rate = 5e-4  # Slightly increased
-    min_lr = 1e-5  # Added minimum learning rate
+    learning_rate = 5e-4
+    min_lr = 1e-5
     weight_decay = 0.1
     label_smoothing = 0.1
-    gradient_accumulation_steps = 8  # Increased for larger effective batch
+    gradient_accumulation_steps = 8
     use_mixed_precision = True
-    warmup_epochs = 2  # Increased warmup period
+    warmup_epochs = 2
 
     # Load data
     print("Loading data...")
@@ -928,13 +897,19 @@ def main():
     print(f"Data loaded: {len(text)} characters")
 
     # Limit the data size for training
-    max_chars = 15000000  # Use more data for better learning
+    max_chars = 20000000
     if len(text) > max_chars:
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
 
-    # Create tokenizer
-    tokenizer = CharacterTokenizer(text)
+    # Create and train BPE tokenizer
+    print("Training BPE tokenizer...")
+    tokenizer = BPETokenizer(vocab_size=vocab_size)
+    tokenizer.train(text, min_frequency=2)
+    
+    # Save tokenizer for later use
+    tokenizer.save('data/bpe_tokenizer.json')
+    print("Tokenizer saved to data/bpe_tokenizer.json")
 
     # Encode the text
     data = tokenizer.encode(text)
@@ -958,7 +933,7 @@ def main():
 
     # Create enhanced model with stochastic depth
     model = EnhancedCharTransformer(
-        vocab_size=tokenizer.vocab_size,
+        vocab_size=vocab_size,  # Use BPE vocab size
         d_model=d_model,
         nhead=nhead,
         num_layers=num_layers,
@@ -980,7 +955,7 @@ def main():
     print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
 
     # Train model with enhanced settings
-    print("\n=== Training Enhanced Character Transformer Model ===")
+    print("\n=== Training Enhanced Transformer Model with BPE Tokenization ===")
     model, (train_losses, val_losses) = train_model(
         model=model,
         train_batches=train_batches,
@@ -989,45 +964,42 @@ def main():
         learning_rate=learning_rate,
         weight_decay=weight_decay,
         warmup_steps=warmup_steps,
-        min_lr=min_lr,  # Added parameter
+        min_lr=min_lr,
         device=device,
-        patience=8,  # Increased patience
+        patience=8,
         label_smoothing=label_smoothing,
         gradient_accumulation_steps=gradient_accumulation_steps,
         use_mixed_precision=use_mixed_precision,
-        use_cosine_schedule=True  # Added cosine schedule
+        use_cosine_schedule=True
     )
 
     # Visualize results
-    visualize_results(train_losses, val_losses, 'enhanced_char_transformer_loss.png')
-    print("\nTraining visualization saved to enhanced_char_transformer_loss.png")
-
-    # Generate some text
-    print("\n=== Generating Text ===")
-    prompt = "The quick brown fox"
-    generated_text = model.generate(
-        prompt=prompt,
-        max_length=500,
-        temperature=0.6,  # Lower temperature for more coherent text
-        top_k=5,  # Increased top_k for more diversity
-        top_p=0.95,  # Balanced top_p for coherence and diversity
-        repetition_penalty=1.2,  # Add repetition penalty to avoid loops
-        tokenizer=tokenizer,
-        device=device
-    )
-    print(f"Prompt: {prompt}")
-    print(f"Generated: {generated_text}")
+    visualize_results(train_losses, val_losses, 'bpe_transformer_loss.png')
+    print("\nTraining visualization saved to bpe_transformer_loss.png")
 
     # Save model
-    torch.save(model.state_dict(), 'enhanced_char_transformer_model.pt')
-    print("Model saved to enhanced_char_transformer_model.pt")
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'vocab_size': vocab_size,
+        'd_model': d_model,
+        'nhead': nhead,
+        'num_layers': num_layers,
+        'dim_feedforward': dim_feedforward,
+        'dropout': dropout,
+        'attention_dropout': attention_dropout,
+        'activation_dropout': activation_dropout,
+        'token_dropout': token_dropout,
+        'stochastic_depth_prob': stochastic_depth_prob
+    }, 'bpe_transformer_model.pt')
+    print("Model saved to bpe_transformer_model.pt")
 
-    # Try generating with different temperatures
+    # Generate some text with different temperatures
     print("\n=== Generating with Different Temperatures ===")
+    prompt = "The quick brown fox"
     for temp in [0.5, 0.7, 0.9]:
         generated_text = model.generate(
             prompt=prompt,
-            max_length=500,
+            max_length=200,  # Reduced since tokens represent larger units
             temperature=temp,
             top_k=50,
             top_p=0.92,
