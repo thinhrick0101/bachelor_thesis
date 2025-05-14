@@ -902,14 +902,11 @@ def main():
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
 
-    # Create and train BPE tokenizer
-    print("Training BPE tokenizer...")
     tokenizer = BPETokenizer(vocab_size=vocab_size)
-    tokenizer.train(text, min_frequency=2)
     
     # Save tokenizer for later use
-    tokenizer.save('data/bpe_tokenizer.json')
-    print("Tokenizer saved to data/bpe_tokenizer.json")
+    tokenizer.load('data/bpe_tokenizer.json')
+    print("Tokenizer loaded from data/bpe_tokenizer.json")
 
     # Encode the text
     data = tokenizer.encode(text)
