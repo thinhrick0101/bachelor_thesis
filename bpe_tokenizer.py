@@ -55,7 +55,8 @@ class BPETokenizer:
                 pairs[pair] += 1
                 
                 # Early break if we've found a very frequent pair
-                if pairs[pair] >= min_frequency * 10:
+                # Increased threshold to allow more exploration
+                if pairs[pair] >= min_frequency * 100:
                     return pairs
         
         return pairs
@@ -85,8 +86,9 @@ class BPETokenizer:
         pbar = tqdm(total=self.vocab_size - len(self.encoder), 
                    desc="Training BPE tokenizer")
         
-        last_pair_count = float('inf')
-        unchanged_count = 0
+        last_pair_counts = []  # Keep track of last N pair counts
+        window_size = 10  # Number of iterations to check for convergence
+        min_change_ratio = 0.01  # Minimum change ratio to continue
         
         while len(self.encoder) < self.vocab_size:
             # Find most common pair
@@ -95,21 +97,33 @@ class BPETokenizer:
                 print("\nNo more pairs found above minimum frequency")
                 break
             
-            # Check for convergence
-            max_pair_count = max(pairs.values())
-            if max_pair_count == last_pair_count:
-                unchanged_count += 1
-                if unchanged_count >= 5:
-                    print("\nConverged: No significant changes in pair frequencies")
-                    break
-            else:
-                unchanged_count = 0
-            last_pair_count = max_pair_count
-            
             # Get most frequent pair
             pair = max(pairs.items(), key=lambda x: x[1])
-            if pair[1] < min_frequency:
-                print("\nNo more pairs above minimum frequency threshold")
+            current_count = pair[1]
+            
+            # Check for convergence using a moving window
+            last_pair_counts.append(current_count)
+            if len(last_pair_counts) > window_size:
+                last_pair_counts.pop(0)
+                
+                # Calculate the rate of change over the window
+                if len(last_pair_counts) == window_size:
+                    start_count = last_pair_counts[0]
+                    end_count = last_pair_counts[-1]
+                    change_ratio = abs(end_count - start_count) / start_count
+                    
+                    # Only stop if change is very small and we have a decent vocabulary
+                    if change_ratio < min_change_ratio and len(self.encoder) > self.vocab_size * 0.5:
+                        print(f"\nConverged: Change ratio {change_ratio:.4f} below threshold {min_change_ratio}")
+                        break
+            
+            # Check minimum frequency with a decreasing threshold
+            current_threshold = max(
+                min_frequency,
+                min_frequency * (1.0 - len(self.encoder) / self.vocab_size)
+            )
+            if pair[1] < current_threshold:
+                print(f"\nNo more pairs above adaptive threshold {current_threshold}")
                 break
             
             # Create new token
@@ -137,6 +151,7 @@ class BPETokenizer:
                 print(f"\nVocabulary size: {len(self.encoder)}")
                 print(f"Most frequent pair: {new_token} (count: {pair[1]})")
                 print(f"Maximum token length: {self.max_token_length}")
+                print(f"Current frequency threshold: {current_threshold}")
         
         pbar.close()
         print(f"\nFinal vocabulary size: {len(self.encoder)}")
