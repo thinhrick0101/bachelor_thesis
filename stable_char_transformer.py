@@ -72,6 +72,43 @@ class CharacterTokenizer:
         """Convert a list of integers to text"""
         return ''.join([self.idx_to_char[idx] for idx in indices])
 
+class ByteTokenizer:
+    """
+    Byte-level tokenizer with a fixed vocabulary size of 256
+    """
+    def __init__(self):
+        # Fixed vocabulary size of 256 (all possible bytes)
+        self.vocab_size = 256
+        
+        # Create byte-to-index and index-to-byte mappings
+        self.byte_to_idx = {i: i for i in range(256)}
+        self.idx_to_byte = {i: i for i in range(256)}
+        
+    def encode(self, text):
+        """Convert text to byte indices"""
+        if isinstance(text, str):
+            # Convert string to bytes and then to indices
+            bytes_data = text.encode('utf-8', errors='replace')
+            return torch.tensor([b for b in bytes_data], dtype=torch.long)
+        elif isinstance(text, bytes):
+            # Already in bytes format
+            return torch.tensor([b for b in text], dtype=torch.long)
+        else:
+            raise ValueError("Input must be string or bytes")
+    
+    def decode(self, indices):
+        """Convert byte indices back to text"""
+        if torch.is_tensor(indices):
+            indices = indices.tolist()
+        
+        # Convert indices to bytes and then to string
+        try:
+            bytes_data = bytes(indices)
+            return bytes_data.decode('utf-8', errors='replace')
+        except Exception as e:
+            print(f"Warning: Error decoding bytes: {e}")
+            return ''.join([chr(i) if i < 128 else '?' for i in indices])
+
 def load_data(data_path, data_url=None):
     """
     Load text data from file or download if not available
@@ -932,69 +969,68 @@ def main():
     # Data parameters
     data_path = 'data/enwik8'
     data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
-    tokenizer_path = 'bpe-enwik8-tokenizer.json'  # Path to the BPE tokenizer
 
-    # Model hyperparameters - further enhanced configuration
-    d_model = 768  # Increased from 512 for better representation
-    nhead = 12  # Adjusted for better head-dimension ratio
-    num_layers = 16  # Increased depth
-    dim_feedforward = 3072  # Increased capacity
-    dropout = 0.2
-    attention_dropout = 0.15  # Slightly increased
-    activation_dropout = 0.15
-    token_dropout = 0.1  # Increased from 0.05
+    # Model hyperparameters - optimized for byte-level
+    d_model = 512
+    nhead = 8
+    num_layers = 12
+    dim_feedforward = 2048
+    dropout = 0.1
+    attention_dropout = 0.1
+    activation_dropout = 0.1
+    token_dropout = 0.05
     use_checkpoint = True
-    stochastic_depth_prob = 0.1  # Added stochastic depth
+    stochastic_depth_prob = 0.1
 
-    # Training hyperparameters - optimized configuration
-    batch_size = 16  # Reduced batch size to save memory
-    seq_length = 512  # Reduced sequence length to save memory
+    # Training hyperparameters - optimized for byte-level
+    batch_size = 32
+    seq_length = 1024  # Good sequence length for byte-level
     num_epochs = 100
-    learning_rate = 5e-4  # Slightly increased
-    min_lr = 1e-5  # Added minimum learning rate
+    learning_rate = 1e-4
+    min_lr = 1e-5
     weight_decay = 0.1
-    label_smoothing = 0.1
-    gradient_accumulation_steps = 16  # Increased to compensate for smaller batch
+    label_smoothing = 0.0
+    gradient_accumulation_steps = 8
     use_mixed_precision = True
-    warmup_epochs = 2  # Increased warmup period
+    warmup_epochs = 5
 
     # Set memory allocation settings
     if torch.cuda.is_available():
-        torch.cuda.set_per_process_memory_fraction(0.85)  # Limit GPU memory usage
+        torch.cuda.set_per_process_memory_fraction(0.85)
         os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
 
     # Load data
     print("Loading data...")
     text = load_data(data_path, data_url)
-    print(f"Data loaded: {len(text)} characters")
+    print(f"Data loaded: {len(text)} bytes")
 
-    # Limit the data size for training
-    max_chars = 15000000  # Use more data for better learning
-    if len(text) > max_chars:
-        print(f"Limiting data to first {max_chars} characters for training")
-        text = text[:max_chars]
-
-    # Create BPE tokenizer
-    print("Loading BPE tokenizer...")
-    tokenizer = BPETokenizer(tokenizer_path)
-    print(f"Vocabulary size: {tokenizer.vocab_size}")
-
-    # Analyze tokenization
-    print("\nAnalyzing tokenization...")
-    sample_text = text[:1000]  # Take a sample
-    encoded = tokenizer.tokenizer.encode(sample_text)
-    print(f"Sample text length: {len(sample_text)} characters")
-    print(f"Encoded length: {len(encoded.ids)} tokens")
-    print(f"Average tokens per character: {len(encoded.ids) / len(sample_text):.2f}")
-    
-    # Print some example tokenization
-    print("\nExample tokenization:")
-    for i in range(min(5, len(encoded.tokens))):
-        print(f"Token {i}: {encoded.tokens[i]} (ID: {encoded.ids[i]})")
+    # Create byte tokenizer
+    print("Creating byte tokenizer...")
+    tokenizer = ByteTokenizer()
+    print(f"Vocabulary size: {tokenizer.vocab_size} bytes (fixed)")
 
     # Encode the text
-    print("\nEncoding full text with BPE tokenizer...")
+    print("Encoding text...")
     data = tokenizer.encode(text)
+    print(f"Encoded length: {len(data)} tokens")
+
+    # Analyze tokenization
+    print("\nAnalyzing byte-level tokenization...")
+    sample_text = text[:100]
+    encoded = tokenizer.encode(sample_text)
+    print(f"Sample text length: {len(sample_text)} bytes")
+    print(f"Encoded length: {len(encoded)} tokens")
+    print(f"Token-to-byte ratio: {len(encoded) / len(sample_text):.2f}")
+    
+    # Print some example tokenization
+    print("\nExample byte values (first 10):")
+    for i in range(min(10, len(encoded))):
+        byte_val = encoded[i].item()
+        try:
+            char = chr(byte_val) if 32 <= byte_val <= 126 else f"<byte {byte_val}>"
+            print(f"Byte {i}: {char} (ID: {byte_val})")
+        except:
+            print(f"Byte {i}: <byte {byte_val}> (ID: {byte_val})")
 
     # Split data into training and validation sets (90% / 10%)
     split_idx = int(len(data) * 0.9)
