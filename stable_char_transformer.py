@@ -11,6 +11,34 @@ import gzip
 import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
+from tokenizers import Tokenizer  # For loading the BPE tokenizer
+
+class BPETokenizer:
+    """
+    BPE tokenizer wrapper for the pre-trained tokenizer
+    """
+    def __init__(self, tokenizer_path):
+        self.tokenizer = Tokenizer.from_file(tokenizer_path)
+        self.vocab_size = self.tokenizer.get_vocab_size()
+        
+    def encode(self, text):
+        """
+        Encode text to token ids
+        """
+        if isinstance(text, str):
+            encoded = self.tokenizer.encode(text)
+            return torch.tensor(encoded.ids, dtype=torch.long)
+        elif isinstance(text, list):
+            encoded = self.tokenizer.encode_batch(text)
+            return torch.tensor([e.ids for e in encoded], dtype=torch.long)
+        
+    def decode(self, indices):
+        """
+        Decode token ids back to text
+        """
+        if indices.dim() == 1:
+            return self.tokenizer.decode(indices.tolist())
+        return [self.tokenizer.decode(ids.tolist()) for ids in indices]
 
 class CharacterTokenizer:
     """
@@ -897,6 +925,7 @@ def main():
     # Data parameters
     data_path = 'data/enwik8'
     data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
+    tokenizer_path = 'bpe-enwik8-tokenizer.json'  # Path to the BPE tokenizer
 
     # Model hyperparameters - further enhanced configuration
     d_model = 768  # Increased from 512 for better representation
@@ -933,10 +962,13 @@ def main():
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
 
-    # Create tokenizer
-    tokenizer = CharacterTokenizer(text)
+    # Create BPE tokenizer
+    print("Loading BPE tokenizer...")
+    tokenizer = BPETokenizer(tokenizer_path)
+    print(f"Vocabulary size: {tokenizer.vocab_size}")
 
     # Encode the text
+    print("Encoding text with BPE tokenizer...")
     data = tokenizer.encode(text)
 
     # Split data into training and validation sets (90% / 10%)
