@@ -635,10 +635,20 @@ def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5
     if is_distributed:
         model = DDP(model, device_ids=[local_rank], output_device=local_rank)
     
-    # Rest of the training function remains similar, but we need to handle distributed metrics
-    # ... existing training loop code ...
+    # Add progress tracking variables
+    total_steps = 0
+    log_interval = 1  # Log every batch
+    best_loss = float('inf')
     
-    # Modify the training loop to handle distributed training
+    def log_metrics(epoch, batch_idx, loss, lr, perplexity, is_val=False, total_batches=None):
+        if local_rank == 0:  # Only print from master process
+            prefix = "Val" if is_val else "Train"
+            progress = f"[{batch_idx}/{total_batches}]" if total_batches else f"[{batch_idx}]"
+            print(f"Epoch {epoch+1} {progress} | "
+                  f"{prefix} Loss: {loss:.4f} | "
+                  f"Perplexity: {perplexity:.2f} | "
+                  f"Learning Rate: {lr:.6f}")
+    
     for epoch in range(num_epochs):
         model.train()
         total_loss = torch.zeros(1).to(device)
@@ -646,6 +656,9 @@ def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5
         start_time = time.time()
         
         optimizer.zero_grad()
+        
+        # Get current learning rate
+        current_lr = optimizer.param_groups[0]['lr']
         
         for batch_idx, (inputs, targets) in enumerate(train_batches):
             inputs = inputs.to(device)
@@ -669,6 +682,7 @@ def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5
                     
                     if warmup_steps > 0:
                         scheduler.step()
+                        current_lr = scheduler.get_last_lr()[0]
             else:
                 outputs = model(inputs)
                 outputs = outputs.reshape(-1, outputs.size(-1))
@@ -683,13 +697,21 @@ def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5
                     
                     if warmup_steps > 0:
                         scheduler.step()
+                        current_lr = scheduler.get_last_lr()[0]
             
+            # Track loss and metrics
             total_loss += loss.item() * gradient_accumulation_steps
             num_batches += 1
+            total_steps += 1
             
-            if (batch_idx + 1) % 10 == 0 and local_rank == 0:
-                print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
-                      f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
+            # Calculate perplexity
+            batch_perplexity = torch.exp(loss * gradient_accumulation_steps)
+            
+            # Log progress
+            if (batch_idx + 1) % log_interval == 0:
+                avg_loss = loss.item() * gradient_accumulation_steps
+                log_metrics(epoch, batch_idx + 1, avg_loss, current_lr, 
+                          batch_perplexity.item(), False, len(train_batches))
         
         # Synchronize loss across all processes
         if is_distributed:
@@ -697,31 +719,70 @@ def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5
             total_loss /= dist.get_world_size()
         
         avg_loss = total_loss.item() / num_batches
-        train_losses.append(avg_loss)
+        epoch_perplexity = math.exp(avg_loss)
         
-        # Only evaluate on validation set from rank 0
+        # Evaluate on validation set
         if val_batches is not None and local_rank in [-1, 0]:
-            val_loss = evaluate_model(model, val_batches, criterion, device, use_amp)
-            val_losses.append(val_loss)
+            model.eval()
+            val_loss = 0
+            val_batches_count = 0
             
-            if warmup_steps == 0:
-                scheduler.step(val_loss)
+            with torch.no_grad():
+                for val_batch_idx, (inputs, targets) in enumerate(val_batches):
+                    inputs = inputs.to(device)
+                    targets = targets.to(device)
+                    
+                    if use_amp:
+                        with autocast():
+                            outputs = model(inputs)
+                            outputs = outputs.reshape(-1, outputs.size(-1))
+                            targets = targets.reshape(-1)
+                            batch_loss = criterion(outputs, targets)
+                    else:
+                        outputs = model(inputs)
+                        outputs = outputs.reshape(-1, outputs.size(-1))
+                        targets = targets.reshape(-1)
+                        batch_loss = criterion(outputs, targets)
+                    
+                    val_loss += batch_loss.item()
+                    val_batches_count += 1
+                    
+                    # Log validation metrics
+                    if (val_batch_idx + 1) % log_interval == 0:
+                        batch_val_perplexity = torch.exp(batch_loss)
+                        log_metrics(epoch, val_batch_idx + 1, batch_loss.item(), 
+                                  current_lr, batch_val_perplexity.item(), True, len(val_batches))
             
-            if val_loss < best_val_loss:
-                best_val_loss = val_loss
-                best_model_state = model.module.state_dict() if is_distributed else model.state_dict()
-                no_improvement_count = 0
-            else:
-                no_improvement_count += 1
-            
-            if no_improvement_count >= patience:
-                print(f"No improvement for {patience} epochs. Early stopping.")
-                break
+            val_loss /= val_batches_count
+            val_perplexity = math.exp(val_loss)
             
             if local_rank == 0:
-                print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}, Val Loss: {val_loss:.4f}')
+                print(f"\nEpoch {epoch+1} Summary | "
+                      f"Train Loss: {avg_loss:.4f} | "
+                      f"Train Perplexity: {epoch_perplexity:.2f} | "
+                      f"Val Loss: {val_loss:.4f} | "
+                      f"Val Perplexity: {val_perplexity:.2f} | "
+                      f"Time: {time.time() - start_time:.2f}s")
+                
+                # Save best model
+                if val_loss < best_loss:
+                    best_loss = val_loss
+                    if local_rank == 0:
+                        print(f"New best model! Loss: {val_loss:.4f}, Perplexity: {val_perplexity:.2f}")
+                        # Save checkpoint
+                        torch.save({
+                            'epoch': epoch,
+                            'model_state_dict': model.module.state_dict() if is_distributed else model.state_dict(),
+                            'optimizer_state_dict': optimizer.state_dict(),
+                            'loss': val_loss,
+                            'perplexity': val_perplexity
+                        }, f'models/checkpoint_epoch_{epoch+1}.pt')
+        
         elif local_rank == 0:
-            print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}')
+            print(f"\nEpoch {epoch+1} Summary | "
+                  f"Train Loss: {avg_loss:.4f} | "
+                  f"Train Perplexity: {epoch_perplexity:.2f} | "
+                  f"Time: {time.time() - start_time:.2f}s")
     
     return model, (train_losses, val_losses)
 
