@@ -12,7 +12,9 @@
 
 # Load required modules
 module load cuda11.3/toolkit
-module load openmpi
+module load gnu12/12.4.0
+module load openmpi4/4.1.6
+module load py3-mpi4py/3.1.3
 
 # Activate conda environment
 source /var/scratch/$USER/anaconda3/etc/profile.d/conda.sh
