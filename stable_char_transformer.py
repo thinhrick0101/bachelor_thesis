@@ -567,33 +567,61 @@ def cleanup_distributed():
 
 def create_distributed_batches(data, batch_size, seq_length, rank, world_size):
     """Create batches for distributed training"""
-    # Calculate the number of batches
-    num_batches = (len(data) - 1) // (batch_size * seq_length)
+    # Calculate total number of sequences that can fit in batches
+    total_seq = (len(data) - 1) // seq_length
+    # Calculate sequences per batch
+    seqs_per_batch = total_seq // batch_size
+    # Ensure we have enough complete batches
+    usable_seqs = seqs_per_batch * batch_size
     
-    # Trim the data to fit into batches
-    data = data[:num_batches * batch_size * seq_length + 1]
+    # Trim data to fit complete sequences
+    usable_length = usable_seqs * seq_length
+    data = data[:usable_length + 1]  # +1 for target shifting
     
-    # Create a tensor from the data
+    # Create tensor from data
     data_tensor = torch.tensor(data, dtype=torch.long)
     
-    # Split data for each process
-    per_rank_size = len(data_tensor) // world_size
-    start_idx = rank * per_rank_size
-    end_idx = start_idx + per_rank_size if rank != world_size - 1 else len(data_tensor)
+    # Calculate size for each rank
+    per_rank_seqs = usable_seqs // world_size
+    seqs_remainder = usable_seqs % world_size
     
+    # Adjust sequences for this rank
+    if rank < seqs_remainder:
+        rank_seqs = per_rank_seqs + 1
+        start_seq = rank * (per_rank_seqs + 1)
+    else:
+        rank_seqs = per_rank_seqs
+        start_seq = (rank * per_rank_seqs) + seqs_remainder
+    
+    # Calculate data indices for this rank
+    start_idx = start_seq * seq_length
+    end_idx = start_idx + (rank_seqs * seq_length) + 1  # +1 for target shifting
+    
+    # Get local data
     local_data = data_tensor[start_idx:end_idx]
-    
-    # Create input and target tensors
-    x = local_data[:-1].view(batch_size, -1)
-    y = local_data[1:].view(batch_size, -1)
     
     # Create batches
     batches = []
-    for i in range(0, x.size(1), seq_length):
-        if i + seq_length <= x.size(1):
-            input_batch = x[:, i:i+seq_length].clone()
-            target_batch = y[:, i:i+seq_length].clone()
-            batches.append((input_batch, target_batch))
+    local_seqs = rank_seqs
+    
+    # Reshape data into batches
+    if local_seqs > 0:
+        # Calculate local batch size to ensure even division
+        local_batch_size = min(batch_size, local_seqs)
+        while local_seqs % local_batch_size != 0:
+            local_batch_size -= 1
+        
+        if local_batch_size > 0:
+            # Reshape data into [batch_size, sequence_length]
+            x = local_data[:-1].view(local_batch_size, -1)
+            y = local_data[1:].view(local_batch_size, -1)
+            
+            # Create batches
+            for i in range(0, x.size(1), seq_length):
+                if i + seq_length <= x.size(1):
+                    input_batch = x[:, i:i+seq_length].clone()
+                    target_batch = y[:, i:i+seq_length].clone()
+                    batches.append((input_batch, target_batch))
     
     return batches
 
