@@ -25,6 +25,8 @@ class BPETokenizer:
         self.max_token_length = 0
         self.char_ngram_freqs = defaultdict(int)  # Track character n-gram frequencies
         self.token_coverage = defaultdict(int)    # Track token coverage
+        self._cache = {}  # Cache for frequently accessed tokens
+        self._cache_size = 10000  # Maximum cache size
         
     def _init_vocab(self, text: str) -> None:
         """Initialize vocabulary with all unique characters and special tokens"""
@@ -282,21 +284,31 @@ class BPETokenizer:
             self.vocab_size = data['vocab_size']
             self.special_tokens = data['special_tokens']
             self.max_token_length = data.get('max_token_length', 1)
+            self._clear_cache()  # Clear cache after loading new tokenizer
+    
+    def _clear_cache(self):
+        """Clear the token cache"""
+        self._cache.clear()
     
     def encode(self, text: str) -> List[int]:
-        """Encode text to token ids with optimized processing"""
+        """Encode text to token ids with optimized processing and caching"""
         if not text:
             return []
         
         tokens = []
         for word in text.split():
+            # Check cache first
+            if word in self._cache:
+                tokens.extend(self._cache[word])
+                continue
+            
             # Try to encode whole word first
             if word in self.encoder:
                 tokens.append(self.encoder[word])
                 continue
             
             # Try to encode subwords efficiently
-            current_token = ""
+            word_tokens = []
             i = 0
             while i < len(word):
                 found = False
@@ -304,15 +316,21 @@ class BPETokenizer:
                 for j in range(min(self.max_token_length, len(word) - i), 0, -1):
                     subword = word[i:i+j]
                     if subword in self.encoder:
-                        tokens.append(self.encoder[subword])
+                        word_tokens.append(self.encoder[subword])
                         i += j
                         found = True
                         break
                 
                 if not found:
                     # If no token found, add unknown token
-                    tokens.append(self.encoder['<unk>'])
+                    word_tokens.append(self.encoder['<unk>'])
                     i += 1
+            
+            # Add to cache if word was successfully tokenized
+            if len(word_tokens) > 0 and len(self._cache) < self._cache_size:
+                self._cache[word] = word_tokens.copy()
+            
+            tokens.extend(word_tokens)
             
             # Add space between words (if not last word)
             if word != text.split()[-1]:

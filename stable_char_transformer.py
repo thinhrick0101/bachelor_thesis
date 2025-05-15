@@ -902,13 +902,20 @@ def main():
         print(f"Limiting data to first {max_chars} characters for training")
         text = text[:max_chars]
 
-    tokenizer = BPETokenizer(vocab_size=vocab_size)
-    
-    # Save tokenizer for later use
-    tokenizer.load('data/bpe_tokenizer.json')
-    print("Tokenizer loaded from data/bpe_tokenizer.json")
+    # Load pre-trained tokenizer
+    print("Loading pre-trained tokenizer...")
+    tokenizer = BPETokenizer()
+    try:
+        tokenizer.load('models/tokenizer.json')
+        vocab_size = len(tokenizer.encoder)  # Update vocab size based on loaded tokenizer
+        print(f"Loaded tokenizer with vocabulary size: {vocab_size:,}")
+    except FileNotFoundError:
+        print("Error: Pre-trained tokenizer not found at models/tokenizer.json")
+        print("Please train the tokenizer first using train_tokenizer.py")
+        return
 
     # Encode the text
+    print("Encoding text with pre-trained tokenizer...")
     data = tokenizer.encode(text)
 
     # Split data into training and validation sets (90% / 10%)

@@ -18,5 +18,25 @@ conda activate mltrain
 # Go to your code directory
 cd /var/scratch/$USER/thesis/bachelor_thesis
 
-# Run your training script (adjust paths/configs as needed)
-python -u  stable_char_transformer.py
+# Create necessary directories
+mkdir -p models logs
+
+# Step 1: Train the tokenizer first
+echo "=== Training BPE Tokenizer ==="
+python -u train_tokenizer.py \
+    --data data/enwik8 \
+    --vocab-size 8000 \
+    --output models/tokenizer.json \
+    --min-frequency 1
+
+# Check if tokenizer training was successful
+if [ $? -eq 0 ]; then
+    echo "Tokenizer training completed successfully."
+    
+    # Step 2: Train the transformer model
+    echo "=== Training Transformer Model ==="
+    python -u stable_char_transformer.py
+else
+    echo "Error: Tokenizer training failed. Stopping job."
+    exit 1
+fi
