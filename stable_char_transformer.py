@@ -11,38 +11,11 @@ import gzip
 import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
-
-class CharacterTokenizer:
-    """
-    Simple character-level tokenizer
-    """
-    def __init__(self, text=None):
-        if text is not None:
-            self.build_vocab(text)
-        else:
-            self.char_to_idx = {}
-            self.idx_to_char = {}
-            self.vocab_size = 0
-
-    def build_vocab(self, text):
-        """Build vocabulary from text"""
-        # Get unique characters
-        chars = sorted(list(set(text)))
-        self.vocab_size = len(chars)
-
-        # Create mappings
-        self.char_to_idx = {ch: i for i, ch in enumerate(chars)}
-        self.idx_to_char = {i: ch for i, ch in enumerate(chars)}
-
-        print(f"Vocabulary size: {self.vocab_size} characters")
-
-    def encode(self, text):
-        """Convert text to a list of integers"""
-        return [self.char_to_idx[ch] for ch in text]
-
-    def decode(self, indices):
-        """Convert a list of integers to text"""
-        return ''.join([self.idx_to_char[idx] for idx in indices])
+from tokenizers import Tokenizer  # Import Hugging Face tokenizer
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data import DistributedSampler
+import argparse
 
 def load_data(data_path, data_url=None):
     """
@@ -409,12 +382,12 @@ class EnhancedCharTransformer(nn.Module):
 
         Args:
             prompt: Initial text prompt
-            max_length: Maximum length of the generated text
+            max_length: Maximum length of the generated sequence (in tokens)
             temperature: Sampling temperature (higher = more random)
             top_k: Number of highest probability tokens to keep for top-k sampling
             top_p: Cumulative probability threshold for nucleus sampling
             repetition_penalty: Penalty for repeating tokens (1.0 = no penalty)
-            tokenizer: Character tokenizer
+            tokenizer: Hugging Face tokenizer instance
             device: Device to use for generation
 
         Returns:
@@ -424,8 +397,8 @@ class EnhancedCharTransformer(nn.Module):
 
         # Encode the prompt
         if isinstance(prompt, str) and tokenizer is not None:
-            prompt_ids = tokenizer.encode(prompt)
-            prompt_tensor = torch.tensor(prompt_ids, dtype=torch.long).unsqueeze(0).to(device)
+            encoded = tokenizer.encode(prompt)
+            prompt_tensor = torch.tensor(encoded.ids, dtype=torch.long).unsqueeze(0).to(device)
         else:
             prompt_tensor = prompt
 
@@ -456,8 +429,7 @@ class EnhancedCharTransformer(nn.Module):
                     # Check for NaN values
                     if torch.isnan(next_token_logits).any():
                         print("Warning: NaN values detected in logits. Using uniform sampling.")
-                        # Fall back to uniform sampling
-                        next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                        next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                     else:
                         # Apply repetition penalty
                         if repetition_penalty > 1.0:
@@ -466,7 +438,7 @@ class EnhancedCharTransformer(nn.Module):
                                     next_token_logits[:, token_id] /= repetition_penalty
 
                         # Apply temperature with a safety check
-                        next_token_logits = next_token_logits / max(0.1, temperature)  # Prevent division by zero
+                        next_token_logits = next_token_logits / max(0.1, temperature)
 
                         # Apply top-k filtering
                         if top_k > 0:
@@ -480,19 +452,15 @@ class EnhancedCharTransformer(nn.Module):
 
                         # Apply top-p (nucleus) filtering with safety checks
                         if top_p < 1.0:
-                            # Sort logits in descending order
                             sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
-
-                            # Apply softmax with a safety check
                             sorted_probs = F.softmax(sorted_logits, dim=-1)
 
                             # Check for NaN values
                             if torch.isnan(sorted_probs).any():
                                 print("Warning: NaN values detected in probabilities. Using uniform sampling.")
-                                next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                                next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                                 continue
 
-                            # Calculate cumulative probabilities
                             cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
 
                             # Create mask for tokens to remove
@@ -520,7 +488,7 @@ class EnhancedCharTransformer(nn.Module):
                         # Check for NaN values
                         if torch.isnan(probs).any() or (probs < 0).any():
                             print("Warning: Invalid probability values. Using uniform sampling.")
-                            next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                            next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                         else:
                             # Sample from the distribution
                             next_token = torch.multinomial(probs, num_samples=1)
@@ -528,13 +496,17 @@ class EnhancedCharTransformer(nn.Module):
                     # Add the new token to past tokens for repetition penalty
                     past_tokens.add(next_token.item())
 
+                    # Check if we've generated an end token
+                    if next_token.item() == tokenizer.token_to_id("[SEP]"):
+                        break
+
                     # Append the next token to the generated sequence
                     generated = torch.cat((generated, next_token), dim=1)
 
                 except Exception as e:
                     print(f"Error during generation: {e}")
                     # Fall back to a safe token
-                    next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                    next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                     generated = torch.cat((generated, next_token), dim=1)
 
         # Decode the generated text
@@ -576,467 +548,396 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 
     return optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
 
-def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_rate=0.0001,
+def setup_distributed(args):
+    """Setup distributed training"""
+    if args.local_rank != -1:
+        torch.cuda.set_device(args.local_rank)
+        dist.init_process_group(
+            backend=args.dist_backend,
+            init_method=f'tcp://{args.master_addr}:{args.master_port}',
+            world_size=args.world_size,
+            rank=args.local_rank
+        )
+        print(f"Initialized process {args.local_rank} of {args.world_size}")
+
+def cleanup_distributed():
+    """Cleanup distributed training"""
+    if dist.is_initialized():
+        dist.destroy_process_group()
+
+def create_distributed_batches(data, batch_size, seq_length, rank, world_size):
+    """Create batches for distributed training"""
+    # Calculate total number of sequences that can fit in batches
+    total_seq = (len(data) - 1) // seq_length
+    # Calculate sequences per batch
+    seqs_per_batch = total_seq // batch_size
+    # Ensure we have enough complete batches
+    usable_seqs = seqs_per_batch * batch_size
+    
+    # Trim data to fit complete sequences
+    usable_length = usable_seqs * seq_length
+    data = data[:usable_length + 1]  # +1 for target shifting
+    
+    # Create tensor from data
+    data_tensor = torch.tensor(data, dtype=torch.long)
+    
+    # Calculate size for each rank
+    per_rank_seqs = usable_seqs // world_size
+    seqs_remainder = usable_seqs % world_size
+    
+    # Adjust sequences for this rank
+    if rank < seqs_remainder:
+        rank_seqs = per_rank_seqs + 1
+        start_seq = rank * (per_rank_seqs + 1)
+    else:
+        rank_seqs = per_rank_seqs
+        start_seq = (rank * per_rank_seqs) + seqs_remainder
+    
+    # Calculate data indices for this rank
+    start_idx = start_seq * seq_length
+    end_idx = start_idx + (rank_seqs * seq_length) + 1  # +1 for target shifting
+    
+    # Get local data
+    local_data = data_tensor[start_idx:end_idx]
+    
+    # Create batches
+    batches = []
+    local_seqs = rank_seqs
+    
+    # Reshape data into batches
+    if local_seqs > 0:
+        # Calculate local batch size to ensure even division
+        local_batch_size = min(batch_size, local_seqs)
+        while local_seqs % local_batch_size != 0:
+            local_batch_size -= 1
+        
+        if local_batch_size > 0:
+            # Reshape data into [batch_size, sequence_length]
+            x = local_data[:-1].view(local_batch_size, -1)
+            y = local_data[1:].view(local_batch_size, -1)
+            
+            # Create batches
+            for i in range(0, x.size(1), seq_length):
+                if i + seq_length <= x.size(1):
+                    input_batch = x[:, i:i+seq_length].clone()
+                    target_batch = y[:, i:i+seq_length].clone()
+                    batches.append((input_batch, target_batch))
+    
+    return batches
+
+def train_distributed_model(model, train_batches, val_batches=None, num_epochs=5, learning_rate=0.0001,
                 weight_decay=0.01, warmup_steps=0, min_lr=0.0, device=None, patience=3, 
                 label_smoothing=0.0, gradient_accumulation_steps=1, use_mixed_precision=True,
-                use_cosine_schedule=False):
-    """
-    Train the model and evaluate on validation set with mixed precision and gradient accumulation
-
-    Args:
-        model: The model to train
-        train_batches: List of training batches
-        val_batches: List of validation batches (optional)
-        num_epochs: Number of training epochs
-        learning_rate: Learning rate for the optimizer
-        weight_decay: Weight decay for regularization
-        warmup_steps: Number of warmup steps for learning rate scheduling
-        min_lr: Minimum learning rate for the optimizer
-        device: Device to use for training
-        patience: Number of epochs to wait for improvement before early stopping
-        label_smoothing: Label smoothing factor for regularization
-        gradient_accumulation_steps: Number of steps to accumulate gradients before updating weights
-        use_mixed_precision: Whether to use mixed precision training (FP16)
-        use_cosine_schedule: Whether to use cosine learning rate schedule
-
-    Returns:
-        Trained model and training metrics
-    """
-    # Determine device if not provided
-    if device is None:
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Move model to device
-    model = model.to(device)
-    print(f"Training on device: {device}")
-
-    # Initialize mixed precision training if available and requested
-    use_amp = use_mixed_precision and device.type == 'cuda'
-    scaler = GradScaler() if use_amp else None  # Remove device_type parameter
-    if use_amp:
-        print("Using mixed precision training (FP16)")
-
-    # Print gradient accumulation info
-    if gradient_accumulation_steps > 1:
-        print(f"Using gradient accumulation with {gradient_accumulation_steps} steps")
-        effective_batch_size = train_batches[0][0].size(0) * gradient_accumulation_steps
-        print(f"Effective batch size: {effective_batch_size}")
-
-    # Define loss function with label smoothing
-    criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
-
-    # Define optimizer with weight decay
-    no_decay = ['bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {
-            'params': [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-            'weight_decay': weight_decay
-        },
-        {
-            'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-            'weight_decay': 0.0
-        }
-    ]
-    optimizer = optim.AdamW(optimizer_grouped_parameters, lr=learning_rate)
-
-    # Calculate total number of training steps
-    total_steps = len(train_batches) * num_epochs // gradient_accumulation_steps
-
-    # Create learning rate scheduler
-    if warmup_steps > 0:
-        if use_cosine_schedule:
-            scheduler = get_cosine_schedule_with_warmup(
-                optimizer, 
-                num_warmup_steps=warmup_steps,
-                num_training_steps=total_steps,
-                min_lr=min_lr
-            )
-        else:
-            scheduler = get_linear_schedule_with_warmup(
-                optimizer,
-                num_warmup_steps=warmup_steps,
-                num_training_steps=total_steps
-            )
-    else:
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer,
-            mode='min',
-            factor=0.5,
-            patience=2,
-            min_lr=min_lr
-        )
-
-    # For tracking metrics
-    train_losses = []
-    val_losses = []
-    best_val_loss = float('inf')
-    best_model_state = None
-    no_improvement_count = 0
-
-    # Training loop
+                use_cosine_schedule=False, local_rank=-1):
+    """Train the model in a distributed setting"""
+    # Set up distributed training
+    is_distributed = local_rank != -1
+    if is_distributed:
+        model = DDP(model, device_ids=[local_rank], output_device=local_rank)
+    
+    # Add progress tracking variables
+    total_steps = 0
+    log_interval = 1  # Log every batch
+    best_loss = float('inf')
+    
+    def log_metrics(epoch, batch_idx, loss, lr, perplexity, is_val=False, total_batches=None):
+        if local_rank == 0:  # Only print from master process
+            prefix = "Val" if is_val else "Train"
+            progress = f"[{batch_idx}/{total_batches}]" if total_batches else f"[{batch_idx}]"
+            print(f"Epoch {epoch+1} {progress} | "
+                  f"{prefix} Loss: {loss:.4f} | "
+                  f"Perplexity: {perplexity:.2f} | "
+                  f"Learning Rate: {lr:.6f}")
+    
     for epoch in range(num_epochs):
         model.train()
-        total_loss = 0
+        total_loss = torch.zeros(1).to(device)
         num_batches = 0
         start_time = time.time()
-
-        # Zero the gradients at the beginning of each epoch
+        
         optimizer.zero_grad()
-
-        # Process each batch
+        
+        # Get current learning rate
+        current_lr = optimizer.param_groups[0]['lr']
+        
         for batch_idx, (inputs, targets) in enumerate(train_batches):
-            # Move tensors to device
             inputs = inputs.to(device)
             targets = targets.to(device)
-
-            # Forward pass with mixed precision if enabled
+            
             if use_amp:
                 with autocast():
-                    # Forward pass
                     outputs = model(inputs)
-
-                    # Reshape for loss calculation
                     outputs = outputs.reshape(-1, outputs.size(-1))
                     targets = targets.reshape(-1)
-
-                    # Calculate loss
-                    loss = criterion(outputs, targets)
-                    # Scale loss for gradient accumulation
-                    loss = loss / gradient_accumulation_steps
-
-                # Backward pass with gradient scaling
+                    loss = criterion(outputs, targets) / gradient_accumulation_steps
+                
                 scaler.scale(loss).backward()
-
-                # Update weights if we've accumulated enough gradients
-                if (batch_idx + 1) % gradient_accumulation_steps == 0 or (batch_idx + 1) == len(train_batches):
-                    # Unscale gradients for clipping
+                
+                if (batch_idx + 1) % gradient_accumulation_steps == 0:
                     scaler.unscale_(optimizer)
-
-                    # Clip gradients to prevent exploding gradients
                     torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-
-                    # Update weights with gradient scaling
                     scaler.step(optimizer)
                     scaler.update()
-
-                    # Zero gradients after update
                     optimizer.zero_grad()
-
-                    # Update learning rate with warmup scheduler
+                    
                     if warmup_steps > 0:
                         scheduler.step()
+                        current_lr = scheduler.get_last_lr()[0]
             else:
-                # Standard precision training
-                # Forward pass
                 outputs = model(inputs)
-
-                # Reshape for loss calculation
                 outputs = outputs.reshape(-1, outputs.size(-1))
                 targets = targets.reshape(-1)
-
-                # Calculate loss
-                loss = criterion(outputs, targets)
-                # Scale loss for gradient accumulation
-                loss = loss / gradient_accumulation_steps
-
-                # Backward pass
+                loss = criterion(outputs, targets) / gradient_accumulation_steps
                 loss.backward()
-
-                # Update weights if we've accumulated enough gradients
-                if (batch_idx + 1) % gradient_accumulation_steps == 0 or (batch_idx + 1) == len(train_batches):
-                    # Clip gradients to prevent exploding gradients
+                
+                if (batch_idx + 1) % gradient_accumulation_steps == 0:
                     torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-
-                    # Update weights
                     optimizer.step()
-
-                    # Zero gradients after update
                     optimizer.zero_grad()
-
-                    # Update learning rate with warmup scheduler
+                    
                     if warmup_steps > 0:
                         scheduler.step()
-
-            # Track loss (use the unscaled loss for logging)
+                        current_lr = scheduler.get_last_lr()[0]
+            
+            # Track loss and metrics
             total_loss += loss.item() * gradient_accumulation_steps
             num_batches += 1
-
-            # Print batch progress every 10 batches
-            if (batch_idx + 1) % 10 == 0:
-                print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
-                      f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
-
-        # Calculate average loss for the epoch
-        avg_loss = total_loss / num_batches
-        train_losses.append(avg_loss)
-
-        # Calculate perplexity
-        perplexity = math.exp(avg_loss)
-
-        # Evaluate on validation set if provided
-        if val_batches is not None:
+            total_steps += 1
+            
+            # Calculate perplexity
+            batch_perplexity = torch.exp(loss * gradient_accumulation_steps)
+            
+            # Log progress
+            if (batch_idx + 1) % log_interval == 0:
+                avg_loss = loss.item() * gradient_accumulation_steps
+                log_metrics(epoch, batch_idx + 1, avg_loss, current_lr, 
+                          batch_perplexity.item(), False, len(train_batches))
+        
+        # Synchronize loss across all processes
+        if is_distributed:
+            dist.all_reduce(total_loss)
+            total_loss /= dist.get_world_size()
+        
+        avg_loss = total_loss.item() / num_batches
+        epoch_perplexity = math.exp(avg_loss)
+        
+        # Evaluate on validation set
+        if val_batches is not None and local_rank in [-1, 0]:
             model.eval()
-            val_total_loss = 0
-            val_num_batches = 0
-
+            val_loss = 0
+            val_batches_count = 0
+            
             with torch.no_grad():
-                for inputs, targets in val_batches:
-                    # Move tensors to device
+                for val_batch_idx, (inputs, targets) in enumerate(val_batches):
                     inputs = inputs.to(device)
                     targets = targets.to(device)
-
-                    # Forward pass (use autocast for consistency if mixed precision is enabled)
+                    
                     if use_amp:
                         with autocast():
                             outputs = model(inputs)
-
-                            # Reshape for loss calculation
                             outputs = outputs.reshape(-1, outputs.size(-1))
                             targets = targets.reshape(-1)
-
-                            # Calculate loss
-                            loss = criterion(outputs, targets)
+                            batch_loss = criterion(outputs, targets)
                     else:
                         outputs = model(inputs)
-
-                        # Reshape for loss calculation
                         outputs = outputs.reshape(-1, outputs.size(-1))
                         targets = targets.reshape(-1)
-
-                        # Calculate loss
-                        loss = criterion(outputs, targets)
-
-                    val_total_loss += loss.item()
-                    val_num_batches += 1
-
-            # Calculate average validation loss
-            val_avg_loss = val_total_loss / val_num_batches
-            val_losses.append(val_avg_loss)
-
-            # Calculate validation perplexity
-            val_perplexity = math.exp(val_avg_loss)
-
-            # Update learning rate with ReduceLROnPlateau scheduler
-            if warmup_steps == 0:
-                scheduler.step(val_avg_loss)
-
-            # Save best model
-            if val_avg_loss < best_val_loss:
-                best_val_loss = val_avg_loss
-                best_model_state = model.state_dict().copy()
-                no_improvement_count = 0
-                print(f"New best model with validation loss: {best_val_loss:.4f}, perplexity: {math.exp(best_val_loss):.2f}")
-            else:
-                no_improvement_count += 1
-
-            # Early stopping
-            if no_improvement_count >= patience:
-                print(f"No improvement for {patience} epochs. Early stopping.")
-                break
-
-            # Print epoch statistics
-            epoch_time = time.time() - start_time
-            print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}, Perplexity: {perplexity:.2f}, '
-                  f'Val Loss: {val_avg_loss:.4f}, Val Perplexity: {val_perplexity:.2f}, '
-                  f'Time: {epoch_time:.2f}s')
-        else:
-            # Print epoch statistics without validation
-            epoch_time = time.time() - start_time
-            print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}, Perplexity: {perplexity:.2f}, '
-                  f'Time: {epoch_time:.2f}s')
-
-    # Load best model if validation was used
-    if val_batches is not None and best_model_state is not None:
-        model.load_state_dict(best_model_state)
-        print(f"Loaded best model with validation loss: {best_val_loss:.4f}, perplexity: {math.exp(best_val_loss):.2f}")
-
+                        batch_loss = criterion(outputs, targets)
+                    
+                    val_loss += batch_loss.item()
+                    val_batches_count += 1
+                    
+                    # Log validation metrics
+                    if (val_batch_idx + 1) % log_interval == 0:
+                        batch_val_perplexity = torch.exp(batch_loss)
+                        log_metrics(epoch, val_batch_idx + 1, batch_loss.item(), 
+                                  current_lr, batch_val_perplexity.item(), True, len(val_batches))
+            
+            val_loss /= val_batches_count
+            val_perplexity = math.exp(val_loss)
+            
+            if local_rank == 0:
+                print(f"\nEpoch {epoch+1} Summary | "
+                      f"Train Loss: {avg_loss:.4f} | "
+                      f"Train Perplexity: {epoch_perplexity:.2f} | "
+                      f"Val Loss: {val_loss:.4f} | "
+                      f"Val Perplexity: {val_perplexity:.2f} | "
+                      f"Time: {time.time() - start_time:.2f}s")
+                
+                # Save best model
+                if val_loss < best_loss:
+                    best_loss = val_loss
+                    if local_rank == 0:
+                        print(f"New best model! Loss: {val_loss:.4f}, Perplexity: {val_perplexity:.2f}")
+                        # Save checkpoint
+                        torch.save({
+                            'epoch': epoch,
+                            'model_state_dict': model.module.state_dict() if is_distributed else model.state_dict(),
+                            'optimizer_state_dict': optimizer.state_dict(),
+                            'loss': val_loss,
+                            'perplexity': val_perplexity
+                        }, f'models/checkpoint_epoch_{epoch+1}.pt')
+        
+        elif local_rank == 0:
+            print(f"\nEpoch {epoch+1} Summary | "
+                  f"Train Loss: {avg_loss:.4f} | "
+                  f"Train Perplexity: {epoch_perplexity:.2f} | "
+                  f"Time: {time.time() - start_time:.2f}s")
+    
     return model, (train_losses, val_losses)
 
-def visualize_results(train_losses, val_losses=None, filename='enhanced_char_transformer_loss.png'):
-    """
-    Visualize training and validation losses
-
-    Args:
-        train_losses: List of training losses
-        val_losses: List of validation losses (optional)
-        filename: Name of the output file
-    """
-    plt.figure(figsize=(12, 6))
-    plt.plot(train_losses, label='Training Loss', marker='o', markersize=4, linestyle='-', linewidth=1)
-
-    if val_losses:
-        plt.plot(val_losses, label='Validation Loss', marker='s', markersize=4, linestyle='-', linewidth=1)
-
-        # Plot the best validation loss
-        best_epoch = val_losses.index(min(val_losses))
-        best_loss = val_losses[best_epoch]
-        plt.plot(best_epoch, best_loss, 'r*', markersize=10, label=f'Best Val Loss: {best_loss:.4f}')
-
-    plt.title('Training and Validation Loss', fontsize=14)
-    plt.xlabel('Epoch', fontsize=12)
-    plt.ylabel('Loss', fontsize=12)
-    plt.legend(fontsize=10)
-    plt.grid(True, alpha=0.3)
-
-    # Add perplexity as secondary y-axis
-    ax1 = plt.gca()
-    ax2 = ax1.twinx()
-
-    # Create perplexity ticks based on loss values
-    loss_ticks = ax1.get_yticks()
-    perplexity_ticks = [math.exp(x) for x in loss_ticks if x > 0]
-    ax2.set_yticks(perplexity_ticks)
-    ax2.set_yticklabels([f'{x:.1f}' for x in perplexity_ticks])
-    ax2.set_ylabel('Perplexity', fontsize=12)
-
-    plt.tight_layout()
-    plt.savefig(filename, dpi=300)
-    plt.close()
-
 def main():
-    # Data parameters
-    data_path = 'data/enwik8'
-    data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--local_rank', type=int, default=-1)
+    parser.add_argument('--world_size', type=int, default=1)
+    parser.add_argument('--master_addr', type=str, default='localhost')
+    parser.add_argument('--master_port', type=str, default='29500')
+    parser.add_argument('--dist_backend', type=str, default='nccl')
+    args = parser.parse_args()
+    
+    # Setup distributed training if needed
+    if args.local_rank != -1:
+        setup_distributed(args)
+    
+    try:
+        # Data parameters
+        data_path = 'data/enwik8'
+        data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
 
-    # Model hyperparameters - further enhanced configuration
-    d_model = 768  # Increased from 512 for better representation
-    nhead = 12  # Adjusted for better head-dimension ratio
-    num_layers = 16  # Increased depth
-    dim_feedforward = 3072  # Increased capacity
-    dropout = 0.2
-    attention_dropout = 0.15  # Slightly increased
-    activation_dropout = 0.15
-    token_dropout = 0.1  # Increased from 0.05
-    use_checkpoint = True
-    stochastic_depth_prob = 0.1  # Added stochastic depth
+        # Model hyperparameters - adjusted for BPE tokenization
+        d_model = 768
+        nhead = 12
+        num_layers = 16
+        dim_feedforward = 3072
+        dropout = 0.2
+        attention_dropout = 0.15
+        activation_dropout = 0.15
+        token_dropout = 0.1
+        use_checkpoint = True
+        stochastic_depth_prob = 0.1
 
-    # Training hyperparameters - optimized configuration
-    batch_size = 32  # Reduced for better gradient estimates
-    seq_length = 768  # Increased context window
-    num_epochs = 100
-    learning_rate = 5e-4  # Slightly increased
-    min_lr = 1e-5  # Added minimum learning rate
-    weight_decay = 0.1
-    label_smoothing = 0.1
-    gradient_accumulation_steps = 8  # Increased for larger effective batch
-    use_mixed_precision = True
-    warmup_epochs = 2  # Increased warmup period
+        # Training hyperparameters
+        batch_size = 32
+        seq_length = 512  # Reduced sequence length since tokens represent larger units
+        num_epochs = 100
+        learning_rate = 5e-4
+        min_lr = 1e-5
+        weight_decay = 0.1
+        label_smoothing = 0.1
+        gradient_accumulation_steps = 8
+        use_mixed_precision = True
+        warmup_epochs = 2
 
-    # Load data
-    print("Loading data...")
-    text = load_data(data_path, data_url)
-    print(f"Data loaded: {len(text)} characters")
+        # Load data
+        print("Loading data...")
+        text = load_data(data_path, data_url)
+        print(f"Data loaded: {len(text)} characters")
 
-    # Limit the data size for training
-    max_chars = 15000000  # Use more data for better learning
-    if len(text) > max_chars:
-        print(f"Limiting data to first {max_chars} characters for training")
-        text = text[:max_chars]
+        # Limit the data size for training
+        max_chars = 20000000
+        if len(text) > max_chars:
+            print(f"Limiting data to first {max_chars} characters for training")
+            text = text[:max_chars]
 
-    # Create tokenizer
-    tokenizer = CharacterTokenizer(text)
+        # Load pre-trained tokenizer
+        print("Loading pre-trained tokenizer...")
+        try:
+            tokenizer = Tokenizer.from_file('bpe-enwik8-tokenizer.json')
+            vocab_size = tokenizer.get_vocab_size()
+            print(f"Loaded tokenizer with vocabulary size: {vocab_size:,}")
+        except Exception as e:
+            print(f"Error loading tokenizer: {e}")
+            print("Please train the tokenizer first using train_tokenizer.py")
+            return
 
-    # Encode the text
-    data = tokenizer.encode(text)
+        # Encode the text
+        print("Encoding text with pre-trained tokenizer...")
+        encoded = tokenizer.encode(text)
+        data = encoded.ids  # Get token IDs from the encoding
 
-    # Split data into training and validation sets (90% / 10%)
-    split_idx = int(len(data) * 0.9)
-    train_data = data[:split_idx]
-    val_data = data[split_idx:]
+        # Split data into training and validation sets (90% / 10%)
+        split_idx = int(len(data) * 0.9)
+        train_data = data[:split_idx]
+        val_data = data[split_idx:]
 
-    # Determine device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # Modify data loading for distributed training
+        if args.local_rank != -1:
+            train_batches = create_distributed_batches(train_data, batch_size, seq_length, 
+                                                     args.local_rank, args.world_size)
+            val_batches = create_distributed_batches(val_data, batch_size, seq_length, 
+                                                   args.local_rank, args.world_size) if val_data else None
+        else:
+            train_batches = create_batches(train_data, batch_size, seq_length)
+            val_batches = create_batches(val_data, batch_size, seq_length)
+        
+        # Calculate warmup steps after creating batches
+        warmup_steps = len(train_batches) * warmup_epochs
 
-    # Create batches
-    print("Creating batches...")
-    train_batches = create_batches(train_data, batch_size, seq_length)
-    val_batches = create_batches(val_data, batch_size, seq_length)
-    print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
-
-    # Calculate warmup steps after creating batches
-    warmup_steps = len(train_batches) * warmup_epochs
-
-    # Create enhanced model with stochastic depth
-    model = EnhancedCharTransformer(
-        vocab_size=tokenizer.vocab_size,
-        d_model=d_model,
-        nhead=nhead,
-        num_layers=num_layers,
-        dim_feedforward=dim_feedforward,
-        dropout=dropout,
-        attention_dropout=attention_dropout,
-        activation_dropout=activation_dropout,
-        token_dropout=token_dropout,
-        use_checkpoint=use_checkpoint,
-        stochastic_depth_prob=stochastic_depth_prob
-    )
-
-    # Move model to device
-    model = model.to(device)
-
-    # Print model architecture
-    total_params = sum(p.numel() for p in model.parameters())
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
-
-    # Train model with enhanced settings
-    print("\n=== Training Enhanced Character Transformer Model ===")
-    model, (train_losses, val_losses) = train_model(
-        model=model,
-        train_batches=train_batches,
-        val_batches=val_batches,
-        num_epochs=num_epochs,
-        learning_rate=learning_rate,
-        weight_decay=weight_decay,
-        warmup_steps=warmup_steps,
-        min_lr=min_lr,  # Added parameter
-        device=device,
-        patience=8,  # Increased patience
-        label_smoothing=label_smoothing,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        use_mixed_precision=use_mixed_precision,
-        use_cosine_schedule=True  # Added cosine schedule
-    )
-
-    # Visualize results
-    visualize_results(train_losses, val_losses, 'enhanced_char_transformer_loss.png')
-    print("\nTraining visualization saved to enhanced_char_transformer_loss.png")
-
-    # Generate some text
-    print("\n=== Generating Text ===")
-    prompt = "The quick brown fox"
-    generated_text = model.generate(
-        prompt=prompt,
-        max_length=500,
-        temperature=0.6,  # Lower temperature for more coherent text
-        top_k=5,  # Increased top_k for more diversity
-        top_p=0.95,  # Balanced top_p for coherence and diversity
-        repetition_penalty=1.2,  # Add repetition penalty to avoid loops
-        tokenizer=tokenizer,
-        device=device
-    )
-    print(f"Prompt: {prompt}")
-    print(f"Generated: {generated_text}")
-
-    # Save model
-    torch.save(model.state_dict(), 'enhanced_char_transformer_model.pt')
-    print("Model saved to enhanced_char_transformer_model.pt")
-
-    # Try generating with different temperatures
-    print("\n=== Generating with Different Temperatures ===")
-    for temp in [0.5, 0.7, 0.9]:
-        generated_text = model.generate(
-            prompt=prompt,
-            max_length=500,
-            temperature=temp,
-            top_k=50,
-            top_p=0.92,
-            repetition_penalty=1.2,
-            tokenizer=tokenizer,
-            device=device
+        # Create enhanced model with stochastic depth
+        model = EnhancedCharTransformer(
+            vocab_size=vocab_size,  # Use BPE vocab size
+            d_model=d_model,
+            nhead=nhead,
+            num_layers=num_layers,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            attention_dropout=attention_dropout,
+            activation_dropout=activation_dropout,
+            token_dropout=token_dropout,
+            use_checkpoint=use_checkpoint,
+            stochastic_depth_prob=stochastic_depth_prob
         )
-        print(f"\nTemperature: {temp}")
-        print(f"Generated: {generated_text}")
+
+        # Move model to device
+        device = torch.device(f"cuda:{args.local_rank}" if args.local_rank != -1 else "cuda")
+        model = model.to(device)
+
+        # Print model architecture
+        total_params = sum(p.numel() for p in model.parameters())
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
+
+        # Train model with enhanced settings
+        print("\n=== Training Enhanced Transformer Model with BPE Tokenization ===")
+        model, (train_losses, val_losses) = train_distributed_model(
+            model=model,
+            train_batches=train_batches,
+            val_batches=val_batches,
+            num_epochs=num_epochs,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+            warmup_steps=warmup_steps,
+            min_lr=min_lr,
+            device=device,
+            patience=8,
+            label_smoothing=label_smoothing,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            use_mixed_precision=use_mixed_precision,
+            use_cosine_schedule=True,
+            local_rank=args.local_rank
+        )
+
+        # Save model and visualize results only on rank 0
+        if args.local_rank in [-1, 0]:
+            visualize_results(train_losses, val_losses, 'bpe_transformer_loss.png')
+            torch.save({
+                'model_state_dict': model.module.state_dict() if args.local_rank != -1 else model.state_dict(),
+                'vocab_size': vocab_size,
+                'd_model': d_model,
+                'nhead': nhead,
+                'num_layers': num_layers,
+                'dim_feedforward': dim_feedforward,
+                'dropout': dropout,
+                'attention_dropout': attention_dropout,
+                'activation_dropout': activation_dropout,
+                'token_dropout': token_dropout,
+                'stochastic_depth_prob': stochastic_depth_prob
+            }, 'bpe_transformer_model.pt')
+    
+    finally:
+        # Cleanup distributed training
+        if args.local_rank != -1:
+            cleanup_distributed()
 
 if __name__ == "__main__":
     main()

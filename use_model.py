@@ -7,17 +7,17 @@ from torch.nn import functional as F
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import the model classes
-from stable_char_transformer import EnhancedCharTransformer, CharacterTokenizer
+from stable_char_transformer import EnhancedCharTransformer
 
-# Define a simplified tokenizer we can use without the original training data
 class SimpleCharTokenizer:
-    """Simplified character tokenizer with basic ASCII characters"""
+    """Character tokenizer that handles the model's vocabulary"""
     def __init__(self):
         # Create a simple character set (printable ASCII)
         chars = [chr(i) for i in range(32, 127)] + ['\n']
-        self.vocab_size = len(chars)
+        # Add special tokens and extended vocabulary to match the model
+        self.vocab_size = 2451  # Match the model's vocabulary size
         
-        # Create mappings
+        # Create mappings for basic characters
         self.char_to_idx = {ch: i for i, ch in enumerate(chars)}
         self.idx_to_char = {i: ch for i, ch in enumerate(chars)}
         
@@ -28,24 +28,26 @@ class SimpleCharTokenizer:
         return [self.char_to_idx.get(ch, self.char_to_idx[' ']) for ch in text]
     
     def decode(self, indices):
-        """Convert a list of integers to text"""
-        return ''.join([self.idx_to_char.get(idx, ' ') for idx in indices])
+        """Convert a list of integers to text, ignoring tokens beyond basic ASCII"""
+        return ''.join([self.idx_to_char.get(idx, ' ') for idx in indices if idx < len(self.idx_to_char)])
 
-def load_pretrained_model(model_path, vocab_size=96):
+def load_pretrained_model(model_path, vocab_size=2451, d_model=768, nhead=12, 
+                         num_layers=16, dim_feedforward=3072, dropout=0.2,
+                         attention_dropout=0.15, activation_dropout=0.15,
+                         token_dropout=0.1, stochastic_depth_prob=0.1):
     """Load the pre-trained model with the correct architecture"""
-    # These parameters should match those used during training
-    # Using common values for transformer models of this size
     model = EnhancedCharTransformer(
         vocab_size=vocab_size,
-        d_model=512,             # Embedding dimension
-        nhead=8,                 # Number of attention heads
-        num_layers=6,            # Number of transformer layers
-        dim_feedforward=2048,    # Feedforward network dimension
-        dropout=0.1,
-        attention_dropout=0.1,
-        activation_dropout=0.1,
-        token_dropout=0.05,
-        use_checkpoint=False     # No need for checkpointing during inference
+        d_model=d_model,
+        nhead=nhead,
+        num_layers=num_layers,
+        dim_feedforward=dim_feedforward,  # This will be doubled by SwiGLU internally
+        dropout=dropout,
+        attention_dropout=attention_dropout,
+        activation_dropout=activation_dropout,
+        token_dropout=token_dropout,
+        use_checkpoint=False,
+        stochastic_depth_prob=stochastic_depth_prob
     )
     
     # Determine device
