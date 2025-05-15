@@ -11,7 +11,7 @@ import gzip
 import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
-from bpe_tokenizer import BPETokenizer  # Import BPETokenizer
+from tokenizers import Tokenizer  # Import Hugging Face tokenizer
 
 def load_data(data_path, data_url=None):
     """
@@ -383,7 +383,7 @@ class EnhancedCharTransformer(nn.Module):
             top_k: Number of highest probability tokens to keep for top-k sampling
             top_p: Cumulative probability threshold for nucleus sampling
             repetition_penalty: Penalty for repeating tokens (1.0 = no penalty)
-            tokenizer: BPE tokenizer instance
+            tokenizer: Hugging Face tokenizer instance
             device: Device to use for generation
 
         Returns:
@@ -393,8 +393,8 @@ class EnhancedCharTransformer(nn.Module):
 
         # Encode the prompt
         if isinstance(prompt, str) and tokenizer is not None:
-            prompt_ids = tokenizer.encode(prompt)
-            prompt_tensor = torch.tensor(prompt_ids, dtype=torch.long).unsqueeze(0).to(device)
+            encoded = tokenizer.encode(prompt)
+            prompt_tensor = torch.tensor(encoded.ids, dtype=torch.long).unsqueeze(0).to(device)
         else:
             prompt_tensor = prompt
 
@@ -425,7 +425,7 @@ class EnhancedCharTransformer(nn.Module):
                     # Check for NaN values
                     if torch.isnan(next_token_logits).any():
                         print("Warning: NaN values detected in logits. Using uniform sampling.")
-                        next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                        next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                     else:
                         # Apply repetition penalty
                         if repetition_penalty > 1.0:
@@ -454,7 +454,7 @@ class EnhancedCharTransformer(nn.Module):
                             # Check for NaN values
                             if torch.isnan(sorted_probs).any():
                                 print("Warning: NaN values detected in probabilities. Using uniform sampling.")
-                                next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                                next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                                 continue
 
                             cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
@@ -484,7 +484,7 @@ class EnhancedCharTransformer(nn.Module):
                         # Check for NaN values
                         if torch.isnan(probs).any() or (probs < 0).any():
                             print("Warning: Invalid probability values. Using uniform sampling.")
-                            next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                            next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                         else:
                             # Sample from the distribution
                             next_token = torch.multinomial(probs, num_samples=1)
@@ -493,7 +493,7 @@ class EnhancedCharTransformer(nn.Module):
                     past_tokens.add(next_token.item())
 
                     # Check if we've generated an end token
-                    if next_token.item() == tokenizer.encoder.get('</s>', -1):
+                    if next_token.item() == tokenizer.token_to_id("[SEP]"):
                         break
 
                     # Append the next token to the generated sequence
@@ -502,7 +502,7 @@ class EnhancedCharTransformer(nn.Module):
                 except Exception as e:
                     print(f"Error during generation: {e}")
                     # Fall back to a safe token
-                    next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                    next_token = torch.randint(0, tokenizer.get_vocab_size(), (1, 1), device=device)
                     generated = torch.cat((generated, next_token), dim=1)
 
         # Decode the generated text
@@ -877,7 +877,6 @@ def main():
     token_dropout = 0.1
     use_checkpoint = True
     stochastic_depth_prob = 0.1
-    vocab_size = 8000  # Increased vocab size for BPE tokenization
 
     # Training hyperparameters
     batch_size = 32
@@ -904,19 +903,19 @@ def main():
 
     # Load pre-trained tokenizer
     print("Loading pre-trained tokenizer...")
-    tokenizer = BPETokenizer()
     try:
-        tokenizer.load('models/tokenizer.json')
-        vocab_size = len(tokenizer.encoder)  # Update vocab size based on loaded tokenizer
+        tokenizer = Tokenizer.from_file('bpe-enwik8-tokenizer.json')
+        vocab_size = tokenizer.get_vocab_size()
         print(f"Loaded tokenizer with vocabulary size: {vocab_size:,}")
-    except FileNotFoundError:
-        print("Error: Pre-trained tokenizer not found at models/tokenizer.json")
+    except Exception as e:
+        print(f"Error loading tokenizer: {e}")
         print("Please train the tokenizer first using train_tokenizer.py")
         return
 
     # Encode the text
     print("Encoding text with pre-trained tokenizer...")
-    data = tokenizer.encode(text)
+    encoded = tokenizer.encode(text)
+    data = encoded.ids  # Get token IDs from the encoding
 
     # Split data into training and validation sets (90% / 10%)
     split_idx = int(len(data) * 0.9)
