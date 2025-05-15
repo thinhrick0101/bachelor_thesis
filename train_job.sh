@@ -18,5 +18,8 @@ conda activate mltrain
 # Go to your code directory
 cd /var/scratch/$USER/thesis/bachelor_thesis
 
+# Clear CUDA cache before running
+python -c "import torch; torch.cuda.empty_cache()"
+
 # Run your training script (adjust paths/configs as needed)
-python -u  stable_char_transformer.py
+python -u stable_char_transformer.py

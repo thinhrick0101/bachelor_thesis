@@ -922,6 +922,10 @@ def visualize_results(train_losses, val_losses=None, filename='enhanced_char_tra
     plt.close()
 
 def main():
+    # Clear CUDA cache at the start
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
     # Data parameters
     data_path = 'data/enwik8'
     data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
@@ -940,16 +944,21 @@ def main():
     stochastic_depth_prob = 0.1  # Added stochastic depth
 
     # Training hyperparameters - optimized configuration
-    batch_size = 32  # Reduced for better gradient estimates
-    seq_length = 768  # Increased context window
+    batch_size = 16  # Reduced batch size to save memory
+    seq_length = 512  # Reduced sequence length to save memory
     num_epochs = 100
     learning_rate = 5e-4  # Slightly increased
     min_lr = 1e-5  # Added minimum learning rate
     weight_decay = 0.1
     label_smoothing = 0.1
-    gradient_accumulation_steps = 8  # Increased for larger effective batch
+    gradient_accumulation_steps = 16  # Increased to compensate for smaller batch
     use_mixed_precision = True
     warmup_epochs = 2  # Increased warmup period
+
+    # Set memory allocation settings
+    if torch.cuda.is_available():
+        torch.cuda.set_per_process_memory_fraction(0.85)  # Limit GPU memory usage
+        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
 
     # Load data
     print("Loading data...")
