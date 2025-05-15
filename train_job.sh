@@ -6,9 +6,9 @@
 #SBATCH --partition=defq                # Use defq partition
 #SBATCH --nodes=4                       # Request 4 nodes
 #SBATCH --ntasks-per-node=1            # One task per node
-#SBATCH --gres=gpu:1                   # Request 1 GPU per node
-#SBATCH --cpus-per-task=8              # Adjust CPU cores per task
-#SBATCH --mem=64G                      # Memory per node
+#SBATCH --gpus-per-node=1              # Request 1 GPU per node
+#SBATCH --cpus-per-task=4              # 4 CPU cores per task
+#SBATCH --mem=32G                      # Memory per node (DAS5 has 32GB per node)
 
 # Load required modules
 module load cuda11.3/toolkit
