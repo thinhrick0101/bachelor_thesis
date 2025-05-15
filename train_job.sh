@@ -31,6 +31,25 @@ export MASTER_PORT=29500
 # Get the world size from SLURM
 export WORLD_SIZE=$SLURM_NTASKS
 
+# Create a simple sync script
+cat > sync.py << 'EOL'
+import torch.distributed as dist
+import os
+import sys
+
+def init_process(rank, size, backend='nccl'):
+    os.environ['MASTER_ADDR'] = os.environ.get('MASTER_ADDR', 'localhost')
+    os.environ['MASTER_PORT'] = os.environ.get('MASTER_PORT', '29500')
+    dist.init_process_group(backend, rank=rank, world_size=size)
+    dist.barrier()
+    dist.destroy_process_group()
+
+if __name__ == "__main__":
+    rank = int(os.environ['SLURM_PROCID'])
+    size = int(os.environ['SLURM_NTASKS'])
+    init_process(rank, size)
+EOL
+
 # Step 1: Train the tokenizer first (only on master node)
 if [ "$SLURM_PROCID" -eq 0 ]; then
     echo "=== Training BPE Tokenizer ==="
@@ -41,8 +60,8 @@ if [ "$SLURM_PROCID" -eq 0 ]; then
         --min-frequency 1
 fi
 
-# Wait for tokenizer to complete on all nodes
-srun --ntasks=$SLURM_NTASKS --ntasks-per-node=1 barrier
+# Wait for tokenizer to complete on all nodes using distributed synchronization
+srun --ntasks=$SLURM_NTASKS --ntasks-per-node=1 python sync.py
 
 # Check if tokenizer exists
 if [ -f "models/tokenizer.json" ]; then
