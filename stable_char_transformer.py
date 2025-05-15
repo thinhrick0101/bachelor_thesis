@@ -114,9 +114,12 @@ def create_batches(data, batch_size, seq_length):
     # Trim the data to fit into batches
     data = data[:num_batches * batch_size * seq_length + 1]
 
-    # Reshape the data into batches
-    x = torch.tensor(data[:-1], dtype=torch.long).view(batch_size, -1)
-    y = torch.tensor(data[1:], dtype=torch.long).view(batch_size, -1)
+    # Convert data to tensor first
+    data_tensor = torch.LongTensor(data)
+    
+    # Create input and target tensors using clone() and detach()
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+    y = data_tensor[1:].clone().detach().view(batch_size, -1)
 
     # Create batches
     batches = []
@@ -976,8 +979,21 @@ def main():
     tokenizer = BPETokenizer(tokenizer_path)
     print(f"Vocabulary size: {tokenizer.vocab_size}")
 
+    # Analyze tokenization
+    print("\nAnalyzing tokenization...")
+    sample_text = text[:1000]  # Take a sample
+    encoded = tokenizer.tokenizer.encode(sample_text)
+    print(f"Sample text length: {len(sample_text)} characters")
+    print(f"Encoded length: {len(encoded.ids)} tokens")
+    print(f"Average tokens per character: {len(encoded.ids) / len(sample_text):.2f}")
+    
+    # Print some example tokenization
+    print("\nExample tokenization:")
+    for i in range(min(5, len(encoded.tokens))):
+        print(f"Token {i}: {encoded.tokens[i]} (ID: {encoded.ids[i]})")
+
     # Encode the text
-    print("Encoding text with BPE tokenizer...")
+    print("\nEncoding full text with BPE tokenizer...")
     data = tokenizer.encode(text)
 
     # Split data into training and validation sets (90% / 10%)
