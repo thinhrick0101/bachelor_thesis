@@ -13,64 +13,6 @@ from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
 
-class BPETokenizer:
-    """
-    BPE tokenizer wrapper for the pre-trained tokenizer
-    """
-    def __init__(self, tokenizer_path):
-        self.tokenizer = Tokenizer.from_file(tokenizer_path)
-        self.vocab_size = self.tokenizer.get_vocab_size()
-        
-    def encode(self, text):
-        """
-        Encode text to token ids
-        """
-        if isinstance(text, str):
-            encoded = self.tokenizer.encode(text)
-            return torch.tensor(encoded.ids, dtype=torch.long)
-        elif isinstance(text, list):
-            encoded = self.tokenizer.encode_batch(text)
-            return torch.tensor([e.ids for e in encoded], dtype=torch.long)
-        
-    def decode(self, indices):
-        """
-        Decode token ids back to text
-        """
-        if indices.dim() == 1:
-            return self.tokenizer.decode(indices.tolist())
-        return [self.tokenizer.decode(ids.tolist()) for ids in indices]
-
-class CharacterTokenizer:
-    """
-    Simple character-level tokenizer
-    """
-    def __init__(self, text=None):
-        if text is not None:
-            self.build_vocab(text)
-        else:
-            self.char_to_idx = {}
-            self.idx_to_char = {}
-            self.vocab_size = 0
-
-    def build_vocab(self, text):
-        """Build vocabulary from text"""
-        # Get unique characters
-        chars = sorted(list(set(text)))
-        self.vocab_size = len(chars)
-
-        # Create mappings
-        self.char_to_idx = {ch: i for i, ch in enumerate(chars)}
-        self.idx_to_char = {i: ch for i, ch in enumerate(chars)}
-
-        print(f"Vocabulary size: {self.vocab_size} characters")
-
-    def encode(self, text):
-        """Convert text to a list of integers"""
-        return [self.char_to_idx[ch] for ch in text]
-
-    def decode(self, indices):
-        """Convert a list of integers to text"""
-        return ''.join([self.idx_to_char[idx] for idx in indices])
 
 class ByteTokenizer:
     """
