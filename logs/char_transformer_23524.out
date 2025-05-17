@@ -1,0 +1,8 @@
+=== Training BPE Tokenizer ===
+Tokenizer training completed successfully.
+=== Training Transformer Model ===
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 20000000 characters for training
+Tokenizer loaded from data/bpe_tokenizer.json

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 14, in <module>
+    from bpe_tokenizer import BPETokenizer  # Import BPETokenizer
+  File "/var/scratch/tng204/thesis/bachelor_thesis/bpe_tokenizer.py", line 7, in <module>
+    from scipy import stats
+ModuleNotFoundError: No module named 'scipy'

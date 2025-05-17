@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 14, in <module>
+    from bpe_tokenizer import BPETokenizer  # Import BPETokenizer
+  File "/var/scratch/tng204/thesis/bachelor_thesis/bpe_tokenizer.py", line 5, in <module>
+    from tqdm import tqdm  # For progress tracking
+ModuleNotFoundError: No module named 'tqdm'

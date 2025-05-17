@@ -1,0 +1,33 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 20000000 characters for training
+Training BPE tokenizer...
+Analyzing character n-grams...
+Initial vocabulary size: 2782 tokens
+Character n-gram types: 166,587
+Analyzing token coverage...
+Converting text to base tokens...
+Processing batch 1/20
+Processing batch 2/20
+Processing batch 3/20
+Processing batch 4/20
+Processing batch 5/20
+Processing batch 6/20
+Processing batch 7/20
+Processing batch 8/20
+Processing batch 9/20
+Processing batch 10/20
+Processing batch 11/20
+Processing batch 12/20
+Processing batch 13/20
+Processing batch 14/20
+Processing batch 15/20
+Processing batch 16/20
+Processing batch 17/20
+Processing batch 18/20
+Processing batch 19/20
+Processing batch 20/20
+Converting words to token IDs...
+Initial token count: 17,037,000
+Training BPE tokenizer to add 5,218 new tokens

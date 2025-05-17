@@ -1,0 +1,4 @@
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_tokenizer.py", line 19
+    tokenizer.train(files=['data/enwik8]', trainer=trainer)
+                                                          ^
+SyntaxError: closing parenthesis ')' does not match opening parenthesis '['

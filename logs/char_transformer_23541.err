@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1018, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 909, in main
+    tokenizer.load('models/tokenizer.json')
+  File "/var/scratch/tng204/thesis/bachelor_thesis/bpe_tokenizer.py", line 282, in load
+    self.encoder = data['encoder']
+KeyError: 'encoder'

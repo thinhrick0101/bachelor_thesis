@@ -1,0 +1,135 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Creating batches...
+Created 2746 training batches and 305 validation batches
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 256
+Epoch 1/100, Batch 10/2746, Loss: 5.5042
+Epoch 1/100, Batch 20/2746, Loss: 5.5293
+Epoch 1/100, Batch 30/2746, Loss: 5.5063
+Epoch 1/100, Batch 40/2746, Loss: 5.4728
+Epoch 1/100, Batch 50/2746, Loss: 5.5032
+Epoch 1/100, Batch 60/2746, Loss: 5.5013
+Epoch 1/100, Batch 70/2746, Loss: 5.4909
+Epoch 1/100, Batch 80/2746, Loss: 5.4832
+Epoch 1/100, Batch 90/2746, Loss: 5.4867
+Epoch 1/100, Batch 100/2746, Loss: 5.4963
+Epoch 1/100, Batch 110/2746, Loss: 5.4898
+Epoch 1/100, Batch 120/2746, Loss: 5.4915
+Epoch 1/100, Batch 130/2746, Loss: 5.5125
+Epoch 1/100, Batch 140/2746, Loss: 5.4729
+Epoch 1/100, Batch 150/2746, Loss: 5.4762
+Epoch 1/100, Batch 160/2746, Loss: 5.5087
+Epoch 1/100, Batch 170/2746, Loss: 5.4723
+Epoch 1/100, Batch 180/2746, Loss: 5.4734
+Epoch 1/100, Batch 190/2746, Loss: 5.4876
+Epoch 1/100, Batch 200/2746, Loss: 5.4655
+Epoch 1/100, Batch 210/2746, Loss: 5.4517
+Epoch 1/100, Batch 220/2746, Loss: 5.4631
+Epoch 1/100, Batch 230/2746, Loss: 5.4568
+Epoch 1/100, Batch 240/2746, Loss: 5.4940
+Epoch 1/100, Batch 250/2746, Loss: 5.4494
+Epoch 1/100, Batch 260/2746, Loss: 5.5252
+Epoch 1/100, Batch 270/2746, Loss: 5.4301
+Epoch 1/100, Batch 280/2746, Loss: 5.4144
+Epoch 1/100, Batch 290/2746, Loss: 5.4072
+Epoch 1/100, Batch 300/2746, Loss: 5.4423
+Epoch 1/100, Batch 310/2746, Loss: 5.4036
+Epoch 1/100, Batch 320/2746, Loss: 5.4175
+Epoch 1/100, Batch 330/2746, Loss: 5.3851
+Epoch 1/100, Batch 340/2746, Loss: 5.4417
+Epoch 1/100, Batch 350/2746, Loss: 5.3607
+Epoch 1/100, Batch 360/2746, Loss: 5.3647
+Epoch 1/100, Batch 370/2746, Loss: 5.3311
+Epoch 1/100, Batch 380/2746, Loss: 5.3650
+Epoch 1/100, Batch 390/2746, Loss: 5.3445
+Epoch 1/100, Batch 400/2746, Loss: 5.3636
+Epoch 1/100, Batch 410/2746, Loss: 5.2986
+Epoch 1/100, Batch 420/2746, Loss: 5.3339
+Epoch 1/100, Batch 430/2746, Loss: 5.3374
+Epoch 1/100, Batch 440/2746, Loss: 5.3184
+Epoch 1/100, Batch 450/2746, Loss: 5.3480
+Epoch 1/100, Batch 460/2746, Loss: 5.3793
+Epoch 1/100, Batch 470/2746, Loss: 5.2925
+Epoch 1/100, Batch 480/2746, Loss: 5.2794
+Epoch 1/100, Batch 490/2746, Loss: 5.2670
+Epoch 1/100, Batch 500/2746, Loss: 5.2960
+Epoch 1/100, Batch 510/2746, Loss: 5.2303
+Epoch 1/100, Batch 520/2746, Loss: 5.3294
+Epoch 1/100, Batch 530/2746, Loss: 5.2225
+Epoch 1/100, Batch 540/2746, Loss: 5.2530
+Epoch 1/100, Batch 550/2746, Loss: 5.2083
+Epoch 1/100, Batch 560/2746, Loss: 5.2087
+Epoch 1/100, Batch 570/2746, Loss: 5.2948
+Epoch 1/100, Batch 580/2746, Loss: 5.1842
+Epoch 1/100, Batch 590/2746, Loss: 5.2051
+Epoch 1/100, Batch 600/2746, Loss: 5.1301
+Epoch 1/100, Batch 610/2746, Loss: 5.1972
+Epoch 1/100, Batch 620/2746, Loss: 5.1443
+Epoch 1/100, Batch 630/2746, Loss: 5.1714
+Epoch 1/100, Batch 640/2746, Loss: 5.1197
+Epoch 1/100, Batch 650/2746, Loss: 5.0751
+Epoch 1/100, Batch 660/2746, Loss: 5.1229
+Epoch 1/100, Batch 670/2746, Loss: 5.0825
+Epoch 1/100, Batch 680/2746, Loss: 5.1747
+Epoch 1/100, Batch 690/2746, Loss: 5.0344
+Epoch 1/100, Batch 700/2746, Loss: 5.1610
+Epoch 1/100, Batch 710/2746, Loss: 5.0463
+Epoch 1/100, Batch 720/2746, Loss: 5.0249
+Epoch 1/100, Batch 730/2746, Loss: 4.9982
+Epoch 1/100, Batch 740/2746, Loss: 5.1146
+Epoch 1/100, Batch 750/2746, Loss: 4.9792
+Epoch 1/100, Batch 760/2746, Loss: 5.0316
+Epoch 1/100, Batch 770/2746, Loss: 4.9623
+Epoch 1/100, Batch 780/2746, Loss: 4.9825
+Epoch 1/100, Batch 790/2746, Loss: 4.9270
+Epoch 1/100, Batch 800/2746, Loss: 4.9137
+Epoch 1/100, Batch 810/2746, Loss: 4.9480
+Epoch 1/100, Batch 820/2746, Loss: 4.8876
+Epoch 1/100, Batch 830/2746, Loss: 4.9400
+Epoch 1/100, Batch 840/2746, Loss: 4.9693
+Epoch 1/100, Batch 850/2746, Loss: 4.8510
+Epoch 1/100, Batch 860/2746, Loss: 4.9315
+Epoch 1/100, Batch 870/2746, Loss: 4.8287
+Epoch 1/100, Batch 880/2746, Loss: 4.8710
+Epoch 1/100, Batch 890/2746, Loss: 4.8613
+Epoch 1/100, Batch 900/2746, Loss: 4.7811
+Epoch 1/100, Batch 910/2746, Loss: 4.8081
+Epoch 1/100, Batch 920/2746, Loss: 4.8321
+Epoch 1/100, Batch 930/2746, Loss: 4.7466
+Epoch 1/100, Batch 940/2746, Loss: 4.8498
+Epoch 1/100, Batch 950/2746, Loss: 4.7079
+Epoch 1/100, Batch 960/2746, Loss: 4.6983
+Epoch 1/100, Batch 970/2746, Loss: 4.8030
+Epoch 1/100, Batch 980/2746, Loss: 4.6588
+Epoch 1/100, Batch 990/2746, Loss: 4.6722
+Epoch 1/100, Batch 1000/2746, Loss: 4.6902
+Epoch 1/100, Batch 1010/2746, Loss: 4.7342
+Epoch 1/100, Batch 1020/2746, Loss: 4.6549

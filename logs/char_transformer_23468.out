@@ -1,0 +1,23 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 20000000 characters for training
+Training BPE tokenizer...
+Initial vocabulary size: 2782 tokens
+Converting text to base tokens...
+
+Vocabulary size: 3000
+Most frequent pair: yn (count: 200)
+Maximum token length: 12
+Current frequency threshold: 2
+
+Vocabulary size: 4000
+Most frequent pair: cla (count: 200)
+Maximum token length: 30
+Current frequency threshold: 2
+
+Converged: Change ratio 0.0000 below threshold 0.01
+
+Final vocabulary size: 4001
+Maximum token length: 30
+Tokenizer saved to data/bpe_tokenizer.json

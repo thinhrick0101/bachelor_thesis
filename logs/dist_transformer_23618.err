@@ -1,0 +1,56 @@
+Lmod has detected the following error: The following module(s) are unknown:
+"openmpi"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "openmpi"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+srun: error: node001: task 0: Exited with exit code 2
+srun: error: node004: task 3: Exited with exit code 2
+srun: error: node002: task 1: Exited with exit code 2
+srun: error: node003: task 2: Exited with exit code 2
+slurmstepd-node001: error: execve(): barrier: No such file or directory
+slurmstepd-node003: error: execve(): barrier: No such file or directory
+slurmstepd-node004: error: execve(): barrier: No such file or directory
+slurmstepd-node002: error: execve(): barrier: No such file or directory
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 854, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 854, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 854, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 776, in main
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 776, in main
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 776, in main
+    train_batches = create_distributed_batches(train_data, batch_size, seq_length, 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 587, in create_distributed_batches
+    train_batches = create_distributed_batches(train_data, batch_size, seq_length, 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 587, in create_distributed_batches
+    x = local_data[:-1].view(batch_size, -1)
+RuntimeError: shape '[32, -1]' is invalid for input of size 1126399
+    train_batches = create_distributed_batches(train_data, batch_size, seq_length, 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 587, in create_distributed_batches
+    x = local_data[:-1].view(batch_size, -1)
+RuntimeError: shape '[32, -1]' is invalid for input of size 1126399
+    x = local_data[:-1].view(batch_size, -1)
+RuntimeError: shape '[32, -1]' is invalid for input of size 1126399
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 854, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 776, in main
+    train_batches = create_distributed_batches(train_data, batch_size, seq_length, 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 587, in create_distributed_batches
+    x = local_data[:-1].view(batch_size, -1)
+RuntimeError: shape '[32, -1]' is invalid for input of size 1126399
+srun: error: node004: task 3: Exited with exit code 1
+srun: error: node002: task 1: Exited with exit code 1
+srun: error: node003: task 2: Exited with exit code 1
+srun: error: node001: task 0: Exited with exit code 1

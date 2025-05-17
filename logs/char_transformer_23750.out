@@ -1,0 +1,16 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 15000000 characters for training
+Loading BPE tokenizer...
+Vocabulary size: 30000
+Encoding text with BPE tokenizer...
+Creating batches...
+Created 138 training batches and 15 validation batches
+Model Parameters: 213,206,865 trainable out of 213,206,865 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 256

@@ -1,0 +1,35 @@
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 15000000 characters for training
+Loading BPE tokenizer...
+Vocabulary size: 30000
+
+Analyzing tokenization...
+Sample text length: 1000 characters
+Encoded length: 314 tokens
+Average tokens per character: 0.31
+
+Example tokenization:
+Token 0: [CLS] (ID: 2)
+Token 1: < (ID: 32)
+Token 2: media (ID: 9192)
+Token 3: wiki (ID: 9461)
+Token 4: xml (ID: 6615)
+
+Encoding full text with BPE tokenizer...
+Creating batches...
+Created 414 training batches and 46 validation batches
+Model Parameters: 213,206,865 trainable out of 213,206,865 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 16 steps
+Effective batch size: 256
+Epoch 1/100, Batch 10/414, Loss: 10.4568
+Epoch 1/100, Batch 20/414, Loss: 10.4726
+Epoch 1/100, Batch 30/414, Loss: 10.4617
+Epoch 1/100, Batch 40/414, Loss: 10.4644
+Epoch 1/100, Batch 50/414, Loss: 10.4510
+Epoch 1/100, Batch 60/414, Loss: 10.4602

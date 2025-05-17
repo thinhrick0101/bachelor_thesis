@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_tokenizer.py", line 19, in <module>
+    tokenizer.train(files='data/enwik8', trainer=trainer)
+TypeError: argument 'files': Can't extract `str` to `Vec`

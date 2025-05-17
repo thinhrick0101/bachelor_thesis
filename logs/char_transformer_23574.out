@@ -1,0 +1,44 @@
+=== Training BPE Tokenizer ===
+Training tokenizer on data/enwik8
+Target vocabulary size: 8000
+Minimum merge frequency: 1
+
+
+
+
+Tokenizer trained and saved to models/tokenizer.json
+
+Testing tokenizer on sample texts:
+
+Input    : Byte Pair Encoding is awesome!
+Tokens   : ['[CLS]', 'By', 'te', 'P', 'air', 'En', 'c', 'od', 'ing', 'is', 'aw', 'es', 'ome', '!', '[SEP]']
+Token IDs: [2, 7453, 6282, 52, 6512, 6364, 71, 6171, 6089, 6076, 6343, 6073, 6237, 5, 3]
+
+Input    : The quick brown fox jumps over the lazy dog.
+Tokens   : ['[CLS]', 'The', 'qu', 'ick', 'b', 'rown', 'fo', 'x', 'j', 'um', 'ps', 'over', 'the', 'l', 'az', 'y', 'd', 'og', '.', '[SEP]']
+Token IDs: [2, 6124, 6096, 6594, 70, 7529, 6834, 92, 78, 6153, 7716, 6258, 6070, 80, 6731, 93, 72, 6224, 18, 3]
+
+Input    : Machine learning models need good tokenization.
+Tokens   : ['[CLS]', 'M', 'ach', 'ine', 'lear', 'ning', 'mod', 'els', 'need', 'good', 'to', 'k', 'en', 'ization', '.', '[SEP]']
+Token IDs: [2, 49, 6325, 6236, 7608, 7804, 6539, 6916, 7550, 7641, 6090, 79, 6072, 7024, 18, 3]
+
+Final vocabulary size: 8,000
+Number of special tokens: 5
+Tokenizer training completed successfully.
+=== Training Transformer Model ===
+Loading data...
+Loading data from data/enwik8
+Data loaded: 99621832 characters
+Limiting data to first 20000000 characters for training
+Loading pre-trained tokenizer...
+Loaded tokenizer with vocabulary size: 30,000
+Encoding text with pre-trained tokenizer...
+Creating batches...
+Created 275 training batches and 30 validation batches
+Model Parameters: 213,206,865 trainable out of 213,206,865 total
+
+=== Training Enhanced Transformer Model with BPE Tokenization ===
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 256

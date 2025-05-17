@@ -1,0 +1,18 @@
+/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py:118: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x = torch.tensor(data[:-1], dtype=torch.long).view(batch_size, -1)
+/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py:119: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y = torch.tensor(data[1:], dtype=torch.long).view(batch_size, -1)
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1074, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1016, in main
+    model, (train_losses, val_losses) = train_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 731, in train_model
+    loss = criterion(outputs, targets)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/loss.py", line 1164, in forward
+    return F.cross_entropy(input, target, weight=self.weight,
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 3014, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(input, target, weight, _Reduction.get_enum(reduction), ignore_index, label_smoothing)
+RuntimeError: CUDA out of memory. Tried to allocate 2.75 GiB (GPU 0; 10.57 GiB total capacity; 6.40 GiB already allocated; 2.58 GiB free; 7.15 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

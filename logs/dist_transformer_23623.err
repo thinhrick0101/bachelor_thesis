@@ -1,0 +1,23 @@
+Lmod has detected the following error: The following module(s) are unknown:
+"openmpi"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "openmpi"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+srun: error: node001: task 0: Exited with exit code 2
+srun: error: node004: task 3: Exited with exit code 2
+srun: error: node002: task 1: Exited with exit code 2
+srun: error: node003: task 2: Exited with exit code 2
+slurmstepd-node001: error: execve(): barrier: No such file or directory
+slurmstepd-node004: error: execve(): barrier: No such file or directory
+slurmstepd-node002: error: execve(): barrier: No such file or directory
+slurmstepd-node003: error: execve(): barrier: No such file or directory
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-node001: error: *** STEP 23623.1 ON node001 CANCELLED AT 2025-05-15T21:59:13 ***
+slurmstepd-node001: error: *** JOB 23623 ON node001 CANCELLED AT 2025-05-15T21:59:13 ***
