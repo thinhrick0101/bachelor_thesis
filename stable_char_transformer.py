@@ -12,6 +12,9 @@ import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+import torch.multiprocessing as mp
 
 
 class ByteTokenizer:
@@ -77,38 +80,35 @@ def load_data(data_path, data_url=None):
 
 def create_batches(data, batch_size, seq_length):
     """
-    Create batches of data for training
-
-    Args:
-        data: List of token indices
-        batch_size: Number of sequences per batch
-        seq_length: Length of each sequence
-
-    Returns:
-        List of (input, target) tuples
+    Create batches of data for distributed training
     """
     # Calculate the number of batches
     num_batches = (len(data) - 1) // (batch_size * seq_length)
-
-    # Trim the data to fit into batches
-    data = data[:num_batches * batch_size * seq_length + 1]
-
-    # Convert data to tensor first
-    data_tensor = torch.LongTensor(data)
     
-    # Create input and target tensors using clone() and detach()
+    # Get world size and rank for distributed training
+    world_size = dist.get_world_size() if dist.is_available() and dist.is_initialized() else 1
+    rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
+    
+    # Calculate per-node data size
+    data_per_node = len(data) // world_size
+    node_start = rank * data_per_node
+    node_end = node_start + data_per_node if rank < world_size - 1 else len(data)
+    
+    # Get this node's portion of data
+    local_data = data[node_start:node_end]
+    
+    # Create batches from local data
+    data_tensor = torch.LongTensor(local_data)
     x = data_tensor[:-1].clone().detach().view(batch_size, -1)
     y = data_tensor[1:].clone().detach().view(batch_size, -1)
-
-    # Create batches
+    
     batches = []
     for i in range(0, x.size(1), seq_length):
-        # Get sequences of length seq_length
         if i + seq_length <= x.size(1):
             input_batch = x[:, i:i+seq_length].clone()
             target_batch = y[:, i:i+seq_length].clone()
             batches.append((input_batch, target_batch))
-
+    
     return batches
 
 class ImprovedPositionalEncoding(nn.Module):
@@ -903,7 +903,24 @@ def visualize_results(train_losses, val_losses=None, filename='enhanced_char_tra
     plt.savefig(filename, dpi=300)
     plt.close()
 
+def setup_distributed():
+    dist.init_process_group(
+        backend='nccl',  # or 'gloo' if using CPU
+        init_method='env://'
+    )
+
 def main():
+    # Distributed setup
+    local_rank = int(os.environ.get("LOCAL_RANK", 0))
+    world_size = int(os.environ.get("WORLD_SIZE", 1))
+    rank = int(os.environ.get("RANK", 0))
+    
+    # Initialize distributed training
+    setup_distributed()
+    
+    # Set device
+    device = torch.device(f"cuda:{local_rank}" if torch.cuda.is_available() else "cpu")
+
     # Clear CUDA cache at the start
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -979,13 +996,13 @@ def main():
     train_data = data[:split_idx]
     val_data = data[split_idx:]
 
-    # Determine device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Create batches
-    print("Creating batches...")
-    train_batches = create_batches(train_data, batch_size, seq_length)
-    val_batches = create_batches(val_data, batch_size, seq_length)
+    # Adjust batch size for distributed training
+    global_batch_size = 32  # Your original batch size
+    local_batch_size = global_batch_size // world_size
+    
+    # Create batches with adjusted batch size
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+    val_batches = create_batches(val_data, local_batch_size, seq_length)
     print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
     # Calculate warmup steps after creating batches
@@ -1072,6 +1089,10 @@ def main():
         )
         print(f"\nTemperature: {temp}")
         print(f"Generated: {generated_text}")
+
+    # Wrap model with DDP
+    if dist.is_available() and dist.is_initialized():
+        model = DDP(model, device_ids=[local_rank], output_device=local_rank)
 
 if __name__ == "__main__":
     main()
