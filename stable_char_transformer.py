@@ -82,6 +82,7 @@ def load_data(data_path, data_url=None):
 def create_batches(data, batch_size, seq_length):
     """
     Create batches of data for distributed training, ensuring each node gets unique batches
+    with correct tensor shapes
     """
     # Get world size and rank for distributed training
     world_size = dist.get_world_size() if dist.is_available() and dist.is_initialized() else 1
@@ -93,37 +94,53 @@ def create_batches(data, batch_size, seq_length):
     else:
         data_tensor = data
     
-    # Calculate total number of batches
-    total_batches = (len(data_tensor) - seq_length) // (batch_size * seq_length)
+    # Calculate total number of complete sequences
+    total_sequences = (len(data_tensor) - 1) // seq_length
     
-    # Calculate batches per node
-    batches_per_node = total_batches // world_size
+    # Calculate sequences per node
+    sequences_per_node = total_sequences // world_size
     
-    # Calculate start and end batch indices for this node
-    start_batch = rank * batches_per_node
-    end_batch = start_batch + batches_per_node
-    
-    # Calculate actual data indices
-    start_idx = start_batch * batch_size * seq_length
-    end_idx = end_batch * batch_size * seq_length + seq_length  # Add seq_length to include targets
+    # Calculate start and end indices for this node
+    start_idx = rank * sequences_per_node * seq_length
+    end_idx = start_idx + sequences_per_node * seq_length
     
     # Get this node's portion of data
     local_data = data_tensor[start_idx:end_idx]
     
-    # Create batches
+    # Calculate number of complete batches
+    num_complete_batches = len(local_data) // (batch_size * seq_length)
+    
+    # Trim data to be evenly divisible by batch_size * seq_length
+    trim_length = num_complete_batches * batch_size * seq_length
+    local_data = local_data[:trim_length]
+    
+    # Reshape into [num_sequences, batch_size, seq_length]
+    local_data = local_data.view(-1, batch_size, seq_length)
+    
+    # Create input-target pairs
     batches = []
-    for i in range(0, len(local_data) - seq_length, batch_size * seq_length):
-        chunk = local_data[i:i + batch_size * seq_length + 1]  # +1 to include target
-        if len(chunk) < batch_size * seq_length + 1:
-            break
-            
-        chunk = chunk.view(batch_size, seq_length + 1)
-        input_batch = chunk[:, :-1].clone()
-        target_batch = chunk[:, 1:].clone()
+    for i in range(local_data.size(0)):
+        # Get current sequence
+        sequence = local_data[i]
+        
+        # Create input and target
+        # Input is the sequence except last token
+        input_batch = sequence.clone()
+        # Target is the sequence shifted by 1
+        target_batch = torch.zeros_like(sequence)
+        target_batch[:, :-1] = sequence[:, 1:]
+        # Last target is the first token of next sequence or 0 if last sequence
+        if i < local_data.size(0) - 1:
+            target_batch[:, -1] = local_data[i + 1, :, 0]
+        
         batches.append((input_batch, target_batch))
     
-    print(f"Rank {rank}: Created {len(batches)} batches (batch range {start_batch}-{end_batch} out of {total_batches})")
-    return batches, start_batch  # Return start_batch for correct batch numbering
+    print(f"Rank {rank}: Created {len(batches)} batches (sequence range {start_idx//seq_length}-{end_idx//seq_length})")
+    
+    if len(batches) > 0:
+        print(f"Rank {rank}: Batch shapes - Input: {batches[0][0].shape}, Target: {batches[0][1].shape}")
+    
+    return batches, start_idx // seq_length  # Return start sequence number for batch numbering
 
 class ImprovedPositionalEncoding(nn.Module):
     """
