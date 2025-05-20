@@ -93,38 +93,37 @@ def create_batches(data, batch_size, seq_length):
     else:
         data_tensor = data
     
-    # Calculate total number of sequences
-    total_sequences = len(data_tensor) // seq_length
+    # Calculate total number of batches
+    total_batches = (len(data_tensor) - seq_length) // (batch_size * seq_length)
     
-    # Calculate sequences per node
-    sequences_per_node = total_sequences // world_size
+    # Calculate batches per node
+    batches_per_node = total_batches // world_size
     
-    # Calculate start and end indices for this node's sequences
-    start_idx = rank * sequences_per_node * seq_length
-    end_idx = start_idx + sequences_per_node * seq_length
+    # Calculate start and end batch indices for this node
+    start_batch = rank * batches_per_node
+    end_batch = start_batch + batches_per_node
+    
+    # Calculate actual data indices
+    start_idx = start_batch * batch_size * seq_length
+    end_idx = end_batch * batch_size * seq_length + seq_length  # Add seq_length to include targets
     
     # Get this node's portion of data
     local_data = data_tensor[start_idx:end_idx]
     
-    # Calculate number of batches for this node
-    num_batches = (len(local_data) - seq_length) // (batch_size * seq_length)
-    
-    # Trim data to be evenly divisible by batch_size * seq_length
-    trim_length = num_batches * batch_size * seq_length
-    local_data = local_data[:trim_length]
-    
-    # Reshape into [batch_size, -1]
-    local_data = local_data.view(batch_size, -1)
-    
     # Create batches
     batches = []
-    for i in range(0, local_data.size(1) - seq_length, seq_length):
-        input_batch = local_data[:, i:i+seq_length].clone()
-        target_batch = local_data[:, i+1:i+seq_length+1].clone()
+    for i in range(0, len(local_data) - seq_length, batch_size * seq_length):
+        chunk = local_data[i:i + batch_size * seq_length + 1]  # +1 to include target
+        if len(chunk) < batch_size * seq_length + 1:
+            break
+            
+        chunk = chunk.view(batch_size, seq_length + 1)
+        input_batch = chunk[:, :-1].clone()
+        target_batch = chunk[:, 1:].clone()
         batches.append((input_batch, target_batch))
     
-    print(f"Rank {rank}: Created {len(batches)} batches from sequence range {start_idx//seq_length}-{end_idx//seq_length}")
-    return batches
+    print(f"Rank {rank}: Created {len(batches)} batches (batch range {start_batch}-{end_batch} out of {total_batches})")
+    return batches, start_batch  # Return start_batch for correct batch numbering
 
 class ImprovedPositionalEncoding(nn.Module):
     """
@@ -1108,8 +1107,8 @@ def main():
         local_batch_size = global_batch_size // world_size
         
         # Create batches with adjusted batch size
-        train_batches = create_batches(train_data, local_batch_size, seq_length)
-        val_batches = create_batches(val_data, local_batch_size, seq_length)
+        train_batches, start_batch = create_batches(train_data, local_batch_size, seq_length)
+        val_batches, _ = create_batches(val_data, local_batch_size, seq_length)
         print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
         # Calculate warmup steps after creating batches
