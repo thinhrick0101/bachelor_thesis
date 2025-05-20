@@ -1,0 +1,1149 @@
++ module load cuda11.3/toolkit
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ source /var/scratch/tng204/anaconda3/etc/profile.d/conda.sh
+++ export CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ '[' -z x ']'
++ conda activate mltrain
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate mltrain
++ '[' -n '' ']'
++ local ask_conda
+++ PS1=
+++ __conda_exe shell.posix activate mltrain
+++ '[' -n '' ']'
+++ /var/scratch/tng204/anaconda3/bin/conda shell.posix activate mltrain
++ ask_conda='unset _CE_M
+unset _CE_CONDA
+PS1='\''(mltrain) '\''
+export PATH='\''/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_PROMPT_MODIFIER='\''(mltrain) '\''
+export CONDA_EXE='\''/var/scratch/tng204/anaconda3/bin/conda'\''
+export CONDA_PYTHON_EXE='\''/var/scratch/tng204/anaconda3/bin/python'\'''
++ eval 'unset _CE_M
+unset _CE_CONDA
+PS1='\''(mltrain) '\''
+export PATH='\''/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_PROMPT_MODIFIER='\''(mltrain) '\''
+export CONDA_EXE='\''/var/scratch/tng204/anaconda3/bin/conda'\''
+export CONDA_PYTHON_EXE='\''/var/scratch/tng204/anaconda3/bin/python'\'''
+++ unset _CE_M
+++ unset _CE_CONDA
+++ PS1='(mltrain) '
+++ export PATH=/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin
+++ PATH=/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export 'CONDA_PROMPT_MODIFIER=(mltrain) '
+++ CONDA_PROMPT_MODIFIER='(mltrain) '
+++ export CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ export CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
++ cd /var/scratch/tng204/thesis/bachelor_thesis
++ python -c 'import torch; torch.cuda.empty_cache()'
+++ head -n 1
+++ scontrol show hostnames 'node[002-007,024-026,046-052]'
++ export MASTER_ADDR=node002
++ MASTER_ADDR=node002
++ export MASTER_PORT=29500
++ MASTER_PORT=29500
++ export WORLD_SIZE=16
++ WORLD_SIZE=16
++ export TORCH_DISTRIBUTED_TIMEOUT=1800
++ TORCH_DISTRIBUTED_TIMEOUT=1800
++ export NCCL_DEBUG=INFO
++ NCCL_DEBUG=INFO
++ export NCCL_IB_TIMEOUT=30
++ NCCL_IB_TIMEOUT=30
++ export NCCL_SOCKET_TIMEOUT=300
++ NCCL_SOCKET_TIMEOUT=300
++ echo '=== Distributed Training Configuration ==='
++ echo 'Master node: node002'
++ echo 'Master port: 29500'
++ echo 'World size: 16'
++ echo 'Job nodes: node[002-007,024-026,046-052]'
++ echo 'CUDA_VISIBLE_DEVICES: 0'
++ echo ========================================
++ mkdir -p logs
++ srun --kill-on-bad-exit=1 torchrun --nnodes=16 --nproc_per_node=1 --rdzv_id=25655 --rdzv_backend=c10d --rdzv_endpoint=node002:29500 --max_restarts=3 stable_char_transformer.py
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 836593) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 782039) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 704239) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 702741) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684438) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 803495) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 695487) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 701266) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 671739) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684232) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 722877) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1006017) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 715668) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 3577846) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 814058) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 699971) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 836631) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 782063) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 700002) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 702764) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1006041) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 814083) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 695510) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 715692) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 722902) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 701289) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684462) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 3577871) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 803518) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 671765) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684255) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 704262) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 836657) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 722925) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 701312) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 782086) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 671788) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 715715) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 695533) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684485) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 700032) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684278) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1006064) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 814106) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 803541) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 704285) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 3577894) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 702787) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 836682) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1165, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1063, in main
+    train_batches = create_batches(train_data, local_batch_size, seq_length)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 103, in create_batches
+    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
+RuntimeError: shape '[2, -1]' is invalid for input of size 5624999
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 695556) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 704308) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 722957) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 700062) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 702810) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 701335) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 3577917) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 671811) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 715738) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 782109) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684301) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 684508) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 814129) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1006087) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 803564) of binary: /var/scratch/tng204/anaconda3/envs/mltrain/bin/python3.10
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    sys.exit(main())
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    return f(*args, **kwargs)
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+Traceback (most recent call last):
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/bin/torchrun", line 8, in <module>
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    raise ChildFailedError(
+    return launch_agent(self._config, self._entrypoint, list(args))
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    sys.exit(main())
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node047.localdomain
+  rank      : 10 (local_rank: 0)
+  exitcode  : 1 (pid: 704308)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    raise ChildFailedError(
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node026.localdomain
+  rank      : 8 (local_rank: 0)
+  exitcode  : 1 (pid: 700062)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node005.localdomain
+  rank      : 3 (local_rank: 0)
+  exitcode  : 1 (pid: 814129)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node006.localdomain
+  rank      : 4 (local_rank: 0)
+  exitcode  : 1 (pid: 715738)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node004.localdomain
+  rank      : 2 (local_rank: 0)
+  exitcode  : 1 (pid: 782109)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+    raise ChildFailedError(
+    raise ChildFailedError(
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return f(*args, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 761, in main
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node003.localdomain
+  rank      : 1 (local_rank: 0)
+  exitcode  : 1 (pid: 803564)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node052.localdomain
+  rank      : 15 (local_rank: 0)
+  exitcode  : 1 (pid: 695556)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    raise ChildFailedError(
+    raise ChildFailedError(
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node007.localdomain
+  rank      : 5 (local_rank: 0)
+  exitcode  : 1 (pid: 684301)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node049.localdomain
+  rank      : 12 (local_rank: 0)
+  exitcode  : 1 (pid: 671811)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node048.localdomain
+  rank      : 11 (local_rank: 0)
+  exitcode  : 1 (pid: 684508)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+    run(args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/run.py", line 752, in run
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node025.localdomain
+  rank      : 7 (local_rank: 0)
+  exitcode  : 1 (pid: 1006087)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    return launch_agent(self._config, self._entrypoint, list(args))
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node050.localdomain
+  rank      : 13 (local_rank: 0)
+  exitcode  : 1 (pid: 702810)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node046.localdomain
+  rank      : 9 (local_rank: 0)
+  exitcode  : 1 (pid: 722957)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node051.localdomain
+  rank      : 14 (local_rank: 0)
+  exitcode  : 1 (pid: 701335)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:13
+  host      : node024.localdomain
+  rank      : 6 (local_rank: 0)
+  exitcode  : 1 (pid: 3577917)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+    elastic_launch(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+stable_char_transformer.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-20_09:21:08
+  host      : node002.localdomain
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 836682)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+srun: error: node052: task 15: Exited with exit code 1
+srun: Terminating StepId=25655.0
+srun: error: node050: task 13: Exited with exit code 1
+srun: error: node026: task 8: Exited with exit code 1
+srun: error: node049: task 12: Exited with exit code 1
+srun: error: node047: task 10: Exited with exit code 1
+srun: error: node025: task 7: Exited with exit code 1
+slurmstepd-node002: error: *** STEP 25655.0 ON node002 CANCELLED AT 2025-05-20T09:21:13 ***
+srun: error: node007: task 5: Exited with exit code 1
+srun: error: node051: task 14: Exited with exit code 1
+srun: error: node046: task 9: Exited with exit code 1
+srun: error: node048: task 11: Exited with exit code 1
+srun: error: node006: task 4: Exited with exit code 1
+srun: error: node003: task 1: Exited with exit code 1
+srun: error: node004: task 2: Exited with exit code 1
+srun: error: node005: task 3: Exited with exit code 1
+srun: error: node024: task 6: Exited with exit code 1
+srun: error: node002: task 0: Terminated
+srun: Force Terminated StepId=25655.0

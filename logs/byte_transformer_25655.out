@@ -1,0 +1,3571 @@
+=== Distributed Training Configuration ===
+Master node: node002
+Master port: 29500
+World size: 16
+Job nodes: node[002-007,024-026,046-052]
+CUDA_VISIBLE_DEVICES: 0
+========================================
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 58005
+node002:836593:836593 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:836593:836593 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:836593:836593 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:836593:836593 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node047:704239:704239 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node049:671739:671739 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node049:671739:671739 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702741:702741 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node047:704239:704239 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:684438:684438 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node052:695487:695487 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node046:722877:722877 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node050:702741:702741 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:684438:684438 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node052:695487:695487 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node046:722877:722877 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:701266:701266 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node051:701266:701266 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:671739:671739 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:671739:671739 [0] NCCL INFO Using network IB
+node047:704239:704239 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:704239:704239 [0] NCCL INFO Using network IB
+node048:684438:684438 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:684438:684438 [0] NCCL INFO Using network IB
+node050:702741:702741 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:702741:702741 [0] NCCL INFO Using network IB
+node046:722877:722877 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:722877:722877 [0] NCCL INFO Using network IB
+node052:695487:695487 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:695487:695487 [0] NCCL INFO Using network IB
+node051:701266:701266 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:701266:701266 [0] NCCL INFO Using network IB
+node007:684232:684232 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node007:684232:684232 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node007:684232:684232 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:684232:684232 [0] NCCL INFO Using network IB
+node004:782039:782039 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node004:782039:782039 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782039:782039 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:782039:782039 [0] NCCL INFO Using network IB
+node003:803495:803495 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node003:803495:803495 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:803495:803495 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:803495:803495 [0] NCCL INFO Using network IB
+node024:3577846:3577846 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node024:3577846:3577846 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node025:1006017:1006017 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node025:1006017:1006017 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577846:3577846 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3577846:3577846 [0] NCCL INFO Using network IB
+node025:1006017:1006017 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1006017:1006017 [0] NCCL INFO Using network IB
+node026:699971:699971 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:699971:699971 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node026:699971:699971 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:699971:699971 [0] NCCL INFO Using network IB
+node006:715668:715668 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node006:715668:715668 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:715668:715668 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:715668:715668 [0] NCCL INFO Using network IB
+node005:814058:814058 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node005:814058:814058 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:814058:814058 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:814058:814058 [0] NCCL INFO Using network IB
+node026:699971:699988 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:722877:722889 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:722877:722889 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:704239:704251 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:704239:704251 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:684438:684450 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:684438:684450 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:671739:671753 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:671739:671753 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:702741:702753 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:702741:702753 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:701266:701278 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:701266:701278 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:695487:695499 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:695487:695499 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:836593:836607 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836593:836607 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836593:836607 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:836593:836607 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:803495:803507 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:803495:803507 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:782039:782051 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:782039:782051 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:814058:814071 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:814058:814071 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:715668:715681 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:715668:715681 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:684232:684244 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:684232:684244 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3577846:3577859 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3577846:3577859 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1006017:1006029 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1006017:1006029 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node026:699971:699988 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704239:704251 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671739:671753 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:702741:702753 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701266:701278 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722877:722889 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node048:684438:684450 [0] NCCL INFO Connected all rings
+node047:704239:704251 [0] NCCL INFO Connected all rings
+node049:671739:671753 [0] NCCL INFO Connected all rings
+node050:702741:702753 [0] NCCL INFO Connected all rings
+node051:701266:701278 [0] NCCL INFO Connected all rings
+node024:3577846:3577859 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722877:722889 [0] NCCL INFO Connected all rings
+node007:684232:684244 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:699971:699988 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006017:1006029 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node004:782039:782051 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node006:715668:715681 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:836593:836607 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:814058:814071 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node003:803495:803507 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:684232:684244 [0] NCCL INFO Connected all rings
+node024:3577846:3577859 [0] NCCL INFO Connected all rings
+node026:699971:699988 [0] NCCL INFO Connected all rings
+node052:695487:695499 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006017:1006029 [0] NCCL INFO Connected all rings
+node006:715668:715681 [0] NCCL INFO Connected all rings
+node003:803495:803507 [0] NCCL INFO Connected all rings
+node002:836593:836607 [0] NCCL INFO Connected all rings
+node004:782039:782051 [0] NCCL INFO Connected all rings
+node052:695487:695499 [0] NCCL INFO Connected all rings
+node005:814058:814071 [0] NCCL INFO Connected all rings
+node048:684438:684450 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node002:836593:836607 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node026:699971:699988 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node024:3577846:3577859 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node004:782039:782051 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node007:684232:684244 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node051:701266:701278 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node047:704239:704251 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node046:722877:722889 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node052:695487:695499 [0] NCCL INFO Connected all trees
+node052:695487:695499 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:695487:695499 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node052:695487:695499 [0] NCCL INFO comm 0x7fb78c003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577846:3577859 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node048:684438:684450 [0] NCCL INFO Connected all trees
+node048:684438:684450 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:684438:684450 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node048:684438:684450 [0] NCCL INFO comm 0x7f9e84003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node025:1006017:1006029 [0] NCCL INFO Connected all trees
+node025:1006017:1006029 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006017:1006029 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782039:782051 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node025:1006017:1006029 [0] NCCL INFO comm 0x7f95c0003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684232:684244 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node003:803495:803507 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO Connected all trees
+node005:814058:814071 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:814058:814071 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702741:702753 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node005:814058:814071 [0] NCCL INFO comm 0x7feecc003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722877:722889 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node049:671739:671753 [0] NCCL INFO Connected all trees
+node049:671739:671753 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:671739:671753 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:671739:671753 [0] NCCL INFO comm 0x7f5370003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:699971:699988 [0] NCCL INFO Connected all trees
+node026:699971:699988 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node026:699971:699988 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:699971:699988 [0] NCCL INFO comm 0x7f7ce8003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node051:701266:701278 [0] NCCL INFO Connected all trees
+node051:701266:701278 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701266:701278 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702741:702753 [0] NCCL INFO Connected all trees
+node050:702741:702753 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684232:684244 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node050:702741:702753 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702741:702753 [0] NCCL INFO comm 0x7fda8c003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node047:704239:704251 [0] NCCL INFO Connected all trees
+node047:704239:704251 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704239:704251 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node047:704239:704251 [0] NCCL INFO comm 0x7fde28003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722877:722889 [0] NCCL INFO Connected all trees
+node046:722877:722889 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node046:722877:722889 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node051:701266:701278 [0] NCCL INFO comm 0x7f88f8003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722877:722889 [0] NCCL INFO comm 0x7f71e0003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node003:803495:803507 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node006:715668:715681 [0] NCCL INFO Connected all trees
+node006:715668:715681 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:715668:715681 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:715668:715681 [0] NCCL INFO comm 0x7fab14003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684232:684244 [0] NCCL INFO Connected all trees
+node007:684232:684244 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684232:684244 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:836593:836607 [0] NCCL INFO Connected all trees
+node002:836593:836607 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:836593:836607 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684232:684244 [0] NCCL INFO comm 0x7fcdf4003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577846:3577859 [0] NCCL INFO Connected all trees
+node024:3577846:3577859 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3577846:3577859 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:836593:836607 [0] NCCL INFO comm 0x7f7e08003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577846:3577859 [0] NCCL INFO comm 0x7f13a8003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node003:803495:803507 [0] NCCL INFO Connected all trees
+node003:803495:803507 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:836593:836593 [0] NCCL INFO Launch mode Parallel
+node003:803495:803507 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:803495:803507 [0] NCCL INFO comm 0x7f6f78003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782039:782051 [0] NCCL INFO Connected all trees
+node004:782039:782051 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:782039:782051 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782039:782051 [0] NCCL INFO comm 0x7fe138003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 4/16 initialized successfully
+Process 12/16 initialized successfully
+Process 4 using device: cuda:0
+Process 2/16 initialized successfully
+Process 12 using device: cuda:0
+Process 10/16 initialized successfully
+Process 2 using device: cuda:0
+Process 6/16 initialized successfully
+Process 14/16 initialized successfully
+Process 10 using device: cuda:0
+Process 14 using device: cuda:0
+Process 6 using device: cuda:0
+Process 1/16 initialized successfully
+Process 3/16 initialized successfully
+Process 5/16 initialized successfully
+Process 9/16 initialized successfully
+Process 1 using device: cuda:0
+Process 15/16 initialized successfully
+Process 11/16 initialized successfully
+Process 3 using device: cuda:0
+Process 7/16 initialized successfully
+Process 5 using device: cuda:0
+Process 9 using device: cuda:0
+Process 15 using device: cuda:0
+Process 11 using device: cuda:0
+Process 7 using device: cuda:0
+Process 13/16 initialized successfully
+Process 13 using device: cuda:0
+Loading data from data/enwik8
+Data loaded: 99621832 bytes
+Rank 2: Loading data...
+Rank 8: Loading data...
+Rank 15: Loading data...
+Rank 14: Loading data...
+Rank 12: Loading data...
+Rank 4: Loading data...
+Rank 1: Loading data...
+Rank 9: Loading data...
+Rank 13: Loading data...
+Rank 11: Loading data...
+Rank 10: Loading data...
+Rank 5: Loading data...
+Rank 3: Loading data...
+Rank 7: Loading data...
+Rank 6: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 12: Data loaded: 99621832 bytes
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 0: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 5: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 15: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 13: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 10: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 12: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 9: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 14: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 11: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 1: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 4: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 8: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 6: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 2: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 7: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 3: shape '[2, -1]' is invalid for input of size 5624999
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49407
+node002:836631:836631 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:836631:836631 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:836631:836631 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:836631:836631 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node052:695510:695510 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node007:684255:684255 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node003:803518:803518 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node046:722902:722902 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node048:684462:684462 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node052:695510:695510 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702764:702764 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node025:1006041:1006041 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node051:701289:701289 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node047:704262:704262 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node048:684462:684462 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:803518:803518 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702764:702764 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node025:1006041:1006041 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:715692:715692 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node007:684255:684255 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577871:3577871 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node046:722902:722902 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:701289:701289 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node047:704262:704262 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:715692:715692 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577871:3577871 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:671765:671765 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node049:671765:671765 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node046:722902:722902 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:722902:722902 [0] NCCL INFO Using network IB
+node048:684462:684462 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:684462:684462 [0] NCCL INFO Using network IB
+node052:695510:695510 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:695510:695510 [0] NCCL INFO Using network IB
+node007:684255:684255 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:684255:684255 [0] NCCL INFO Using network IB
+node003:803518:803518 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:803518:803518 [0] NCCL INFO Using network IB
+node050:702764:702764 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:702764:702764 [0] NCCL INFO Using network IB
+node047:704262:704262 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:704262:704262 [0] NCCL INFO Using network IB
+node051:701289:701289 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:701289:701289 [0] NCCL INFO Using network IB
+node025:1006041:1006041 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1006041:1006041 [0] NCCL INFO Using network IB
+node006:715692:715692 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:715692:715692 [0] NCCL INFO Using network IB
+node024:3577871:3577871 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3577871:3577871 [0] NCCL INFO Using network IB
+node049:671765:671765 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:671765:671765 [0] NCCL INFO Using network IB
+node004:782063:782063 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node004:782063:782063 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782063:782063 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:782063:782063 [0] NCCL INFO Using network IB
+node005:814083:814083 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node005:814083:814083 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:814083:814083 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:814083:814083 [0] NCCL INFO Using network IB
+node026:700002:700002 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:700002:700002 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node026:700002:700002 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:700002:700002 [0] NCCL INFO Using network IB
+node026:700002:700018 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:722902:722914 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:722902:722914 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:704262:704274 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:704262:704274 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:684462:684474 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:684462:684474 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:671765:671777 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:671765:671777 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:702764:702776 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:702764:702776 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:701289:701301 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:701289:701301 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:695510:695522 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:695510:695522 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:836631:836645 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836631:836645 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836631:836645 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:836631:836645 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:803518:803530 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:803518:803530 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:782063:782075 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:782063:782075 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:814083:814095 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:814083:814095 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:715692:715704 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:715692:715704 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:684255:684267 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:684255:684267 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3577871:3577883 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3577871:3577883 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1006041:1006053 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1006041:1006053 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node026:700002:700018 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704262:704274 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node048:684462:684474 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:702764:702776 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722902:722914 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701289:701301 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671765:671777 [0] NCCL INFO Connected all rings
+node007:684255:684267 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node048:684462:684474 [0] NCCL INFO Connected all rings
+node047:704262:704274 [0] NCCL INFO Connected all rings
+node026:700002:700018 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722902:722914 [0] NCCL INFO Connected all rings
+node050:702764:702776 [0] NCCL INFO Connected all rings
+node024:3577871:3577883 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701289:701301 [0] NCCL INFO Connected all rings
+node025:1006041:1006053 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node004:782063:782075 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node006:715692:715704 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:814083:814095 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:684255:684267 [0] NCCL INFO Connected all rings
+node003:803518:803530 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:836631:836645 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:700002:700018 [0] NCCL INFO Connected all rings
+node024:3577871:3577883 [0] NCCL INFO Connected all rings
+node052:695510:695522 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006041:1006053 [0] NCCL INFO Connected all rings
+node006:715692:715704 [0] NCCL INFO Connected all rings
+node003:803518:803530 [0] NCCL INFO Connected all rings
+node004:782063:782075 [0] NCCL INFO Connected all rings
+node005:814083:814095 [0] NCCL INFO Connected all rings
+node002:836631:836645 [0] NCCL INFO Connected all rings
+node052:695510:695522 [0] NCCL INFO Connected all rings
+node049:671765:671777 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node002:836631:836645 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node025:1006041:1006053 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node005:814083:814095 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node049:671765:671777 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node006:715692:715704 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node050:702764:702776 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node046:722902:722914 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node024:3577871:3577883 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node007:684255:684267 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node004:782063:782075 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node051:701289:701301 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:803518:803530 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node047:704262:704274 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node052:695510:695522 [0] NCCL INFO Connected all trees
+node052:695510:695522 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:695510:695522 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node052:695510:695522 [0] NCCL INFO comm 0x7f1c10003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577871:3577883 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node048:684462:684474 [0] NCCL INFO Connected all trees
+node048:684462:684474 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:684462:684474 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node048:684462:684474 [0] NCCL INFO comm 0x7fc198003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node049:671765:671777 [0] NCCL INFO Connected all trees
+node049:671765:671777 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:671765:671777 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:671765:671777 [0] NCCL INFO comm 0x7f39f4003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node051:701289:701301 [0] NCCL INFO Connected all trees
+node051:701289:701301 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701289:701301 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702764:702776 [0] NCCL INFO Connected all trees
+node050:702764:702776 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node050:702764:702776 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:700002:700018 [0] NCCL INFO Connected all trees
+node026:700002:700018 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006041:1006053 [0] NCCL INFO Connected all trees
+node025:1006041:1006053 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006041:1006053 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node051:701289:701301 [0] NCCL INFO comm 0x7f9510003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:700002:700018 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702764:702776 [0] NCCL INFO comm 0x7f95b4003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782063:782075 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node026:700002:700018 [0] NCCL INFO comm 0x7f669c003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node025:1006041:1006053 [0] NCCL INFO comm 0x7f7600003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node047:704262:704274 [0] NCCL INFO Connected all trees
+node047:704262:704274 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704262:704274 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:722902:722914 [0] NCCL INFO Connected all trees
+node046:722902:722914 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704262:704274 [0] NCCL INFO comm 0x7fd16c003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722902:722914 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:722902:722914 [0] NCCL INFO comm 0x7feb08003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node006:715692:715704 [0] NCCL INFO Connected all trees
+node006:715692:715704 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:715692:715704 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:715692:715704 [0] NCCL INFO comm 0x7f9410003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node005:814083:814095 [0] NCCL INFO Connected all trees
+node005:814083:814095 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:814083:814095 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node005:814083:814095 [0] NCCL INFO comm 0x7ffb08003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684255:684267 [0] NCCL INFO Connected all trees
+node007:684255:684267 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684255:684267 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684255:684267 [0] NCCL INFO comm 0x7fcf0c003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577871:3577883 [0] NCCL INFO Connected all trees
+node024:3577871:3577883 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3577871:3577883 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3577871:3577883 [0] NCCL INFO comm 0x7fdbbc003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836631:836645 [0] NCCL INFO Connected all trees
+node002:836631:836645 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:836631:836645 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:836631:836645 [0] NCCL INFO comm 0x7f1bd0003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836631:836631 [0] NCCL INFO Launch mode Parallel
+node003:803518:803530 [0] NCCL INFO Connected all trees
+node003:803518:803530 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:803518:803530 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:803518:803530 [0] NCCL INFO comm 0x7f9164003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782063:782075 [0] NCCL INFO Connected all trees
+node004:782063:782075 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:782063:782075 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782063:782075 [0] NCCL INFO comm 0x7fd0f4003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 4/16 initialized successfully
+Process 12/16 initialized successfully
+Process 4 using device: cuda:0
+Process 12 using device: cuda:0
+Process 6/16 initialized successfully
+Process 10/16 initialized successfully
+Process 14/16 initialized successfully
+Process 2/16 initialized successfully
+Loading data from data/enwik8
+Process 6 using device: cuda:0
+Process 10 using device: cuda:0
+Process 14 using device: cuda:0
+Process 2 using device: cuda:0
+Process 7/16 initialized successfully
+Process 11/16 initialized successfully
+Process 7 using device: cuda:0
+Process 1/16 initialized successfully
+Process 5/16 initialized successfully
+Process 3/16 initialized successfully
+Process 11 using device: cuda:0
+Process 9/16 initialized successfully
+Process 1 using device: cuda:0
+Process 13/16 initialized successfully
+Process 3 using device: cuda:0
+Process 5 using device: cuda:0
+Process 15/16 initialized successfully
+Process 13 using device: cuda:0
+Process 9 using device: cuda:0
+Process 15 using device: cuda:0
+Data loaded: 99621832 bytes
+Rank 8: Loading data...
+Rank 3: Loading data...
+Rank 12: Loading data...
+Rank 4: Loading data...
+Rank 5: Loading data...
+Rank 1: Loading data...
+Rank 9: Loading data...
+Rank 6: Loading data...
+Rank 2: Loading data...
+Rank 7: Loading data...
+Rank 14: Loading data...
+Rank 11: Loading data...
+Rank 10: Loading data...
+Rank 15: Loading data...
+Rank 13: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 12: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 0: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 11: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 15: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 14: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 4: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 9: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 6: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 5: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 13: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 12: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 10: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 8: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 1: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 2: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 3: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 7: shape '[2, -1]' is invalid for input of size 5624999
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 37847
+node002:836657:836657 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:836657:836657 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:836657:836657 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:836657:836657 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node025:1006064:1006064 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node007:684278:684278 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node003:803541:803541 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node046:722925:722925 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node047:704285:704285 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node051:701312:701312 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node049:671788:671788 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node006:715715:715715 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node052:695533:695533 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node004:782086:782086 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node007:684278:684278 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:803541:803541 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node046:722925:722925 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577894:3577894 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node025:1006064:1006064 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:671788:671788 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:684485:684485 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node047:704285:704285 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:715715:715715 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782086:782086 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:701312:701312 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702787:702787 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node052:695533:695533 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577894:3577894 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:684485:684485 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702787:702787 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:814106:814106 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node005:814106:814106 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:671788:671788 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:671788:671788 [0] NCCL INFO Using network IB
+node007:684278:684278 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:684278:684278 [0] NCCL INFO Using network IB
+node003:803541:803541 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:803541:803541 [0] NCCL INFO Using network IB
+node046:722925:722925 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:722925:722925 [0] NCCL INFO Using network IB
+node047:704285:704285 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:704285:704285 [0] NCCL INFO Using network IB
+node025:1006064:1006064 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1006064:1006064 [0] NCCL INFO Using network IB
+node048:684485:684485 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:684485:684485 [0] NCCL INFO Using network IB
+node051:701312:701312 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:701312:701312 [0] NCCL INFO Using network IB
+node052:695533:695533 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:695533:695533 [0] NCCL INFO Using network IB
+node024:3577894:3577894 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3577894:3577894 [0] NCCL INFO Using network IB
+node004:782086:782086 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:782086:782086 [0] NCCL INFO Using network IB
+node006:715715:715715 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:715715:715715 [0] NCCL INFO Using network IB
+node050:702787:702787 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:702787:702787 [0] NCCL INFO Using network IB
+node005:814106:814106 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:814106:814106 [0] NCCL INFO Using network IB
+node026:700032:700032 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:700032:700032 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node026:700032:700032 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:700032:700032 [0] NCCL INFO Using network IB
+node026:700032:700048 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:722925:722937 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:722925:722937 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:704285:704297 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:704285:704297 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:684485:684497 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:684485:684497 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:671788:671800 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:671788:671800 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:702787:702799 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:702787:702799 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:701312:701324 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:701312:701324 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:695533:695545 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:695533:695545 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:836657:836671 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836657:836671 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836657:836671 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:836657:836671 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:803541:803553 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:803541:803553 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:782086:782098 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:782086:782098 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:814106:814118 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:814106:814118 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:715715:715727 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:715715:715727 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:684278:684290 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:684278:684290 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3577894:3577906 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3577894:3577906 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1006064:1006076 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1006064:1006076 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node046:722925:722937 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671788:671800 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:702787:702799 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701312:701324 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704285:704297 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671788:671800 [0] NCCL INFO Connected all rings
+node048:684485:684497 [0] NCCL INFO Connected all rings
+node007:684278:684290 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:702787:702799 [0] NCCL INFO Connected all rings
+node051:701312:701324 [0] NCCL INFO Connected all rings
+node026:700032:700048 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006064:1006076 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722925:722937 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704285:704297 [0] NCCL INFO Connected all rings
+node004:782086:782098 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:684278:684290 [0] NCCL INFO Connected all rings
+node006:715715:715727 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:814106:814118 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node024:3577894:3577906 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:836657:836671 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node003:803541:803553 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:700032:700048 [0] NCCL INFO Connected all rings
+node052:695533:695545 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722925:722937 [0] NCCL INFO Connected all rings
+node025:1006064:1006076 [0] NCCL INFO Connected all rings
+node004:782086:782098 [0] NCCL INFO Connected all rings
+node003:803541:803553 [0] NCCL INFO Connected all rings
+node006:715715:715727 [0] NCCL INFO Connected all rings
+node024:3577894:3577906 [0] NCCL INFO Connected all rings
+node002:836657:836671 [0] NCCL INFO Connected all rings
+node005:814106:814118 [0] NCCL INFO Connected all rings
+node052:695533:695545 [0] NCCL INFO Connected all rings
+node049:671788:671800 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node002:836657:836671 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node025:1006064:1006076 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node026:700032:700048 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node024:3577894:3577906 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node005:814106:814118 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782086:782098 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node051:701312:701324 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node007:684278:684290 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node047:704285:704297 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node052:695533:695545 [0] NCCL INFO Connected all trees
+node052:695533:695545 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:695533:695545 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node052:695533:695545 [0] NCCL INFO comm 0x7f9878003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577894:3577906 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node003:803541:803553 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node046:722925:722937 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node048:684485:684497 [0] NCCL INFO Connected all trees
+node048:684485:684497 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:684485:684497 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node048:684485:684497 [0] NCCL INFO comm 0x7f751c003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node025:1006064:1006076 [0] NCCL INFO Connected all trees
+node025:1006064:1006076 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006064:1006076 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node025:1006064:1006076 [0] NCCL INFO comm 0x7fc928003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782086:782098 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node049:671788:671800 [0] NCCL INFO Connected all trees
+node049:671788:671800 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:671788:671800 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:671788:671800 [0] NCCL INFO comm 0x7f64d8003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node005:814106:814118 [0] NCCL INFO Connected all trees
+node005:814106:814118 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:814106:814118 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node005:814106:814118 [0] NCCL INFO comm 0x7f7284003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node051:701312:701324 [0] NCCL INFO Connected all trees
+node051:701312:701324 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701312:701324 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684278:684290 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node050:702787:702799 [0] NCCL INFO Connected all trees
+node050:702787:702799 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node050:702787:702799 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:700032:700048 [0] NCCL INFO Connected all trees
+node026:700032:700048 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701312:701324 [0] NCCL INFO comm 0x7f1028003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node050:702787:702799 [0] NCCL INFO comm 0x7fb4e8003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:700032:700048 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:700032:700048 [0] NCCL INFO comm 0x7fc1c4003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node047:704285:704297 [0] NCCL INFO Connected all trees
+node047:704285:704297 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704285:704297 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:722925:722937 [0] NCCL INFO Connected all trees
+node046:722925:722937 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node046:722925:722937 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node047:704285:704297 [0] NCCL INFO comm 0x7fc56c003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722925:722937 [0] NCCL INFO comm 0x7f2928003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node003:803541:803553 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node006:715715:715727 [0] NCCL INFO Connected all trees
+node006:715715:715727 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:715715:715727 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:715715:715727 [0] NCCL INFO comm 0x7f2940003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684278:684290 [0] NCCL INFO Connected all trees
+node007:684278:684290 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684278:684290 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684278:684290 [0] NCCL INFO comm 0x7f2bb0003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836657:836671 [0] NCCL INFO Connected all trees
+node002:836657:836671 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:836657:836671 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3577894:3577906 [0] NCCL INFO Connected all trees
+node024:3577894:3577906 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3577894:3577906 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:836657:836671 [0] NCCL INFO comm 0x7f2b20003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3577894:3577906 [0] NCCL INFO comm 0x7f2e74003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836657:836657 [0] NCCL INFO Launch mode Parallel
+node003:803541:803553 [0] NCCL INFO Connected all trees
+node003:803541:803553 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:803541:803553 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:803541:803553 [0] NCCL INFO comm 0x7fdf48003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782086:782098 [0] NCCL INFO Connected all trees
+node004:782086:782098 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:782086:782098 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782086:782098 [0] NCCL INFO comm 0x7fce6c003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 4/16 initialized successfully
+Process 12/16 initialized successfully
+Process 4 using device: cuda:0
+Process 12 using device: cuda:0
+Process 2/16 initialized successfully
+Process 2 using device: cuda:0
+Process 10/16 initialized successfully
+Loading data from data/enwik8
+Process 6/16 initialized successfully
+Process 14/16 initialized successfully
+Process 10 using device: cuda:0
+Process 3/16 initialized successfully
+Process 14 using device: cuda:0
+Process 6 using device: cuda:0
+Process 3 using device: cuda:0
+Process 5/16 initialized successfully
+Process 1/16 initialized successfully
+Process 7/16 initialized successfully
+Process 1 using device: cuda:0
+Process 9/16 initialized successfully
+Process 13/16 initialized successfully
+Process 5 using device: cuda:0
+Process 15/16 initialized successfully
+Process 7 using device: cuda:0
+Process 9 using device: cuda:0
+Process 11/16 initialized successfully
+Process 13 using device: cuda:0
+Process 11 using device: cuda:0
+Process 15 using device: cuda:0
+Data loaded: 99621832 bytes
+Rank 2: Loading data...
+Rank 8: Loading data...
+Rank 3: Loading data...
+Rank 12: Loading data...
+Rank 4: Loading data...
+Rank 1: Loading data...
+Rank 6: Loading data...
+Rank 7: Loading data...
+Rank 14: Loading data...
+Rank 5: Loading data...
+Rank 9: Loading data...
+Rank 13: Loading data...
+Rank 11: Loading data...
+Rank 10: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Loading data...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 12: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 0: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 8: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 6: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 10: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 14: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 12: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 5: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 13: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 9: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 4: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 11: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 15: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 1: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 2: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 3: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 7: shape '[2, -1]' is invalid for input of size 5624999
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 41255
+node002:836682:836682 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:836682:836682 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:836682:836682 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:836682:836682 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node024:3577917:3577917 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node024:3577917:3577917 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:715738:715738 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node006:715738:715738 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node025:1006087:1006087 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node025:1006087:1006087 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:701335:701335 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node050:702810:702810 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node046:722957:722957 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node007:684301:684301 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node048:684508:684508 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node052:695556:695556 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node049:671811:671811 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node051:701335:701335 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node007:684301:684301 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node046:722957:722957 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:684508:684508 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:702810:702810 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:671811:671811 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node052:695556:695556 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3577917:3577917 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3577917:3577917 [0] NCCL INFO Using network IB
+node025:1006087:1006087 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1006087:1006087 [0] NCCL INFO Using network IB
+node051:701335:701335 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:701335:701335 [0] NCCL INFO Using network IB
+node007:684301:684301 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:684301:684301 [0] NCCL INFO Using network IB
+node048:684508:684508 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:684508:684508 [0] NCCL INFO Using network IB
+node006:715738:715738 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:715738:715738 [0] NCCL INFO Using network IB
+node050:702810:702810 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:702810:702810 [0] NCCL INFO Using network IB
+node046:722957:722957 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:722957:722957 [0] NCCL INFO Using network IB
+node049:671811:671811 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:671811:671811 [0] NCCL INFO Using network IB
+node052:695556:695556 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:695556:695556 [0] NCCL INFO Using network IB
+node047:704308:704308 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node004:782109:782109 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node003:803564:803564 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node047:704308:704308 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:803564:803564 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782109:782109 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node047:704308:704308 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:704308:704308 [0] NCCL INFO Using network IB
+node003:803564:803564 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:803564:803564 [0] NCCL INFO Using network IB
+node004:782109:782109 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:782109:782109 [0] NCCL INFO Using network IB
+node005:814129:814129 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node005:814129:814129 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:814129:814129 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:814129:814129 [0] NCCL INFO Using network IB
+node026:700062:700062 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:700062:700062 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node026:700062:700062 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:700062:700062 [0] NCCL INFO Using network IB
+node026:700062:700078 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:722957:722969 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:722957:722969 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:704308:704320 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:704308:704320 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:684508:684520 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:684508:684520 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:671811:671823 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:671811:671823 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:702810:702822 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:702810:702822 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:701335:701347 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:701335:701347 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:695556:695568 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:695556:695568 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:836682:836696 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836682:836696 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:836682:836696 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:836682:836696 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:803564:803576 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:803564:803576 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:782109:782121 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:782109:782121 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:814129:814141 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:814129:814141 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:715738:715750 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:715738:715750 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:684301:684313 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:684301:684313 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3577917:3577929 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3577917:3577929 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1006087:1006099 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1006087:1006099 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node026:700062:700078 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:836682:836696 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671811:671823 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:702810:702822 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701335:701347 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722957:722969 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704308:704320 [0] NCCL INFO Connected all rings
+node048:684508:684520 [0] NCCL INFO Connected all rings
+node050:702810:702822 [0] NCCL INFO Connected all rings
+node007:684301:684313 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:671811:671823 [0] NCCL INFO Connected all rings
+node051:701335:701347 [0] NCCL INFO Connected all rings
+node025:1006087:1006099 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:700062:700078 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:722957:722969 [0] NCCL INFO Connected all rings
+node007:684301:684313 [0] NCCL INFO Connected all rings
+node004:782109:782121 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node006:715738:715750 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:814129:814141 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node024:3577917:3577929 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node003:803564:803576 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:836682:836696 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006087:1006099 [0] NCCL INFO Connected all rings
+node026:700062:700078 [0] NCCL INFO Connected all rings
+node052:695556:695568 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node003:803564:803576 [0] NCCL INFO Connected all rings
+node006:715738:715750 [0] NCCL INFO Connected all rings
+node024:3577917:3577929 [0] NCCL INFO Connected all rings
+node004:782109:782121 [0] NCCL INFO Connected all rings
+node002:836682:836696 [0] NCCL INFO Connected all rings
+node052:695556:695568 [0] NCCL INFO Connected all rings
+node005:814129:814141 [0] NCCL INFO Connected all rings
+node047:704308:704320 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node002:836682:836696 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node006:715738:715750 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node050:702810:702822 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node003:803564:803576 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node046:722957:722969 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782109:782121 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node051:701335:701347 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node007:684301:684313 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node047:704308:704320 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO Connected all trees
+node052:695556:695568 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:695556:695568 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702810:702822 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node052:695556:695568 [0] NCCL INFO comm 0x7f2504003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node003:803564:803576 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3577917:3577929 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node048:684508:684520 [0] NCCL INFO Connected all trees
+node048:684508:684520 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:684508:684520 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node048:684508:684520 [0] NCCL INFO comm 0x7fdc50003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722957:722969 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node025:1006087:1006099 [0] NCCL INFO Connected all trees
+node025:1006087:1006099 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006087:1006099 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node025:1006087:1006099 [0] NCCL INFO comm 0x7f6ad0003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782109:782121 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node049:671811:671823 [0] NCCL INFO Connected all trees
+node049:671811:671823 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:671811:671823 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:671811:671823 [0] NCCL INFO comm 0x7f3000003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node051:701335:701347 [0] NCCL INFO Connected all trees
+node051:701335:701347 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701335:701347 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:702810:702822 [0] NCCL INFO Connected all trees
+node050:702810:702822 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node050:702810:702822 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node051:701335:701347 [0] NCCL INFO comm 0x7fdeb4003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node050:702810:702822 [0] NCCL INFO comm 0x7ff9d8003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684301:684313 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node005:814129:814141 [0] NCCL INFO Connected all trees
+node005:814129:814141 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:814129:814141 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node005:814129:814141 [0] NCCL INFO comm 0x7f0e88003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node047:704308:704320 [0] NCCL INFO Connected all trees
+node047:704308:704320 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704308:704320 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node047:704308:704320 [0] NCCL INFO comm 0x7f869c003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:722957:722969 [0] NCCL INFO Connected all trees
+node046:722957:722969 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node046:722957:722969 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:722957:722969 [0] NCCL INFO comm 0x7f4b50003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:700062:700078 [0] NCCL INFO Connected all trees
+node026:700062:700078 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:803564:803576 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node026:700062:700078 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:700062:700078 [0] NCCL INFO comm 0x7f0a20003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node006:715738:715750 [0] NCCL INFO Connected all trees
+node006:715738:715750 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:715738:715750 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:715738:715750 [0] NCCL INFO comm 0x7f9320003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684301:684313 [0] NCCL INFO Connected all trees
+node007:684301:684313 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684301:684313 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684301:684313 [0] NCCL INFO comm 0x7f8868003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836682:836696 [0] NCCL INFO Connected all trees
+node002:836682:836696 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:836682:836696 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3577917:3577929 [0] NCCL INFO Connected all trees
+node024:3577917:3577929 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3577917:3577929 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3577917:3577929 [0] NCCL INFO comm 0x7f7ba4003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836682:836696 [0] NCCL INFO comm 0x7f6440003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:836682:836682 [0] NCCL INFO Launch mode Parallel
+node003:803564:803576 [0] NCCL INFO Connected all trees
+node003:803564:803576 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:803564:803576 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:803564:803576 [0] NCCL INFO comm 0x7fe274003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782109:782121 [0] NCCL INFO Connected all trees
+node004:782109:782121 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:782109:782121 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782109:782121 [0] NCCL INFO comm 0x7f03a8003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 4/16 initialized successfully
+Process 12/16 initialized successfully
+Process 4 using device: cuda:0
+Process 12 using device: cuda:0
+Process 2/16 initialized successfully
+Process 10/16 initialized successfully
+Loading data from data/enwik8
+Process 6/16 initialized successfully
+Process 2 using device: cuda:0
+Process 14/16 initialized successfully
+Process 10 using device: cuda:0
+Process 6 using device: cuda:0
+Process 14 using device: cuda:0
+Process 1/16 initialized successfully
+Process 9/16 initialized successfully
+Process 3/16 initialized successfully
+Process 5/16 initialized successfully
+Process 1 using device: cuda:0
+Process 3 using device: cuda:0
+Process 9 using device: cuda:0
+Process 11/16 initialized successfully
+Process 7/16 initialized successfully
+Process 13/16 initialized successfully
+Process 15/16 initialized successfully
+Process 7 using device: cuda:0
+Process 5 using device: cuda:0
+Process 11 using device: cuda:0
+Process 13 using device: cuda:0
+Process 15 using device: cuda:0
+Data loaded: 99621832 bytes
+Rank 2: Loading data...
+Rank 8: Loading data...
+Rank 3: Loading data...
+Rank 15: Loading data...
+Rank 14: Loading data...
+Rank 4: Loading data...
+Rank 5: Loading data...
+Rank 9: Loading data...
+Rank 13: Loading data...
+Rank 7: Loading data...
+Rank 1: Loading data...
+Rank 6: Loading data...
+Rank 11: Loading data...
+Rank 10: Loading data...
+Rank 12: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 12: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Data loaded: 99621832 bytes
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoding text...
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 0: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 11: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 5: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 6: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 13: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 9: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 12: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 14: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 15: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 8: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 10: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 4: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 1: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 2: shape '[2, -1]' is invalid for input of size 5624999
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Error in process 7: shape '[2, -1]' is invalid for input of size 5624999
+Error in process 3: shape '[2, -1]' is invalid for input of size 5624999

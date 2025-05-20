@@ -1,0 +1,90 @@
++ module load cuda11.3/toolkit
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ source /var/scratch/tng204/anaconda3/etc/profile.d/conda.sh
+++ export CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ '[' -z x ']'
++ conda activate mltrain
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate mltrain
++ '[' -n '' ']'
++ local ask_conda
+++ PS1=
+++ __conda_exe shell.posix activate mltrain
+++ '[' -n '' ']'
+++ /var/scratch/tng204/anaconda3/bin/conda shell.posix activate mltrain
++ ask_conda='unset _CE_M
+unset _CE_CONDA
+PS1='\''(mltrain) '\''
+export PATH='\''/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_PROMPT_MODIFIER='\''(mltrain) '\''
+export CONDA_EXE='\''/var/scratch/tng204/anaconda3/bin/conda'\''
+export CONDA_PYTHON_EXE='\''/var/scratch/tng204/anaconda3/bin/python'\'''
++ eval 'unset _CE_M
+unset _CE_CONDA
+PS1='\''(mltrain) '\''
+export PATH='\''/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin'\''
+export CONDA_SHLVL='\''2'\''
+export CONDA_PROMPT_MODIFIER='\''(mltrain) '\''
+export CONDA_EXE='\''/var/scratch/tng204/anaconda3/bin/conda'\''
+export CONDA_PYTHON_EXE='\''/var/scratch/tng204/anaconda3/bin/python'\'''
+++ unset _CE_M
+++ unset _CE_CONDA
+++ PS1='(mltrain) '
+++ export PATH=/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin
+++ PATH=/cm/local/apps/cuda-driver/libs/current/bin:/cm/shared/apps/cuda11.3/toolkit/11.3.1/bin:/var/scratch/tng204/anaconda3/envs/mltrain/bin:/var/scratch/tng204/anaconda3/condabin:/home/tng204/.local/bin:/home/tng204/bin:/opt/ohpc/pub/mpi/libfabric/1.19.0/bin:/opt/ohpc/pub/mpi/ucx-ohpc/1.15.0/bin:/opt/ohpc/pub/libs/hwloc/bin:/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.6/bin:/opt/ohpc/pub/compiler/gcc/12.4.0/bin:/opt/ohpc/pub/utils/autotools/bin:/opt/ohpc/pub/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/cm/shared/package/reserve.slurm/bin
+++ export CONDA_SHLVL=2
+++ CONDA_SHLVL=2
+++ export 'CONDA_PROMPT_MODIFIER=(mltrain) '
+++ CONDA_PROMPT_MODIFIER='(mltrain) '
+++ export CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ export CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r
++ cd /var/scratch/tng204/thesis/bachelor_thesis
++ python -c 'import torch; torch.cuda.empty_cache()'
+++ head -n 1
+++ scontrol show hostnames 'node[002-007,024-026,046-052]'
++ export MASTER_ADDR=node002
++ MASTER_ADDR=node002
++ export MASTER_PORT=29500
++ MASTER_PORT=29500
++ export WORLD_SIZE=16
++ WORLD_SIZE=16
++ export TORCH_DISTRIBUTED_TIMEOUT=1800
++ TORCH_DISTRIBUTED_TIMEOUT=1800
++ export NCCL_DEBUG=INFO
++ NCCL_DEBUG=INFO
++ export NCCL_IB_TIMEOUT=30
++ NCCL_IB_TIMEOUT=30
++ export NCCL_SOCKET_TIMEOUT=300
++ NCCL_SOCKET_TIMEOUT=300
++ echo '=== Distributed Training Configuration ==='
++ echo 'Master node: node002'
++ echo 'Master port: 29500'
++ echo 'World size: 16'
++ echo 'Job nodes: node[002-007,024-026,046-052]'
++ echo 'CUDA_VISIBLE_DEVICES: 0'
++ echo ========================================
++ mkdir -p logs
++ srun --kill-on-bad-exit=1 torchrun --nnodes=16 --nproc_per_node=1 --rdzv_id=25656 --rdzv_backend=c10d --rdzv_endpoint=node002:29500 --max_restarts=3 stable_char_transformer.py
