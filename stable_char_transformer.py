@@ -92,24 +92,35 @@ def create_batches(data, batch_size, seq_length):
     
     # Calculate per-node data size
     data_per_node = len(data) // world_size
+    # Ensure data_per_node is divisible by (batch_size * seq_length)
+    data_per_node = (data_per_node // (batch_size * seq_length)) * (batch_size * seq_length)
+    
+    # Calculate start and end indices for this node
     node_start = rank * data_per_node
-    node_end = node_start + data_per_node if rank < world_size - 1 else len(data)
+    node_end = node_start + data_per_node
     
     # Get this node's portion of data
     local_data = data[node_start:node_end]
     
     # Create batches from local data
     data_tensor = torch.LongTensor(local_data)
-    x = data_tensor[:-1].clone().detach().view(batch_size, -1)
-    y = data_tensor[1:].clone().detach().view(batch_size, -1)
+    
+    # Calculate number of complete sequences
+    num_sequences = data_tensor.size(0) // (batch_size * seq_length)
+    
+    # Trim data to be evenly divisible by batch_size * seq_length
+    data_tensor = data_tensor[:num_sequences * batch_size * seq_length]
+    
+    # Reshape into [batch_size, num_sequences * seq_length]
+    data_tensor = data_tensor.view(batch_size, -1)
     
     batches = []
-    for i in range(0, x.size(1), seq_length):
-        if i + seq_length <= x.size(1):
-            input_batch = x[:, i:i+seq_length].clone()
-            target_batch = y[:, i:i+seq_length].clone()
-            batches.append((input_batch, target_batch))
+    for i in range(0, data_tensor.size(1) - seq_length, seq_length):
+        input_batch = data_tensor[:, i:i+seq_length].clone()
+        target_batch = data_tensor[:, i+1:i+seq_length+1].clone()
+        batches.append((input_batch, target_batch))
     
+    print(f"Rank {rank}: Created {len(batches)} batches of shape {batches[0][0].shape if batches else 'N/A'}")
     return batches
 
 class ImprovedPositionalEncoding(nn.Module):
