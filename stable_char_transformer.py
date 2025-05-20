@@ -81,46 +81,49 @@ def load_data(data_path, data_url=None):
 
 def create_batches(data, batch_size, seq_length):
     """
-    Create batches of data for distributed training
+    Create batches of data for distributed training, ensuring each node gets unique batches
     """
-    # Calculate the number of batches
-    num_batches = (len(data) - 1) // (batch_size * seq_length)
-    
     # Get world size and rank for distributed training
     world_size = dist.get_world_size() if dist.is_available() and dist.is_initialized() else 1
     rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
     
-    # Calculate per-node data size
-    data_per_node = len(data) // world_size
-    # Ensure data_per_node is divisible by (batch_size * seq_length)
-    data_per_node = (data_per_node // (batch_size * seq_length)) * (batch_size * seq_length)
+    # Convert data to tensor if it's not already
+    if not torch.is_tensor(data):
+        data_tensor = torch.LongTensor(data)
+    else:
+        data_tensor = data
     
-    # Calculate start and end indices for this node
-    node_start = rank * data_per_node
-    node_end = node_start + data_per_node
+    # Calculate total number of sequences
+    total_sequences = len(data_tensor) // seq_length
+    
+    # Calculate sequences per node
+    sequences_per_node = total_sequences // world_size
+    
+    # Calculate start and end indices for this node's sequences
+    start_idx = rank * sequences_per_node * seq_length
+    end_idx = start_idx + sequences_per_node * seq_length
     
     # Get this node's portion of data
-    local_data = data[node_start:node_end]
+    local_data = data_tensor[start_idx:end_idx]
     
-    # Create batches from local data
-    data_tensor = torch.LongTensor(local_data)
-    
-    # Calculate number of complete sequences
-    num_sequences = data_tensor.size(0) // (batch_size * seq_length)
+    # Calculate number of batches for this node
+    num_batches = (len(local_data) - seq_length) // (batch_size * seq_length)
     
     # Trim data to be evenly divisible by batch_size * seq_length
-    data_tensor = data_tensor[:num_sequences * batch_size * seq_length]
+    trim_length = num_batches * batch_size * seq_length
+    local_data = local_data[:trim_length]
     
-    # Reshape into [batch_size, num_sequences * seq_length]
-    data_tensor = data_tensor.view(batch_size, -1)
+    # Reshape into [batch_size, -1]
+    local_data = local_data.view(batch_size, -1)
     
+    # Create batches
     batches = []
-    for i in range(0, data_tensor.size(1) - seq_length, seq_length):
-        input_batch = data_tensor[:, i:i+seq_length].clone()
-        target_batch = data_tensor[:, i+1:i+seq_length+1].clone()
+    for i in range(0, local_data.size(1) - seq_length, seq_length):
+        input_batch = local_data[:, i:i+seq_length].clone()
+        target_batch = local_data[:, i+1:i+seq_length+1].clone()
         batches.append((input_batch, target_batch))
     
-    print(f"Rank {rank}: Created {len(batches)} batches of shape {batches[0][0].shape if batches else 'N/A'}")
+    print(f"Rank {rank}: Created {len(batches)} batches from sequence range {start_idx//seq_length}-{end_idx//seq_length}")
     return batches
 
 class ImprovedPositionalEncoding(nn.Module):
@@ -789,8 +792,14 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
             # Print batch progress every 10 batches
             if (batch_idx + 1) % 10 == 0:
-                print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
+                # Get rank for distributed training
+                rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
+                print(f"[Rank {rank}] Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
                       f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
+
+            # Add synchronization point every 100 batches
+            if dist.is_available() and dist.is_initialized() and (batch_idx + 1) % 100 == 0:
+                dist.barrier()
 
         # Add synchronization barrier after each epoch
         if dist.is_available() and dist.is_initialized():
