@@ -617,13 +617,20 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 
     return optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
 
-def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_rate=0.0001,
+def train_model(model, train_batches_info, val_batches_info=None, num_epochs=5, learning_rate=0.0001,
                 weight_decay=0.01, warmup_steps=0, min_lr=0.0, device=None, patience=3, 
                 label_smoothing=0.0, gradient_accumulation_steps=1, use_mixed_precision=True,
                 use_cosine_schedule=False):
     """
     Train the model with distributed batch processing
     """
+    # Unpack batches and start index
+    train_batches, start_batch_idx = train_batches_info
+    if val_batches_info is not None:
+        val_batches, _ = val_batches_info
+    else:
+        val_batches = None
+    
     # Get rank for distributed training
     rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
     
@@ -792,7 +799,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
             # Print batch progress every 10 batches
             if (batch_idx + 1) % 10 == 0:
-                global_batch = start_batch + batch_idx + 1  # Calculate global batch number
+                global_batch = start_batch_idx + batch_idx + 1  # Calculate global batch number
                 total_batches = len(train_batches) * dist.get_world_size() if dist.is_available() and dist.is_initialized() else len(train_batches)
                 print(f"[Rank {rank}] Epoch {epoch+1}/{num_epochs}, Global Batch {global_batch}/{total_batches}, "
                       f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
@@ -1108,7 +1115,7 @@ def main():
         local_batch_size = global_batch_size // world_size
         
         # Create batches with adjusted batch size
-        train_batches, start_batch = create_batches(train_data, local_batch_size, seq_length)
+        train_batches, start_batch_idx = create_batches(train_data, local_batch_size, seq_length)
         val_batches, _ = create_batches(val_data, local_batch_size, seq_length)
         print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
@@ -1142,8 +1149,8 @@ def main():
         print("\n=== Training Enhanced Character Transformer Model ===")
         model, (train_losses, val_losses) = train_model(
             model=model,
-            train_batches=train_batches,
-            val_batches=val_batches,
+            train_batches_info=(train_batches, start_batch_idx),
+            val_batches_info=(val_batches, None),
             num_epochs=num_epochs,
             learning_rate=learning_rate,
             weight_decay=weight_decay,
