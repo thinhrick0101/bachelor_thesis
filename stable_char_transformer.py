@@ -605,27 +605,11 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                 label_smoothing=0.0, gradient_accumulation_steps=1, use_mixed_precision=True,
                 use_cosine_schedule=False):
     """
-    Train the model and evaluate on validation set with mixed precision and gradient accumulation
-
-    Args:
-        model: The model to train
-        train_batches: List of training batches
-        val_batches: List of validation batches (optional)
-        num_epochs: Number of training epochs
-        learning_rate: Learning rate for the optimizer
-        weight_decay: Weight decay for regularization
-        warmup_steps: Number of warmup steps for learning rate scheduling
-        min_lr: Minimum learning rate for the optimizer
-        device: Device to use for training
-        patience: Number of epochs to wait for improvement before early stopping
-        label_smoothing: Label smoothing factor for regularization
-        gradient_accumulation_steps: Number of steps to accumulate gradients before updating weights
-        use_mixed_precision: Whether to use mixed precision training (FP16)
-        use_cosine_schedule: Whether to use cosine learning rate schedule
-
-    Returns:
-        Trained model and training metrics
+    Train the model with distributed batch processing
     """
+    # Get rank for distributed training
+    rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
+    
     # Determine device if not provided
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -791,9 +775,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
             # Print batch progress every 10 batches
             if (batch_idx + 1) % 10 == 0:
-                # Get rank for distributed training
-                rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
-                print(f"[Rank {rank}] Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
+                global_batch = start_batch + batch_idx + 1  # Calculate global batch number
+                total_batches = len(train_batches) * dist.get_world_size() if dist.is_available() and dist.is_initialized() else len(train_batches)
+                print(f"[Rank {rank}] Epoch {epoch+1}/{num_epochs}, Global Batch {global_batch}/{total_batches}, "
                       f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
 
             # Add synchronization point every 100 batches
