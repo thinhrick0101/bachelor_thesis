@@ -15,6 +15,7 @@ from tokenizers import Tokenizer  # For loading the BPE tokenizer
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 import torch.multiprocessing as mp
+import datetime
 
 
 class ByteTokenizer:
@@ -904,195 +905,261 @@ def visualize_results(train_losses, val_losses=None, filename='enhanced_char_tra
     plt.close()
 
 def setup_distributed():
-    dist.init_process_group(
-        backend='nccl',  # or 'gloo' if using CPU
-        init_method='env://'
-    )
+    """
+    Set up distributed training with improved error handling and logging
+    """
+    try:
+        # Set longer timeout for initialization
+        os.environ['TORCH_DISTRIBUTED_TIMEOUT'] = '1800'  # 30 minutes
+        
+        # Get distributed training parameters from environment
+        rank = int(os.environ.get("RANK", 0))
+        world_size = int(os.environ.get("WORLD_SIZE", 1))
+        local_rank = int(os.environ.get("LOCAL_RANK", 0))
+        
+        # Log distributed training configuration
+        print(f"\nDistributed Training Configuration:")
+        print(f"Rank: {rank}")
+        print(f"World Size: {world_size}")
+        print(f"Local Rank: {local_rank}")
+        print(f"Master Address: {os.environ.get('MASTER_ADDR', 'Not Set')}")
+        print(f"Master Port: {os.environ.get('MASTER_PORT', 'Not Set')}")
+        
+        # Initialize process group with timeout
+        dist.init_process_group(
+            backend='nccl' if torch.cuda.is_available() else 'gloo',
+            init_method='env://',
+            timeout=datetime.timedelta(minutes=30),
+            world_size=world_size,
+            rank=rank
+        )
+        
+        # Set device and ensure it's working
+        if torch.cuda.is_available():
+            torch.cuda.set_device(local_rank)
+            # Verify CUDA device is working
+            torch.zeros(1).cuda(local_rank)
+            
+        # Synchronize processes
+        if dist.is_initialized():
+            dist.barrier()
+            print(f"Process {rank}/{world_size} initialized successfully")
+            
+    except Exception as e:
+        print(f"\nError during distributed setup:")
+        print(f"Type: {type(e).__name__}")
+        print(f"Message: {str(e)}")
+        print("\nEnvironment Variables:")
+        for var in ['RANK', 'WORLD_SIZE', 'LOCAL_RANK', 'MASTER_ADDR', 'MASTER_PORT']:
+            print(f"{var}: {os.environ.get(var, 'Not Set')}")
+        raise
 
 def main():
-    # Distributed setup
-    local_rank = int(os.environ.get("LOCAL_RANK", 0))
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
-    rank = int(os.environ.get("RANK", 0))
-    
-    # Initialize distributed training
-    setup_distributed()
-    
-    # Set device
-    device = torch.device(f"cuda:{local_rank}" if torch.cuda.is_available() else "cpu")
+    try:
+        # Distributed setup
+        local_rank = int(os.environ.get("LOCAL_RANK", 0))
+        world_size = int(os.environ.get("WORLD_SIZE", 1))
+        rank = int(os.environ.get("RANK", 0))
+        
+        # Initialize distributed training
+        setup_distributed()
+        
+        # Set device
+        device = torch.device(f"cuda:{local_rank}" if torch.cuda.is_available() else "cpu")
+        print(f"Process {rank} using device: {device}")
 
-    # Clear CUDA cache at the start
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+        # Clear CUDA cache at the start
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
-    # Data parameters
-    data_path = 'data/enwik8'
-    data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
+        # Data parameters
+        data_path = 'data/enwik8'
+        data_url = 'https://codeberg.org/pbm/former/raw/branch/master/data/enwik8.gz'
 
-    # Model hyperparameters - optimized for byte-level
-    d_model = 512
-    nhead = 8
-    num_layers = 12
-    dim_feedforward = 2048
-    dropout = 0.1
-    attention_dropout = 0.1
-    activation_dropout = 0.1
-    token_dropout = 0.05
-    use_checkpoint = True
-    stochastic_depth_prob = 0.1
+        # Only download data on rank 0
+        if rank == 0:
+            # Load data
+            print("Loading data...")
+            text = load_data(data_path, data_url)
+            print(f"Data loaded: {len(text)} bytes")
+        
+        # Wait for rank 0 to finish downloading
+        if dist.is_initialized():
+            dist.barrier()
+        
+        # Now all ranks load the data
+        if rank != 0:
+            print(f"Rank {rank}: Loading data...")
+            text = load_data(data_path)
+            print(f"Rank {rank}: Data loaded: {len(text)} bytes")
 
-    # Training hyperparameters - optimized for byte-level
-    batch_size = 32
-    seq_length = 1024  # Good sequence length for byte-level
-    num_epochs = 100
-    learning_rate = 1e-4
-    min_lr = 1e-5
-    weight_decay = 0.1
-    label_smoothing = 0.0
-    gradient_accumulation_steps = 8
-    use_mixed_precision = True
-    warmup_epochs = 5
+        # Model hyperparameters - optimized for byte-level
+        d_model = 512
+        nhead = 8
+        num_layers = 12
+        dim_feedforward = 2048
+        dropout = 0.1
+        attention_dropout = 0.1
+        activation_dropout = 0.1
+        token_dropout = 0.05
+        use_checkpoint = True
+        stochastic_depth_prob = 0.1
 
-    # Set memory allocation settings
-    if torch.cuda.is_available():
-        torch.cuda.set_per_process_memory_fraction(0.85)
-        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
+        # Training hyperparameters - optimized for byte-level
+        batch_size = 32
+        seq_length = 1024  # Good sequence length for byte-level
+        num_epochs = 100
+        learning_rate = 1e-4
+        min_lr = 1e-5
+        weight_decay = 0.1
+        label_smoothing = 0.0
+        gradient_accumulation_steps = 8
+        use_mixed_precision = True
+        warmup_epochs = 5
 
-    # Load data
-    print("Loading data...")
-    text = load_data(data_path, data_url)
-    print(f"Data loaded: {len(text)} bytes")
+        # Set memory allocation settings
+        if torch.cuda.is_available():
+            torch.cuda.set_per_process_memory_fraction(0.85)
+            os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
 
-    # Create byte tokenizer
-    print("Creating byte tokenizer...")
-    tokenizer = ByteTokenizer()
-    print(f"Vocabulary size: {tokenizer.vocab_size} bytes (fixed)")
+        # Create byte tokenizer
+        print("Creating byte tokenizer...")
+        tokenizer = ByteTokenizer()
+        print(f"Vocabulary size: {tokenizer.vocab_size} bytes (fixed)")
 
-    # Encode the text
-    print("Encoding text...")
-    data = tokenizer.encode(text)
-    print(f"Encoded length: {len(data)} tokens")
+        # Encode the text
+        print("Encoding text...")
+        data = tokenizer.encode(text)
+        print(f"Encoded length: {len(data)} tokens")
 
-    # Analyze tokenization
-    print("\nAnalyzing byte-level tokenization...")
-    sample_text = text[:100]
-    encoded = tokenizer.encode(sample_text)
-    print(f"Sample text length: {len(sample_text)} bytes")
-    print(f"Encoded length: {len(encoded)} tokens")
-    print(f"Token-to-byte ratio: {len(encoded) / len(sample_text):.2f}")
-    
-    # Print some example tokenization
-    print("\nExample byte values (first 10):")
-    for i in range(min(10, len(encoded))):
-        byte_val = encoded[i].item()
-        try:
-            char = chr(byte_val) if 32 <= byte_val <= 126 else f"<byte {byte_val}>"
-            print(f"Byte {i}: {char} (ID: {byte_val})")
-        except:
-            print(f"Byte {i}: <byte {byte_val}> (ID: {byte_val})")
+        # Analyze tokenization
+        print("\nAnalyzing byte-level tokenization...")
+        sample_text = text[:100]
+        encoded = tokenizer.encode(sample_text)
+        print(f"Sample text length: {len(sample_text)} bytes")
+        print(f"Encoded length: {len(encoded)} tokens")
+        print(f"Token-to-byte ratio: {len(encoded) / len(sample_text):.2f}")
+        
+        # Print some example tokenization
+        print("\nExample byte values (first 10):")
+        for i in range(min(10, len(encoded))):
+            byte_val = encoded[i].item()
+            try:
+                char = chr(byte_val) if 32 <= byte_val <= 126 else f"<byte {byte_val}>"
+                print(f"Byte {i}: {char} (ID: {byte_val})")
+            except:
+                print(f"Byte {i}: <byte {byte_val}> (ID: {byte_val})")
 
-    # Split data into training and validation sets (90% / 10%)
-    split_idx = int(len(data) * 0.9)
-    train_data = data[:split_idx]
-    val_data = data[split_idx:]
+        # Split data into training and validation sets (90% / 10%)
+        split_idx = int(len(data) * 0.9)
+        train_data = data[:split_idx]
+        val_data = data[split_idx:]
 
-    # Adjust batch size for distributed training
-    global_batch_size = 32  # Your original batch size
-    local_batch_size = global_batch_size // world_size
-    
-    # Create batches with adjusted batch size
-    train_batches = create_batches(train_data, local_batch_size, seq_length)
-    val_batches = create_batches(val_data, local_batch_size, seq_length)
-    print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
+        # Adjust batch size for distributed training
+        global_batch_size = 32  # Your original batch size
+        local_batch_size = global_batch_size // world_size
+        
+        # Create batches with adjusted batch size
+        train_batches = create_batches(train_data, local_batch_size, seq_length)
+        val_batches = create_batches(val_data, local_batch_size, seq_length)
+        print(f"Created {len(train_batches)} training batches and {len(val_batches)} validation batches")
 
-    # Calculate warmup steps after creating batches
-    warmup_steps = len(train_batches) * warmup_epochs
+        # Calculate warmup steps after creating batches
+        warmup_steps = len(train_batches) * warmup_epochs
 
-    # Create enhanced model with stochastic depth
-    model = EnhancedCharTransformer(
-        vocab_size=tokenizer.vocab_size,
-        d_model=d_model,
-        nhead=nhead,
-        num_layers=num_layers,
-        dim_feedforward=dim_feedforward,
-        dropout=dropout,
-        attention_dropout=attention_dropout,
-        activation_dropout=activation_dropout,
-        token_dropout=token_dropout,
-        use_checkpoint=use_checkpoint,
-        stochastic_depth_prob=stochastic_depth_prob
-    )
+        # Create enhanced model with stochastic depth
+        model = EnhancedCharTransformer(
+            vocab_size=tokenizer.vocab_size,
+            d_model=d_model,
+            nhead=nhead,
+            num_layers=num_layers,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            attention_dropout=attention_dropout,
+            activation_dropout=activation_dropout,
+            token_dropout=token_dropout,
+            use_checkpoint=use_checkpoint,
+            stochastic_depth_prob=stochastic_depth_prob
+        )
 
-    # Move model to device
-    model = model.to(device)
+        # Move model to device
+        model = model.to(device)
 
-    # Print model architecture
-    total_params = sum(p.numel() for p in model.parameters())
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
+        # Print model architecture
+        total_params = sum(p.numel() for p in model.parameters())
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"Model Parameters: {trainable_params:,} trainable out of {total_params:,} total")
 
-    # Train model with enhanced settings
-    print("\n=== Training Enhanced Character Transformer Model ===")
-    model, (train_losses, val_losses) = train_model(
-        model=model,
-        train_batches=train_batches,
-        val_batches=val_batches,
-        num_epochs=num_epochs,
-        learning_rate=learning_rate,
-        weight_decay=weight_decay,
-        warmup_steps=warmup_steps,
-        min_lr=min_lr,  # Added parameter
-        device=device,
-        patience=8,  # Increased patience
-        label_smoothing=label_smoothing,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        use_mixed_precision=use_mixed_precision,
-        use_cosine_schedule=True  # Added cosine schedule
-    )
+        # Train model with enhanced settings
+        print("\n=== Training Enhanced Character Transformer Model ===")
+        model, (train_losses, val_losses) = train_model(
+            model=model,
+            train_batches=train_batches,
+            val_batches=val_batches,
+            num_epochs=num_epochs,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+            warmup_steps=warmup_steps,
+            min_lr=min_lr,  # Added parameter
+            device=device,
+            patience=8,  # Increased patience
+            label_smoothing=label_smoothing,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            use_mixed_precision=use_mixed_precision,
+            use_cosine_schedule=True  # Added cosine schedule
+        )
 
-    # Visualize results
-    visualize_results(train_losses, val_losses, 'enhanced_char_transformer_loss.png')
-    print("\nTraining visualization saved to enhanced_char_transformer_loss.png")
+        # Visualize results
+        visualize_results(train_losses, val_losses, 'enhanced_char_transformer_loss.png')
+        print("\nTraining visualization saved to enhanced_char_transformer_loss.png")
 
-    # Generate some text
-    print("\n=== Generating Text ===")
-    prompt = "The quick brown fox"
-    generated_text = model.generate(
-        prompt=prompt,
-        max_length=500,
-        temperature=0.6,  # Lower temperature for more coherent text
-        top_k=5,  # Increased top_k for more diversity
-        top_p=0.95,  # Balanced top_p for coherence and diversity
-        repetition_penalty=1.2,  # Add repetition penalty to avoid loops
-        tokenizer=tokenizer,
-        device=device
-    )
-    print(f"Prompt: {prompt}")
-    print(f"Generated: {generated_text}")
-
-    # Save model
-    torch.save(model.state_dict(), 'enhanced_char_transformer_model.pt')
-    print("Model saved to enhanced_char_transformer_model.pt")
-
-    # Try generating with different temperatures
-    print("\n=== Generating with Different Temperatures ===")
-    for temp in [0.5, 0.7, 0.9]:
+        # Generate some text
+        print("\n=== Generating Text ===")
+        prompt = "The quick brown fox"
         generated_text = model.generate(
             prompt=prompt,
             max_length=500,
-            temperature=temp,
-            top_k=50,
-            top_p=0.92,
-            repetition_penalty=1.2,
+            temperature=0.6,  # Lower temperature for more coherent text
+            top_k=5,  # Increased top_k for more diversity
+            top_p=0.95,  # Balanced top_p for coherence and diversity
+            repetition_penalty=1.2,  # Add repetition penalty to avoid loops
             tokenizer=tokenizer,
             device=device
         )
-        print(f"\nTemperature: {temp}")
+        print(f"Prompt: {prompt}")
         print(f"Generated: {generated_text}")
 
-    # Wrap model with DDP
-    if dist.is_available() and dist.is_initialized():
-        model = DDP(model, device_ids=[local_rank], output_device=local_rank)
+        # Save model
+        torch.save(model.state_dict(), 'enhanced_char_transformer_model.pt')
+        print("Model saved to enhanced_char_transformer_model.pt")
+
+        # Try generating with different temperatures
+        print("\n=== Generating with Different Temperatures ===")
+        for temp in [0.5, 0.7, 0.9]:
+            generated_text = model.generate(
+                prompt=prompt,
+                max_length=500,
+                temperature=temp,
+                top_k=50,
+                top_p=0.92,
+                repetition_penalty=1.2,
+                tokenizer=tokenizer,
+                device=device
+            )
+            print(f"\nTemperature: {temp}")
+            print(f"Generated: {generated_text}")
+
+        # Wrap model with DDP
+        if dist.is_available() and dist.is_initialized():
+            model = DDP(model, device_ids=[local_rank], output_device=local_rank)
+
+    except Exception as e:
+        print(f"Error in process {rank}: {str(e)}")
+        raise
+    finally:
+        # Cleanup
+        if dist.is_initialized():
+            dist.destroy_process_group()
 
 if __name__ == "__main__":
     main()
