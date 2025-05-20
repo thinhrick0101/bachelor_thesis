@@ -107,7 +107,7 @@ def create_batches(data, batch_size, seq_length):
     # Get this node's portion of data
     local_data = data_tensor[start_idx:end_idx]
     
-    # Calculate number of complete batches
+    # Calculate number of complete batches for this node
     num_complete_batches = len(local_data) // (batch_size * seq_length)
     
     # Trim data to be evenly divisible by batch_size * seq_length
@@ -124,23 +124,22 @@ def create_batches(data, batch_size, seq_length):
         sequence = local_data[i]
         
         # Create input and target
-        # Input is the sequence except last token
         input_batch = sequence.clone()
-        # Target is the sequence shifted by 1
         target_batch = torch.zeros_like(sequence)
         target_batch[:, :-1] = sequence[:, 1:]
-        # Last target is the first token of next sequence or 0 if last sequence
         if i < local_data.size(0) - 1:
             target_batch[:, -1] = local_data[i + 1, :, 0]
         
         batches.append((input_batch, target_batch))
     
-    print(f"Rank {rank}: Created {len(batches)} batches (sequence range {start_idx//seq_length}-{end_idx//seq_length})")
+    # Calculate this node's starting batch number
+    start_batch = rank * num_complete_batches
     
+    print(f"Rank {rank}: Created {len(batches)} batches (global batch range {start_batch}-{start_batch + len(batches)})")
     if len(batches) > 0:
         print(f"Rank {rank}: Batch shapes - Input: {batches[0][0].shape}, Target: {batches[0][1].shape}")
     
-    return batches, start_idx // seq_length  # Return start sequence number for batch numbering
+    return batches, start_batch
 
 class ImprovedPositionalEncoding(nn.Module):
     """
@@ -631,8 +630,21 @@ def train_model(model, train_batches_info, val_batches_info=None, num_epochs=5, 
     else:
         val_batches = None
     
-    # Get rank for distributed training
+    # Get distributed training info
     rank = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
+    world_size = dist.get_world_size() if dist.is_available() and dist.is_initialized() else 1
+    
+    # Calculate total batches across all nodes
+    local_batches = len(train_batches)
+    if dist.is_available() and dist.is_initialized():
+        total_batches_tensor = torch.tensor([local_batches], device=device)
+        dist.all_reduce(total_batches_tensor, op=dist.ReduceOp.SUM)
+        total_batches = total_batches_tensor.item()
+    else:
+        total_batches = local_batches
+
+    # Print batch distribution info
+    print(f"Rank {rank}: Processing {local_batches} batches (total across nodes: {total_batches})")
     
     # Determine device if not provided
     if device is None:
@@ -799,8 +811,7 @@ def train_model(model, train_batches_info, val_batches_info=None, num_epochs=5, 
 
             # Print batch progress every 10 batches
             if (batch_idx + 1) % 10 == 0:
-                global_batch = start_batch_idx + batch_idx + 1  # Calculate global batch number
-                total_batches = len(train_batches) * dist.get_world_size() if dist.is_available() and dist.is_initialized() else len(train_batches)
+                global_batch = start_batch_idx + batch_idx + 1
                 print(f"[Rank {rank}] Epoch {epoch+1}/{num_epochs}, Global Batch {global_batch}/{total_batches}, "
                       f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
 
