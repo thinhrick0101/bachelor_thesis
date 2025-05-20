@@ -702,6 +702,10 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
         num_batches = 0
         start_time = time.time()
 
+        # Add synchronization barrier before each epoch
+        if dist.is_available() and dist.is_initialized():
+            dist.barrier()
+
         # Zero the gradients at the beginning of each epoch
         optimizer.zero_grad()
 
@@ -788,6 +792,17 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                 print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
                       f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
 
+        # Add synchronization barrier after each epoch
+        if dist.is_available() and dist.is_initialized():
+            # Synchronize loss across all nodes
+            if device.type == 'cuda':
+                avg_loss = torch.tensor(total_loss / num_batches, device=device)
+                dist.all_reduce(avg_loss, op=dist.ReduceOp.SUM)
+                avg_loss = avg_loss / dist.get_world_size()
+            
+            # Wait for all nodes to finish the epoch
+            dist.barrier()
+
         # Calculate average loss for the epoch
         avg_loss = total_loss / num_batches
         train_losses.append(avg_loss)
@@ -800,6 +815,10 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
             model.eval()
             val_total_loss = 0
             val_num_batches = 0
+
+            # Add synchronization barrier before validation
+            if dist.is_available() and dist.is_initialized():
+                dist.barrier()
 
             with torch.no_grad():
                 for inputs, targets in val_batches:
@@ -830,6 +849,15 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
                     val_total_loss += loss.item()
                     val_num_batches += 1
+
+            # Synchronize validation loss across nodes
+            if dist.is_available() and dist.is_initialized():
+                if device.type == 'cuda':
+                    val_avg_loss = torch.tensor(val_total_loss / val_num_batches, device=device)
+                    dist.all_reduce(val_avg_loss, op=dist.ReduceOp.SUM)
+                    val_avg_loss = val_avg_loss / dist.get_world_size()
+                    val_total_loss = val_avg_loss.item() * val_num_batches
+                dist.barrier()
 
             # Calculate average validation loss
             val_avg_loss = val_total_loss / val_num_batches
