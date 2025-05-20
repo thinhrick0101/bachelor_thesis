@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1135, in <module>
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1077, in main
+    # Try generating with different temperatures
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 834, in train_model
+    if val_avg_loss < best_val_loss:
+OSError: [Errno 116] Stale file handle

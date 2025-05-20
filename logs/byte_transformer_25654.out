@@ -1,0 +1,6 @@
+=== Distributed Training Configuration ===
+Master node: node002
+Master port: 29500
+World size: 16
+Job nodes: node[002-007,024-026,046-052]
+========================================
