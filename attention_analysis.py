@@ -346,7 +346,11 @@ class CustomSparseAttention(nn.Module):
         
         # Apply attention masks if provided
         if attn_mask is not None:
+            # Convert float mask to boolean mask (assuming -inf means masked positions)
+            if attn_mask.dtype == torch.float32:
+                attn_mask = attn_mask == float('-inf')
             attn_weights = attn_weights.masked_fill(attn_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+            
         if key_padding_mask is not None:
             attn_weights = attn_weights.masked_fill(key_padding_mask.unsqueeze(1).unsqueeze(2), float('-inf'))
         
