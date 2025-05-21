@@ -122,13 +122,18 @@ def main():
     
     # Load test data
     print("Loading test data...")
-    test_text = load_data('data/enwik8')[-10000:]  # Use last 10k bytes for testing
+    test_text = load_data('data/enwik8')[-100000:]  # Use last 100k bytes for testing
     test_data = tokenizer.encode(test_text)
     
-    # Create test batches
-    batch_size = 32
-    seq_length = 1024
+    # Create test batches with smaller batch size for analysis
+    batch_size = 4  # Reduced batch size
+    seq_length = 512  # Reduced sequence length
     test_batches = create_batches(test_data, batch_size, seq_length)
+    
+    if not test_batches:
+        raise ValueError("No test batches created. Test data might be too small.")
+        
+    print(f"Created {len(test_batches)} test batches")
     
     # Analyze attention patterns
     print("\nAnalyzing attention patterns...")
