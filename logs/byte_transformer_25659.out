@@ -1,0 +1,1363 @@
+=== Distributed Training Configuration ===
+Master node: node002
+Master port: 29500
+World size: 16
+Job nodes: node[002-007,024-026,046-052]
+CUDA_VISIBLE_DEVICES: 0
+========================================
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 56087
+node002:837413:837413 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:837413:837413 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:837413:837413 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:837413:837413 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node048:685141:685141 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node047:704912:704912 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node025:1006706:1006706 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node003:804200:804200 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node046:723579:723579 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node048:685141:685141 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:701972:701972 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node047:704912:704912 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node007:684901:684901 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node024:3578548:3578548 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node005:814747:814747 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node046:723579:723579 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:804200:804200 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node025:1006706:1006706 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:672418:672418 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node006:716339:716339 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node051:701972:701972 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3578548:3578548 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:814747:814747 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node007:684901:684901 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:672418:672418 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node052:696164:696164 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node006:716339:716339 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node052:696164:696164 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node050:703409:703409 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node050:703409:703409 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782718:782718 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node004:782718:782718 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:804200:804200 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:804200:804200 [0] NCCL INFO Using network IB
+node047:704912:704912 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:704912:704912 [0] NCCL INFO Using network IB
+node046:723579:723579 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:723579:723579 [0] NCCL INFO Using network IB
+node025:1006706:1006706 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1006706:1006706 [0] NCCL INFO Using network IB
+node048:685141:685141 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:685141:685141 [0] NCCL INFO Using network IB
+node007:684901:684901 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:684901:684901 [0] NCCL INFO Using network IB
+node051:701972:701972 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:701972:701972 [0] NCCL INFO Using network IB
+node024:3578548:3578548 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3578548:3578548 [0] NCCL INFO Using network IB
+node049:672418:672418 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:672418:672418 [0] NCCL INFO Using network IB
+node006:716339:716339 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:716339:716339 [0] NCCL INFO Using network IB
+node050:703409:703409 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:703409:703409 [0] NCCL INFO Using network IB
+node005:814747:814747 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:814747:814747 [0] NCCL INFO Using network IB
+node052:696164:696164 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:696164:696164 [0] NCCL INFO Using network IB
+node026:700687:700687 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:700687:700687 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:782718:782718 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:782718:782718 [0] NCCL INFO Using network IB
+node026:700687:700687 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:700687:700687 [0] NCCL INFO Using network IB
+node026:700687:700703 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:723579:723591 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:723579:723591 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:704912:704925 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:704912:704925 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:685141:685162 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:685141:685162 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:672418:672430 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:672418:672430 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:703409:703421 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:703409:703421 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:701972:701984 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:701972:701984 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:696164:696176 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:696164:696176 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:837413:837427 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:837413:837427 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:837413:837427 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:837413:837427 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:804200:804212 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:804200:804212 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:782718:782730 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:782718:782730 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:814747:814759 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:814747:814759 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:716339:716351 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:716339:716351 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:684901:684913 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:684901:684913 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3578548:3578560 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3578548:3578560 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1006706:1006718 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1006706:1006718 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node026:700687:700703 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704912:704925 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:672418:672430 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:703409:703421 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:723579:723591 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:701972:701984 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:704912:704925 [0] NCCL INFO Connected all rings
+node007:684901:684913 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node048:685141:685162 [0] NCCL INFO Connected all rings
+node050:703409:703421 [0] NCCL INFO Connected all rings
+node049:672418:672430 [0] NCCL INFO Connected all rings
+node051:701972:701984 [0] NCCL INFO Connected all rings
+node046:723579:723591 [0] NCCL INFO Connected all rings
+node024:3578548:3578560 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:700687:700703 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1006706:1006718 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node004:782718:782730 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:837413:837427 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node006:716339:716351 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node003:804200:804212 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:814747:814759 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node052:696164:696176 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:684901:684913 [0] NCCL INFO Connected all rings
+node026:700687:700703 [0] NCCL INFO Connected all rings
+node024:3578548:3578560 [0] NCCL INFO Connected all rings
+node025:1006706:1006718 [0] NCCL INFO Connected all rings
+node002:837413:837427 [0] NCCL INFO Connected all rings
+node003:804200:804212 [0] NCCL INFO Connected all rings
+node006:716339:716351 [0] NCCL INFO Connected all rings
+node004:782718:782730 [0] NCCL INFO Connected all rings
+node052:696164:696176 [0] NCCL INFO Connected all rings
+node005:814747:814759 [0] NCCL INFO Connected all rings
+node047:704912:704925 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node002:837413:837427 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node049:672418:672430 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node006:716339:716351 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node024:3578548:3578560 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node050:703409:703421 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node005:814747:814759 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node046:723579:723591 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node051:701972:701984 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node047:704912:704925 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node003:804200:804212 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node052:696164:696176 [0] NCCL INFO Connected all trees
+node052:696164:696176 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:696164:696176 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node052:696164:696176 [0] NCCL INFO comm 0x7f4c34003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3578548:3578560 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO Connected all trees
+node048:685141:685162 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:685141:685162 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:703409:703421 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node048:685141:685162 [0] NCCL INFO comm 0x7f6780003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:723579:723591 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node004:782718:782730 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node007:684901:684913 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node025:1006706:1006718 [0] NCCL INFO Connected all trees
+node025:1006706:1006718 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1006706:1006718 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node025:1006706:1006718 [0] NCCL INFO comm 0x7f9ab8003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node049:672418:672430 [0] NCCL INFO Connected all trees
+node049:672418:672430 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:672418:672430 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:672418:672430 [0] NCCL INFO comm 0x7fe340003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node005:814747:814759 [0] NCCL INFO Connected all trees
+node005:814747:814759 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:814747:814759 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node005:814747:814759 [0] NCCL INFO comm 0x7f55a0003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node051:701972:701984 [0] NCCL INFO Connected all trees
+node051:701972:701984 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:701972:701984 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:703409:703421 [0] NCCL INFO Connected all trees
+node050:703409:703421 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node050:703409:703421 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node051:701972:701984 [0] NCCL INFO comm 0x7f09d4003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node050:703409:703421 [0] NCCL INFO comm 0x7f59c0003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:700687:700703 [0] NCCL INFO Connected all trees
+node026:700687:700703 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node026:700687:700703 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:804200:804212 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node026:700687:700703 [0] NCCL INFO comm 0x7fe628003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node047:704912:704925 [0] NCCL INFO Connected all trees
+node047:704912:704925 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:704912:704925 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node047:704912:704925 [0] NCCL INFO comm 0x7fd344003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:723579:723591 [0] NCCL INFO Connected all trees
+node046:723579:723591 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node046:723579:723591 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:723579:723591 [0] NCCL INFO comm 0x7f7288003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node006:716339:716351 [0] NCCL INFO Connected all trees
+node006:716339:716351 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:716339:716351 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:716339:716351 [0] NCCL INFO comm 0x7f5bcc003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:684901:684913 [0] NCCL INFO Connected all trees
+node007:684901:684913 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:684901:684913 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:684901:684913 [0] NCCL INFO comm 0x7f4038003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3578548:3578560 [0] NCCL INFO Connected all trees
+node024:3578548:3578560 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3578548:3578560 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:837413:837427 [0] NCCL INFO Connected all trees
+node002:837413:837427 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:837413:837427 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3578548:3578560 [0] NCCL INFO comm 0x7f01e0003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:837413:837427 [0] NCCL INFO comm 0x7f1654003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:837413:837413 [0] NCCL INFO Launch mode Parallel
+node003:804200:804212 [0] NCCL INFO Connected all trees
+node003:804200:804212 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:804200:804212 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:804200:804212 [0] NCCL INFO comm 0x7fca8c003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:782718:782730 [0] NCCL INFO Connected all trees
+node004:782718:782730 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:782718:782730 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:782718:782730 [0] NCCL INFO comm 0x7f704c003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 4/16 initialized successfully
+Process 12/16 initialized successfully
+Process 4 using device: cuda:0
+Process 12 using device: cuda:0
+Process 2/16 initialized successfully
+Process 6/16 initialized successfully
+Process 2 using device: cuda:0
+Process 10/16 initialized successfully
+Process 14/16 initialized successfully
+Process 6 using device: cuda:0
+Process 1/16 initialized successfully
+Process 10 using device: cuda:0
+Process 14 using device: cuda:0
+Process 1 using device: cuda:0
+Process 3/16 initialized successfully
+Process 5/16 initialized successfully
+Process 9/16 initialized successfully
+Process 15/16 initialized successfully
+Process 7/16 initialized successfully
+Process 11/16 initialized successfully
+Process 3 using device: cuda:0
+Process 5 using device: cuda:0
+Process 9 using device: cuda:0
+Process 13/16 initialized successfully
+Process 15 using device: cuda:0
+Loading data from data/enwik8
+Process 7 using device: cuda:0
+Process 11 using device: cuda:0
+Process 13 using device: cuda:0
+Data loaded: 99621832 bytes
+Rank 2: Loading data...
+Rank 9: Loading data...
+Rank 6: Loading data...
+Rank 1: Loading data...
+Rank 12: Loading data...
+Rank 10: Loading data...
+Rank 4: Loading data...
+Rank 14: Loading data...
+Rank 11: Loading data...
+Rank 8: Loading data...
+Rank 3: Loading data...
+Rank 7: Loading data...
+Rank 13: Loading data...
+Rank 15: Loading data...
+Rank 5: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 15: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 12: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 0: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 0: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 15: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 15: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 8: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 13: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 8: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 6: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 10: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 13: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 6: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 12: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 10: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 5: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 11: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 12: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 9: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 5: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 11: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 9: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 14: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 4: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 14: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 4: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 1: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 1: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 2: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 2: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Rank 3: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 3: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 7: Created 2745 batches of shape torch.Size([2, 1024])
+Rank 7: Created 304 batches of shape torch.Size([2, 1024])
+Created 2745 training batches and 304 validation batches
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Epoch 1/100, Batch 10/2745, Loss: 5.6225
+Epoch 1/100, Batch 10/2745, Loss: 5.2680
+Epoch 1/100, Batch 10/2745, Loss: 5.5323
+Epoch 1/100, Batch 10/2745, Loss: 5.4269
+Epoch 1/100, Batch 10/2745, Loss: 5.6440
+Epoch 1/100, Batch 10/2745, Loss: 5.6164
+Epoch 1/100, Batch 10/2745, Loss: 5.5098
+Epoch 1/100, Batch 10/2745, Loss: 5.5465
+Epoch 1/100, Batch 10/2745, Loss: 5.6665
+Epoch 1/100, Batch 10/2745, Loss: 5.5954
+Epoch 1/100, Batch 10/2745, Loss: 5.5900
+Epoch 1/100, Batch 10/2745, Loss: 5.7140
+Epoch 1/100, Batch 10/2745, Loss: 5.5753
+Epoch 1/100, Batch 10/2745, Loss: 5.5501
+Epoch 1/100, Batch 10/2745, Loss: 5.4680
+Epoch 1/100, Batch 10/2745, Loss: 5.5874
+Epoch 1/100, Batch 20/2745, Loss: 5.6708
+Epoch 1/100, Batch 20/2745, Loss: 5.5692
+Epoch 1/100, Batch 30/2745, Loss: 5.6251
+Epoch 1/100, Batch 20/2745, Loss: 5.4891
+Epoch 1/100, Batch 20/2745, Loss: 5.5128
+Epoch 1/100, Batch 20/2745, Loss: 5.4949
+Epoch 1/100, Batch 20/2745, Loss: 5.6501
+Epoch 1/100, Batch 20/2745, Loss: 5.6329
+Epoch 1/100, Batch 20/2745, Loss: 5.6444
+Epoch 1/100, Batch 20/2745, Loss: 5.5743
+Epoch 1/100, Batch 20/2745, Loss: 5.4944
+Epoch 1/100, Batch 20/2745, Loss: 5.5479
+Epoch 1/100, Batch 20/2745, Loss: 5.5057
+Epoch 1/100, Batch 20/2745, Loss: 5.6728
+Epoch 1/100, Batch 20/2745, Loss: 5.5429
+Epoch 1/100, Batch 20/2745, Loss: 5.4430
+Epoch 1/100, Batch 20/2745, Loss: 5.3417
+Epoch 1/100, Batch 40/2745, Loss: 5.6363
+Epoch 1/100, Batch 30/2745, Loss: 5.4592
+Epoch 1/100, Batch 30/2745, Loss: 5.4533
+Epoch 1/100, Batch 30/2745, Loss: 5.5135
+Epoch 1/100, Batch 30/2745, Loss: 5.6222
+Epoch 1/100, Batch 30/2745, Loss: 5.6235
+Epoch 1/100, Batch 30/2745, Loss: 5.3747
+Epoch 1/100, Batch 30/2745, Loss: 5.4675
+Epoch 1/100, Batch 30/2745, Loss: 5.5509
+Epoch 1/100, Batch 30/2745, Loss: 5.5476
+Epoch 1/100, Batch 30/2745, Loss: 5.5697
+Epoch 1/100, Batch 30/2745, Loss: 5.4323
+Epoch 1/100, Batch 30/2745, Loss: 5.5161
+Epoch 1/100, Batch 30/2745, Loss: 5.4758
+Epoch 1/100, Batch 30/2745, Loss: 5.6108
+Epoch 1/100, Batch 30/2745, Loss: 5.4840
+Epoch 1/100, Batch 50/2745, Loss: 5.5704
+Epoch 1/100, Batch 60/2745, Loss: 5.4845
+Epoch 1/100, Batch 40/2745, Loss: 5.4611
+Epoch 1/100, Batch 40/2745, Loss: 5.5906
+Epoch 1/100, Batch 40/2745, Loss: 5.5024
+Epoch 1/100, Batch 40/2745, Loss: 5.4979
+Epoch 1/100, Batch 40/2745, Loss: 5.6346
+Epoch 1/100, Batch 40/2745, Loss: 5.3722
+Epoch 1/100, Batch 40/2745, Loss: 5.5200
+Epoch 1/100, Batch 40/2745, Loss: 5.6060
+Epoch 1/100, Batch 40/2745, Loss: 5.5450
+Epoch 1/100, Batch 40/2745, Loss: 5.4059
+Epoch 1/100, Batch 40/2745, Loss: 5.4632
+Epoch 1/100, Batch 40/2745, Loss: 5.4278
+Epoch 1/100, Batch 40/2745, Loss: 5.3667
+Epoch 1/100, Batch 40/2745, Loss: 5.6111
+Epoch 1/100, Batch 40/2745, Loss: 5.7339
+Epoch 1/100, Batch 70/2745, Loss: 5.6288
+Epoch 1/100, Batch 50/2745, Loss: 5.5528
+Epoch 1/100, Batch 50/2745, Loss: 5.5902
+Epoch 1/100, Batch 50/2745, Loss: 5.4843
+Epoch 1/100, Batch 50/2745, Loss: 5.6253
+Epoch 1/100, Batch 50/2745, Loss: 5.5147
+Epoch 1/100, Batch 50/2745, Loss: 5.4680
+Epoch 1/100, Batch 50/2745, Loss: 5.5125
+Epoch 1/100, Batch 50/2745, Loss: 5.5411
+Epoch 1/100, Batch 50/2745, Loss: 5.5491
+Epoch 1/100, Batch 50/2745, Loss: 5.5780
+Epoch 1/100, Batch 50/2745, Loss: 5.4936
+Epoch 1/100, Batch 50/2745, Loss: 5.5757
+Epoch 1/100, Batch 50/2745, Loss: 5.6770
+Epoch 1/100, Batch 50/2745, Loss: 5.5975
+Epoch 1/100, Batch 50/2745, Loss: 5.5777
+Epoch 1/100, Batch 80/2745, Loss: 5.4510
+Epoch 1/100, Batch 90/2745, Loss: 5.6449
+Epoch 1/100, Batch 60/2745, Loss: 5.6026
+Epoch 1/100, Batch 60/2745, Loss: 5.5914
+Epoch 1/100, Batch 60/2745, Loss: 5.5288
+Epoch 1/100, Batch 60/2745, Loss: 5.5184
+Epoch 1/100, Batch 60/2745, Loss: 5.5861
+Epoch 1/100, Batch 60/2745, Loss: 5.5695
+Epoch 1/100, Batch 60/2745, Loss: 5.5046
+Epoch 1/100, Batch 60/2745, Loss: 5.6008
+Epoch 1/100, Batch 60/2745, Loss: 5.5786
+Epoch 1/100, Batch 60/2745, Loss: 5.2811
+Epoch 1/100, Batch 60/2745, Loss: 5.5942
+Epoch 1/100, Batch 60/2745, Loss: 5.5415
+Epoch 1/100, Batch 60/2745, Loss: 5.5718
+Epoch 1/100, Batch 60/2745, Loss: 5.7484
+Epoch 1/100, Batch 60/2745, Loss: 5.5939
+Epoch 1/100, Batch 100/2745, Loss: 5.6150
+Epoch 1/100, Batch 70/2745, Loss: 5.5460
+Epoch 1/100, Batch 70/2745, Loss: 5.4337
+Epoch 1/100, Batch 70/2745, Loss: 5.5931
+Epoch 1/100, Batch 70/2745, Loss: 5.5498
+Epoch 1/100, Batch 70/2745, Loss: 5.6042
+Epoch 1/100, Batch 70/2745, Loss: 5.6163
+Epoch 1/100, Batch 70/2745, Loss: 5.5725
+Epoch 1/100, Batch 70/2745, Loss: 5.5967
+Epoch 1/100, Batch 70/2745, Loss: 5.5488
+Epoch 1/100, Batch 70/2745, Loss: 5.4477
+Epoch 1/100, Batch 70/2745, Loss: 5.4901
+Epoch 1/100, Batch 70/2745, Loss: 5.4865
+Epoch 1/100, Batch 110/2745, Loss: 5.5810
+Epoch 1/100, Batch 70/2745, Loss: 5.4359
+Epoch 1/100, Batch 70/2745, Loss: 5.6978
+Epoch 1/100, Batch 70/2745, Loss: 5.4546
+Epoch 1/100, Batch 120/2745, Loss: 5.5324
+Epoch 1/100, Batch 80/2745, Loss: 5.5275
+Epoch 1/100, Batch 80/2745, Loss: 5.4761
+Epoch 1/100, Batch 80/2745, Loss: 5.5932
+Epoch 1/100, Batch 80/2745, Loss: 5.5674
+Epoch 1/100, Batch 80/2745, Loss: 5.6034
+Epoch 1/100, Batch 80/2745, Loss: 5.6275
+Epoch 1/100, Batch 80/2745, Loss: 5.5416
+Epoch 1/100, Batch 80/2745, Loss: 5.4424
+Epoch 1/100, Batch 80/2745, Loss: 5.4140
+Epoch 1/100, Batch 80/2745, Loss: 5.2778
+Epoch 1/100, Batch 80/2745, Loss: 5.5939
+Epoch 1/100, Batch 80/2745, Loss: 5.5307
+Epoch 1/100, Batch 80/2745, Loss: 5.5413
+Epoch 1/100, Batch 80/2745, Loss: 5.5831
+Epoch 1/100, Batch 80/2745, Loss: 5.5226
+Epoch 1/100, Batch 130/2745, Loss: 5.5478
+Epoch 1/100, Batch 90/2745, Loss: 5.4393
+Epoch 1/100, Batch 90/2745, Loss: 5.5712
+Epoch 1/100, Batch 90/2745, Loss: 5.4339
+Epoch 1/100, Batch 90/2745, Loss: 5.5549
+Epoch 1/100, Batch 90/2745, Loss: 5.6300
+Epoch 1/100, Batch 90/2745, Loss: 5.5799
+Epoch 1/100, Batch 90/2745, Loss: 5.6001
+Epoch 1/100, Batch 90/2745, Loss: 5.5599
+Epoch 1/100, Batch 140/2745, Loss: 5.5558
+Epoch 1/100, Batch 90/2745, Loss: 5.5821
+Epoch 1/100, Batch 90/2745, Loss: 5.5082
+Epoch 1/100, Batch 90/2745, Loss: 5.4747
+Epoch 1/100, Batch 90/2745, Loss: 5.3973
+Epoch 1/100, Batch 90/2745, Loss: 5.5439
+Epoch 1/100, Batch 90/2745, Loss: 5.5404
+Epoch 1/100, Batch 90/2745, Loss: 5.4009
+Epoch 1/100, Batch 150/2745, Loss: 5.5033
+Epoch 1/100, Batch 100/2745, Loss: 5.5428
+Epoch 1/100, Batch 100/2745, Loss: 5.5113
+Epoch 1/100, Batch 100/2745, Loss: 5.4637
+Epoch 1/100, Batch 100/2745, Loss: 5.5517
+Epoch 1/100, Batch 100/2745, Loss: 5.6128
+Epoch 1/100, Batch 100/2745, Loss: 5.6244
+Epoch 1/100, Batch 100/2745, Loss: 5.4667
+Epoch 1/100, Batch 100/2745, Loss: 5.6001
+Epoch 1/100, Batch 100/2745, Loss: 5.5947
+Epoch 1/100, Batch 100/2745, Loss: 5.6316
+Epoch 1/100, Batch 100/2745, Loss: 5.2902
+Epoch 1/100, Batch 100/2745, Loss: 5.4424
+Epoch 1/100, Batch 100/2745, Loss: 5.5324
+Epoch 1/100, Batch 100/2745, Loss: 5.5131
+Epoch 1/100, Batch 100/2745, Loss: 5.3835
+Epoch 1/100, Batch 160/2745, Loss: 5.6180
+Epoch 1/100, Batch 110/2745, Loss: 5.5535
+Epoch 1/100, Batch 110/2745, Loss: 5.5028
+Epoch 1/100, Batch 110/2745, Loss: 5.6050
+Epoch 1/100, Batch 110/2745, Loss: 5.6232
+Epoch 1/100, Batch 110/2745, Loss: 5.5355
+Epoch 1/100, Batch 110/2745, Loss: 5.5708
+Epoch 1/100, Batch 110/2745, Loss: 5.5404
+Epoch 1/100, Batch 110/2745, Loss: 5.6577
+Epoch 1/100, Batch 110/2745, Loss: 5.5944
+Epoch 1/100, Batch 110/2745, Loss: 5.6577
+Epoch 1/100, Batch 170/2745, Loss: 5.4223
+Epoch 1/100, Batch 110/2745, Loss: 5.5317
+Epoch 1/100, Batch 110/2745, Loss: 5.3962
+Epoch 1/100, Batch 110/2745, Loss: 5.4163
+Epoch 1/100, Batch 110/2745, Loss: 5.5521
+Epoch 1/100, Batch 110/2745, Loss: 5.4949
+Epoch 1/100, Batch 120/2745, Loss: 5.5317
+Epoch 1/100, Batch 180/2745, Loss: 5.6651
+Epoch 1/100, Batch 120/2745, Loss: 5.4101
+Epoch 1/100, Batch 120/2745, Loss: 5.6635
+Epoch 1/100, Batch 120/2745, Loss: 5.5911
+Epoch 1/100, Batch 120/2745, Loss: 5.4739
+Epoch 1/100, Batch 120/2745, Loss: 5.5575
+Epoch 1/100, Batch 120/2745, Loss: 5.5656
+Epoch 1/100, Batch 120/2745, Loss: 5.5710
+Epoch 1/100, Batch 120/2745, Loss: 5.5346
+Epoch 1/100, Batch 120/2745, Loss: 5.6511
+Epoch 1/100, Batch 120/2745, Loss: 5.5236
+Epoch 1/100, Batch 120/2745, Loss: 5.4226
+Epoch 1/100, Batch 120/2745, Loss: 5.5873
+Epoch 1/100, Batch 120/2745, Loss: 5.5682
+Epoch 1/100, Batch 120/2745, Loss: 5.5092
+Epoch 1/100, Batch 190/2745, Loss: 5.5613
+Epoch 1/100, Batch 130/2745, Loss: 5.5343
+Epoch 1/100, Batch 130/2745, Loss: 5.6155
+Epoch 1/100, Batch 130/2745, Loss: 5.5817
+Epoch 1/100, Batch 130/2745, Loss: 5.5776
+Epoch 1/100, Batch 130/2745, Loss: 5.5974
+Epoch 1/100, Batch 130/2745, Loss: 5.5280
+Epoch 1/100, Batch 130/2745, Loss: 5.5346
+Epoch 1/100, Batch 130/2745, Loss: 5.5043
+Epoch 1/100, Batch 200/2745, Loss: 5.6126
+Epoch 1/100, Batch 130/2745, Loss: 5.5702
+Epoch 1/100, Batch 130/2745, Loss: 5.6055
+Epoch 1/100, Batch 130/2745, Loss: 5.4088
+Epoch 1/100, Batch 130/2745, Loss: 5.5940
+Epoch 1/100, Batch 130/2745, Loss: 5.3817
+Epoch 1/100, Batch 130/2745, Loss: 5.4019
+Epoch 1/100, Batch 130/2745, Loss: 5.5284
+Epoch 1/100, Batch 140/2745, Loss: 5.5567
+Epoch 1/100, Batch 210/2745, Loss: 5.4804
+Epoch 1/100, Batch 140/2745, Loss: 5.4538
+Epoch 1/100, Batch 140/2745, Loss: 5.5619
+Epoch 1/100, Batch 140/2745, Loss: 5.5727
+Epoch 1/100, Batch 140/2745, Loss: 5.5462
+Epoch 1/100, Batch 140/2745, Loss: 5.6092
+Epoch 1/100, Batch 140/2745, Loss: 5.5128
+Epoch 1/100, Batch 140/2745, Loss: 5.6864
+Epoch 1/100, Batch 140/2745, Loss: 5.5536
+Epoch 1/100, Batch 140/2745, Loss: 5.4960
+Epoch 1/100, Batch 140/2745, Loss: 5.4756
+Epoch 1/100, Batch 140/2745, Loss: 5.5026
+Epoch 1/100, Batch 140/2745, Loss: 5.3847
+Epoch 1/100, Batch 140/2745, Loss: 5.5050
+Epoch 1/100, Batch 140/2745, Loss: 5.3262
+Epoch 1/100, Batch 220/2745, Loss: 5.4891
+Epoch 1/100, Batch 150/2745, Loss: 5.5689
+Epoch 1/100, Batch 150/2745, Loss: 5.3414
+Epoch 1/100, Batch 150/2745, Loss: 5.5381
+Epoch 1/100, Batch 150/2745, Loss: 5.6051
+Epoch 1/100, Batch 150/2745, Loss: 5.5088
+Epoch 1/100, Batch 150/2745, Loss: 5.4924
+Epoch 1/100, Batch 150/2745, Loss: 5.5910
+Epoch 1/100, Batch 150/2745, Loss: 5.5450
+Epoch 1/100, Batch 150/2745, Loss: 5.3597
+Epoch 1/100, Batch 230/2745, Loss: 5.5523
+Epoch 1/100, Batch 150/2745, Loss: 5.5053
+Epoch 1/100, Batch 150/2745, Loss: 5.4010
+Epoch 1/100, Batch 150/2745, Loss: 5.5261
+Epoch 1/100, Batch 150/2745, Loss: 5.4356
+Epoch 1/100, Batch 150/2745, Loss: 5.5384
+Epoch 1/100, Batch 150/2745, Loss: 5.5636
+Epoch 1/100, Batch 160/2745, Loss: 5.5521
+Epoch 1/100, Batch 240/2745, Loss: 5.5635
+Epoch 1/100, Batch 160/2745, Loss: 5.5084
+Epoch 1/100, Batch 160/2745, Loss: 5.5318
+Epoch 1/100, Batch 160/2745, Loss: 5.5128
+Epoch 1/100, Batch 160/2745, Loss: 5.3921
+Epoch 1/100, Batch 160/2745, Loss: 5.5546
+Epoch 1/100, Batch 160/2745, Loss: 5.4800
+Epoch 1/100, Batch 160/2745, Loss: 5.6053
+Epoch 1/100, Batch 160/2745, Loss: 5.5322
+Epoch 1/100, Batch 160/2745, Loss: 5.5467
+Epoch 1/100, Batch 160/2745, Loss: 5.4869
+Epoch 1/100, Batch 160/2745, Loss: 5.5310
+Epoch 1/100, Batch 160/2745, Loss: 5.4409
+Epoch 1/100, Batch 160/2745, Loss: 5.5791
+Epoch 1/100, Batch 250/2745, Loss: 5.5628
+Epoch 1/100, Batch 160/2745, Loss: 5.6173
+Epoch 1/100, Batch 170/2745, Loss: 5.5134
+Epoch 1/100, Batch 170/2745, Loss: 5.5501
+Epoch 1/100, Batch 170/2745, Loss: 5.6189
+Epoch 1/100, Batch 170/2745, Loss: 5.4848
+Epoch 1/100, Batch 170/2745, Loss: 5.4970
+Epoch 1/100, Batch 170/2745, Loss: 5.5208
+Epoch 1/100, Batch 170/2745, Loss: 5.5413
+Epoch 1/100, Batch 170/2745, Loss: 5.5825
+Epoch 1/100, Batch 260/2745, Loss: 5.5931
+Epoch 1/100, Batch 170/2745, Loss: 5.6101
+Epoch 1/100, Batch 170/2745, Loss: 5.5532
+Epoch 1/100, Batch 170/2745, Loss: 5.4297
+Epoch 1/100, Batch 170/2745, Loss: 5.5066
+Epoch 1/100, Batch 170/2745, Loss: 5.4490
+Epoch 1/100, Batch 170/2745, Loss: 5.5679
+Epoch 1/100, Batch 170/2745, Loss: 5.5437
+Epoch 1/100, Batch 180/2745, Loss: 5.5587
+Epoch 1/100, Batch 270/2745, Loss: 5.5765
+Epoch 1/100, Batch 180/2745, Loss: 5.5906
+Epoch 1/100, Batch 180/2745, Loss: 5.5745
+Epoch 1/100, Batch 180/2745, Loss: 5.5438
+Epoch 1/100, Batch 180/2745, Loss: 5.5565
+Epoch 1/100, Batch 180/2745, Loss: 5.4760
+Epoch 1/100, Batch 180/2745, Loss: 5.5514
+Epoch 1/100, Batch 180/2745, Loss: 5.5526
+Epoch 1/100, Batch 180/2745, Loss: 5.6341
+Epoch 1/100, Batch 180/2745, Loss: 5.3707
+Epoch 1/100, Batch 180/2745, Loss: 5.5203
+Epoch 1/100, Batch 180/2745, Loss: 5.5370
+Epoch 1/100, Batch 180/2745, Loss: 5.4153
+Epoch 1/100, Batch 180/2745, Loss: 5.3738
+Epoch 1/100, Batch 280/2745, Loss: 5.4806
+Epoch 1/100, Batch 190/2745, Loss: 5.5006
+Epoch 1/100, Batch 180/2745, Loss: 5.4447
+Epoch 1/100, Batch 190/2745, Loss: 5.6020
+Epoch 1/100, Batch 190/2745, Loss: 5.5112
+Epoch 1/100, Batch 190/2745, Loss: 5.4988
+Epoch 1/100, Batch 190/2745, Loss: 5.4569
+Epoch 1/100, Batch 190/2745, Loss: 5.5696
+Epoch 1/100, Batch 190/2745, Loss: 5.5001
+Epoch 1/100, Batch 190/2745, Loss: 5.5204
+Epoch 1/100, Batch 290/2745, Loss: 5.5408
+Epoch 1/100, Batch 190/2745, Loss: 5.6378
+Epoch 1/100, Batch 190/2745, Loss: 5.5473
+Epoch 1/100, Batch 190/2745, Loss: 5.5519
+Epoch 1/100, Batch 190/2745, Loss: 5.4410
+Epoch 1/100, Batch 190/2745, Loss: 5.5202
+Epoch 1/100, Batch 190/2745, Loss: 5.4478
+Epoch 1/100, Batch 200/2745, Loss: 5.5411
+Epoch 1/100, Batch 190/2745, Loss: 5.5265
+Epoch 1/100, Batch 300/2745, Loss: 5.5580
+Epoch 1/100, Batch 200/2745, Loss: 5.6126
+Epoch 1/100, Batch 200/2745, Loss: 5.5460
+Epoch 1/100, Batch 200/2745, Loss: 5.4448
+Epoch 1/100, Batch 200/2745, Loss: 5.4907
+Epoch 1/100, Batch 200/2745, Loss: 5.4953

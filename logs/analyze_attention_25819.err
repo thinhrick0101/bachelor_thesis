@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 216, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 127, in main
+    test_text = load_data('bachelor_thesis/data/enwik8')[-10000:]  # Use last 10k bytes for testing
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 73, in load_data
+    with open(data_path, 'r', encoding='utf-8', errors='replace') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'bachelor_thesis/data/enwik8'
