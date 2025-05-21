@@ -1,0 +1,33 @@
+Setting up paths...
+Loading pretrained model...
+Loading test data...
+Loading data from data/enwik8
+Created 48 test batches
+
+Analyzing attention patterns...
+Visualizing attention patterns...
+
+Creating sparse attention model...
+
+Sparse Attention Configuration:
+- Local Window Size: 512
+- Global Tokens: 165001
+- Sparsity Threshold: 0.01
+
+Comparing attention mechanisms...
+
+Results Summary:
+Full Attention:
+- Perplexity: 3.46
+- Speed: 30997.10 tokens/sec
+- Memory: 607.67 MB
+
+Sparse Attention:
+- Perplexity: 32.61
+- Speed: 6984.86 tokens/sec
+- Memory: 603.99 MB
+
+Relative Differences:
+- Perplexity degradation: 842.6%
+- Speed improvement: -77.5%
+- Memory reduction: 0.6%
