@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 219, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 144, in main
+    results = analyzer.analyze_sequence(sample_seq, tokenizer)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/attention_analysis.py", line 54, in analyze_sequence
+    'sparsity_potential': self.calculate_sparsity_potential()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/attention_analysis.py", line 124, in calculate_sparsity_potential
+    'effective_rank': self._calculate_effective_rank(attn_map),
+  File "/var/scratch/tng204/thesis/bachelor_thesis/attention_analysis.py", line 241, in _calculate_effective_rank
+    U, S, V = torch.svd(matrix)
+RuntimeError: linalg.svd: input should have at least 2 dimensions, but has 1 dimensions instead
