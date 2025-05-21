@@ -188,11 +188,12 @@ class EnhancedTransformerBlock(nn.Module):
     and better regularization techniques
     """
     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
-                 attention_dropout=0.1, activation_dropout=0.1, use_checkpoint=True):
+                 attention_dropout=0.1, activation_dropout=0.1, use_checkpoint=True,
+                 attention_module=None):
         super(EnhancedTransformerBlock, self).__init__()
 
         # Multi-head self-attention with scaled dot-product attention
-        self.self_attn = nn.MultiheadAttention(
+        self.self_attn = attention_module if attention_module is not None else nn.MultiheadAttention(
             d_model,
             nhead,
             dropout=attention_dropout,  # Separate dropout for attention
@@ -289,7 +290,8 @@ class EnhancedCharTransformer(nn.Module):
     """
     def __init__(self, vocab_size, d_model, nhead, num_layers, dim_feedforward,
                  dropout=0.1, attention_dropout=0.1, activation_dropout=0.1,
-                 token_dropout=0.05, use_checkpoint=True, stochastic_depth_prob=0.1):
+                 token_dropout=0.05, use_checkpoint=True, stochastic_depth_prob=0.1,
+                 attention_class=None, attention_kwargs=None):
         super(EnhancedCharTransformer, self).__init__()
 
         # Token embedding with weight tying preparation
@@ -312,6 +314,22 @@ class EnhancedCharTransformer(nn.Module):
             layer_attn_dropout = attention_dropout * (1.0 + i * 0.05)
             layer_attn_dropout = min(layer_attn_dropout, 0.4)  # Cap at 0.4
 
+            # Create transformer block with custom attention if specified
+            if attention_class is not None:
+                attention = attention_class(
+                    d_model,
+                    nhead,
+                    dropout=layer_attn_dropout,
+                    **(attention_kwargs or {})
+                )
+            else:
+                attention = nn.MultiheadAttention(
+                    d_model,
+                    nhead,
+                    dropout=layer_attn_dropout,
+                    batch_first=True
+                )
+
             self.transformer_blocks.append(
                 EnhancedTransformerBlock(
                     d_model=d_model,
@@ -320,7 +338,8 @@ class EnhancedCharTransformer(nn.Module):
                     dropout=layer_dropout,
                     attention_dropout=layer_attn_dropout,
                     activation_dropout=activation_dropout,
-                    use_checkpoint=use_checkpoint
+                    use_checkpoint=use_checkpoint,
+                    attention_module=attention
                 )
             )
 
