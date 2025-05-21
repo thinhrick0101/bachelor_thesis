@@ -240,7 +240,7 @@ class EnhancedTransformerBlock(nn.Module):
     def _attention_block(self, src, src_mask=None):
         """Self-attention block with pre-norm"""
         src2 = self.norm1(src)
-        src2, _ = self.self_attn(src2, src2, src2, attn_mask=src_mask, need_weights=False)
+        src2, attn_weights = self.self_attn(src2, src2, src2, attn_mask=src_mask, need_weights=True)
         return self.dropout1(self.gamma1 * src2)
 
     def _ff_block(self, src):
