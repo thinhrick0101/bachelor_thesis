@@ -262,12 +262,27 @@ class AttentionPatternAnalyzer:
     @staticmethod
     def _estimate_compressibility(attention_weights):
         """Estimate compressibility of attention patterns"""
-        # Use ratio of top-k singular values as proxy for compressibility
-        matrix = attention_weights.mean(dim=(0, 1))
-        U, S, V = torch.svd(matrix)
+        # Ensure matrix is 2D
+        if attention_weights.dim() == 4:  # [batch, heads, seq, seq]
+            matrix = attention_weights.mean(dim=(0, 1))  # Average over batch and heads
+        elif attention_weights.dim() == 1:  # [seq]
+            seq_len = attention_weights.size(0)
+            matrix = attention_weights.view(seq_len, 1)  # Reshape to [seq, 1]
+        else:
+            matrix = attention_weights
+            
+        # Add small epsilon to ensure numerical stability
+        matrix = matrix + 1e-8
         
-        top_k = min(10, len(S))
-        return (S[:top_k].sum() / S.sum()).item()
+        try:
+            # Use ratio of top-k singular values as proxy for compressibility
+            U, S, V = torch.svd(matrix)
+            
+            top_k = min(10, len(S))
+            return (S[:top_k].sum() / S.sum()).item()
+        except RuntimeError:
+            # Fallback if SVD fails
+            return 0.0  # Return minimum compressibility as fallback
 
 class CustomSparseAttention(nn.Module):
     """
