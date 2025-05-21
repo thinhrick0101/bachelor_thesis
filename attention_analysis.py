@@ -194,7 +194,8 @@ class AttentionPatternAnalyzer:
         for i in range(seq_len):
             start_idx = max(0, i - local_window)
             end_idx = min(seq_len, i + local_window + 1)
-            local_attention += attention_weights[i, start_idx:end_idx].sum().item()
+            # Handle 1D tensor correctly
+            local_attention += attention_weights[start_idx:end_idx].sum().item()
             
         return local_attention / attention_weights.sum().item()
     
