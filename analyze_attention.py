@@ -19,9 +19,7 @@ from attention_analysis import (
 def main():
     # Setup paths
     print("Setting up paths...")
-    model_dir = 'bachelor_thesis'
-    model_path = os.path.join(model_dir, 'enhanced_char_transformer_model.pt')
-    os.makedirs(model_dir, exist_ok=True)
+    model_path = 'enhanced_char_transformer_model.pt'
     
     # Model configuration (matching the pretrained model)
     config = {
@@ -51,7 +49,7 @@ def main():
         
         # Load training data
         print("Loading training data...")
-        train_text = load_data('bachelor_thesis/data/enwik8')
+        train_text = load_data('data/enwik8')
         
         # Split into train/val
         split_idx = int(len(train_text) * 0.9)
@@ -90,7 +88,7 @@ def main():
             
             # Load training data
             print("Loading training data...")
-            train_text = load_data('bachelor_thesis/data/enwik8')
+            train_text = load_data('data/enwik8')
             
             # Split into train/val
             split_idx = int(len(train_text) * 0.9)
@@ -124,7 +122,7 @@ def main():
     
     # Load test data
     print("Loading test data...")
-    test_text = load_data('bachelor_thesis/data/enwik8')[-10000:]  # Use last 10k bytes for testing
+    test_text = load_data('data/enwik8')[-10000:]  # Use last 10k bytes for testing
     test_data = tokenizer.encode(test_text)
     
     # Create test batches
@@ -142,7 +140,7 @@ def main():
     
     # Visualize the analysis results
     print("Visualizing attention patterns...")
-    visualize_attention_patterns(results, os.path.join(model_dir, 'attention_analysis.png'))
+    visualize_attention_patterns(results, 'attention_analysis.png')
     
     # Create sparse attention model based on analysis
     print("\nCreating sparse attention model...")
@@ -188,7 +186,7 @@ def main():
     )
     
     # Plot comparison results
-    plot_comparison_results(comparison_results, os.path.join(model_dir, 'attention_comparison.png'))
+    plot_comparison_results(comparison_results, 'attention_comparison.png')
     
     # Print numerical results
     print("\nResults Summary:")
