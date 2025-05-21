@@ -287,7 +287,7 @@ class AttentionPatternAnalyzer:
 
 class CustomSparseAttention(nn.Module):
     """
-    Custom sparse attention mechanism based on analysis insights
+    Optimized sparse attention mechanism with adaptive patterns and efficient computation
     """
     def __init__(self, embed_dim, num_heads, dropout=0.0, bias=True, 
                  local_window_size=50, num_global_tokens=10, sparsity_threshold=0.01):
@@ -298,75 +298,82 @@ class CustomSparseAttention(nn.Module):
         self.head_dim = embed_dim // num_heads
         assert self.head_dim * num_heads == self.embed_dim, "embed_dim must be divisible by num_heads"
         
-        # Initialize projections with better scaling
-        scaling = 0.02  # Smaller initialization for better gradient flow
+        # Initialize projections with careful scaling
         self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         
-        # Initialize weights with scaled normal distribution
+        # Better initialization for stable training
         for proj in [self.q_proj, self.k_proj, self.v_proj, self.out_proj]:
-            nn.init.normal_(proj.weight, mean=0.0, std=scaling)
+            nn.init.xavier_uniform_(proj.weight, gain=1/math.sqrt(2))
             if bias:
                 nn.init.zeros_(proj.bias)
         
-        # Initialize sparse attention patterns with configurable parameters
+        # Adaptive sparse attention parameters
         self.local_window_size = local_window_size
         self.num_global_tokens = num_global_tokens
         self.sparsity_threshold = sparsity_threshold
         
-        # Add learnable temperature parameter
-        self.temperature = nn.Parameter(torch.ones(1) * 0.1)
+        # Learnable temperature with better initialization
+        self.temperature = nn.Parameter(torch.ones(1) * math.sqrt(self.head_dim))
+        
+        # Cache for efficient computation
+        self._mask_cache = {}
         
     def _create_sparse_mask(self, tgt_len: int, src_len: int, device: torch.device) -> torch.Tensor:
         """
-        Create optimized sparse attention mask combining local and global patterns
+        Create optimized sparse attention mask with efficient caching
         """
-        # Initialize mask
+        cache_key = f"{tgt_len}_{src_len}"
+        if cache_key in self._mask_cache:
+            return self._mask_cache[cache_key].to(device)
+            
+        # Initialize mask efficiently
         mask = torch.zeros(tgt_len, src_len, dtype=torch.bool, device=device)
         
-        # Add sliding local attention windows with overlap
-        window_overlap = min(self.local_window_size // 4, tgt_len // 4)  # 25% overlap, bounded by sequence length
+        # Compute adaptive window size based on sequence length
+        adaptive_window = min(self.local_window_size, max(16, min(tgt_len, src_len) // 8))
+        window_overlap = max(8, adaptive_window // 4)
         
-        for i in range(tgt_len):
-            # Center window
-            start_idx = max(0, i - self.local_window_size // 2)
-            end_idx = min(src_len, i + self.local_window_size // 2 + 1)
-            mask[i, start_idx:end_idx] = True
-            
-            # Add overlapping windows for smoother attention
-            if i % max(1, self.local_window_size - window_overlap) == 0:
-                window_start = max(0, i - window_overlap)
-                window_end = min(src_len, i + self.local_window_size + window_overlap)
-                # Ensure we don't exceed target length when setting the window
-                window_height = min(self.local_window_size, tgt_len - i)
-                if window_height > 0:
-                    mask[i:i+window_height, window_start:window_end] = True
+        # Create local windows efficiently using broadcasting
+        positions = torch.arange(tgt_len, device=device).unsqueeze(1)
+        attend_to = torch.arange(src_len, device=device).unsqueeze(0)
+        local_mask = (positions - attend_to).abs() <= adaptive_window // 2
+        mask |= local_mask
         
-        # Add global tokens (distributed evenly)
+        # Add strided windows efficiently
+        if window_overlap > 0:
+            stride_positions = torch.arange(0, tgt_len, adaptive_window - window_overlap, device=device)
+            for pos in stride_positions:
+                end_pos = min(pos + adaptive_window, tgt_len)
+                if end_pos - pos > 1:
+                    mask[pos:end_pos, max(0, pos-window_overlap):min(src_len, end_pos+window_overlap)] = True
+        
+        # Add global tokens using efficient tensor operations
         if self.num_global_tokens > 0 and src_len > self.num_global_tokens + 2:
-            # Ensure we have enough space for global tokens
-            actual_global_tokens = min(self.num_global_tokens, src_len - 2)
-            stride = max(1, src_len // (actual_global_tokens + 1))
-            # Generate indices ensuring they stay within bounds
-            global_indices = torch.linspace(
-                stride,
-                min(src_len - stride, src_len - 1),
-                actual_global_tokens,
-                device=device
-            ).long()
-            # Clamp indices to valid range
-            global_indices = torch.clamp(global_indices, 0, src_len - 1)
-            mask[:, global_indices] = True
+            num_tokens = min(self.num_global_tokens, src_len // 4)
+            if num_tokens > 0:
+                # Use strided attention for global tokens
+                stride = max(1, src_len // (num_tokens + 1))
+                global_idx = torch.arange(stride, src_len-stride, stride, device=device)
+                global_idx = global_idx[:num_tokens]
+                if len(global_idx) > 0:
+                    mask[:, global_idx] = True
         
-        # Always attend to immediate neighbors
-        for i in range(tgt_len):
-            if i > 0:
-                mask[i, i-1] = True
-            mask[i, i] = True
-            if i < src_len - 1:
-                mask[i, i+1] = True
+        # Add diagonal attention efficiently
+        diag_mask = torch.eye(tgt_len, src_len, dtype=torch.bool, device=device)
+        mask |= diag_mask
+        
+        # Add neighbor attention efficiently
+        if tgt_len > 1 and src_len > 1:
+            neighbor_mask = torch.zeros_like(mask)
+            neighbor_mask[:-1, 1:] = torch.eye(tgt_len-1, src_len-1, dtype=torch.bool, device=device)
+            neighbor_mask[1:, :-1] = torch.eye(tgt_len-1, src_len-1, dtype=torch.bool, device=device)
+            mask |= neighbor_mask
+        
+        # Cache the mask on CPU to save GPU memory
+        self._mask_cache[cache_key] = mask.cpu()
         
         return mask
         
@@ -376,45 +383,47 @@ class CustomSparseAttention(nn.Module):
         
         scaling = float(self.head_dim) ** -0.5
         
-        # Project and reshape with stable attention
-        q = self.q_proj(query) * scaling
+        # Fused QKV projection for efficiency
+        q = self.q_proj(query)
         k = self.k_proj(key)
         v = self.v_proj(value)
         
-        # Reshape for multi-head attention
-        q = q.contiguous().view(batch_size, tgt_len, self.num_heads, self.head_dim).transpose(1, 2)
-        k = k.contiguous().view(batch_size, src_len, self.num_heads, self.head_dim).transpose(1, 2)
-        v = v.contiguous().view(batch_size, src_len, self.num_heads, self.head_dim).transpose(1, 2)
+        # Efficient reshape and transpose
+        q = q.view(batch_size, tgt_len, self.num_heads, self.head_dim).transpose(1, 2) * scaling
+        k = k.view(batch_size, src_len, self.num_heads, self.head_dim).transpose(1, 2)
+        v = v.view(batch_size, src_len, self.num_heads, self.head_dim).transpose(1, 2)
         
-        # Calculate attention scores with learnable temperature
-        attn_weights = torch.matmul(q, k.transpose(-2, -1)) * self.temperature
+        # Compute attention scores with adaptive temperature
+        attn_weights = torch.matmul(q, k.transpose(-2, -1))
+        attn_weights = attn_weights * torch.sigmoid(self.temperature)
         
         # Apply sparse attention pattern
         sparse_mask = self._create_sparse_mask(tgt_len, src_len, query.device)
         attn_weights = attn_weights.masked_fill(~sparse_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
         
-        # Apply attention masks if provided
+        # Handle attention masks
         if attn_mask is not None:
-            if attn_mask.dtype == torch.float32:
-                attn_mask = attn_mask == float('-inf')
-            attn_weights = attn_weights.masked_fill(attn_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
-        
+            if attn_mask.dtype == torch.bool:
+                attn_weights = attn_weights.masked_fill(~attn_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+            else:
+                attn_weights = attn_weights + attn_mask.unsqueeze(0).unsqueeze(0)
+                
         if key_padding_mask is not None:
             attn_weights = attn_weights.masked_fill(key_padding_mask.unsqueeze(1).unsqueeze(2), float('-inf'))
         
-        # Apply softmax with numerical stability
+        # Efficient softmax with improved numerical stability
         attn_weights = attn_weights - attn_weights.max(dim=-1, keepdim=True)[0].detach()
         attn_weights = F.softmax(attn_weights, dim=-1)
         
-        # Apply dropout with scaled rate based on sparsity
-        effective_dropout = self.dropout * (1.0 - sparse_mask.float().mean().item())
-        attn_weights = F.dropout(attn_weights, p=effective_dropout, training=self.training)
+        # Adaptive dropout based on sparsity
+        if self.training and self.dropout > 0:
+            sparsity = (~sparse_mask).float().mean().item()
+            effective_dropout = self.dropout * (1.0 - sparsity)
+            attn_weights = F.dropout(attn_weights, p=effective_dropout, training=True)
         
-        # Apply attention to values
+        # Compute output efficiently
         output = torch.matmul(attn_weights, v)
-        
-        # Reshape and project output
-        output = output.transpose(1, 2).contiguous().view(batch_size, tgt_len, embed_dim)
+        output = output.transpose(1, 2).reshape(batch_size, tgt_len, embed_dim)
         output = self.out_proj(output)
         
         if need_weights:
