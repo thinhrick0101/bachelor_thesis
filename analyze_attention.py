@@ -19,7 +19,7 @@ from attention_analysis import (
 def main():
     # Setup paths
     print("Setting up paths...")
-    model_path = 'enhanced_char_transformer_model.pt'
+    model_path = 'bachelor_thesis/enhanced_char_transformer_model.pt'
     
     # Model configuration (matching the pretrained model)
     config = {
