@@ -497,6 +497,7 @@ def compare_attention_mechanisms(model, sparse_model, test_data, tokenizer):
     }
     
     models = {'full': model, 'sparse': sparse_model}
+    device = next(model.parameters()).device  # Get device from model
     
     for name, m in models.items():
         m.eval()
@@ -509,6 +510,9 @@ def compare_attention_mechanisms(model, sparse_model, test_data, tokenizer):
             
             for batch in test_data:
                 inputs, targets = batch
+                # Move tensors to the same device as model
+                inputs = inputs.to(device)
+                targets = targets.to(device)
                 
                 # Record memory usage
                 if torch.cuda.is_available():
