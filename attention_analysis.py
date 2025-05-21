@@ -234,17 +234,30 @@ class AttentionPatternAnalyzer:
     @staticmethod
     def _calculate_effective_rank(attention_weights):
         """Calculate effective rank of attention matrix"""
-        # Reshape to 2D matrix
-        matrix = attention_weights.mean(dim=(0, 1))
+        # Ensure matrix is 2D
+        if attention_weights.dim() == 4:  # [batch, heads, seq, seq]
+            matrix = attention_weights.mean(dim=(0, 1))  # Average over batch and heads
+        elif attention_weights.dim() == 1:  # [seq]
+            seq_len = attention_weights.size(0)
+            matrix = attention_weights.view(seq_len, 1)  # Reshape to [seq, 1]
+        else:
+            matrix = attention_weights
+            
+        # Add small epsilon to ensure numerical stability
+        matrix = matrix + 1e-8
         
         # Calculate SVD
-        U, S, V = torch.svd(matrix)
-        
-        # Calculate normalized singular values
-        normalized_singular_values = S / S.sum()
-        
-        # Calculate effective rank
-        return torch.exp(-torch.sum(normalized_singular_values * torch.log(normalized_singular_values))).item()
+        try:
+            U, S, V = torch.svd(matrix)
+            
+            # Calculate normalized singular values
+            normalized_singular_values = S / S.sum()
+            
+            # Calculate effective rank
+            return torch.exp(-torch.sum(normalized_singular_values * torch.log(normalized_singular_values + 1e-10))).item()
+        except RuntimeError:
+            # Fallback if SVD fails
+            return 1.0  # Return minimum rank as fallback
     
     @staticmethod
     def _estimate_compressibility(attention_weights):
