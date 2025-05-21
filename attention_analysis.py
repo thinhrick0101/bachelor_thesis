@@ -6,6 +6,7 @@ import seaborn as sns
 import numpy as np
 from typing import Optional, Tuple
 import math
+import time
 
 class AttentionPatternAnalyzer:
     """
