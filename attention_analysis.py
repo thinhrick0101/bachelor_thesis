@@ -163,12 +163,25 @@ class AttentionPatternAnalyzer:
             cumsum = torch.cumsum(sorted_weights, 0)
             
             # Find window sizes for different thresholds
-            window_90 = torch.where(cumsum >= 0.9)[0][0].item() + 1
+            # Handle case where cumsum doesn't reach threshold
+            threshold_indices = torch.where(cumsum >= 0.9)[0]
+            if len(threshold_indices) > 0:
+                window_90 = threshold_indices[0].item() + 1
+            else:
+                # If threshold is never reached, use full sequence length
+                window_90 = seq_len
+            
             cumsum_weights.append(window_90)
             
+        if not cumsum_weights:  # If no valid windows found
+            return {
+                'median': seq_len,
+                '90th_percentile': seq_len
+            }
+            
         return {
-            'median': np.median(cumsum_weights),
-            '90th_percentile': np.percentile(cumsum_weights, 90)
+            'median': float(np.median(cumsum_weights)),
+            '90th_percentile': float(np.percentile(cumsum_weights, 90))
         }
     
     @staticmethod
