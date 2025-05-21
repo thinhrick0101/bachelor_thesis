@@ -327,7 +327,8 @@ class CustomSparseAttention(nn.Module):
         mask = torch.zeros(tgt_len, src_len, dtype=torch.bool, device=device)
         
         # Add sliding local attention windows with overlap
-        window_overlap = self.local_window_size // 4  # 25% overlap
+        window_overlap = min(self.local_window_size // 4, tgt_len // 4)  # 25% overlap, bounded by sequence length
+        
         for i in range(tgt_len):
             # Center window
             start_idx = max(0, i - self.local_window_size // 2)
@@ -335,15 +336,28 @@ class CustomSparseAttention(nn.Module):
             mask[i, start_idx:end_idx] = True
             
             # Add overlapping windows for smoother attention
-            if i % (self.local_window_size - window_overlap) == 0:
+            if i % max(1, self.local_window_size - window_overlap) == 0:
                 window_start = max(0, i - window_overlap)
                 window_end = min(src_len, i + self.local_window_size + window_overlap)
-                mask[i:i+self.local_window_size, window_start:window_end] = True
+                # Ensure we don't exceed target length when setting the window
+                window_height = min(self.local_window_size, tgt_len - i)
+                if window_height > 0:
+                    mask[i:i+window_height, window_start:window_end] = True
         
         # Add global tokens (distributed evenly)
-        if self.num_global_tokens > 0:
-            stride = src_len // (self.num_global_tokens + 1)
-            global_indices = torch.linspace(stride, src_len-stride, self.num_global_tokens).long()
+        if self.num_global_tokens > 0 and src_len > self.num_global_tokens + 2:
+            # Ensure we have enough space for global tokens
+            actual_global_tokens = min(self.num_global_tokens, src_len - 2)
+            stride = max(1, src_len // (actual_global_tokens + 1))
+            # Generate indices ensuring they stay within bounds
+            global_indices = torch.linspace(
+                stride,
+                min(src_len - stride, src_len - 1),
+                actual_global_tokens,
+                device=device
+            ).long()
+            # Clamp indices to valid range
+            global_indices = torch.clamp(global_indices, 0, src_len - 1)
             mask[:, global_indices] = True
         
         # Always attend to immediate neighbors
