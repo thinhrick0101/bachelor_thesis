@@ -1,0 +1,31 @@
++ module load cuda11.3/toolkit
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ source /var/scratch/tng204/anaconda3/etc/profile.d/conda.sh
+++ export CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ CONDA_EXE=/var/scratch/tng204/anaconda3/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ CONDA_PYTHON_EXE=/var/scratch/tng204/anaconda3/bin/python
+++ '[' -z x ']'
++ conda activate mltrain
++ local cmd=activate
++ case "$cmd" in
++ __conda_activate activate mltrain
++ '[' -n '' ']'
++ local ask_conda
+++ PS1=
+++ __conda_exe shell.posix activate mltrain
+++ '[' -n '' ']'
+++ /var/scratch/tng204/anaconda3/bin/conda shell.posix activate mltrain
+slurmstepd-node002: error: *** JOB 25660 ON node002 CANCELLED AT 2025-05-20T10:26:44 ***

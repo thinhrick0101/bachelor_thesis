@@ -1,0 +1,2133 @@
+=== Distributed Training Configuration ===
+Master node: node002
+Master port: 29500
+World size: 16
+Job nodes: node[002-007,024-026,046-052]
+CUDA_VISIBLE_DEVICES: 0
+========================================
+
+Distributed Training Configuration:
+Rank: 4
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 12
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 13
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 11
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 6
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 9
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 7
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 3
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 10
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 15
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 1
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 14
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 8
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 5
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 2
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+
+Distributed Training Configuration:
+Rank: 0
+World Size: 16
+Local Rank: 0
+Master Address: node002.localdomain
+Master Port: 49945
+node002:838007:838007 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.2<0>
+node002:838007:838007 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node002:838007:838007 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.2<0>
+node002:838007:838007 [0] NCCL INFO Using network IB
+NCCL version 2.10.3+cuda11.3
+node048:685484:685484 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.48<0>
+node050:703753:703753 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.50<0>
+node024:3579044:3579044 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.24<0>
+node052:696500:696500 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.52<0>
+node025:1007043:1007043 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.25<0>
+node048:685484:685484 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node046:723974:723974 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.46<0>
+node050:703753:703753 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node049:672758:672758 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.49<0>
+node052:696500:696500 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node024:3579044:3579044 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node025:1007043:1007043 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:783054:783054 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.4<0>
+node049:672758:672758 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:815092:815092 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.5<0>
+node046:723974:723974 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node004:783054:783054 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node005:815092:815092 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node051:702318:702318 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.51<0>
+node051:702318:702318 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node007:685250:685250 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.7<0>
+node007:685250:685250 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node048:685484:685484 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.48<0>
+node048:685484:685484 [0] NCCL INFO Using network IB
+node050:703753:703753 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.50<0>
+node050:703753:703753 [0] NCCL INFO Using network IB
+node025:1007043:1007043 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.25<0>
+node025:1007043:1007043 [0] NCCL INFO Using network IB
+node046:723974:723974 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.46<0>
+node046:723974:723974 [0] NCCL INFO Using network IB
+node052:696500:696500 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.52<0>
+node052:696500:696500 [0] NCCL INFO Using network IB
+node024:3579044:3579044 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.24<0>
+node024:3579044:3579044 [0] NCCL INFO Using network IB
+node004:783054:783054 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.4<0>
+node004:783054:783054 [0] NCCL INFO Using network IB
+node005:815092:815092 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.5<0>
+node005:815092:815092 [0] NCCL INFO Using network IB
+node049:672758:672758 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.49<0>
+node049:672758:672758 [0] NCCL INFO Using network IB
+node051:702318:702318 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.51<0>
+node051:702318:702318 [0] NCCL INFO Using network IB
+node007:685250:685250 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.7<0>
+node007:685250:685250 [0] NCCL INFO Using network IB
+node047:705255:705255 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.47<0>
+node047:705255:705255 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node047:705255:705255 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.47<0>
+node047:705255:705255 [0] NCCL INFO Using network IB
+node006:716681:716681 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.6<0>
+node006:716681:716681 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node006:716681:716681 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.6<0>
+node006:716681:716681 [0] NCCL INFO Using network IB
+node003:804640:804640 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.3<0>
+node003:804640:804640 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node003:804640:804640 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.3<0>
+node003:804640:804640 [0] NCCL INFO Using network IB
+node026:701084:701084 [0] NCCL INFO Bootstrap : Using ib0:10.149.0.26<0>
+node026:701084:701084 [0] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+node026:701084:701084 [0] NCCL INFO NET/IB : Using [0]mlx4_0:1/IB ; OOB ib0:10.149.0.26<0>
+node026:701084:701084 [0] NCCL INFO Using network IB
+node026:701084:701100 [0] NCCL INFO Trees [0] 4/12/-1->8->0 [1] -1/-1/-1->8->9
+node046:723974:723986 [0] NCCL INFO Trees [0] -1/-1/-1->9->10 [1] 10/8/-1->9->11
+node046:723974:723986 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node047:705255:705267 [0] NCCL INFO Trees [0] 9/11/-1->10->12 [1] -1/-1/-1->10->9
+node047:705255:705267 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node048:685484:685496 [0] NCCL INFO Trees [0] -1/-1/-1->11->10 [1] 13/9/-1->11->7
+node048:685484:685496 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node049:672758:672770 [0] NCCL INFO Trees [0] 10/14/-1->12->8 [1] -1/-1/-1->12->13
+node049:672758:672770 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node050:703753:703766 [0] NCCL INFO Trees [0] -1/-1/-1->13->14 [1] 14/12/-1->13->11
+node050:703753:703766 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node051:702318:702330 [0] NCCL INFO Trees [0] 13/15/-1->14->12 [1] -1/-1/-1->14->13
+node051:702318:702330 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node052:696500:696512 [0] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 7/-1/-1->15->-1
+node052:696500:696512 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node002:838007:838021 [0] NCCL INFO Channel 00/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:838007:838021 [0] NCCL INFO Channel 01/02 :    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+node002:838007:838021 [0] NCCL INFO Trees [0] 8/-1/-1->0->-1 [1] -1/-1/-1->0->1
+node002:838007:838021 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node003:804640:804652 [0] NCCL INFO Trees [0] -1/-1/-1->1->2 [1] 2/0/-1->1->3
+node003:804640:804652 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node004:783054:783067 [0] NCCL INFO Trees [0] 1/3/-1->2->4 [1] -1/-1/-1->2->1
+node004:783054:783067 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node005:815092:815104 [0] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 5/1/-1->3->7
+node005:815092:815104 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node006:716681:716693 [0] NCCL INFO Trees [0] 2/6/-1->4->8 [1] -1/-1/-1->4->5
+node006:716681:716693 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node007:685250:685262 [0] NCCL INFO Trees [0] -1/-1/-1->5->6 [1] 6/4/-1->5->3
+node007:685250:685262 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node024:3579044:3579056 [0] NCCL INFO Trees [0] 5/7/-1->6->4 [1] -1/-1/-1->6->5
+node024:3579044:3579056 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node025:1007043:1007055 [0] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 11/3/-1->7->15
+node025:1007043:1007055 [0] NCCL INFO Setting affinity for GPU 0 to 0f000f
+node026:701084:701100 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [receive] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [receive] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [receive] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [receive] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [receive] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [receive] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [receive] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [receive] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [receive] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [receive] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [receive] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [receive] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [receive] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 00 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 00 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 00 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 00 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 00 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 00 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 00 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 00 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 00 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 01 : 8[82000] -> 9[3000] [send] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 00 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 01 : 9[3000] -> 10[3000] [send] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 01 : 10[3000] -> 11[3000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 11[3000] -> 12[3000] [send] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 01 : 15[3000] -> 0[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 01 : 12[3000] -> 13[3000] [send] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 01 : 13[3000] -> 14[3000] [send] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 01 : 14[3000] -> 15[3000] [send] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 01 : 1[3000] -> 2[3000] [send] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 01 : 6[3000] -> 7[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 01 : 4[3000] -> 5[3000] [send] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 01 : 2[3000] -> 3[3000] [send] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 5[3000] -> 6[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 7[3000] -> 8[82000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 3[3000] -> 4[3000] [send] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 01 : 0[3000] -> 1[3000] [send] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node048:685484:685496 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node049:672758:672770 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node050:703753:703766 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node051:702318:702330 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:723974:723986 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:685250:685262 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node047:705255:705267 [0] NCCL INFO Connected all rings
+node048:685484:685496 [0] NCCL INFO Connected all rings
+node049:672758:672770 [0] NCCL INFO Connected all rings
+node050:703753:703766 [0] NCCL INFO Connected all rings
+node051:702318:702330 [0] NCCL INFO Connected all rings
+node024:3579044:3579056 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node026:701084:701100 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node025:1007043:1007055 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node046:723974:723986 [0] NCCL INFO Connected all rings
+node004:783054:783067 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node006:716681:716693 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node005:815092:815104 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node007:685250:685262 [0] NCCL INFO Connected all rings
+node003:804640:804652 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node002:838007:838021 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node052:696500:696512 [0] NCCL INFO NCCL_IB_TIMEOUT set by environment to 30.
+node024:3579044:3579056 [0] NCCL INFO Connected all rings
+node026:701084:701100 [0] NCCL INFO Connected all rings
+node025:1007043:1007055 [0] NCCL INFO Connected all rings
+node003:804640:804652 [0] NCCL INFO Connected all rings
+node004:783054:783067 [0] NCCL INFO Connected all rings
+node002:838007:838021 [0] NCCL INFO Connected all rings
+node005:815092:815104 [0] NCCL INFO Connected all rings
+node006:716681:716693 [0] NCCL INFO Connected all rings
+node052:696500:696512 [0] NCCL INFO Connected all rings
+node047:705255:705267 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 10[3000] -> 12[3000] [receive] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [receive] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [receive] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 01 : 9[3000] -> 11[3000] [send] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [receive] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [receive] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [receive] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [send] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 2[3000] -> 4[3000] [receive] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 1[3000] -> 3[3000] [receive] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [receive] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 11[3000] -> 13[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 12[3000] -> 14[3000] [send] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 4[3000] -> 6[3000] [send] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 3[3000] -> 5[3000] [send] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [send] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [receive] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [receive] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [send] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 8[82000] -> 12[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 7[3000] -> 11[3000] [receive] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [receive] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [receive] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [send] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 4[3000] -> 8[82000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 3[3000] -> 7[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [receive] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 0[3000] -> 8[82000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 15[3000] -> 7[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 8[82000] -> 0[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 7[3000] -> 15[3000] [send] via NET/IB/0
+node002:838007:838021 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 12[3000] -> 8[82000] [receive] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 11[3000] -> 7[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 00 : 8[82000] -> 4[3000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 01 : 7[3000] -> 3[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 14[3000] -> 12[3000] [receive] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 6[3000] -> 4[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 13[3000] -> 11[3000] [receive] via NET/IB/0
+node026:701084:701100 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [receive] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 5[3000] -> 3[3000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 00 : 12[3000] -> 10[3000] [send] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 00 : 4[3000] -> 2[3000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 01 : 11[3000] -> 9[3000] [send] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 01 : 3[3000] -> 1[3000] [send] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 15[3000] -> 14[3000] [receive] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [receive] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [receive] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 7[3000] -> 6[3000] [receive] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node006:716681:716693 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [receive] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Channel 00 : 11[3000] -> 10[3000] [send] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [receive] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 00 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 00 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 00 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node050:703753:703766 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [receive] via NET/IB/0
+node005:815092:815104 [0] NCCL INFO Channel 00 : 3[3000] -> 2[3000] [send] via NET/IB/0
+node046:723974:723986 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [receive] via NET/IB/0
+node004:783054:783067 [0] NCCL INFO Channel 00 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [receive] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO Channel 01 : 14[3000] -> 13[3000] [send] via NET/IB/0
+node003:804640:804652 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [receive] via NET/IB/0
+node047:705255:705267 [0] NCCL INFO Channel 01 : 10[3000] -> 9[3000] [send] via NET/IB/0
+node024:3579044:3579056 [0] NCCL INFO Channel 01 : 6[3000] -> 5[3000] [send] via NET/IB/0
+node052:696500:696512 [0] NCCL INFO Connected all trees
+node052:696500:696512 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node052:696500:696512 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node052:696500:696512 [0] NCCL INFO comm 0x7feb24003040 rank 15 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node050:703753:703766 [0] NCCL INFO Channel 01 : 13[3000] -> 12[3000] [send] via NET/IB/0
+node048:685484:685496 [0] NCCL INFO Connected all trees
+node048:685484:685496 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node048:685484:685496 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node048:685484:685496 [0] NCCL INFO comm 0x7fe634003040 rank 11 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node025:1007043:1007055 [0] NCCL INFO Connected all trees
+node025:1007043:1007055 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node025:1007043:1007055 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:723974:723986 [0] NCCL INFO Channel 01 : 9[3000] -> 8[82000] [send] via NET/IB/0
+node025:1007043:1007055 [0] NCCL INFO comm 0x7f71f0003040 rank 7 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:783054:783067 [0] NCCL INFO Channel 01 : 2[3000] -> 1[3000] [send] via NET/IB/0
+node007:685250:685262 [0] NCCL INFO Channel 01 : 5[3000] -> 4[3000] [send] via NET/IB/0
+node049:672758:672770 [0] NCCL INFO Connected all trees
+node049:672758:672770 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node049:672758:672770 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node049:672758:672770 [0] NCCL INFO comm 0x7f71bc003040 rank 12 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node005:815092:815104 [0] NCCL INFO Connected all trees
+node005:815092:815104 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node005:815092:815104 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node005:815092:815104 [0] NCCL INFO comm 0x7f953c003040 rank 3 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node051:702318:702330 [0] NCCL INFO Connected all trees
+node051:702318:702330 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node051:702318:702330 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node050:703753:703766 [0] NCCL INFO Connected all trees
+node050:703753:703766 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node050:703753:703766 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:804640:804652 [0] NCCL INFO Channel 01 : 1[3000] -> 0[3000] [send] via NET/IB/0
+node051:702318:702330 [0] NCCL INFO comm 0x7fa6e0003040 rank 14 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node050:703753:703766 [0] NCCL INFO comm 0x7f56c0003040 rank 13 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node026:701084:701100 [0] NCCL INFO Connected all trees
+node026:701084:701100 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node026:701084:701100 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node026:701084:701100 [0] NCCL INFO comm 0x7fe514003040 rank 8 nranks 16 cudaDev 0 busId 82000 - Init COMPLETE
+node047:705255:705267 [0] NCCL INFO Connected all trees
+node047:705255:705267 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node047:705255:705267 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node046:723974:723986 [0] NCCL INFO Connected all trees
+node046:723974:723986 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node046:723974:723986 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node006:716681:716693 [0] NCCL INFO Connected all trees
+node006:716681:716693 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node006:716681:716693 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node047:705255:705267 [0] NCCL INFO comm 0x7f26f8003040 rank 10 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node046:723974:723986 [0] NCCL INFO comm 0x7f0248003040 rank 9 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node006:716681:716693 [0] NCCL INFO comm 0x7fb754003040 rank 4 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node007:685250:685262 [0] NCCL INFO Connected all trees
+node007:685250:685262 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node007:685250:685262 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node007:685250:685262 [0] NCCL INFO comm 0x7f87a4003040 rank 5 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node024:3579044:3579056 [0] NCCL INFO Connected all trees
+node024:3579044:3579056 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node024:3579044:3579056 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node002:838007:838021 [0] NCCL INFO Connected all trees
+node002:838007:838021 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node002:838007:838021 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node024:3579044:3579056 [0] NCCL INFO comm 0x7fefc4003040 rank 6 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:838007:838021 [0] NCCL INFO comm 0x7f36c0003040 rank 0 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node002:838007:838007 [0] NCCL INFO Launch mode Parallel
+node003:804640:804652 [0] NCCL INFO Connected all trees
+node003:804640:804652 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node003:804640:804652 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node003:804640:804652 [0] NCCL INFO comm 0x7f18e0003040 rank 1 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+node004:783054:783067 [0] NCCL INFO Connected all trees
+node004:783054:783067 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 8/8/512
+node004:783054:783067 [0] NCCL INFO 2 coll channels, 2 p2p channels, 1 p2p channels per peer
+node004:783054:783067 [0] NCCL INFO comm 0x7f1004003040 rank 2 nranks 16 cudaDev 0 busId 3000 - Init COMPLETE
+Process 0/16 initialized successfully
+Process 0 using device: cuda:0
+Process 8/16 initialized successfully
+Loading data...
+Process 8 using device: cuda:0
+Process 12/16 initialized successfully
+Process 12 using device: cuda:0
+Process 4/16 initialized successfully
+Process 4 using device: cuda:0
+Process 10/16 initialized successfully
+Process 6/16 initialized successfully
+Process 14/16 initialized successfully
+Process 2/16 initialized successfully
+Process 10 using device: cuda:0
+Process 14 using device: cuda:0
+Process 2 using device: cuda:0
+Process 6 using device: cuda:0
+Process 9/16 initialized successfully
+Process 5/16 initialized successfully
+Process 15/16 initialized successfully
+Process 1/16 initialized successfully
+Process 11/16 initialized successfully
+Process 9 using device: cuda:0
+Process 13/16 initialized successfully
+Process 7/16 initialized successfully
+Process 5 using device: cuda:0
+Process 11 using device: cuda:0
+Process 15 using device: cuda:0
+Process 1 using device: cuda:0
+Process 3/16 initialized successfully
+Process 13 using device: cuda:0
+Process 7 using device: cuda:0
+Process 3 using device: cuda:0
+Loading data from data/enwik8
+Data loaded: 99621832 bytes
+Rank 13: Loading data...
+Rank 1: Loading data...
+Rank 3: Loading data...
+Rank 5: Loading data...
+Rank 10: Loading data...
+Rank 6: Loading data...
+Rank 4: Loading data...
+Rank 11: Loading data...
+Rank 9: Loading data...
+Rank 8: Loading data...
+Rank 15: Loading data...
+Rank 12: Loading data...
+Rank 14: Loading data...
+Rank 7: Loading data...
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Loading data from data/enwik8
+Rank 2: Loading data...
+Loading data from data/enwik8
+Rank 15: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 8: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 6: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 2: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 4: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 1: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 3: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 10: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 12: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 11: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 14: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 13: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 5: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 9: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Rank 7: Data loaded: 99621832 bytes
+Creating byte tokenizer...
+Vocabulary size: 256 bytes (fixed)
+Encoding text...
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 0: Created 2746 batches (sequence range 0-5493)
+Rank 0: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 0: Created 305 batches (sequence range 0-610)
+Rank 0: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Sample text length: 100 bytes
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 15: Created 2746 batches (sequence range 82395-87888)
+Rank 15: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 15: Created 305 batches (sequence range 9150-9760)
+Rank 15: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 8: Created 2746 batches (sequence range 43944-49437)
+Rank 8: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 4: Created 2746 batches (sequence range 21972-27465)
+Rank 4: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 10: Created 2746 batches (sequence range 54930-60423)
+Rank 10: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 5: Created 2746 batches (sequence range 27465-32958)
+Rank 5: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 8: Created 305 batches (sequence range 4880-5490)
+Rank 8: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 12: Created 2746 batches (sequence range 65916-71409)
+Rank 12: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 4: Created 305 batches (sequence range 2440-3050)
+Rank 4: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 6: Created 2746 batches (sequence range 32958-38451)
+Rank 6: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 10: Created 305 batches (sequence range 6100-6710)
+Rank 10: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 5: Created 305 batches (sequence range 3050-3660)
+Rank 5: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 12: Created 305 batches (sequence range 7320-7930)
+Rank 12: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 6: Created 305 batches (sequence range 3660-4270)
+Rank 6: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 14: Created 2746 batches (sequence range 76902-82395)
+Rank 14: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 13: Created 2746 batches (sequence range 71409-76902)
+Rank 13: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 14: Created 305 batches (sequence range 8540-9150)
+Rank 14: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 13: Created 305 batches (sequence range 7930-8540)
+Rank 13: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 1: Created 2746 batches (sequence range 5493-10986)
+Rank 1: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 11: Created 2746 batches (sequence range 60423-65916)
+Rank 11: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 1: Created 305 batches (sequence range 610-1220)
+Rank 1: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 11: Created 305 batches (sequence range 6710-7320)
+Rank 11: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 9: Created 2746 batches (sequence range 49437-54930)
+Rank 9: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 9: Created 305 batches (sequence range 5490-6100)
+Rank 9: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Rank 2: Created 2746 batches (sequence range 10986-16479)
+Rank 2: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 2: Created 305 batches (sequence range 1220-1830)
+Rank 2: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Rank 3: Created 2746 batches (sequence range 16479-21972)
+Rank 3: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 3: Created 305 batches (sequence range 1830-2440)
+Rank 3: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Encoded length: 100000000 tokens
+
+Analyzing byte-level tokenization...
+Sample text length: 100 bytes
+Encoded length: 100 tokens
+Token-to-byte ratio: 1.00
+
+Example byte values (first 10):
+Byte 0: < (ID: 60)
+Byte 1: m (ID: 109)
+Byte 2: e (ID: 101)
+Byte 3: d (ID: 100)
+Byte 4: i (ID: 105)
+Byte 5: a (ID: 97)
+Byte 6: w (ID: 119)
+Byte 7: i (ID: 105)
+Byte 8: k (ID: 107)
+Byte 9: i (ID: 105)
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Rank 7: Created 2746 batches (sequence range 38451-43944)
+Rank 7: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Rank 7: Created 305 batches (sequence range 4270-4880)
+Rank 7: Batch shapes - Input: torch.Size([2, 1024]), Target: torch.Size([2, 1024])
+Created 2746 training batches and 305 validation batches
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+Model Parameters: 63,677,721 trainable out of 63,677,721 total
+
+=== Training Enhanced Character Transformer Model ===
+Training on device: cuda:0
+Using mixed precision training (FP16)
+Using gradient accumulation with 8 steps
+Effective batch size: 16
+[Rank 8] Epoch 1/100, Global Batch 43954/43936, Loss: 5.5594
+[Rank 6] Epoch 1/100, Global Batch 32968/43936, Loss: 5.5135
+[Rank 11] Epoch 1/100, Global Batch 60433/43936, Loss: 5.6051
+[Rank 1] Epoch 1/100, Global Batch 5503/43936, Loss: 5.6215
+[Rank 3] Epoch 1/100, Global Batch 16489/43936, Loss: 5.6320
+[Rank 9] Epoch 1/100, Global Batch 49447/43936, Loss: 5.3875
+[Rank 7] Epoch 1/100, Global Batch 38461/43936, Loss: 5.4722
+[Rank 0] Epoch 1/100, Global Batch 10/43936, Loss: 5.6516
+[Rank 13] Epoch 1/100, Global Batch 71419/43936, Loss: 5.6636
+[Rank 5] Epoch 1/100, Global Batch 27475/43936, Loss: 5.6029
+[Rank 12] Epoch 1/100, Global Batch 65926/43936, Loss: 5.4698
+[Rank 15] Epoch 1/100, Global Batch 82405/43936, Loss: 5.6334
+[Rank 14] Epoch 1/100, Global Batch 76912/43936, Loss: 5.6046
+[Rank 4] Epoch 1/100, Global Batch 21982/43936, Loss: 5.5042
+[Rank 2] Epoch 1/100, Global Batch 10996/43936, Loss: 5.4112
+[Rank 10] Epoch 1/100, Global Batch 54940/43936, Loss: 5.5585
+[Rank 8] Epoch 1/100, Global Batch 43964/43936, Loss: 5.4942
+[Rank 8] Epoch 1/100, Global Batch 43974/43936, Loss: 5.4380
+[Rank 6] Epoch 1/100, Global Batch 32978/43936, Loss: 5.4207
+[Rank 7] Epoch 1/100, Global Batch 38471/43936, Loss: 5.4166
+[Rank 14] Epoch 1/100, Global Batch 76922/43936, Loss: 5.6319
+[Rank 5] Epoch 1/100, Global Batch 27485/43936, Loss: 5.5991
+[Rank 11] Epoch 1/100, Global Batch 60443/43936, Loss: 5.6157
+[Rank 3] Epoch 1/100, Global Batch 16499/43936, Loss: 5.6375
+[Rank 9] Epoch 1/100, Global Batch 49457/43936, Loss: 5.3321
+[Rank 13] Epoch 1/100, Global Batch 71429/43936, Loss: 5.6850
+[Rank 0] Epoch 1/100, Global Batch 20/43936, Loss: 5.6448
+[Rank 1] Epoch 1/100, Global Batch 5513/43936, Loss: 5.6045
+[Rank 15] Epoch 1/100, Global Batch 82415/43936, Loss: 5.4510
+[Rank 10] Epoch 1/100, Global Batch 54950/43936, Loss: 5.4637
+[Rank 12] Epoch 1/100, Global Batch 65936/43936, Loss: 5.5154
+[Rank 2] Epoch 1/100, Global Batch 11006/43936, Loss: 5.4022
+[Rank 4] Epoch 1/100, Global Batch 21992/43936, Loss: 5.5413
+[Rank 8] Epoch 1/100, Global Batch 43984/43936, Loss: 5.4629
+[Rank 3] Epoch 1/100, Global Batch 16509/43936, Loss: 5.6101
+[Rank 5] Epoch 1/100, Global Batch 27495/43936, Loss: 5.6208
+[Rank 7] Epoch 1/100, Global Batch 38481/43936, Loss: 5.4270
+[Rank 11] Epoch 1/100, Global Batch 60453/43936, Loss: 5.6026
+[Rank 9] Epoch 1/100, Global Batch 49467/43936, Loss: 5.3793
+[Rank 6] Epoch 1/100, Global Batch 32988/43936, Loss: 5.5466
+[Rank 14] Epoch 1/100, Global Batch 76932/43936, Loss: 5.6300
+[Rank 1] Epoch 1/100, Global Batch 5523/43936, Loss: 5.6595
+[Rank 0] Epoch 1/100, Global Batch 30/43936, Loss: 5.4888
+[Rank 13] Epoch 1/100, Global Batch 71439/43936, Loss: 5.7397
+[Rank 15] Epoch 1/100, Global Batch 82425/43936, Loss: 5.6141
+[Rank 4] Epoch 1/100, Global Batch 22002/43936, Loss: 5.5511
+[Rank 12] Epoch 1/100, Global Batch 65946/43936, Loss: 5.4913
+[Rank 10] Epoch 1/100, Global Batch 54960/43936, Loss: 5.4943
+[Rank 2] Epoch 1/100, Global Batch 11016/43936, Loss: 5.6299
+[Rank 8] Epoch 1/100, Global Batch 43994/43936, Loss: 5.4856
+[Rank 8] Epoch 1/100, Global Batch 44004/43936, Loss: 5.4359
+[Rank 9] Epoch 1/100, Global Batch 49477/43936, Loss: 5.3255
+[Rank 5] Epoch 1/100, Global Batch 27505/43936, Loss: 5.5791
+[Rank 11] Epoch 1/100, Global Batch 60463/43936, Loss: 5.6690
+[Rank 14] Epoch 1/100, Global Batch 76942/43936, Loss: 5.6668
+[Rank 3] Epoch 1/100, Global Batch 16519/43936, Loss: 5.6528
+[Rank 7] Epoch 1/100, Global Batch 38491/43936, Loss: 5.5735
+[Rank 13] Epoch 1/100, Global Batch 71449/43936, Loss: 5.7612
+[Rank 0] Epoch 1/100, Global Batch 40/43936, Loss: 5.6482
+[Rank 1] Epoch 1/100, Global Batch 5533/43936, Loss: 5.5897
+[Rank 6] Epoch 1/100, Global Batch 32998/43936, Loss: 5.3471
+[Rank 15] Epoch 1/100, Global Batch 82435/43936, Loss: 5.5608
+[Rank 12] Epoch 1/100, Global Batch 65956/43936, Loss: 5.4723
+[Rank 2] Epoch 1/100, Global Batch 11026/43936, Loss: 5.5371
+[Rank 10] Epoch 1/100, Global Batch 54970/43936, Loss: 5.5957
+[Rank 4] Epoch 1/100, Global Batch 22012/43936, Loss: 5.5075
+[Rank 8] Epoch 1/100, Global Batch 44014/43936, Loss: 5.4406
+[Rank 9] Epoch 1/100, Global Batch 49487/43936, Loss: 5.4412
+[Rank 3] Epoch 1/100, Global Batch 16529/43936, Loss: 5.6126
+[Rank 5] Epoch 1/100, Global Batch 27515/43936, Loss: 5.5433
+[Rank 14] Epoch 1/100, Global Batch 76952/43936, Loss: 5.5236
+[Rank 1] Epoch 1/100, Global Batch 5543/43936, Loss: 5.6622
+[Rank 11] Epoch 1/100, Global Batch 60473/43936, Loss: 5.5124
+[Rank 7] Epoch 1/100, Global Batch 38501/43936, Loss: 5.6124
+[Rank 13] Epoch 1/100, Global Batch 71459/43936, Loss: 5.6851
+[Rank 6] Epoch 1/100, Global Batch 33008/43936, Loss: 5.5941
+[Rank 0] Epoch 1/100, Global Batch 50/43936, Loss: 5.6360
+[Rank 15] Epoch 1/100, Global Batch 82445/43936, Loss: 5.6004
+[Rank 8] Epoch 1/100, Global Batch 44024/43936, Loss: 5.5258
+[Rank 12] Epoch 1/100, Global Batch 65966/43936, Loss: 5.5221
+[Rank 10] Epoch 1/100, Global Batch 54980/43936, Loss: 5.5565
+[Rank 4] Epoch 1/100, Global Batch 22022/43936, Loss: 5.5292
+[Rank 2] Epoch 1/100, Global Batch 11036/43936, Loss: 5.6248
+[Rank 8] Epoch 1/100, Global Batch 44034/43936, Loss: 5.4632
+[Rank 9] Epoch 1/100, Global Batch 49497/43936, Loss: 5.4315
+[Rank 3] Epoch 1/100, Global Batch 16539/43936, Loss: 5.5291
+[Rank 5] Epoch 1/100, Global Batch 27525/43936, Loss: 5.5684
+[Rank 1] Epoch 1/100, Global Batch 5553/43936, Loss: 5.6498
+[Rank 14] Epoch 1/100, Global Batch 76962/43936, Loss: 5.6646
+[Rank 11] Epoch 1/100, Global Batch 60483/43936, Loss: 5.5670
+[Rank 13] Epoch 1/100, Global Batch 71469/43936, Loss: 5.6078
+[Rank 7] Epoch 1/100, Global Batch 38511/43936, Loss: 5.5071
+[Rank 0] Epoch 1/100, Global Batch 60/43936, Loss: 5.4114
+[Rank 15] Epoch 1/100, Global Batch 82455/43936, Loss: 5.6045
+[Rank 12] Epoch 1/100, Global Batch 65976/43936, Loss: 5.5696
+[Rank 10] Epoch 1/100, Global Batch 54990/43936, Loss: 5.6009
+[Rank 6] Epoch 1/100, Global Batch 33018/43936, Loss: 5.4460
+[Rank 4] Epoch 1/100, Global Batch 22032/43936, Loss: 5.5505
+[Rank 2] Epoch 1/100, Global Batch 11046/43936, Loss: 5.6155
+[Rank 8] Epoch 1/100, Global Batch 44044/43936, Loss: 5.2048
+[Rank 9] Epoch 1/100, Global Batch 49507/43936, Loss: 5.4169
+[Rank 3] Epoch 1/100, Global Batch 16549/43936, Loss: 5.5310
+[Rank 5] Epoch 1/100, Global Batch 27535/43936, Loss: 5.5626
+[Rank 14] Epoch 1/100, Global Batch 76972/43936, Loss: 5.6691
+[Rank 1] Epoch 1/100, Global Batch 5563/43936, Loss: 5.6337
+[Rank 7] Epoch 1/100, Global Batch 38521/43936, Loss: 5.5629
+[Rank 15] Epoch 1/100, Global Batch 82465/43936, Loss: 5.5065
+[Rank 0] Epoch 1/100, Global Batch 70/43936, Loss: 5.4501
+[Rank 6] Epoch 1/100, Global Batch 33028/43936, Loss: 5.4622
+[Rank 11] Epoch 1/100, Global Batch 60493/43936, Loss: 5.5638
+[Rank 13] Epoch 1/100, Global Batch 71479/43936, Loss: 5.6824
+[Rank 12] Epoch 1/100, Global Batch 65986/43936, Loss: 5.4636
+[Rank 10] Epoch 1/100, Global Batch 55000/43936, Loss: 5.4968
+[Rank 4] Epoch 1/100, Global Batch 22042/43936, Loss: 5.5778
+[Rank 2] Epoch 1/100, Global Batch 11056/43936, Loss: 5.5039
+[Rank 9] Epoch 1/100, Global Batch 49517/43936, Loss: 5.3592
+[Rank 5] Epoch 1/100, Global Batch 27545/43936, Loss: 5.6205
+[Rank 3] Epoch 1/100, Global Batch 16559/43936, Loss: 5.6029
+[Rank 14] Epoch 1/100, Global Batch 76982/43936, Loss: 5.6606
+[Rank 7] Epoch 1/100, Global Batch 38531/43936, Loss: 5.5799
+[Rank 11] Epoch 1/100, Global Batch 60503/43936, Loss: 5.6650
+[Rank 15] Epoch 1/100, Global Batch 82475/43936, Loss: 5.5309
+[Rank 1] Epoch 1/100, Global Batch 5573/43936, Loss: 5.6324
+[Rank 13] Epoch 1/100, Global Batch 71489/43936, Loss: 5.4907
+[Rank 0] Epoch 1/100, Global Batch 80/43936, Loss: 5.2631
+[Rank 6] Epoch 1/100, Global Batch 33038/43936, Loss: 5.6396
+[Rank 12] Epoch 1/100, Global Batch 65996/43936, Loss: 5.3594
+[Rank 10] Epoch 1/100, Global Batch 55010/43936, Loss: 5.5122
+[Rank 4] Epoch 1/100, Global Batch 22052/43936, Loss: 5.5152
+[Rank 2] Epoch 1/100, Global Batch 11066/43936, Loss: 5.6312
+[Rank 9] Epoch 1/100, Global Batch 49527/43936, Loss: 5.2769
+[Rank 14] Epoch 1/100, Global Batch 76992/43936, Loss: 5.6375
+[Rank 5] Epoch 1/100, Global Batch 27555/43936, Loss: 5.5231
+[Rank 3] Epoch 1/100, Global Batch 16569/43936, Loss: 5.6452
+[Rank 11] Epoch 1/100, Global Batch 60513/43936, Loss: 5.5790
+[Rank 7] Epoch 1/100, Global Batch 38541/43936, Loss: 5.5710
+[Rank 15] Epoch 1/100, Global Batch 82485/43936, Loss: 5.6071
+[Rank 0] Epoch 1/100, Global Batch 90/43936, Loss: 5.6138
+[Rank 1] Epoch 1/100, Global Batch 5583/43936, Loss: 5.5568
+[Rank 13] Epoch 1/100, Global Batch 71499/43936, Loss: 5.5242
+[Rank 6] Epoch 1/100, Global Batch 33048/43936, Loss: 5.5202
+[Rank 10] Epoch 1/100, Global Batch 55020/43936, Loss: 5.6321
+[Rank 4] Epoch 1/100, Global Batch 22062/43936, Loss: 5.5597
+[Rank 12] Epoch 1/100, Global Batch 66006/43936, Loss: 5.4478
+[Rank 2] Epoch 1/100, Global Batch 11076/43936, Loss: 5.5758
+[Rank 9] Epoch 1/100, Global Batch 49537/43936, Loss: 5.3888
+[Rank 14] Epoch 1/100, Global Batch 77002/43936, Loss: 5.6191
+[Rank 5] Epoch 1/100, Global Batch 27565/43936, Loss: 5.4604
+[Rank 3] Epoch 1/100, Global Batch 16579/43936, Loss: 5.5152
+[Rank 11] Epoch 1/100, Global Batch 60523/43936, Loss: 5.5558
+[Rank 0] Epoch 1/100, Global Batch 100/43936, Loss: 5.6871
+[Rank 15] Epoch 1/100, Global Batch 82495/43936, Loss: 5.6732
+[Rank 13] Epoch 1/100, Global Batch 71509/43936, Loss: 5.6850
+[Rank 1] Epoch 1/100, Global Batch 5593/43936, Loss: 5.4955
+[Rank 7] Epoch 1/100, Global Batch 38551/43936, Loss: 5.5704
+[Rank 6] Epoch 1/100, Global Batch 33058/43936, Loss: 5.5207
+[Rank 10] Epoch 1/100, Global Batch 55030/43936, Loss: 5.6754
+[Rank 4] Epoch 1/100, Global Batch 22072/43936, Loss: 5.3981
+[Rank 12] Epoch 1/100, Global Batch 66016/43936, Loss: 5.5494
+[Rank 2] Epoch 1/100, Global Batch 11086/43936, Loss: 5.6255
+[Rank 8] Epoch 1/100, Global Batch 44054/43936, Loss: 5.4671
+[Rank 5] Epoch 1/100, Global Batch 27575/43936, Loss: 5.5723
+[Rank 7] Epoch 1/100, Global Batch 38561/43936, Loss: 5.5439
+[Rank 9] Epoch 1/100, Global Batch 49547/43936, Loss: 5.3568
+[Rank 11] Epoch 1/100, Global Batch 60533/43936, Loss: 5.5447
+[Rank 4] Epoch 1/100, Global Batch 22082/43936, Loss: 5.5214
+[Rank 3] Epoch 1/100, Global Batch 16589/43936, Loss: 5.6242
+[Rank 6] Epoch 1/100, Global Batch 33068/43936, Loss: 5.5469
+[Rank 15] Epoch 1/100, Global Batch 82505/43936, Loss: 5.5799
+[Rank 13] Epoch 1/100, Global Batch 71519/43936, Loss: 5.3658
+[Rank 0] Epoch 1/100, Global Batch 110/43936, Loss: 5.5768
+[Rank 10] Epoch 1/100, Global Batch 55040/43936, Loss: 5.5336
+[Rank 2] Epoch 1/100, Global Batch 11096/43936, Loss: 5.5574
+[Rank 14] Epoch 1/100, Global Batch 77012/43936, Loss: 5.4827
+[Rank 1] Epoch 1/100, Global Batch 5603/43936, Loss: 5.4128
+[Rank 12] Epoch 1/100, Global Batch 66026/43936, Loss: 5.5402
+[Rank 8] Epoch 1/100, Global Batch 44064/43936, Loss: 5.4988
+[Rank 8] Epoch 1/100, Global Batch 44074/43936, Loss: 5.4951
+[Rank 7] Epoch 1/100, Global Batch 38571/43936, Loss: 5.4922
+[Rank 9] Epoch 1/100, Global Batch 49557/43936, Loss: 5.3428
+[Rank 11] Epoch 1/100, Global Batch 60543/43936, Loss: 5.4945
+[Rank 3] Epoch 1/100, Global Batch 16599/43936, Loss: 5.5856
+[Rank 6] Epoch 1/100, Global Batch 33078/43936, Loss: 5.5144
+[Rank 5] Epoch 1/100, Global Batch 27585/43936, Loss: 5.5233
+[Rank 10] Epoch 1/100, Global Batch 55050/43936, Loss: 5.6661
+[Rank 14] Epoch 1/100, Global Batch 77022/43936, Loss: 5.5230
+[Rank 4] Epoch 1/100, Global Batch 22092/43936, Loss: 5.5390
+[Rank 0] Epoch 1/100, Global Batch 120/43936, Loss: 5.6488
+[Rank 15] Epoch 1/100, Global Batch 82515/43936, Loss: 5.5626
+[Rank 1] Epoch 1/100, Global Batch 5613/43936, Loss: 5.4501
+[Rank 2] Epoch 1/100, Global Batch 11106/43936, Loss: 5.6040
+[Rank 12] Epoch 1/100, Global Batch 66036/43936, Loss: 5.5584
+[Rank 13] Epoch 1/100, Global Batch 71529/43936, Loss: 5.5467
+[Rank 8] Epoch 1/100, Global Batch 44084/43936, Loss: 5.4615
+[Rank 5] Epoch 1/100, Global Batch 27595/43936, Loss: 5.5274
+[Rank 9] Epoch 1/100, Global Batch 49567/43936, Loss: 5.3983
+[Rank 3] Epoch 1/100, Global Batch 16609/43936, Loss: 5.6484
+[Rank 7] Epoch 1/100, Global Batch 38581/43936, Loss: 5.4666
+[Rank 10] Epoch 1/100, Global Batch 55060/43936, Loss: 5.6709
+[Rank 6] Epoch 1/100, Global Batch 33088/43936, Loss: 5.5621
+[Rank 13] Epoch 1/100, Global Batch 71539/43936, Loss: 5.6284
+[Rank 14] Epoch 1/100, Global Batch 77032/43936, Loss: 5.6410
+[Rank 11] Epoch 1/100, Global Batch 60553/43936, Loss: 5.5566
+[Rank 1] Epoch 1/100, Global Batch 5623/43936, Loss: 5.6081
+[Rank 4] Epoch 1/100, Global Batch 22102/43936, Loss: 5.5414
+[Rank 0] Epoch 1/100, Global Batch 130/43936, Loss: 5.6303
+[Rank 15] Epoch 1/100, Global Batch 82525/43936, Loss: 5.5774
+[Rank 2] Epoch 1/100, Global Batch 11116/43936, Loss: 5.6691
+[Rank 12] Epoch 1/100, Global Batch 66046/43936, Loss: 5.4474
+[Rank 8] Epoch 1/100, Global Batch 44094/43936, Loss: 5.5230
+[Rank 8] Epoch 1/100, Global Batch 44104/43936, Loss: 5.5139
+[Rank 5] Epoch 1/100, Global Batch 27605/43936, Loss: 5.5195
+[Rank 3] Epoch 1/100, Global Batch 16619/43936, Loss: 5.5428
+[Rank 9] Epoch 1/100, Global Batch 49577/43936, Loss: 5.3494
+[Rank 7] Epoch 1/100, Global Batch 38591/43936, Loss: 5.5136
+[Rank 10] Epoch 1/100, Global Batch 55070/43936, Loss: 5.6456
+[Rank 14] Epoch 1/100, Global Batch 77042/43936, Loss: 5.5514
+[Rank 13] Epoch 1/100, Global Batch 71549/43936, Loss: 5.6880
+[Rank 6] Epoch 1/100, Global Batch 33098/43936, Loss: 5.4681
+[Rank 11] Epoch 1/100, Global Batch 60563/43936, Loss: 5.5867
+[Rank 1] Epoch 1/100, Global Batch 5633/43936, Loss: 5.5395
+[Rank 15] Epoch 1/100, Global Batch 82535/43936, Loss: 5.5709
+[Rank 4] Epoch 1/100, Global Batch 22112/43936, Loss: 5.3115
+[Rank 0] Epoch 1/100, Global Batch 140/43936, Loss: 5.6423
+[Rank 2] Epoch 1/100, Global Batch 11126/43936, Loss: 5.4016
+[Rank 12] Epoch 1/100, Global Batch 66056/43936, Loss: 5.4734
+[Rank 8] Epoch 1/100, Global Batch 44114/43936, Loss: 5.3150
+[Rank 5] Epoch 1/100, Global Batch 27615/43936, Loss: 5.5710
+[Rank 3] Epoch 1/100, Global Batch 16629/43936, Loss: 5.5948
+[Rank 9] Epoch 1/100, Global Batch 49587/43936, Loss: 5.3147
+[Rank 7] Epoch 1/100, Global Batch 38601/43936, Loss: 5.3810
+[Rank 14] Epoch 1/100, Global Batch 77052/43936, Loss: 5.5686
+[Rank 10] Epoch 1/100, Global Batch 55080/43936, Loss: 5.5990
+[Rank 6] Epoch 1/100, Global Batch 33108/43936, Loss: 5.6015
+[Rank 11] Epoch 1/100, Global Batch 60573/43936, Loss: 5.5136
+[Rank 13] Epoch 1/100, Global Batch 71559/43936, Loss: 5.6504
+[Rank 1] Epoch 1/100, Global Batch 5643/43936, Loss: 5.6418
+[Rank 15] Epoch 1/100, Global Batch 82545/43936, Loss: 5.4656
+[Rank 12] Epoch 1/100, Global Batch 66066/43936, Loss: 5.5396
+[Rank 0] Epoch 1/100, Global Batch 150/43936, Loss: 5.5674
+[Rank 4] Epoch 1/100, Global Batch 22122/43936, Loss: 5.5178
+[Rank 8] Epoch 1/100, Global Batch 44124/43936, Loss: 5.3146
+[Rank 2] Epoch 1/100, Global Batch 11136/43936, Loss: 5.6368
+[Rank 8] Epoch 1/100, Global Batch 44134/43936, Loss: 5.3952
+[Rank 3] Epoch 1/100, Global Batch 16639/43936, Loss: 5.6013
+[Rank 5] Epoch 1/100, Global Batch 27625/43936, Loss: 5.3576
+[Rank 9] Epoch 1/100, Global Batch 49597/43936, Loss: 5.4201
+[Rank 11] Epoch 1/100, Global Batch 60583/43936, Loss: 5.6506
+[Rank 14] Epoch 1/100, Global Batch 77062/43936, Loss: 5.6405
+[Rank 7] Epoch 1/100, Global Batch 38611/43936, Loss: 5.5615
+[Rank 13] Epoch 1/100, Global Batch 71569/43936, Loss: 5.5076
+[Rank 15] Epoch 1/100, Global Batch 82555/43936, Loss: 5.4882
+[Rank 10] Epoch 1/100, Global Batch 55090/43936, Loss: 5.5045
+[Rank 6] Epoch 1/100, Global Batch 33118/43936, Loss: 5.5289
+[Rank 1] Epoch 1/100, Global Batch 5653/43936, Loss: 5.6262
+[Rank 4] Epoch 1/100, Global Batch 22132/43936, Loss: 5.4661
+[Rank 12] Epoch 1/100, Global Batch 66076/43936, Loss: 5.4925
+[Rank 0] Epoch 1/100, Global Batch 160/43936, Loss: 5.6706
+[Rank 2] Epoch 1/100, Global Batch 11146/43936, Loss: 5.5902
+[Rank 8] Epoch 1/100, Global Batch 44144/43936, Loss: 5.4863
+[Rank 5] Epoch 1/100, Global Batch 27635/43936, Loss: 5.5880
+[Rank 9] Epoch 1/100, Global Batch 49607/43936, Loss: 5.4015
+[Rank 3] Epoch 1/100, Global Batch 16649/43936, Loss: 5.6575
+[Rank 11] Epoch 1/100, Global Batch 60593/43936, Loss: 5.4423
+[Rank 7] Epoch 1/100, Global Batch 38621/43936, Loss: 5.5508
+[Rank 14] Epoch 1/100, Global Batch 77072/43936, Loss: 5.5880
+[Rank 13] Epoch 1/100, Global Batch 71579/43936, Loss: 5.6471
+[Rank 15] Epoch 1/100, Global Batch 82565/43936, Loss: 5.5132
+[Rank 1] Epoch 1/100, Global Batch 5663/43936, Loss: 5.4474
+[Rank 10] Epoch 1/100, Global Batch 55100/43936, Loss: 5.6799
+[Rank 0] Epoch 1/100, Global Batch 170/43936, Loss: 5.5483
+[Rank 4] Epoch 1/100, Global Batch 22142/43936, Loss: 5.5169
+[Rank 6] Epoch 1/100, Global Batch 33128/43936, Loss: 5.5418
+[Rank 12] Epoch 1/100, Global Batch 66086/43936, Loss: 5.4324
+[Rank 2] Epoch 1/100, Global Batch 11156/43936, Loss: 5.4930
+[Rank 5] Epoch 1/100, Global Batch 27645/43936, Loss: 5.5711
+[Rank 9] Epoch 1/100, Global Batch 49617/43936, Loss: 5.3661
+[Rank 3] Epoch 1/100, Global Batch 16659/43936, Loss: 5.4295
+[Rank 11] Epoch 1/100, Global Batch 60603/43936, Loss: 5.4464
+[Rank 14] Epoch 1/100, Global Batch 77082/43936, Loss: 5.6335
+[Rank 7] Epoch 1/100, Global Batch 38631/43936, Loss: 5.5642
+[Rank 13] Epoch 1/100, Global Batch 71589/43936, Loss: 5.4096
+[Rank 15] Epoch 1/100, Global Batch 82575/43936, Loss: 5.5276
+[Rank 1] Epoch 1/100, Global Batch 5673/43936, Loss: 5.4686
+[Rank 0] Epoch 1/100, Global Batch 180/43936, Loss: 5.2440
+[Rank 10] Epoch 1/100, Global Batch 55110/43936, Loss: 5.5927
+[Rank 4] Epoch 1/100, Global Batch 22152/43936, Loss: 5.4645
+[Rank 6] Epoch 1/100, Global Batch 33138/43936, Loss: 5.4208
+[Rank 12] Epoch 1/100, Global Batch 66096/43936, Loss: 5.5214
+[Rank 2] Epoch 1/100, Global Batch 11166/43936, Loss: 5.5931
+[Rank 9] Epoch 1/100, Global Batch 49627/43936, Loss: 5.3309
+[Rank 5] Epoch 1/100, Global Batch 27655/43936, Loss: 5.5536
+[Rank 3] Epoch 1/100, Global Batch 16669/43936, Loss: 5.6038
+[Rank 11] Epoch 1/100, Global Batch 60613/43936, Loss: 5.5489
+[Rank 13] Epoch 1/100, Global Batch 71599/43936, Loss: 5.6755
+[Rank 14] Epoch 1/100, Global Batch 77092/43936, Loss: 5.6330
+[Rank 15] Epoch 1/100, Global Batch 82585/43936, Loss: 5.5860
+[Rank 7] Epoch 1/100, Global Batch 38641/43936, Loss: 5.5570
+[Rank 0] Epoch 1/100, Global Batch 190/43936, Loss: 5.6322
+[Rank 1] Epoch 1/100, Global Batch 5683/43936, Loss: 5.6111
+[Rank 10] Epoch 1/100, Global Batch 55120/43936, Loss: 5.6061
+[Rank 4] Epoch 1/100, Global Batch 22162/43936, Loss: 5.4987
+[Rank 2] Epoch 1/100, Global Batch 11176/43936, Loss: 5.5029
+[Rank 6] Epoch 1/100, Global Batch 33148/43936, Loss: 5.4716
+[Rank 12] Epoch 1/100, Global Batch 66106/43936, Loss: 5.4541
+[Rank 5] Epoch 1/100, Global Batch 27665/43936, Loss: 5.5281
+[Rank 9] Epoch 1/100, Global Batch 49637/43936, Loss: 5.3781
+[Rank 13] Epoch 1/100, Global Batch 71609/43936, Loss: 5.6519
+[Rank 11] Epoch 1/100, Global Batch 60623/43936, Loss: 5.6391
+[Rank 14] Epoch 1/100, Global Batch 77102/43936, Loss: 5.6266
+[Rank 3] Epoch 1/100, Global Batch 16679/43936, Loss: 5.5896
+[Rank 15] Epoch 1/100, Global Batch 82595/43936, Loss: 5.5326
+[Rank 7] Epoch 1/100, Global Batch 38651/43936, Loss: 5.4583
+[Rank 0] Epoch 1/100, Global Batch 200/43936, Loss: 5.5748
+[Rank 10] Epoch 1/100, Global Batch 55130/43936, Loss: 5.5692
+[Rank 1] Epoch 1/100, Global Batch 5693/43936, Loss: 5.3453
+[Rank 4] Epoch 1/100, Global Batch 22172/43936, Loss: 5.5286
+[Rank 2] Epoch 1/100, Global Batch 11186/43936, Loss: 5.5538
+[Rank 6] Epoch 1/100, Global Batch 33158/43936, Loss: 5.5590
+[Rank 12] Epoch 1/100, Global Batch 66116/43936, Loss: 5.5100
+[Rank 8] Epoch 1/100, Global Batch 44154/43936, Loss: 5.4604
+[Rank 5] Epoch 1/100, Global Batch 27675/43936, Loss: 5.5339
+[Rank 14] Epoch 1/100, Global Batch 77112/43936, Loss: 5.5538
+[Rank 11] Epoch 1/100, Global Batch 60633/43936, Loss: 5.5722
+[Rank 12] Epoch 1/100, Global Batch 66126/43936, Loss: 5.4605
+[Rank 15] Epoch 1/100, Global Batch 82605/43936, Loss: 5.5175
+[Rank 3] Epoch 1/100, Global Batch 16689/43936, Loss: 5.6150
+[Rank 9] Epoch 1/100, Global Batch 49647/43936, Loss: 5.4690
+[Rank 1] Epoch 1/100, Global Batch 5703/43936, Loss: 5.5575
+[Rank 4] Epoch 1/100, Global Batch 22182/43936, Loss: 5.5354
+[Rank 6] Epoch 1/100, Global Batch 33168/43936, Loss: 5.4487
+[Rank 2] Epoch 1/100, Global Batch 11196/43936, Loss: 5.5725
+[Rank 0] Epoch 1/100, Global Batch 210/43936, Loss: 5.6247
+[Rank 7] Epoch 1/100, Global Batch 38661/43936, Loss: 5.5259
+[Rank 10] Epoch 1/100, Global Batch 55140/43936, Loss: 5.5559
+[Rank 13] Epoch 1/100, Global Batch 71619/43936, Loss: 5.6322
+[Rank 8] Epoch 1/100, Global Batch 44164/43936, Loss: 5.5454
+[Rank 8] Epoch 1/100, Global Batch 44174/43936, Loss: 5.5015
+[Rank 5] Epoch 1/100, Global Batch 27685/43936, Loss: 5.3161
+[Rank 14] Epoch 1/100, Global Batch 77122/43936, Loss: 5.5610
+[Rank 9] Epoch 1/100, Global Batch 49657/43936, Loss: 5.3447
+[Rank 11] Epoch 1/100, Global Batch 60643/43936, Loss: 5.5736
+[Rank 3] Epoch 1/100, Global Batch 16699/43936, Loss: 5.6477
+[Rank 1] Epoch 1/100, Global Batch 5713/43936, Loss: 5.5491
+[Rank 12] Epoch 1/100, Global Batch 66136/43936, Loss: 5.3571
+[Rank 15] Epoch 1/100, Global Batch 82615/43936, Loss: 5.5254
+[Rank 7] Epoch 1/100, Global Batch 38671/43936, Loss: 5.5303
+[Rank 4] Epoch 1/100, Global Batch 22192/43936, Loss: 5.4804
+[Rank 0] Epoch 1/100, Global Batch 220/43936, Loss: 5.4239
+[Rank 13] Epoch 1/100, Global Batch 71629/43936, Loss: 5.6181
+[Rank 10] Epoch 1/100, Global Batch 55150/43936, Loss: 5.6765
+[Rank 2] Epoch 1/100, Global Batch 11206/43936, Loss: 5.6067
+[Rank 6] Epoch 1/100, Global Batch 33178/43936, Loss: 5.4477
+[Rank 8] Epoch 1/100, Global Batch 44184/43936, Loss: 5.4412
+[Rank 5] Epoch 1/100, Global Batch 27695/43936, Loss: 5.5947
+[Rank 15] Epoch 1/100, Global Batch 82625/43936, Loss: 5.5331
+[Rank 9] Epoch 1/100, Global Batch 49667/43936, Loss: 5.2555
+[Rank 0] Epoch 1/100, Global Batch 230/43936, Loss: 5.4975
+[Rank 4] Epoch 1/100, Global Batch 22202/43936, Loss: 5.4892
+[Rank 11] Epoch 1/100, Global Batch 60653/43936, Loss: 5.4734
+[Rank 3] Epoch 1/100, Global Batch 16709/43936, Loss: 5.5628
+[Rank 14] Epoch 1/100, Global Batch 77132/43936, Loss: 5.5213
+[Rank 1] Epoch 1/100, Global Batch 5723/43936, Loss: 5.3774
+[Rank 7] Epoch 1/100, Global Batch 38681/43936, Loss: 5.5408
+[Rank 13] Epoch 1/100, Global Batch 71639/43936, Loss: 5.6137
+[Rank 10] Epoch 1/100, Global Batch 55160/43936, Loss: 5.6473
+[Rank 12] Epoch 1/100, Global Batch 66146/43936, Loss: 5.4942
+[Rank 2] Epoch 1/100, Global Batch 11216/43936, Loss: 5.5894
+[Rank 6] Epoch 1/100, Global Batch 33188/43936, Loss: 5.5009
+[Rank 8] Epoch 1/100, Global Batch 44194/43936, Loss: 5.3949
+[Rank 8] Epoch 1/100, Global Batch 44204/43936, Loss: 5.4093
+[Rank 5] Epoch 1/100, Global Batch 27705/43936, Loss: 5.5179
+[Rank 4] Epoch 1/100, Global Batch 22212/43936, Loss: 5.5104
+[Rank 9] Epoch 1/100, Global Batch 49677/43936, Loss: 5.4036
+[Rank 15] Epoch 1/100, Global Batch 82635/43936, Loss: 5.4042
+[Rank 14] Epoch 1/100, Global Batch 77142/43936, Loss: 5.2951
+[Rank 0] Epoch 1/100, Global Batch 240/43936, Loss: 5.5231
+[Rank 1] Epoch 1/100, Global Batch 5733/43936, Loss: 5.4580
+[Rank 3] Epoch 1/100, Global Batch 16719/43936, Loss: 5.5041
+[Rank 13] Epoch 1/100, Global Batch 71649/43936, Loss: 5.6650
+[Rank 2] Epoch 1/100, Global Batch 11226/43936, Loss: 5.5758
+[Rank 10] Epoch 1/100, Global Batch 55170/43936, Loss: 5.5644
+[Rank 11] Epoch 1/100, Global Batch 60663/43936, Loss: 5.5549
+[Rank 7] Epoch 1/100, Global Batch 38691/43936, Loss: 5.4732
+[Rank 6] Epoch 1/100, Global Batch 33198/43936, Loss: 5.4759
+[Rank 12] Epoch 1/100, Global Batch 66156/43936, Loss: 5.5169
+[Rank 8] Epoch 1/100, Global Batch 44214/43936, Loss: 5.4151
+[Rank 5] Epoch 1/100, Global Batch 27715/43936, Loss: 5.3996
+[Rank 4] Epoch 1/100, Global Batch 22222/43936, Loss: 5.4833
+[Rank 15] Epoch 1/100, Global Batch 82645/43936, Loss: 5.2826
+[Rank 9] Epoch 1/100, Global Batch 49687/43936, Loss: 5.3817
+[Rank 13] Epoch 1/100, Global Batch 71659/43936, Loss: 5.5998
+[Rank 0] Epoch 1/100, Global Batch 250/43936, Loss: 5.5749
+[Rank 1] Epoch 1/100, Global Batch 5743/43936, Loss: 5.6171
+[Rank 14] Epoch 1/100, Global Batch 77152/43936, Loss: 5.5641
+[Rank 3] Epoch 1/100, Global Batch 16729/43936, Loss: 5.3018
+[Rank 2] Epoch 1/100, Global Batch 11236/43936, Loss: 5.5680
+[Rank 10] Epoch 1/100, Global Batch 55180/43936, Loss: 5.3902
+[Rank 7] Epoch 1/100, Global Batch 38701/43936, Loss: 5.4659
+[Rank 6] Epoch 1/100, Global Batch 33208/43936, Loss: 5.5288
+[Rank 11] Epoch 1/100, Global Batch 60673/43936, Loss: 5.5271
+[Rank 8] Epoch 1/100, Global Batch 44224/43936, Loss: 5.4284
+[Rank 12] Epoch 1/100, Global Batch 66166/43936, Loss: 5.5454
+[Rank 8] Epoch 1/100, Global Batch 44234/43936, Loss: 5.3733
+[Rank 5] Epoch 1/100, Global Batch 27725/43936, Loss: 5.5901
+[Rank 4] Epoch 1/100, Global Batch 22232/43936, Loss: 5.4993
+[Rank 9] Epoch 1/100, Global Batch 49697/43936, Loss: 5.3167
+[Rank 13] Epoch 1/100, Global Batch 71669/43936, Loss: 5.5892
+[Rank 0] Epoch 1/100, Global Batch 260/43936, Loss: 5.4481
+[Rank 15] Epoch 1/100, Global Batch 82655/43936, Loss: 5.5371
+[Rank 1] Epoch 1/100, Global Batch 5753/43936, Loss: 5.5436
+[Rank 2] Epoch 1/100, Global Batch 11246/43936, Loss: 5.4371
+[Rank 14] Epoch 1/100, Global Batch 77162/43936, Loss: 5.4525
+[Rank 10] Epoch 1/100, Global Batch 55190/43936, Loss: 5.6050
+[Rank 3] Epoch 1/100, Global Batch 16739/43936, Loss: 5.4147
+[Rank 7] Epoch 1/100, Global Batch 38711/43936, Loss: 5.3323
+[Rank 6] Epoch 1/100, Global Batch 33218/43936, Loss: 5.5282
+[Rank 11] Epoch 1/100, Global Batch 60683/43936, Loss: 5.4484
+[Rank 12] Epoch 1/100, Global Batch 66176/43936, Loss: 5.4776
+[Rank 8] Epoch 1/100, Global Batch 44244/43936, Loss: 5.3878
+[Rank 5] Epoch 1/100, Global Batch 27735/43936, Loss: 5.4091
+[Rank 4] Epoch 1/100, Global Batch 22242/43936, Loss: 5.4785
+[Rank 15] Epoch 1/100, Global Batch 82665/43936, Loss: 5.5088
+[Rank 9] Epoch 1/100, Global Batch 49707/43936, Loss: 5.2974
+[Rank 13] Epoch 1/100, Global Batch 71679/43936, Loss: 5.6251
+[Rank 0] Epoch 1/100, Global Batch 270/43936, Loss: 5.5168
+[Rank 2] Epoch 1/100, Global Batch 11256/43936, Loss: 5.4926
+[Rank 1] Epoch 1/100, Global Batch 5763/43936, Loss: 5.5531
+[Rank 3] Epoch 1/100, Global Batch 16749/43936, Loss: 5.5784
+[Rank 14] Epoch 1/100, Global Batch 77172/43936, Loss: 5.5044
+[Rank 10] Epoch 1/100, Global Batch 55200/43936, Loss: 5.6123
+[Rank 7] Epoch 1/100, Global Batch 38721/43936, Loss: 5.3943
+[Rank 6] Epoch 1/100, Global Batch 33228/43936, Loss: 5.4817
+[Rank 11] Epoch 1/100, Global Batch 60693/43936, Loss: 5.5338
+[Rank 12] Epoch 1/100, Global Batch 66186/43936, Loss: 5.4737
+[Rank 5] Epoch 1/100, Global Batch 27745/43936, Loss: 5.4904
+[Rank 9] Epoch 1/100, Global Batch 49717/43936, Loss: 5.3391
+[Rank 15] Epoch 1/100, Global Batch 82675/43936, Loss: 5.4430
+[Rank 2] Epoch 1/100, Global Batch 11266/43936, Loss: 5.4565
+[Rank 4] Epoch 1/100, Global Batch 22252/43936, Loss: 5.4458
+[Rank 0] Epoch 1/100, Global Batch 280/43936, Loss: 5.4911
+[Rank 13] Epoch 1/100, Global Batch 71689/43936, Loss: 5.6112
+[Rank 1] Epoch 1/100, Global Batch 5773/43936, Loss: 5.5645
+[Rank 10] Epoch 1/100, Global Batch 55210/43936, Loss: 5.4947
+[Rank 14] Epoch 1/100, Global Batch 77182/43936, Loss: 5.5667
+[Rank 3] Epoch 1/100, Global Batch 16759/43936, Loss: 5.5594
+[Rank 6] Epoch 1/100, Global Batch 33238/43936, Loss: 5.4620
+[Rank 7] Epoch 1/100, Global Batch 38731/43936, Loss: 5.3355
+[Rank 11] Epoch 1/100, Global Batch 60703/43936, Loss: 5.6343
+[Rank 12] Epoch 1/100, Global Batch 66196/43936, Loss: 5.4697
+[Rank 5] Epoch 1/100, Global Batch 27755/43936, Loss: 5.4949
+[Rank 13] Epoch 1/100, Global Batch 71699/43936, Loss: 5.6382
+[Rank 0] Epoch 1/100, Global Batch 290/43936, Loss: 5.6453
+[Rank 9] Epoch 1/100, Global Batch 49727/43936, Loss: 5.3155
+[Rank 15] Epoch 1/100, Global Batch 82685/43936, Loss: 5.5073
+[Rank 2] Epoch 1/100, Global Batch 11276/43936, Loss: 5.4816
+[Rank 4] Epoch 1/100, Global Batch 22262/43936, Loss: 5.2975
+[Rank 10] Epoch 1/100, Global Batch 55220/43936, Loss: 5.5714
+[Rank 1] Epoch 1/100, Global Batch 5783/43936, Loss: 5.4271
+[Rank 14] Epoch 1/100, Global Batch 77192/43936, Loss: 5.5597
+[Rank 3] Epoch 1/100, Global Batch 16769/43936, Loss: 5.4890
+[Rank 6] Epoch 1/100, Global Batch 33248/43936, Loss: 5.5238
+[Rank 7] Epoch 1/100, Global Batch 38741/43936, Loss: 5.4166
+[Rank 11] Epoch 1/100, Global Batch 60713/43936, Loss: 5.5405
+[Rank 12] Epoch 1/100, Global Batch 66206/43936, Loss: 5.4800
+[Rank 5] Epoch 1/100, Global Batch 27765/43936, Loss: 5.4338
+[Rank 13] Epoch 1/100, Global Batch 71709/43936, Loss: 5.6475
+[Rank 15] Epoch 1/100, Global Batch 82695/43936, Loss: 5.4527
+[Rank 1] Epoch 1/100, Global Batch 5793/43936, Loss: 5.4728
+[Rank 4] Epoch 1/100, Global Batch 22272/43936, Loss: 5.4854
+[Rank 0] Epoch 1/100, Global Batch 300/43936, Loss: 5.6085
+[Rank 2] Epoch 1/100, Global Batch 11286/43936, Loss: 5.4399
+[Rank 14] Epoch 1/100, Global Batch 77202/43936, Loss: 5.4529
+[Rank 9] Epoch 1/100, Global Batch 49737/43936, Loss: 5.3464
+[Rank 10] Epoch 1/100, Global Batch 55230/43936, Loss: 5.5975
+[Rank 3] Epoch 1/100, Global Batch 16779/43936, Loss: 5.5542
+[Rank 6] Epoch 1/100, Global Batch 33258/43936, Loss: 5.4053
+[Rank 7] Epoch 1/100, Global Batch 38751/43936, Loss: 5.4125
+[Rank 11] Epoch 1/100, Global Batch 60723/43936, Loss: 5.5440
+[Rank 12] Epoch 1/100, Global Batch 66216/43936, Loss: 5.4764
+[Rank 8] Epoch 1/100, Global Batch 44254/43936, Loss: 5.4496
+[Rank 3] Epoch 1/100, Global Batch 16789/43936, Loss: 5.4941
+[Rank 10] Epoch 1/100, Global Batch 55240/43936, Loss: 5.6141
+[Rank 5] Epoch 1/100, Global Batch 27775/43936, Loss: 5.3936
+[Rank 14] Epoch 1/100, Global Batch 77212/43936, Loss: 5.5187
+[Rank 1] Epoch 1/100, Global Batch 5803/43936, Loss: 5.4680
+[Rank 0] Epoch 1/100, Global Batch 310/43936, Loss: 5.5467
+[Rank 6] Epoch 1/100, Global Batch 33268/43936, Loss: 5.4956
+[Rank 4] Epoch 1/100, Global Batch 22282/43936, Loss: 5.3012
+[Rank 15] Epoch 1/100, Global Batch 82705/43936, Loss: 5.5088
+[Rank 13] Epoch 1/100, Global Batch 71719/43936, Loss: 5.6073
+[Rank 7] Epoch 1/100, Global Batch 38761/43936, Loss: 5.4465
+[Rank 9] Epoch 1/100, Global Batch 49747/43936, Loss: 5.3099
+[Rank 2] Epoch 1/100, Global Batch 11296/43936, Loss: 5.5540
+[Rank 11] Epoch 1/100, Global Batch 60733/43936, Loss: 5.5020
+[Rank 12] Epoch 1/100, Global Batch 66226/43936, Loss: 5.1887
+[Rank 8] Epoch 1/100, Global Batch 44264/43936, Loss: 5.3166
+[Rank 8] Epoch 1/100, Global Batch 44274/43936, Loss: 5.3295
+[Rank 9] Epoch 1/100, Global Batch 49757/43936, Loss: 5.3654
+[Rank 5] Epoch 1/100, Global Batch 27785/43936, Loss: 5.2802
+[Rank 3] Epoch 1/100, Global Batch 16799/43936, Loss: 5.5649
+[Rank 1] Epoch 1/100, Global Batch 5813/43936, Loss: 5.4127
+[Rank 13] Epoch 1/100, Global Batch 71729/43936, Loss: 5.6117
+[Rank 4] Epoch 1/100, Global Batch 22292/43936, Loss: 5.4380
+[Rank 10] Epoch 1/100, Global Batch 55250/43936, Loss: 5.5882
+[Rank 0] Epoch 1/100, Global Batch 320/43936, Loss: 5.5569
+[Rank 14] Epoch 1/100, Global Batch 77222/43936, Loss: 5.4579
+[Rank 2] Epoch 1/100, Global Batch 11306/43936, Loss: 5.4431
+[Rank 6] Epoch 1/100, Global Batch 33278/43936, Loss: 5.4348
+[Rank 7] Epoch 1/100, Global Batch 38771/43936, Loss: 5.3608
+[Rank 15] Epoch 1/100, Global Batch 82715/43936, Loss: 5.5003
+[Rank 11] Epoch 1/100, Global Batch 60743/43936, Loss: 5.4870
+[Rank 12] Epoch 1/100, Global Batch 66236/43936, Loss: 5.3779
+[Rank 8] Epoch 1/100, Global Batch 44284/43936, Loss: 5.3514
+[Rank 5] Epoch 1/100, Global Batch 27795/43936, Loss: 5.5092
+[Rank 9] Epoch 1/100, Global Batch 49767/43936, Loss: 5.4948
+[Rank 4] Epoch 1/100, Global Batch 22302/43936, Loss: 5.3115
+[Rank 3] Epoch 1/100, Global Batch 16809/43936, Loss: 5.3913
+[Rank 1] Epoch 1/100, Global Batch 5823/43936, Loss: 5.5607
+[Rank 10] Epoch 1/100, Global Batch 55260/43936, Loss: 5.5316
+[Rank 7] Epoch 1/100, Global Batch 38781/43936, Loss: 5.3954
+[Rank 0] Epoch 1/100, Global Batch 330/43936, Loss: 5.5258
+[Rank 2] Epoch 1/100, Global Batch 11316/43936, Loss: 5.3912
+[Rank 13] Epoch 1/100, Global Batch 71739/43936, Loss: 5.4021
+[Rank 14] Epoch 1/100, Global Batch 77232/43936, Loss: 5.5513
+[Rank 6] Epoch 1/100, Global Batch 33288/43936, Loss: 5.4409
+[Rank 15] Epoch 1/100, Global Batch 82725/43936, Loss: 5.4651
+[Rank 11] Epoch 1/100, Global Batch 60753/43936, Loss: 5.4473
+[Rank 12] Epoch 1/100, Global Batch 66246/43936, Loss: 5.3270
+[Rank 8] Epoch 1/100, Global Batch 44294/43936, Loss: 5.4664
+[Rank 8] Epoch 1/100, Global Batch 44304/43936, Loss: 5.2802
+[Rank 5] Epoch 1/100, Global Batch 27805/43936, Loss: 5.4207
+[Rank 9] Epoch 1/100, Global Batch 49777/43936, Loss: 5.2709
+[Rank 4] Epoch 1/100, Global Batch 22312/43936, Loss: 5.4373
+[Rank 3] Epoch 1/100, Global Batch 16819/43936, Loss: 5.3726
+[Rank 1] Epoch 1/100, Global Batch 5833/43936, Loss: 5.5022
+[Rank 10] Epoch 1/100, Global Batch 55270/43936, Loss: 5.4038
+[Rank 2] Epoch 1/100, Global Batch 11326/43936, Loss: 5.5296
+[Rank 7] Epoch 1/100, Global Batch 38791/43936, Loss: 5.4467
+[Rank 13] Epoch 1/100, Global Batch 71749/43936, Loss: 5.6029
+[Rank 0] Epoch 1/100, Global Batch 340/43936, Loss: 5.5181
+[Rank 14] Epoch 1/100, Global Batch 77242/43936, Loss: 5.4905
+[Rank 6] Epoch 1/100, Global Batch 33298/43936, Loss: 5.4218
+[Rank 11] Epoch 1/100, Global Batch 60763/43936, Loss: 5.4134
+[Rank 15] Epoch 1/100, Global Batch 82735/43936, Loss: 5.4508
+[Rank 12] Epoch 1/100, Global Batch 66256/43936, Loss: 5.3956
+[Rank 8] Epoch 1/100, Global Batch 44314/43936, Loss: 5.3935
+[Rank 5] Epoch 1/100, Global Batch 27815/43936, Loss: 5.4600
+[Rank 4] Epoch 1/100, Global Batch 22322/43936, Loss: 5.3300
+[Rank 9] Epoch 1/100, Global Batch 49787/43936, Loss: 5.2588
+[Rank 1] Epoch 1/100, Global Batch 5843/43936, Loss: 5.4384
+[Rank 2] Epoch 1/100, Global Batch 11336/43936, Loss: 5.4642
+[Rank 3] Epoch 1/100, Global Batch 16829/43936, Loss: 5.5380
+[Rank 7] Epoch 1/100, Global Batch 38801/43936, Loss: 5.3517
+[Rank 10] Epoch 1/100, Global Batch 55280/43936, Loss: 5.4130
+[Rank 14] Epoch 1/100, Global Batch 77252/43936, Loss: 5.4844
+[Rank 13] Epoch 1/100, Global Batch 71759/43936, Loss: 5.3464
+[Rank 0] Epoch 1/100, Global Batch 350/43936, Loss: 5.4750
+[Rank 11] Epoch 1/100, Global Batch 60773/43936, Loss: 5.4126
+[Rank 6] Epoch 1/100, Global Batch 33308/43936, Loss: 5.4292
+[Rank 15] Epoch 1/100, Global Batch 82745/43936, Loss: 5.4200
+[Rank 8] Epoch 1/100, Global Batch 44324/43936, Loss: 5.2607
+[Rank 12] Epoch 1/100, Global Batch 66266/43936, Loss: 5.5175
+[Rank 8] Epoch 1/100, Global Batch 44334/43936, Loss: 5.3773
+[Rank 5] Epoch 1/100, Global Batch 27825/43936, Loss: 5.4508
+[Rank 4] Epoch 1/100, Global Batch 22332/43936, Loss: 5.4194
+[Rank 9] Epoch 1/100, Global Batch 49797/43936, Loss: 5.2354
+[Rank 2] Epoch 1/100, Global Batch 11346/43936, Loss: 5.4459
+[Rank 1] Epoch 1/100, Global Batch 5853/43936, Loss: 5.4523
+[Rank 7] Epoch 1/100, Global Batch 38811/43936, Loss: 5.4544
+[Rank 10] Epoch 1/100, Global Batch 55290/43936, Loss: 5.3787
+[Rank 3] Epoch 1/100, Global Batch 16839/43936, Loss: 5.4762
+[Rank 14] Epoch 1/100, Global Batch 77262/43936, Loss: 5.5646
+[Rank 13] Epoch 1/100, Global Batch 71769/43936, Loss: 5.3710
+[Rank 11] Epoch 1/100, Global Batch 60783/43936, Loss: 5.4698
+[Rank 0] Epoch 1/100, Global Batch 360/43936, Loss: 5.5590
+[Rank 6] Epoch 1/100, Global Batch 33318/43936, Loss: 5.4618
+[Rank 15] Epoch 1/100, Global Batch 82755/43936, Loss: 5.3624
+[Rank 12] Epoch 1/100, Global Batch 66276/43936, Loss: 5.4032
+[Rank 8] Epoch 1/100, Global Batch 44344/43936, Loss: 5.1736
+[Rank 5] Epoch 1/100, Global Batch 27835/43936, Loss: 5.4226
+[Rank 9] Epoch 1/100, Global Batch 49807/43936, Loss: 5.2421
+[Rank 4] Epoch 1/100, Global Batch 22342/43936, Loss: 5.3191
+[Rank 2] Epoch 1/100, Global Batch 11356/43936, Loss: 5.4283
+[Rank 1] Epoch 1/100, Global Batch 5863/43936, Loss: 5.4204
+[Rank 10] Epoch 1/100, Global Batch 55300/43936, Loss: 5.2364
+[Rank 14] Epoch 1/100, Global Batch 77272/43936, Loss: 5.4599
+[Rank 3] Epoch 1/100, Global Batch 16849/43936, Loss: 5.5256
+[Rank 13] Epoch 1/100, Global Batch 71779/43936, Loss: 5.4816
+[Rank 11] Epoch 1/100, Global Batch 60793/43936, Loss: 5.4722
+[Rank 7] Epoch 1/100, Global Batch 38821/43936, Loss: 5.4391
+[Rank 0] Epoch 1/100, Global Batch 370/43936, Loss: 5.4491
+[Rank 6] Epoch 1/100, Global Batch 33328/43936, Loss: 5.4034
+[Rank 15] Epoch 1/100, Global Batch 82765/43936, Loss: 5.4558
+[Rank 12] Epoch 1/100, Global Batch 66286/43936, Loss: 5.4334
+[Rank 5] Epoch 1/100, Global Batch 27845/43936, Loss: 5.4052
+[Rank 9] Epoch 1/100, Global Batch 49817/43936, Loss: 5.2006
+[Rank 1] Epoch 1/100, Global Batch 5873/43936, Loss: 5.3986
+[Rank 4] Epoch 1/100, Global Batch 22352/43936, Loss: 5.3881
+[Rank 0] Epoch 1/100, Global Batch 380/43936, Loss: 5.4655
+[Rank 10] Epoch 1/100, Global Batch 55310/43936, Loss: 5.4256
+[Rank 13] Epoch 1/100, Global Batch 71789/43936, Loss: 5.5215
+[Rank 14] Epoch 1/100, Global Batch 77282/43936, Loss: 5.4554
+[Rank 11] Epoch 1/100, Global Batch 60803/43936, Loss: 5.4498
+[Rank 2] Epoch 1/100, Global Batch 11366/43936, Loss: 5.4050
+[Rank 3] Epoch 1/100, Global Batch 16859/43936, Loss: 5.3666
+[Rank 7] Epoch 1/100, Global Batch 38831/43936, Loss: 5.4159
+[Rank 15] Epoch 1/100, Global Batch 82775/43936, Loss: 5.3442
+[Rank 6] Epoch 1/100, Global Batch 33338/43936, Loss: 5.3967
+[Rank 12] Epoch 1/100, Global Batch 66296/43936, Loss: 5.3760
+[Rank 5] Epoch 1/100, Global Batch 27855/43936, Loss: 5.3792
+[Rank 9] Epoch 1/100, Global Batch 49827/43936, Loss: 5.2255
+[Rank 1] Epoch 1/100, Global Batch 5883/43936, Loss: 5.4293
+[Rank 13] Epoch 1/100, Global Batch 71799/43936, Loss: 5.4101
+[Rank 0] Epoch 1/100, Global Batch 390/43936, Loss: 5.5186
+[Rank 11] Epoch 1/100, Global Batch 60813/43936, Loss: 5.4525
+[Rank 2] Epoch 1/100, Global Batch 11376/43936, Loss: 5.4290
+[Rank 4] Epoch 1/100, Global Batch 22362/43936, Loss: 5.4112
+[Rank 10] Epoch 1/100, Global Batch 55320/43936, Loss: 5.4942
+[Rank 14] Epoch 1/100, Global Batch 77292/43936, Loss: 5.4473
+[Rank 3] Epoch 1/100, Global Batch 16869/43936, Loss: 5.4414
+[Rank 7] Epoch 1/100, Global Batch 38841/43936, Loss: 5.3937
+[Rank 15] Epoch 1/100, Global Batch 82785/43936, Loss: 5.5075
+[Rank 6] Epoch 1/100, Global Batch 33348/43936, Loss: 5.4275
+[Rank 12] Epoch 1/100, Global Batch 66306/43936, Loss: 5.5062
+[Rank 5] Epoch 1/100, Global Batch 27865/43936, Loss: 5.3532
+[Rank 9] Epoch 1/100, Global Batch 49837/43936, Loss: 5.3475
+[Rank 11] Epoch 1/100, Global Batch 60823/43936, Loss: 5.3754
+[Rank 1] Epoch 1/100, Global Batch 5893/43936, Loss: 5.5267
+[Rank 4] Epoch 1/100, Global Batch 22372/43936, Loss: 5.3525
+[Rank 10] Epoch 1/100, Global Batch 55330/43936, Loss: 5.4048
+[Rank 2] Epoch 1/100, Global Batch 11386/43936, Loss: 5.4595
+[Rank 0] Epoch 1/100, Global Batch 400/43936, Loss: 5.4842
+[Rank 3] Epoch 1/100, Global Batch 16879/43936, Loss: 5.1270
+[Rank 7] Epoch 1/100, Global Batch 38851/43936, Loss: 5.3168
+[Rank 13] Epoch 1/100, Global Batch 71809/43936, Loss: 5.4623
+[Rank 15] Epoch 1/100, Global Batch 82795/43936, Loss: 5.4749
+[Rank 14] Epoch 1/100, Global Batch 77302/43936, Loss: 5.3995
+[Rank 6] Epoch 1/100, Global Batch 33358/43936, Loss: 5.3689
+[Rank 12] Epoch 1/100, Global Batch 66316/43936, Loss: 5.3650
+[Rank 8] Epoch 1/100, Global Batch 44354/43936, Loss: 5.3134
+[Rank 11] Epoch 1/100, Global Batch 60833/43936, Loss: 5.3814
+[Rank 14] Epoch 1/100, Global Batch 77312/43936, Loss: 5.3661
+[Rank 5] Epoch 1/100, Global Batch 27875/43936, Loss: 5.3084
+[Rank 0] Epoch 1/100, Global Batch 410/43936, Loss: 5.3341
+[Rank 1] Epoch 1/100, Global Batch 5903/43936, Loss: 5.3707
+[Rank 9] Epoch 1/100, Global Batch 49847/43936, Loss: 5.1561
+[Rank 15] Epoch 1/100, Global Batch 82805/43936, Loss: 5.3962
+[Rank 4] Epoch 1/100, Global Batch 22382/43936, Loss: 5.3334
+[Rank 10] Epoch 1/100, Global Batch 55340/43936, Loss: 5.4652
+[Rank 6] Epoch 1/100, Global Batch 33368/43936, Loss: 5.4076
+[Rank 7] Epoch 1/100, Global Batch 38861/43936, Loss: 5.3751
+[Rank 3] Epoch 1/100, Global Batch 16889/43936, Loss: 5.1106
+[Rank 2] Epoch 1/100, Global Batch 11396/43936, Loss: 5.4752
+[Rank 13] Epoch 1/100, Global Batch 71819/43936, Loss: 5.5627
+[Rank 12] Epoch 1/100, Global Batch 66326/43936, Loss: 5.4047
+[Rank 8] Epoch 1/100, Global Batch 44364/43936, Loss: 5.3634
+[Rank 8] Epoch 1/100, Global Batch 44374/43936, Loss: 5.3601
+[Rank 11] Epoch 1/100, Global Batch 60843/43936, Loss: 5.4465
+[Rank 5] Epoch 1/100, Global Batch 27885/43936, Loss: 5.3463
+[Rank 14] Epoch 1/100, Global Batch 77322/43936, Loss: 5.2725
+[Rank 4] Epoch 1/100, Global Batch 22392/43936, Loss: 5.3693
+[Rank 0] Epoch 1/100, Global Batch 420/43936, Loss: 5.4744
+[Rank 9] Epoch 1/100, Global Batch 49857/43936, Loss: 5.1909
+[Rank 1] Epoch 1/100, Global Batch 5913/43936, Loss: 5.2997
+[Rank 3] Epoch 1/100, Global Batch 16899/43936, Loss: 5.4362
+[Rank 2] Epoch 1/100, Global Batch 11406/43936, Loss: 5.3870
+[Rank 15] Epoch 1/100, Global Batch 82815/43936, Loss: 5.4333
+[Rank 13] Epoch 1/100, Global Batch 71829/43936, Loss: 5.4985
+[Rank 6] Epoch 1/100, Global Batch 33378/43936, Loss: 5.3466
+[Rank 7] Epoch 1/100, Global Batch 38871/43936, Loss: 5.3809
+[Rank 10] Epoch 1/100, Global Batch 55350/43936, Loss: 5.3985
+[Rank 12] Epoch 1/100, Global Batch 66336/43936, Loss: 5.2256
+[Rank 8] Epoch 1/100, Global Batch 44384/43936, Loss: 5.3907
+[Rank 5] Epoch 1/100, Global Batch 27895/43936, Loss: 5.2114
+[Rank 0] Epoch 1/100, Global Batch 430/43936, Loss: 5.3506
+[Rank 11] Epoch 1/100, Global Batch 60853/43936, Loss: 5.4421
+[Rank 4] Epoch 1/100, Global Batch 22402/43936, Loss: 5.3920
+[Rank 14] Epoch 1/100, Global Batch 77332/43936, Loss: 5.4876
+[Rank 9] Epoch 1/100, Global Batch 49867/43936, Loss: 5.2023
+[Rank 7] Epoch 1/100, Global Batch 38881/43936, Loss: 5.4151
+[Rank 2] Epoch 1/100, Global Batch 11416/43936, Loss: 5.3978
+[Rank 10] Epoch 1/100, Global Batch 55360/43936, Loss: 5.4249
+[Rank 15] Epoch 1/100, Global Batch 82825/43936, Loss: 5.2732
+[Rank 1] Epoch 1/100, Global Batch 5923/43936, Loss: 5.3618
+[Rank 3] Epoch 1/100, Global Batch 16909/43936, Loss: 5.5030
+[Rank 13] Epoch 1/100, Global Batch 71839/43936, Loss: 5.4828
+[Rank 6] Epoch 1/100, Global Batch 33388/43936, Loss: 5.4098
+[Rank 12] Epoch 1/100, Global Batch 66346/43936, Loss: 5.2967
+[Rank 8] Epoch 1/100, Global Batch 44394/43936, Loss: 5.4444
+[Rank 8] Epoch 1/100, Global Batch 44404/43936, Loss: 5.2677
+[Rank 5] Epoch 1/100, Global Batch 27905/43936, Loss: 5.3605
+[Rank 11] Epoch 1/100, Global Batch 60863/43936, Loss: 5.4691
+[Rank 4] Epoch 1/100, Global Batch 22412/43936, Loss: 5.4312
+[Rank 0] Epoch 1/100, Global Batch 440/43936, Loss: 5.4417
+[Rank 9] Epoch 1/100, Global Batch 49877/43936, Loss: 5.2320
+[Rank 7] Epoch 1/100, Global Batch 38891/43936, Loss: 5.3227
+[Rank 14] Epoch 1/100, Global Batch 77342/43936, Loss: 5.4414
+[Rank 10] Epoch 1/100, Global Batch 55370/43936, Loss: 5.4515
+[Rank 3] Epoch 1/100, Global Batch 16919/43936, Loss: 5.3820
+[Rank 2] Epoch 1/100, Global Batch 11426/43936, Loss: 5.4552
+[Rank 13] Epoch 1/100, Global Batch 71849/43936, Loss: 5.2995
+[Rank 1] Epoch 1/100, Global Batch 5933/43936, Loss: 5.2898
+[Rank 15] Epoch 1/100, Global Batch 82835/43936, Loss: 5.3644
+[Rank 6] Epoch 1/100, Global Batch 33398/43936, Loss: 5.3697
+[Rank 12] Epoch 1/100, Global Batch 66356/43936, Loss: 5.3585
+[Rank 8] Epoch 1/100, Global Batch 44414/43936, Loss: 5.3702
+[Rank 5] Epoch 1/100, Global Batch 27915/43936, Loss: 5.3050
+[Rank 11] Epoch 1/100, Global Batch 60873/43936, Loss: 5.4478
+[Rank 14] Epoch 1/100, Global Batch 77352/43936, Loss: 5.2865
+[Rank 4] Epoch 1/100, Global Batch 22422/43936, Loss: 5.2980
+[Rank 0] Epoch 1/100, Global Batch 450/43936, Loss: 5.3756
+[Rank 9] Epoch 1/100, Global Batch 49887/43936, Loss: 5.1432
+[Rank 7] Epoch 1/100, Global Batch 38901/43936, Loss: 5.3653
+[Rank 15] Epoch 1/100, Global Batch 82845/43936, Loss: 5.4127
+[Rank 3] Epoch 1/100, Global Batch 16929/43936, Loss: 5.4124
+[Rank 13] Epoch 1/100, Global Batch 71859/43936, Loss: 5.3334
+[Rank 1] Epoch 1/100, Global Batch 5943/43936, Loss: 5.4074
+[Rank 10] Epoch 1/100, Global Batch 55380/43936, Loss: 5.5085
+[Rank 2] Epoch 1/100, Global Batch 11436/43936, Loss: 5.2197
+[Rank 6] Epoch 1/100, Global Batch 33408/43936, Loss: 5.3956
+[Rank 8] Epoch 1/100, Global Batch 44424/43936, Loss: 5.2391
+[Rank 12] Epoch 1/100, Global Batch 66366/43936, Loss: 5.3269
+[Rank 8] Epoch 1/100, Global Batch 44434/43936, Loss: 5.3079
+[Rank 4] Epoch 1/100, Global Batch 22432/43936, Loss: 5.2408
+[Rank 11] Epoch 1/100, Global Batch 60883/43936, Loss: 5.3930
+[Rank 5] Epoch 1/100, Global Batch 27925/43936, Loss: 5.3276
+[Rank 14] Epoch 1/100, Global Batch 77362/43936, Loss: 5.3902
+[Rank 9] Epoch 1/100, Global Batch 49897/43936, Loss: 5.1621
+[Rank 0] Epoch 1/100, Global Batch 460/43936, Loss: 5.3529
+[Rank 7] Epoch 1/100, Global Batch 38911/43936, Loss: 5.2744
+[Rank 15] Epoch 1/100, Global Batch 82855/43936, Loss: 5.3442
+[Rank 1] Epoch 1/100, Global Batch 5953/43936, Loss: 5.4154
+[Rank 13] Epoch 1/100, Global Batch 71869/43936, Loss: 5.4025
+[Rank 10] Epoch 1/100, Global Batch 55390/43936, Loss: 5.4037
+[Rank 3] Epoch 1/100, Global Batch 16939/43936, Loss: 5.4228
+[Rank 2] Epoch 1/100, Global Batch 11446/43936, Loss: 5.4196
+[Rank 6] Epoch 1/100, Global Batch 33418/43936, Loss: 5.3668
+[Rank 12] Epoch 1/100, Global Batch 66376/43936, Loss: 5.2121
+[Rank 8] Epoch 1/100, Global Batch 44444/43936, Loss: 5.1360
+[Rank 4] Epoch 1/100, Global Batch 22442/43936, Loss: 5.2618
+[Rank 5] Epoch 1/100, Global Batch 27935/43936, Loss: 5.3086
+[Rank 11] Epoch 1/100, Global Batch 60893/43936, Loss: 5.3714
+[Rank 14] Epoch 1/100, Global Batch 77372/43936, Loss: 5.4136
+[Rank 0] Epoch 1/100, Global Batch 470/43936, Loss: 5.3890
+[Rank 9] Epoch 1/100, Global Batch 49907/43936, Loss: 5.2265
+[Rank 15] Epoch 1/100, Global Batch 82865/43936, Loss: 5.3413
+[Rank 7] Epoch 1/100, Global Batch 38921/43936, Loss: 5.2832
+[Rank 13] Epoch 1/100, Global Batch 71879/43936, Loss: 5.4995
+[Rank 1] Epoch 1/100, Global Batch 5963/43936, Loss: 5.3136
+[Rank 2] Epoch 1/100, Global Batch 11456/43936, Loss: 5.4193
+[Rank 10] Epoch 1/100, Global Batch 55400/43936, Loss: 5.3875
+[Rank 3] Epoch 1/100, Global Batch 16949/43936, Loss: 5.3010
+[Rank 6] Epoch 1/100, Global Batch 33428/43936, Loss: 5.3929
+[Rank 12] Epoch 1/100, Global Batch 66386/43936, Loss: 5.3503
+[Rank 5] Epoch 1/100, Global Batch 27945/43936, Loss: 5.2949
+[Rank 11] Epoch 1/100, Global Batch 60903/43936, Loss: 5.4004
+[Rank 14] Epoch 1/100, Global Batch 77382/43936, Loss: 5.4323
+[Rank 4] Epoch 1/100, Global Batch 22452/43936, Loss: 5.2861
+[Rank 9] Epoch 1/100, Global Batch 49917/43936, Loss: 5.1566
+[Rank 0] Epoch 1/100, Global Batch 480/43936, Loss: 5.3378
+[Rank 15] Epoch 1/100, Global Batch 82875/43936, Loss: 5.4140
+[Rank 7] Epoch 1/100, Global Batch 38931/43936, Loss: 5.3340
+[Rank 13] Epoch 1/100, Global Batch 71889/43936, Loss: 5.3836
+[Rank 1] Epoch 1/100, Global Batch 5973/43936, Loss: 5.3673
+[Rank 10] Epoch 1/100, Global Batch 55410/43936, Loss: 5.4910
+[Rank 2] Epoch 1/100, Global Batch 11466/43936, Loss: 5.3962
+[Rank 3] Epoch 1/100, Global Batch 16959/43936, Loss: 5.3977
+[Rank 6] Epoch 1/100, Global Batch 33438/43936, Loss: 5.2236
+[Rank 12] Epoch 1/100, Global Batch 66396/43936, Loss: 5.2953
+[Rank 5] Epoch 1/100, Global Batch 27955/43936, Loss: 5.2174
+[Rank 11] Epoch 1/100, Global Batch 60913/43936, Loss: 5.3806
+[Rank 14] Epoch 1/100, Global Batch 77392/43936, Loss: 5.3786
+[Rank 4] Epoch 1/100, Global Batch 22462/43936, Loss: 5.2843
+[Rank 0] Epoch 1/100, Global Batch 490/43936, Loss: 5.3626
+[Rank 15] Epoch 1/100, Global Batch 82885/43936, Loss: 5.3637
+[Rank 9] Epoch 1/100, Global Batch 49927/43936, Loss: 5.0928
+[Rank 7] Epoch 1/100, Global Batch 38941/43936, Loss: 5.2988
+[Rank 1] Epoch 1/100, Global Batch 5983/43936, Loss: 5.3905
+[Rank 13] Epoch 1/100, Global Batch 71899/43936, Loss: 5.4212
+[Rank 2] Epoch 1/100, Global Batch 11476/43936, Loss: 5.3845
+[Rank 10] Epoch 1/100, Global Batch 55420/43936, Loss: 5.4409
+[Rank 3] Epoch 1/100, Global Batch 16969/43936, Loss: 5.3590
+[Rank 6] Epoch 1/100, Global Batch 33448/43936, Loss: 5.3253
+[Rank 12] Epoch 1/100, Global Batch 66406/43936, Loss: 5.2826
+[Rank 5] Epoch 1/100, Global Batch 27965/43936, Loss: 5.1888
+[Rank 4] Epoch 1/100, Global Batch 22472/43936, Loss: 5.2607
+[Rank 11] Epoch 1/100, Global Batch 60923/43936, Loss: 5.3536
+[Rank 0] Epoch 1/100, Global Batch 500/43936, Loss: 5.3215
+[Rank 15] Epoch 1/100, Global Batch 82895/43936, Loss: 5.3370
+[Rank 14] Epoch 1/100, Global Batch 77402/43936, Loss: 5.3568
+[Rank 7] Epoch 1/100, Global Batch 38951/43936, Loss: 5.2598
+[Rank 9] Epoch 1/100, Global Batch 49937/43936, Loss: 5.1225
+[Rank 1] Epoch 1/100, Global Batch 5993/43936, Loss: 5.2955
+[Rank 13] Epoch 1/100, Global Batch 71909/43936, Loss: 5.4155
+[Rank 2] Epoch 1/100, Global Batch 11486/43936, Loss: 5.3676
+[Rank 10] Epoch 1/100, Global Batch 55430/43936, Loss: 5.3891
+[Rank 3] Epoch 1/100, Global Batch 16979/43936, Loss: 5.3607
+[Rank 6] Epoch 1/100, Global Batch 33458/43936, Loss: 5.3419
+[Rank 12] Epoch 1/100, Global Batch 66416/43936, Loss: 5.2424
+[Rank 8] Epoch 1/100, Global Batch 44454/43936, Loss: 5.2570
+[Rank 14] Epoch 1/100, Global Batch 77412/43936, Loss: 5.2420
+[Rank 9] Epoch 1/100, Global Batch 49947/43936, Loss: 5.0769
+[Rank 4] Epoch 1/100, Global Batch 22482/43936, Loss: 5.2503
+[Rank 10] Epoch 1/100, Global Batch 55440/43936, Loss: 5.3774
+[Rank 0] Epoch 1/100, Global Batch 510/43936, Loss: 5.4117
+[Rank 5] Epoch 1/100, Global Batch 27975/43936, Loss: 5.2861
+[Rank 13] Epoch 1/100, Global Batch 71919/43936, Loss: 5.4413
+[Rank 7] Epoch 1/100, Global Batch 38961/43936, Loss: 5.3168
+[Rank 12] Epoch 1/100, Global Batch 66426/43936, Loss: 5.3972
+[Rank 3] Epoch 1/100, Global Batch 16989/43936, Loss: 5.3774
+[Rank 2] Epoch 1/100, Global Batch 11496/43936, Loss: 5.2534
+[Rank 11] Epoch 1/100, Global Batch 60933/43936, Loss: 5.3837
+[Rank 15] Epoch 1/100, Global Batch 82905/43936, Loss: 5.3128
+[Rank 1] Epoch 1/100, Global Batch 6003/43936, Loss: 5.3526
+[Rank 6] Epoch 1/100, Global Batch 33468/43936, Loss: 5.3109
+[Rank 8] Epoch 1/100, Global Batch 44464/43936, Loss: 5.2685
+[Rank 4] Epoch 1/100, Global Batch 22492/43936, Loss: 5.1849
+[Rank 8] Epoch 1/100, Global Batch 44474/43936, Loss: 5.2946
+[Rank 14] Epoch 1/100, Global Batch 77422/43936, Loss: 5.2573
+[Rank 5] Epoch 1/100, Global Batch 27985/43936, Loss: 5.2475
+[Rank 9] Epoch 1/100, Global Batch 49957/43936, Loss: 5.1002
+[Rank 0] Epoch 1/100, Global Batch 520/43936, Loss: 5.2927
+[Rank 7] Epoch 1/100, Global Batch 38971/43936, Loss: 5.2953
+[Rank 10] Epoch 1/100, Global Batch 55450/43936, Loss: 5.5052
+[Rank 15] Epoch 1/100, Global Batch 82915/43936, Loss: 5.3514
+[Rank 1] Epoch 1/100, Global Batch 6013/43936, Loss: 5.2134
+[Rank 6] Epoch 1/100, Global Batch 33478/43936, Loss: 5.3378
+[Rank 12] Epoch 1/100, Global Batch 66436/43936, Loss: 5.2701
+[Rank 13] Epoch 1/100, Global Batch 71929/43936, Loss: 5.4605
+[Rank 3] Epoch 1/100, Global Batch 16999/43936, Loss: 5.0560
+[Rank 2] Epoch 1/100, Global Batch 11506/43936, Loss: 5.3370
+[Rank 11] Epoch 1/100, Global Batch 60943/43936, Loss: 5.3560
+[Rank 8] Epoch 1/100, Global Batch 44484/43936, Loss: 5.2219
+[Rank 4] Epoch 1/100, Global Batch 22502/43936, Loss: 5.2789
+[Rank 9] Epoch 1/100, Global Batch 49967/43936, Loss: 5.1569
+[Rank 5] Epoch 1/100, Global Batch 27995/43936, Loss: 5.2920
+[Rank 14] Epoch 1/100, Global Batch 77432/43936, Loss: 5.3472
+[Rank 7] Epoch 1/100, Global Batch 38981/43936, Loss: 5.1985
+[Rank 10] Epoch 1/100, Global Batch 55460/43936, Loss: 5.3752
+[Rank 3] Epoch 1/100, Global Batch 17009/43936, Loss: 5.3569
+[Rank 0] Epoch 1/100, Global Batch 530/43936, Loss: 5.3129
+[Rank 15] Epoch 1/100, Global Batch 82925/43936, Loss: 5.2957
+[Rank 13] Epoch 1/100, Global Batch 71939/43936, Loss: 5.3733
+[Rank 12] Epoch 1/100, Global Batch 66446/43936, Loss: 5.1661
+[Rank 1] Epoch 1/100, Global Batch 6023/43936, Loss: 5.1061
+[Rank 2] Epoch 1/100, Global Batch 11516/43936, Loss: 5.3126
+[Rank 6] Epoch 1/100, Global Batch 33488/43936, Loss: 5.3606
+[Rank 11] Epoch 1/100, Global Batch 60953/43936, Loss: 5.4207
+[Rank 8] Epoch 1/100, Global Batch 44494/43936, Loss: 5.2502
+[Rank 8] Epoch 1/100, Global Batch 44504/43936, Loss: 5.1857
+[Rank 9] Epoch 1/100, Global Batch 49977/43936, Loss: 5.0998
+[Rank 4] Epoch 1/100, Global Batch 22512/43936, Loss: 5.0595
+[Rank 5] Epoch 1/100, Global Batch 28005/43936, Loss: 5.2597
+[Rank 14] Epoch 1/100, Global Batch 77442/43936, Loss: 5.2966
+[Rank 0] Epoch 1/100, Global Batch 540/43936, Loss: 5.3830
+[Rank 10] Epoch 1/100, Global Batch 55470/43936, Loss: 5.3902
+[Rank 3] Epoch 1/100, Global Batch 17019/43936, Loss: 5.3915
+[Rank 7] Epoch 1/100, Global Batch 38991/43936, Loss: 5.2727
+[Rank 13] Epoch 1/100, Global Batch 71949/43936, Loss: 5.4382
+[Rank 15] Epoch 1/100, Global Batch 82935/43936, Loss: 5.1640
+[Rank 2] Epoch 1/100, Global Batch 11526/43936, Loss: 5.3049
+[Rank 1] Epoch 1/100, Global Batch 6033/43936, Loss: 5.4163
+[Rank 11] Epoch 1/100, Global Batch 60963/43936, Loss: 5.2600
+[Rank 6] Epoch 1/100, Global Batch 33498/43936, Loss: 5.2527
+[Rank 12] Epoch 1/100, Global Batch 66456/43936, Loss: 5.1983
+[Rank 8] Epoch 1/100, Global Batch 44514/43936, Loss: 5.2320
+[Rank 9] Epoch 1/100, Global Batch 49987/43936, Loss: 5.0841
+[Rank 4] Epoch 1/100, Global Batch 22522/43936, Loss: 5.2092
+[Rank 5] Epoch 1/100, Global Batch 28015/43936, Loss: 5.2475
+[Rank 10] Epoch 1/100, Global Batch 55480/43936, Loss: 5.3082
+[Rank 14] Epoch 1/100, Global Batch 77452/43936, Loss: 5.1334
+[Rank 0] Epoch 1/100, Global Batch 550/43936, Loss: 5.3532
+[Rank 7] Epoch 1/100, Global Batch 39001/43936, Loss: 5.2610
+[Rank 12] Epoch 1/100, Global Batch 66466/43936, Loss: 5.2035
+[Rank 1] Epoch 1/100, Global Batch 6043/43936, Loss: 5.3044
+[Rank 3] Epoch 1/100, Global Batch 17029/43936, Loss: 5.2969
+[Rank 15] Epoch 1/100, Global Batch 82945/43936, Loss: 5.3013
+[Rank 13] Epoch 1/100, Global Batch 71959/43936, Loss: 5.2931
+[Rank 2] Epoch 1/100, Global Batch 11536/43936, Loss: 5.3244
+[Rank 11] Epoch 1/100, Global Batch 60973/43936, Loss: 5.3046
+[Rank 6] Epoch 1/100, Global Batch 33508/43936, Loss: 5.2723
+[Rank 8] Epoch 1/100, Global Batch 44524/43936, Loss: 5.2860
+[Rank 8] Epoch 1/100, Global Batch 44534/43936, Loss: 5.1600
+[Rank 9] Epoch 1/100, Global Batch 49997/43936, Loss: 5.2170
+[Rank 5] Epoch 1/100, Global Batch 28025/43936, Loss: 5.2795
+[Rank 4] Epoch 1/100, Global Batch 22532/43936, Loss: 5.1923
+[Rank 14] Epoch 1/100, Global Batch 77462/43936, Loss: 5.2784
+[Rank 10] Epoch 1/100, Global Batch 55490/43936, Loss: 5.2309
+[Rank 7] Epoch 1/100, Global Batch 39011/43936, Loss: 5.2584
+[Rank 0] Epoch 1/100, Global Batch 560/43936, Loss: 5.4197
+[Rank 15] Epoch 1/100, Global Batch 82955/43936, Loss: 5.3325
+[Rank 1] Epoch 1/100, Global Batch 6053/43936, Loss: 5.2747
+[Rank 11] Epoch 1/100, Global Batch 60983/43936, Loss: 5.3049
+[Rank 12] Epoch 1/100, Global Batch 66476/43936, Loss: 5.2473
+[Rank 3] Epoch 1/100, Global Batch 17039/43936, Loss: 5.3201
+[Rank 2] Epoch 1/100, Global Batch 11546/43936, Loss: 5.2829
+[Rank 13] Epoch 1/100, Global Batch 71969/43936, Loss: 5.3229
+[Rank 6] Epoch 1/100, Global Batch 33518/43936, Loss: 5.2562
+[Rank 8] Epoch 1/100, Global Batch 44544/43936, Loss: 5.2280
+[Rank 9] Epoch 1/100, Global Batch 50007/43936, Loss: 5.0697
+[Rank 5] Epoch 1/100, Global Batch 28035/43936, Loss: 5.2918
+[Rank 10] Epoch 1/100, Global Batch 55500/43936, Loss: 5.2826
+[Rank 14] Epoch 1/100, Global Batch 77472/43936, Loss: 5.3013
+[Rank 4] Epoch 1/100, Global Batch 22542/43936, Loss: 5.1522
+[Rank 0] Epoch 1/100, Global Batch 570/43936, Loss: 5.2751
+[Rank 15] Epoch 1/100, Global Batch 82965/43936, Loss: 5.1322
+[Rank 7] Epoch 1/100, Global Batch 39021/43936, Loss: 5.2147
+[Rank 1] Epoch 1/100, Global Batch 6063/43936, Loss: 5.2176
+[Rank 12] Epoch 1/100, Global Batch 66486/43936, Loss: 5.1817
+[Rank 11] Epoch 1/100, Global Batch 60993/43936, Loss: 5.1874
+[Rank 2] Epoch 1/100, Global Batch 11556/43936, Loss: 5.2821
+[Rank 3] Epoch 1/100, Global Batch 17049/43936, Loss: 5.3411
+[Rank 13] Epoch 1/100, Global Batch 71979/43936, Loss: 5.2858
+[Rank 6] Epoch 1/100, Global Batch 33528/43936, Loss: 5.2979
+[Rank 9] Epoch 1/100, Global Batch 50017/43936, Loss: 5.0623
+[Rank 5] Epoch 1/100, Global Batch 28045/43936, Loss: 5.2801
+[Rank 14] Epoch 1/100, Global Batch 77482/43936, Loss: 5.2746
+[Rank 4] Epoch 1/100, Global Batch 22552/43936, Loss: 5.1975
+[Rank 10] Epoch 1/100, Global Batch 55510/43936, Loss: 5.2766
+[Rank 0] Epoch 1/100, Global Batch 580/43936, Loss: 5.2799
+[Rank 7] Epoch 1/100, Global Batch 39031/43936, Loss: 5.2132
+[Rank 1] Epoch 1/100, Global Batch 6073/43936, Loss: 5.2370
+[Rank 11] Epoch 1/100, Global Batch 61003/43936, Loss: 5.3698
+[Rank 15] Epoch 1/100, Global Batch 82975/43936, Loss: 5.2073
+[Rank 2] Epoch 1/100, Global Batch 11566/43936, Loss: 5.2627
+[Rank 12] Epoch 1/100, Global Batch 66496/43936, Loss: 5.1599
+[Rank 3] Epoch 1/100, Global Batch 17059/43936, Loss: 5.3040
+[Rank 13] Epoch 1/100, Global Batch 71989/43936, Loss: 5.2778
+[Rank 6] Epoch 1/100, Global Batch 33538/43936, Loss: 5.3046
+[Rank 9] Epoch 1/100, Global Batch 50027/43936, Loss: 5.1105
+[Rank 5] Epoch 1/100, Global Batch 28055/43936, Loss: 5.1906
+[Rank 14] Epoch 1/100, Global Batch 77492/43936, Loss: 5.1895
+[Rank 4] Epoch 1/100, Global Batch 22562/43936, Loss: 5.1596
+[Rank 0] Epoch 1/100, Global Batch 590/43936, Loss: 5.2798
+[Rank 10] Epoch 1/100, Global Batch 55520/43936, Loss: 5.2952
+[Rank 7] Epoch 1/100, Global Batch 39041/43936, Loss: 5.2699
+[Rank 1] Epoch 1/100, Global Batch 6083/43936, Loss: 5.2511
+[Rank 11] Epoch 1/100, Global Batch 61013/43936, Loss: 5.2658
+[Rank 15] Epoch 1/100, Global Batch 82985/43936, Loss: 5.1678
+[Rank 2] Epoch 1/100, Global Batch 11576/43936, Loss: 5.1018
+[Rank 12] Epoch 1/100, Global Batch 66506/43936, Loss: 5.2206
+[Rank 3] Epoch 1/100, Global Batch 17069/43936, Loss: 5.3220
+[Rank 13] Epoch 1/100, Global Batch 71999/43936, Loss: 5.3451
+[Rank 6] Epoch 1/100, Global Batch 33548/43936, Loss: 5.3193
+[Rank 9] Epoch 1/100, Global Batch 50037/43936, Loss: 5.0227
+[Rank 5] Epoch 1/100, Global Batch 28065/43936, Loss: 5.1826
+[Rank 14] Epoch 1/100, Global Batch 77502/43936, Loss: 5.1972
+[Rank 0] Epoch 1/100, Global Batch 600/43936, Loss: 5.2707
+[Rank 10] Epoch 1/100, Global Batch 55530/43936, Loss: 5.3017
+[Rank 4] Epoch 1/100, Global Batch 22572/43936, Loss: 5.1573
+[Rank 7] Epoch 1/100, Global Batch 39051/43936, Loss: 5.3157
+[Rank 1] Epoch 1/100, Global Batch 6093/43936, Loss: 5.2647
+[Rank 15] Epoch 1/100, Global Batch 82995/43936, Loss: 5.1563
+[Rank 11] Epoch 1/100, Global Batch 61023/43936, Loss: 5.3453
+[Rank 2] Epoch 1/100, Global Batch 11586/43936, Loss: 5.2328
+[Rank 13] Epoch 1/100, Global Batch 72009/43936, Loss: 5.5145
+[Rank 3] Epoch 1/100, Global Batch 17079/43936, Loss: 5.2358
+[Rank 12] Epoch 1/100, Global Batch 66516/43936, Loss: 5.2441
+[Rank 6] Epoch 1/100, Global Batch 33558/43936, Loss: 5.2335
+[Rank 8] Epoch 1/100, Global Batch 44554/43936, Loss: 5.1467
+[Rank 5] Epoch 1/100, Global Batch 28075/43936, Loss: 5.1237
+[Rank 9] Epoch 1/100, Global Batch 50047/43936, Loss: 5.0324
+[Rank 11] Epoch 1/100, Global Batch 61033/43936, Loss: 5.2387
+[Rank 13] Epoch 1/100, Global Batch 72019/43936, Loss: 5.2946
+[Rank 4] Epoch 1/100, Global Batch 22582/43936, Loss: 5.1342
+[Rank 1] Epoch 1/100, Global Batch 6103/43936, Loss: 5.2720
+[Rank 10] Epoch 1/100, Global Batch 55540/43936, Loss: 5.4000
+[Rank 15] Epoch 1/100, Global Batch 83005/43936, Loss: 5.1586
+[Rank 2] Epoch 1/100, Global Batch 11596/43936, Loss: 5.2617
+[Rank 0] Epoch 1/100, Global Batch 610/43936, Loss: 5.2766
+[Rank 3] Epoch 1/100, Global Batch 17089/43936, Loss: 5.1886
+[Rank 7] Epoch 1/100, Global Batch 39061/43936, Loss: 5.1957
+[Rank 14] Epoch 1/100, Global Batch 77512/43936, Loss: 5.1909
+[Rank 6] Epoch 1/100, Global Batch 33568/43936, Loss: 5.1846
+[Rank 12] Epoch 1/100, Global Batch 66526/43936, Loss: 5.2312
+[Rank 8] Epoch 1/100, Global Batch 44564/43936, Loss: 5.1524
+[Rank 8] Epoch 1/100, Global Batch 44574/43936, Loss: 5.1967
+[Rank 10] Epoch 1/100, Global Batch 55550/43936, Loss: 5.2646
+[Rank 0] Epoch 1/100, Global Batch 620/43936, Loss: 5.2670
+[Rank 9] Epoch 1/100, Global Batch 50057/43936, Loss: 5.1160
+[Rank 5] Epoch 1/100, Global Batch 28085/43936, Loss: 5.1469
+[Rank 1] Epoch 1/100, Global Batch 6113/43936, Loss: 5.2768
+[Rank 11] Epoch 1/100, Global Batch 61043/43936, Loss: 5.2354
+[Rank 13] Epoch 1/100, Global Batch 72029/43936, Loss: 5.2385
+[Rank 3] Epoch 1/100, Global Batch 17099/43936, Loss: 5.2580
+[Rank 7] Epoch 1/100, Global Batch 39071/43936, Loss: 5.2104
+[Rank 4] Epoch 1/100, Global Batch 22592/43936, Loss: 5.1389
+[Rank 2] Epoch 1/100, Global Batch 11606/43936, Loss: 5.2111
+[Rank 15] Epoch 1/100, Global Batch 83015/43936, Loss: 5.1986
+[Rank 14] Epoch 1/100, Global Batch 77522/43936, Loss: 5.2143
+[Rank 6] Epoch 1/100, Global Batch 33578/43936, Loss: 5.1667
+[Rank 12] Epoch 1/100, Global Batch 66536/43936, Loss: 5.0642
+[Rank 8] Epoch 1/100, Global Batch 44584/43936, Loss: 5.1010
+[Rank 5] Epoch 1/100, Global Batch 28095/43936, Loss: 5.2627
+[Rank 0] Epoch 1/100, Global Batch 630/43936, Loss: 5.1154
+[Rank 10] Epoch 1/100, Global Batch 55560/43936, Loss: 5.2422
+[Rank 9] Epoch 1/100, Global Batch 50067/43936, Loss: 4.9843
+[Rank 11] Epoch 1/100, Global Batch 61053/43936, Loss: 5.3138
+[Rank 4] Epoch 1/100, Global Batch 22602/43936, Loss: 5.0956
+[Rank 14] Epoch 1/100, Global Batch 77532/43936, Loss: 5.2654
+[Rank 1] Epoch 1/100, Global Batch 6123/43936, Loss: 5.3018
+[Rank 13] Epoch 1/100, Global Batch 72039/43936, Loss: 5.2760
+[Rank 3] Epoch 1/100, Global Batch 17109/43936, Loss: 5.1643
+[Rank 15] Epoch 1/100, Global Batch 83025/43936, Loss: 5.2633
+[Rank 2] Epoch 1/100, Global Batch 11616/43936, Loss: 5.2324
+[Rank 6] Epoch 1/100, Global Batch 33588/43936, Loss: 5.1719
+[Rank 7] Epoch 1/100, Global Batch 39081/43936, Loss: 5.1332
+[Rank 12] Epoch 1/100, Global Batch 66546/43936, Loss: 5.1060
+[Rank 8] Epoch 1/100, Global Batch 44594/43936, Loss: 5.0691
+[Rank 8] Epoch 1/100, Global Batch 44604/43936, Loss: 5.0524
+[Rank 5] Epoch 1/100, Global Batch 28105/43936, Loss: 5.1337
+[Rank 0] Epoch 1/100, Global Batch 640/43936, Loss: 5.3273
+[Rank 10] Epoch 1/100, Global Batch 55570/43936, Loss: 5.3538
+[Rank 1] Epoch 1/100, Global Batch 6133/43936, Loss: 5.2066
+[Rank 9] Epoch 1/100, Global Batch 50077/43936, Loss: 4.9961
+[Rank 11] Epoch 1/100, Global Batch 61063/43936, Loss: 5.2570
+[Rank 4] Epoch 1/100, Global Batch 22612/43936, Loss: 5.1015
+[Rank 13] Epoch 1/100, Global Batch 72049/43936, Loss: 5.2831
+[Rank 3] Epoch 1/100, Global Batch 17119/43936, Loss: 5.1631
+[Rank 2] Epoch 1/100, Global Batch 11626/43936, Loss: 5.2077
+[Rank 14] Epoch 1/100, Global Batch 77542/43936, Loss: 5.2797
+[Rank 7] Epoch 1/100, Global Batch 39091/43936, Loss: 5.1420
+[Rank 15] Epoch 1/100, Global Batch 83035/43936, Loss: 5.2534
+[Rank 6] Epoch 1/100, Global Batch 33598/43936, Loss: 5.2795
+[Rank 12] Epoch 1/100, Global Batch 66556/43936, Loss: 5.2988
+[Rank 8] Epoch 1/100, Global Batch 44614/43936, Loss: 5.0097
+[Rank 5] Epoch 1/100, Global Batch 28115/43936, Loss: 5.0660
+[Rank 0] Epoch 1/100, Global Batch 650/43936, Loss: 5.0777
+[Rank 10] Epoch 1/100, Global Batch 55580/43936, Loss: 5.2624
+[Rank 9] Epoch 1/100, Global Batch 50087/43936, Loss: 5.0322
+[Rank 3] Epoch 1/100, Global Batch 17129/43936, Loss: 5.1963
+[Rank 1] Epoch 1/100, Global Batch 6143/43936, Loss: 5.1689
+[Rank 11] Epoch 1/100, Global Batch 61073/43936, Loss: 5.3376
+[Rank 4] Epoch 1/100, Global Batch 22622/43936, Loss: 5.1107
+[Rank 14] Epoch 1/100, Global Batch 77552/43936, Loss: 5.2688
+[Rank 13] Epoch 1/100, Global Batch 72059/43936, Loss: 5.1929
+[Rank 15] Epoch 1/100, Global Batch 83045/43936, Loss: 5.1703
+[Rank 2] Epoch 1/100, Global Batch 11636/43936, Loss: 5.2726
+[Rank 7] Epoch 1/100, Global Batch 39101/43936, Loss: 5.2284
+[Rank 6] Epoch 1/100, Global Batch 33608/43936, Loss: 5.0986
+[Rank 8] Epoch 1/100, Global Batch 44624/43936, Loss: 4.9831
+[Rank 12] Epoch 1/100, Global Batch 66566/43936, Loss: 5.1354
+[Rank 8] Epoch 1/100, Global Batch 44634/43936, Loss: 5.0411
+[Rank 5] Epoch 1/100, Global Batch 28125/43936, Loss: 5.1869
+[Rank 0] Epoch 1/100, Global Batch 660/43936, Loss: 5.1841
+[Rank 9] Epoch 1/100, Global Batch 50097/43936, Loss: 4.9614
+[Rank 14] Epoch 1/100, Global Batch 77562/43936, Loss: 5.1764
+[Rank 10] Epoch 1/100, Global Batch 55590/43936, Loss: 5.2940
+[Rank 11] Epoch 1/100, Global Batch 61083/43936, Loss: 5.2014
+[Rank 3] Epoch 1/100, Global Batch 17139/43936, Loss: 5.3020
+[Rank 13] Epoch 1/100, Global Batch 72069/43936, Loss: 5.3710
+[Rank 4] Epoch 1/100, Global Batch 22632/43936, Loss: 5.1318
+[Rank 1] Epoch 1/100, Global Batch 6153/43936, Loss: 5.1392
+[Rank 2] Epoch 1/100, Global Batch 11646/43936, Loss: 5.1828
+[Rank 15] Epoch 1/100, Global Batch 83055/43936, Loss: 5.0923
+[Rank 7] Epoch 1/100, Global Batch 39111/43936, Loss: 5.2128
+[Rank 6] Epoch 1/100, Global Batch 33618/43936, Loss: 5.1589
+[Rank 12] Epoch 1/100, Global Batch 66576/43936, Loss: 5.0896
