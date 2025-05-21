@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 225, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 195, in main
+    comparison_results = compare_attention_mechanisms(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/attention_analysis.py", line 506, in compare_attention_mechanisms
+    start_time = time.time()
+NameError: name 'time' is not defined
