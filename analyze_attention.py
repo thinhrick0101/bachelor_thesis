@@ -154,21 +154,27 @@ def main():
     local_patterns = results['local_patterns']
     sparsity_potential = results['sparsity_potential']
     
-    # Calculate median effective window size across layers
+    # Calculate attention parameters from analysis
     window_sizes = [layer_data['median_window'] for layer_data in local_patterns.values()]
     median_window = int(sum(window_sizes) / len(window_sizes))
-    
-    # Calculate average number of global tokens needed
     global_tokens = [layer_data['top_k_90'] for layer_data in sparsity_potential.values()]
     avg_global_tokens = int(sum(global_tokens) / len(global_tokens))
     
     # Create sparse attention configuration
     sparse_config = config.copy()
     sparse_config['attention_class'] = CustomSparseAttention
+    
     sparse_config['attention_kwargs'] = {
         'local_window_size': median_window,
-        'num_global_tokens': avg_global_tokens
+        'num_global_tokens': avg_global_tokens,
+        'sparsity_threshold': 0.01  # Add default sparsity threshold
     }
+    
+    # Print sparse attention configuration
+    print("\nSparse Attention Configuration:")
+    print(f"- Local Window Size: {median_window}")
+    print(f"- Global Tokens: {avg_global_tokens}")
+    print(f"- Sparsity Threshold: {sparse_config['attention_kwargs']['sparsity_threshold']}")
     
     # Create sparse model
     sparse_model = EnhancedCharTransformer(**sparse_config)

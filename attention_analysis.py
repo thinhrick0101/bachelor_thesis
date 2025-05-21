@@ -288,7 +288,8 @@ class CustomSparseAttention(nn.Module):
     """
     Custom sparse attention mechanism based on analysis insights
     """
-    def __init__(self, embed_dim, num_heads, dropout=0.0, bias=True):
+    def __init__(self, embed_dim, num_heads, dropout=0.0, bias=True, 
+                 local_window_size=50, num_global_tokens=10, sparsity_threshold=0.01):
         super(CustomSparseAttention, self).__init__()
         self.embed_dim = embed_dim
         self.num_heads = num_heads
@@ -301,10 +302,10 @@ class CustomSparseAttention(nn.Module):
         self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         
-        # Initialize sparse attention patterns
-        self.local_window_size = 50  # Adjustable based on analysis
-        self.num_global_tokens = 10  # Number of tokens that attend globally
-        self.sparsity_threshold = 0.01  # Threshold for pruning attention weights
+        # Initialize sparse attention patterns with configurable parameters
+        self.local_window_size = local_window_size
+        self.num_global_tokens = num_global_tokens
+        self.sparsity_threshold = sparsity_threshold
         
     def forward(self, query, key, value, key_padding_mask=None, need_weights=True, attn_mask=None):
         """
