@@ -111,7 +111,7 @@ def main():
     tokenizer = ByteTokenizer()
     
     # Check if model exists
-    model_path = 'bachelor_thesis/models/dense_char_transformer.pt'
+    model_path = 'bachelor_thesis/models/dense_byte_transformer.pt'
     if os.path.exists(model_path):
         print(f"Loading existing model from {model_path}")
         model.load_state_dict(torch.load(model_path))
