@@ -6,7 +6,7 @@ import math
 from sparse_char_transformer import SparseCharTransformer, generate_square_subsequent_mask
 from stable_char_transformer import ByteTokenizer, create_batches, load_data
 from contextlib import nullcontext
-import torch.amp as amp
+from torch.cuda.amp import GradScaler, autocast
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                       learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
@@ -21,7 +21,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     )
     
     # Setup mixed precision training
-    scaler = torch.amp.GradScaler('cuda') if use_mixed_precision else None
+    scaler = GradScaler() if use_mixed_precision else None
     
     # Training metrics
     best_val_loss = float('inf')
@@ -58,7 +58,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
             src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
             
             # Forward pass with mixed precision
-            with amp.autocast('cuda') if use_mixed_precision else nullcontext():
+            with autocast() if use_mixed_precision else nullcontext():
                 output, attention_weights = model(input_ids, src_mask=src_mask)
                 loss = nn.functional.cross_entropy(
                     output.view(-1, output.size(-1)),
