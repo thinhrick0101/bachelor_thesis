@@ -16,7 +16,6 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     """Train the sparse transformer model with advanced training techniques"""
     
     # Enable gradient checkpointing for memory efficiency
-    model.enable_input_require_grads()
     model.gradient_checkpointing_enable()
     
     # Setup optimizer and scheduler

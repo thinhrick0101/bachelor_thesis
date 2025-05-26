@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from sparse_attention import SparseAttention, AdaptiveSparseAttention
+from torch.utils.checkpoint import checkpoint
 
 class SparseTransformerEncoderLayer(nn.Module):
     """Sparse Transformer Encoder Layer that uses our sparse attention mechanism"""
@@ -86,6 +87,9 @@ class SparseCharTransformer(nn.Module):
         self.norm = nn.LayerNorm(d_model)
         self.fc_out = nn.Linear(d_model, vocab_size)
         
+        # Gradient checkpointing state
+        self.gradient_checkpointing = False
+        
         # Initialize parameters
         self._reset_parameters()
         
@@ -94,6 +98,25 @@ class SparseCharTransformer(nn.Module):
         for p in self.parameters():
             if p.dim() > 1:
                 nn.init.xavier_uniform_(p)
+                
+    def gradient_checkpointing_enable(self):
+        """Enables gradient checkpointing for memory efficiency"""
+        self.gradient_checkpointing = True
+    
+    def gradient_checkpointing_disable(self):
+        """Disables gradient checkpointing"""
+        self.gradient_checkpointing = False
+    
+    def _layer_forward(self, layer, src, src_mask=None, src_key_padding_mask=None):
+        """Helper function for gradient checkpointing"""
+        def create_custom_forward(module):
+            def custom_forward(*inputs):
+                return module(*inputs)
+            return custom_forward
+        
+        if self.gradient_checkpointing:
+            return checkpoint(create_custom_forward(layer), src, src_mask, src_key_padding_mask)
+        return layer(src, src_mask, src_key_padding_mask)
                 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
         # Embed and add positional encoding
@@ -105,11 +128,10 @@ class SparseCharTransformer(nn.Module):
         
         # Pass through encoder layers
         for layer in self.layers:
-            src, attn_weights = layer(
-                src,
-                src_mask=src_mask,
-                src_key_padding_mask=src_key_padding_mask
-            )
+            if self.gradient_checkpointing:
+                src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
+            else:
+                src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             attention_weights.append(attn_weights)
             
         # Final normalization
