@@ -8,6 +8,7 @@ from stable_char_transformer import ByteTokenizer, create_batches, load_data
 from contextlib import nullcontext
 from torch.cuda.amp import GradScaler, autocast
 import gc
+import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                       learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
@@ -19,10 +20,13 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     model.gradient_checkpointing_enable()
     
     # Setup optimizer and scheduler
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
-        optimizer, T_0=warmup_steps, T_mult=2, eta_min=min_lr
-    )
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-7, weight_decay=weight_decay)  # Start with very small lr
+    
+    # Custom warmup scheduler
+    def get_lr(step):
+        if step < warmup_steps:
+            return learning_rate * (step / warmup_steps)
+        return learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)))
     
     # Setup mixed precision training
     scaler = GradScaler() if use_mixed_precision else None
@@ -32,6 +36,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     patience_counter = 0
     train_losses = []
     val_losses = []
+    global_step = 0
     
     # Training loop
     for epoch in range(num_epochs):
@@ -64,21 +69,36 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 # Forward pass with mixed precision
                 with autocast() if use_mixed_precision else nullcontext():
                     output, attention_weights = model(input_ids, src_mask=src_mask)
-                    loss = nn.functional.cross_entropy(
+                    
+                    # Calculate cross entropy loss with label smoothing
+                    loss = F.cross_entropy(
                         output.reshape(-1, output.size(-1)),
                         target_ids.reshape(-1),
-                        ignore_index=-1
+                        ignore_index=-1,
+                        label_smoothing=0.1  # Add label smoothing
                     )
                     
                     # Add sparsity regularization based on attention patterns
                     sparsity_loss = 0
+                    num_valid_layers = 0
                     for i, layer_weights in enumerate(attention_weights):
                         if layer_weights is not None:
-                            # Calculate sparsity factor based on layer position
-                            sparsity_factor = min(1.0, i / len(attention_weights))
-                            sparsity_loss += torch.mean(torch.abs(layer_weights)) * sparsity_factor
+                            # Ensure weights are valid
+                            if not torch.isnan(layer_weights).any() and not torch.isinf(layer_weights).any():
+                                # Calculate sparsity factor based on layer position
+                                sparsity_factor = min(1.0, i / len(attention_weights))
+                                # Clip attention weights for stability
+                                clipped_weights = torch.clamp(layer_weights, -100, 100)
+                                layer_sparsity = torch.mean(torch.abs(clipped_weights))
+                                if not torch.isnan(layer_sparsity):
+                                    sparsity_loss += layer_sparsity * sparsity_factor
+                                    num_valid_layers += 1
                     
-                    loss = loss + 0.01 * sparsity_loss
+                    # Average sparsity loss and add to main loss with smaller weight
+                    if num_valid_layers > 0:
+                        sparsity_loss = sparsity_loss / num_valid_layers
+                        loss = loss + 0.001 * sparsity_loss  # Reduced weight from 0.01 to 0.001
+                    
                     loss = loss / gradient_accumulation_steps
                 
                 # Backward pass with mixed precision
@@ -86,27 +106,33 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                        # Clip gradients
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                        # Clip gradients
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
                         optimizer.step()
                         optimizer.zero_grad()
                 
-                total_train_loss += loss.item() * gradient_accumulation_steps
-                num_batches += 1
-                
                 # Update learning rate
-                scheduler.step(epoch + batch_idx / len(train_batches))
+                global_step += 1
+                for param_group in optimizer.param_groups:
+                    param_group['lr'] = get_lr(global_step)
+                
+                if not torch.isnan(loss):
+                    total_train_loss += loss.item() * gradient_accumulation_steps
+                    num_batches += 1
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
+                    current_lr = optimizer.param_groups[0]['lr']
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
-                          f"Loss: {loss.item():.4f} | LR: {scheduler.get_last_lr()[0]:.6f}")
+                          f"Loss: {loss.item():.4f} | LR: {current_lr:.6f}")
                     
                 # Clear memory
                 del output, attention_weights, loss
@@ -201,7 +227,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         if val_batches:
             print(f"Average Validation Loss: {avg_val_loss:.4f}")
             print(f"Best Validation Loss: {best_val_loss:.4f}")
-        print(f"Learning Rate: {scheduler.get_last_lr()[0]:.6f}")
+        print(f"Learning Rate: {optimizer.param_groups[0]['lr']:.6f}")
         
         # Clear memory at end of epoch
         gc.collect()
