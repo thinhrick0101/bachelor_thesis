@@ -33,29 +33,42 @@ class SparseTransformerEncoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)
 
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
+        # Layer norms for pre-norm architecture
+        self.norm1 = nn.LayerNorm(d_model, eps=1e-6)
+        self.norm2 = nn.LayerNorm(d_model, eps=1e-6)
+        
+        # Dropouts
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
+
+        # Layer scale parameters (helps with training stability)
+        self.layer_scale1 = nn.Parameter(torch.ones(1, 1, d_model) * 0.1)
+        self.layer_scale2 = nn.Parameter(torch.ones(1, 1, d_model) * 0.1)
 
         self.activation = getattr(F, activation)
 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
+        # Pre-norm architecture
+        src_norm = self.norm1(src)
+        
         # Multi-head sparse attention
         src2, attn_weights = self.self_attn(
-            query=src,
-            key=src,
-            value=src,
+            query=src_norm,
+            key=src_norm,
+            value=src_norm,
             attn_mask=src_mask,
             key_padding_mask=src_key_padding_mask
         )
-        src = src + self.dropout1(src2)
-        src = self.norm1(src)
+        
+        # Apply layer scaling and residual
+        src = src + self.dropout1(self.layer_scale1 * src2)
 
-        # Feed-forward network
-        src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
-        src = src + self.dropout2(src2)
-        src = self.norm2(src)
+        # Pre-norm for feed-forward
+        src_norm = self.norm2(src)
+        
+        # Feed-forward network with layer scaling
+        src2 = self.linear2(self.dropout(self.activation(self.linear1(src_norm))))
+        src = src + self.dropout2(self.layer_scale2 * src2)
 
         return src, attn_weights
 
@@ -88,9 +101,8 @@ class SparseCharTransformer(nn.Module):
             ) for i in range(num_layers)
         ])
         
-        # Pre-norm architecture: Add initial normalization
-        self.prenorm = nn.LayerNorm(d_model)
-        self.norm = nn.LayerNorm(d_model)
+        # Final layer norm
+        self.norm = nn.LayerNorm(d_model, eps=1e-6)
         
         # Initialize output projection with smaller weights
         self.fc_out = nn.Linear(d_model, vocab_size)
@@ -142,11 +154,8 @@ class SparseCharTransformer(nn.Module):
                 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
         # Scale embeddings and add positional encoding
-        src = self.embedding(src) * (self.d_model ** 0.5)
+        src = self.embedding(src) * (self.d_model ** 0.25)  # Reduced scaling factor
         src = self.pos_encoder(src)
-        
-        # Apply initial normalization (pre-norm architecture)
-        src = self.prenorm(src)
         
         # Store attention weights for analysis
         attention_weights = []
@@ -163,7 +172,7 @@ class SparseCharTransformer(nn.Module):
         output = self.norm(src)
         
         # Project to vocabulary size with scaled output
-        output = self.fc_out(output) / self.d_model ** 0.25  # Scale down logits
+        output = self.fc_out(output)
         
         return output, attention_weights
     

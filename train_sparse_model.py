@@ -11,8 +11,8 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=1e-4, weight_decay=0.1, warmup_steps=2000,
-                      device='cuda', patience=8, min_lr=1e-5,
+                      learning_rate=5e-5, weight_decay=0.01, warmup_steps=4000,
+                      device='cuda', patience=8, min_lr=1e-6,
                       gradient_accumulation_steps=8, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
@@ -27,22 +27,22 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         {'params': [p for n, p in model.named_parameters() 
                    if not any(layer in n for layer in ['embedding', 'fc_out'])],
          'lr': learning_rate}
-    ], weight_decay=weight_decay)
+    ], weight_decay=weight_decay, eps=1e-8, betas=(0.9, 0.99))
     
-    # Custom warmup scheduler with longer warmup
+    # Custom warmup scheduler with longer warmup and smoother transition
     def get_lr(step):
         if step < warmup_steps:
-            return min(1e-8 + (learning_rate - 1e-8) * (step / warmup_steps), learning_rate)
+            return learning_rate * (step / warmup_steps) ** 2  # Quadratic warmup
+        progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
         return max(
             min_lr,
-            learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / 
-                                              (num_epochs * len(train_batches) - warmup_steps)))
+            learning_rate * 0.5 * (1 + math.cos(math.pi * progress))
         )
     
-    # Setup mixed precision training
+    # Setup mixed precision training with conservative initial scale
     scaler = GradScaler(
-        init_scale=2**10,
-        growth_factor=2.0,
+        init_scale=2**8,  # Start smaller
+        growth_factor=1.2,  # Grow more slowly
         backoff_factor=0.5,
         growth_interval=2000
     ) if use_mixed_precision else None
@@ -103,9 +103,9 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                             # Ensure weights are valid
                             if not torch.isnan(layer_weights).any() and not torch.isinf(layer_weights).any():
                                 # Calculate sparsity factor based on layer position
-                                sparsity_factor = min(0.2, i / len(attention_weights))  # Reduced maximum factor
+                                sparsity_factor = min(0.1, i / len(attention_weights))  # Even smaller maximum factor
                                 # Clip attention weights for stability
-                                clipped_weights = torch.clamp(layer_weights, -10, 10)  # Tighter clipping
+                                clipped_weights = torch.clamp(layer_weights, -5, 5)  # Even tighter clipping
                                 layer_sparsity = torch.mean(torch.abs(clipped_weights))
                                 if not torch.isnan(layer_sparsity):
                                     sparsity_loss += layer_sparsity * sparsity_factor
@@ -114,25 +114,30 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     # Average sparsity loss and add to main loss with smaller weight
                     if num_valid_layers > 0:
                         sparsity_loss = sparsity_loss / num_valid_layers
-                        loss = loss + 0.0001 * sparsity_loss  # Further reduced weight
+                        loss = loss + 0.00001 * sparsity_loss  # Much smaller weight
                     
                     loss = loss / gradient_accumulation_steps
+                
+                # Check for NaN loss before backward pass
+                if torch.isnan(loss) or torch.isinf(loss):
+                    print(f"WARNING: NaN/Inf loss detected at batch {batch_idx}, skipping...")
+                    continue
                 
                 # Backward pass with mixed precision
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
-                        # Clip gradients with tighter threshold
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
+                        # Clip gradients with even tighter threshold
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        # Clip gradients with tighter threshold
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
+                        # Clip gradients with even tighter threshold
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         optimizer.step()
                         optimizer.zero_grad()
                 
@@ -330,9 +335,9 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=1e-4,
-        weight_decay=0.1,
-        warmup_steps=2000,
+        learning_rate=5e-5,
+        weight_decay=0.01,
+        warmup_steps=4000,
         device=device,
         patience=8,
         gradient_accumulation_steps=8,  # Increased from 4
