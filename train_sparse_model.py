@@ -7,12 +7,17 @@ from sparse_char_transformer import SparseCharTransformer, generate_square_subse
 from stable_char_transformer import ByteTokenizer, create_batches, load_data
 from contextlib import nullcontext
 from torch.cuda.amp import GradScaler, autocast
+import gc
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                       learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
                       device='cuda', patience=8, min_lr=1e-5,
-                      gradient_accumulation_steps=4, use_mixed_precision=True):
+                      gradient_accumulation_steps=8, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
+    
+    # Enable gradient checkpointing for memory efficiency
+    model.enable_input_require_grads()
+    model.gradient_checkpointing_enable()
     
     # Setup optimizer and scheduler
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
@@ -38,72 +43,86 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         
         # Training phase
         for batch_idx, batch in enumerate(train_batches):
-            # Handle batch data
-            if isinstance(batch, (tuple, list)):
-                # If batch is a sequence, take the first element as our data
-                batch_data = batch[0]
-            else:
-                batch_data = batch
+            try:
+                # Handle batch data
+                if isinstance(batch, (tuple, list)):
+                    batch_data = batch[0]
+                else:
+                    batch_data = batch
+                    
+                # Ensure batch_data is a tensor and on the correct device
+                if not isinstance(batch_data, torch.Tensor):
+                    batch_data = torch.tensor(batch_data)
+                batch_data = batch_data.to(device)
+                    
+                # Split into input and target
+                input_ids = batch_data[:, :-1]
+                target_ids = batch_data[:, 1:]
                 
-            # Ensure batch_data is a tensor and on the correct device
-            if not isinstance(batch_data, torch.Tensor):
-                batch_data = torch.tensor(batch_data)
-            batch_data = batch_data.to(device)
+                # Create attention mask for training
+                src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
                 
-            # Split into input and target
-            input_ids = batch_data[:, :-1]
-            target_ids = batch_data[:, 1:]
-            
-            # Create attention mask for training
-            src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
-            
-            # Forward pass with mixed precision
-            with autocast() if use_mixed_precision else nullcontext():
-                output, attention_weights = model(input_ids, src_mask=src_mask)
-                loss = nn.functional.cross_entropy(
-                    output.view(-1, output.size(-1)),
-                    target_ids.view(-1),
-                    ignore_index=-1
-                )
+                # Forward pass with mixed precision
+                with autocast() if use_mixed_precision else nullcontext():
+                    output, attention_weights = model(input_ids, src_mask=src_mask)
+                    loss = nn.functional.cross_entropy(
+                        output.view(-1, output.size(-1)),
+                        target_ids.view(-1),
+                        ignore_index=-1
+                    )
+                    
+                    # Add sparsity regularization based on attention patterns
+                    sparsity_loss = 0
+                    for layer_weights in attention_weights:
+                        if layer_weights is not None:
+                            layer_idx = attention_weights.index(layer_weights)
+                            sparsity_factor = min(1.0, layer_idx / len(attention_weights))
+                            sparsity_loss += torch.mean(torch.abs(layer_weights)) * sparsity_factor
+                    
+                    loss = loss + 0.01 * sparsity_loss
+                    loss = loss / gradient_accumulation_steps
                 
-                # Add sparsity regularization based on attention patterns
-                sparsity_loss = 0
-                for layer_weights in attention_weights:
-                    if layer_weights is not None:
-                        # Encourage sparsity in later layers
-                        layer_idx = attention_weights.index(layer_weights)
-                        sparsity_factor = min(1.0, layer_idx / len(attention_weights))
-                        sparsity_loss += torch.mean(torch.abs(layer_weights)) * sparsity_factor
+                # Backward pass with mixed precision
+                if use_mixed_precision:
+                    scaler.scale(loss).backward()
+                    if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                        scaler.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                        scaler.step(optimizer)
+                        scaler.update()
+                        optimizer.zero_grad()
+                else:
+                    loss.backward()
+                    if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                        optimizer.step()
+                        optimizer.zero_grad()
                 
-                loss = loss + 0.01 * sparsity_loss
-                loss = loss / gradient_accumulation_steps
-            
-            # Backward pass with mixed precision
-            if use_mixed_precision:
-                scaler.scale(loss).backward()
-                if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                    scaler.unscale_(optimizer)
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-                    scaler.step(optimizer)
-                    scaler.update()
-                    optimizer.zero_grad()
-            else:
-                loss.backward()
-                if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-                    optimizer.step()
-                    optimizer.zero_grad()
-            
-            total_train_loss += loss.item() * gradient_accumulation_steps
-            num_batches += 1
-            
-            # Update learning rate
-            scheduler.step(epoch + batch_idx / len(train_batches))
-            
-            # Progress logging
-            if batch_idx % 100 == 0:
-                print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
-                      f"Loss: {loss.item():.4f} | LR: {scheduler.get_last_lr()[0]:.6f}")
+                total_train_loss += loss.item() * gradient_accumulation_steps
+                num_batches += 1
+                
+                # Update learning rate
+                scheduler.step(epoch + batch_idx / len(train_batches))
+                
+                # Progress logging
+                if batch_idx % 100 == 0:
+                    print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
+                          f"Loss: {loss.item():.4f} | LR: {scheduler.get_last_lr()[0]:.6f}")
+                    
+                # Clear memory
+                del output, attention_weights, loss
+                if batch_idx % 10 == 0:  # Periodic memory cleanup
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                    
+            except RuntimeError as e:
+                if "out of memory" in str(e):
+                    print("WARNING: out of memory, skipping batch")
+                    if hasattr(torch.cuda, 'empty_cache'):
+                        torch.cuda.empty_cache()
+                    continue
+                else:
+                    raise e
         
         # Calculate average training loss
         avg_train_loss = total_train_loss / num_batches
@@ -117,32 +136,44 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
             
             with torch.no_grad():
                 for batch in val_batches:
-                    # Handle batch data
-                    if isinstance(batch, (tuple, list)):
-                        # If batch is a sequence, take the first element as our data
-                        batch_data = batch[0]
-                    else:
-                        batch_data = batch
+                    try:
+                        # Handle batch data
+                        if isinstance(batch, (tuple, list)):
+                            batch_data = batch[0]
+                        else:
+                            batch_data = batch
+                            
+                        # Ensure batch_data is a tensor and on the correct device
+                        if not isinstance(batch_data, torch.Tensor):
+                            batch_data = torch.tensor(batch_data)
+                        batch_data = batch_data.to(device)
                         
-                    # Ensure batch_data is a tensor and on the correct device
-                    if not isinstance(batch_data, torch.Tensor):
-                        batch_data = torch.tensor(batch_data)
-                    batch_data = batch_data.to(device)
-                    
-                    # Split into input and target
-                    input_ids = batch_data[:, :-1]
-                    target_ids = batch_data[:, 1:]
-                    src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
-                    
-                    output, _ = model(input_ids, src_mask=src_mask)
-                    loss = nn.functional.cross_entropy(
-                        output.view(-1, output.size(-1)),
-                        target_ids.view(-1),
-                        ignore_index=-1
-                    )
-                    
-                    total_val_loss += loss.item()
-                    num_val_batches += 1
+                        # Split into input and target
+                        input_ids = batch_data[:, :-1]
+                        target_ids = batch_data[:, 1:]
+                        src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
+                        
+                        output, _ = model(input_ids, src_mask=src_mask)
+                        loss = nn.functional.cross_entropy(
+                            output.view(-1, output.size(-1)),
+                            target_ids.view(-1),
+                            ignore_index=-1
+                        )
+                        
+                        total_val_loss += loss.item()
+                        num_val_batches += 1
+                        
+                        # Clear memory
+                        del output, loss
+                        
+                    except RuntimeError as e:
+                        if "out of memory" in str(e):
+                            print("WARNING: out of memory during validation, skipping batch")
+                            if hasattr(torch.cuda, 'empty_cache'):
+                                torch.cuda.empty_cache()
+                            continue
+                        else:
+                            raise e
             
             avg_val_loss = total_val_loss / num_val_batches
             val_losses.append(avg_val_loss)
@@ -172,6 +203,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
             print(f"Average Validation Loss: {avg_val_loss:.4f}")
             print(f"Best Validation Loss: {best_val_loss:.4f}")
         print(f"Learning Rate: {scheduler.get_last_lr()[0]:.6f}")
+        
+        # Clear memory at end of epoch
+        gc.collect()
+        torch.cuda.empty_cache()
     
     return train_losses, val_losses
 
@@ -235,9 +270,9 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches
-    batch_size = 32
-    seq_length = 1024
+    # Create batches with smaller batch size and sequence length
+    batch_size = 16  # Reduced from 32
+    seq_length = 512  # Reduced from 1024
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
@@ -253,7 +288,7 @@ def main():
         warmup_steps=1000,
         device=device,
         patience=8,
-        gradient_accumulation_steps=4,
+        gradient_accumulation_steps=8,  # Increased from 4
         use_mixed_precision=True
     )
     
