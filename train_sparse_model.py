@@ -72,10 +72,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     
                     # Add sparsity regularization based on attention patterns
                     sparsity_loss = 0
-                    for layer_weights in attention_weights:
+                    for i, layer_weights in enumerate(attention_weights):
                         if layer_weights is not None:
-                            layer_idx = attention_weights.index(layer_weights)
-                            sparsity_factor = min(1.0, layer_idx / len(attention_weights))
+                            # Calculate sparsity factor based on layer position
+                            sparsity_factor = min(1.0, i / len(attention_weights))
                             sparsity_loss += torch.mean(torch.abs(layer_weights)) * sparsity_factor
                     
                     loss = loss + 0.01 * sparsity_loss
