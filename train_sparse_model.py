@@ -11,45 +11,35 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=1e-5, weight_decay=0.01, warmup_steps=8000,
-                      device='cuda', patience=8, min_lr=1e-6,
-                      gradient_accumulation_steps=16, use_mixed_precision=True):
+                      learning_rate=1e-6, weight_decay=0.01, warmup_steps=10000,
+                      device='cuda', patience=8, min_lr=1e-7,
+                      gradient_accumulation_steps=32, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
     # Enable gradient checkpointing for memory efficiency
-    model.gradient_checkpointing_enable()
+    model.gradient_checkpointing = True
     
-    # Setup optimizer with layer-wise learning rates and gradient accumulation
-    optimizer = torch.optim.AdamW([
-        {'params': model.embedding.parameters(), 'lr': learning_rate * 0.1},
-        {'params': model.fc_out.parameters(), 'lr': learning_rate * 0.1},
-        {'params': [p for n, p in model.named_parameters() 
-                   if not any(layer in n for layer in ['embedding', 'fc_out'])],
-         'lr': learning_rate}
-    ], weight_decay=weight_decay, eps=1e-8, betas=(0.9, 0.98))
+    # Setup optimizer with conservative settings
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=learning_rate,
+        weight_decay=weight_decay,
+        eps=1e-8,
+        betas=(0.9, 0.98)
+    )
     
-    # Custom warmup scheduler with longer warmup and smoother transition
+    # Simple linear warmup
     def get_lr(step):
-        # Constant warmup for first 20% of warmup steps
-        if step < warmup_steps * 0.2:
-            return learning_rate * 0.1
-        # Linear warmup for remaining warmup steps
-        elif step < warmup_steps:
-            return learning_rate * 0.1 + (learning_rate - learning_rate * 0.1) * \
-                   ((step - warmup_steps * 0.2) / (warmup_steps * 0.8))
-        # Cosine decay with warm restarts
-        progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        return max(
-            min_lr,
-            learning_rate * 0.5 * (1 + math.cos(math.pi * progress))
-        )
+        if step < warmup_steps:
+            return learning_rate * (step / warmup_steps)
+        return learning_rate
     
-    # Setup mixed precision training with conservative initial scale
+    # Setup mixed precision training with very conservative settings
     scaler = GradScaler(
-        init_scale=2**7,  # Start even smaller
-        growth_factor=1.1,  # Grow even more slowly
+        init_scale=2**5,  # Very small initial scale
+        growth_factor=1.05,  # Very slow growth
         backoff_factor=0.5,
-        growth_interval=2000
+        growth_interval=4000
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -58,7 +48,6 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     train_losses = []
     val_losses = []
     global_step = 0
-    nan_counter = 0  # Track consecutive NaN losses
     
     # Training loop
     for epoch in range(num_epochs):
@@ -90,9 +79,9 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 
                 # Forward pass with mixed precision
                 with autocast() if use_mixed_precision else nullcontext():
-                    output, attention_weights = model(input_ids, src_mask=src_mask)
+                    output, _ = model(input_ids, src_mask=src_mask)
                     
-                    # Calculate cross entropy loss with label smoothing
+                    # Simple cross entropy loss
                     loss = F.cross_entropy(
                         output.reshape(-1, output.size(-1)),
                         target_ids.reshape(-1),
@@ -100,36 +89,12 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         label_smoothing=0.1
                     )
                     
-                    # Add minimal sparsity regularization
-                    sparsity_loss = 0
-                    num_valid_layers = 0
-                    
-                    for i, layer_weights in enumerate(attention_weights):
-                        if layer_weights is not None and not torch.isnan(layer_weights).any():
-                            # Very minimal sparsity factor
-                            sparsity_factor = 0.01 * (i / len(attention_weights))
-                            layer_sparsity = torch.mean(torch.abs(torch.clamp(layer_weights, -1, 1)))
-                            sparsity_loss += layer_sparsity * sparsity_factor
-                            num_valid_layers += 1
-                    
-                    # Add minimal sparsity loss
-                    if num_valid_layers > 0:
-                        loss = loss + 0.000001 * (sparsity_loss / num_valid_layers)
-                    
                     loss = loss / gradient_accumulation_steps
                 
                 # Check for NaN loss before backward pass
                 if torch.isnan(loss) or torch.isinf(loss):
                     print(f"WARNING: NaN/Inf loss detected at batch {batch_idx}, skipping...")
-                    nan_counter += 1
-                    if nan_counter >= 10:
-                        print("Too many consecutive NaN losses, reducing learning rate...")
-                        for param_group in optimizer.param_groups:
-                            param_group['lr'] *= 0.5
-                        nan_counter = 0
                     continue
-                else:
-                    nan_counter = 0
                 
                 # Backward pass with mixed precision
                 if use_mixed_precision:
@@ -151,23 +116,19 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 if not torch.isnan(loss):
                     global_step += 1
                     current_lr = get_lr(global_step)
-                    for i, param_group in enumerate(optimizer.param_groups):
-                        if i < 2:  # embedding and output layers
-                            param_group['lr'] = current_lr * 0.1
-                        else:
-                            param_group['lr'] = current_lr
+                    for param_group in optimizer.param_groups:
+                        param_group['lr'] = current_lr
                     
                     total_train_loss += loss.item() * gradient_accumulation_steps
                     num_batches += 1
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
-                    current_lr = optimizer.param_groups[-1]['lr']
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
                           f"Loss: {loss.item():.4f} | LR: {current_lr:.6f}")
                     
                 # Clear memory
-                del output, attention_weights, loss
+                del output, loss
                 if batch_idx % 10 == 0:
                     gc.collect()
                     torch.cuda.empty_cache()
@@ -340,12 +301,12 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=1e-5,
+        learning_rate=1e-6,
         weight_decay=0.01,
-        warmup_steps=8000,
+        warmup_steps=10000,
         device=device,
         patience=8,
-        gradient_accumulation_steps=16,
+        gradient_accumulation_steps=32,
         use_mixed_precision=True
     )
     
