@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import os
+import matplotlib.pyplot as plt
+import math
 from stable_char_transformer import (
     EnhancedCharTransformer, 
     ByteTokenizer, 
@@ -8,6 +10,55 @@ from stable_char_transformer import (
     load_data,
     train_model
 )
+
+def visualize_loss(train_losses, val_losses=None, output_file='dense_model_loss.png'):
+    """Visualize training and validation losses"""
+    plt.figure(figsize=(12, 6))
+    
+    # Plot training loss
+    plt.plot(train_losses, label='Training Loss', marker='o', markersize=4, linestyle='-', linewidth=1)
+    
+    # Plot validation loss if available
+    if val_losses:
+        plt.plot(val_losses, label='Validation Loss', marker='s', markersize=4, linestyle='-', linewidth=1)
+        
+        # Plot best validation loss point
+        best_epoch = val_losses.index(min(val_losses))
+        best_loss = val_losses[best_epoch]
+        plt.plot(best_epoch, best_loss, 'r*', markersize=10, label=f'Best Val Loss: {best_loss:.4f}')
+    
+    plt.title('Model Training History', fontsize=14)
+    plt.xlabel('Epoch', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    
+    # Add perplexity as secondary y-axis
+    ax1 = plt.gca()
+    ax2 = ax1.twinx()
+    
+    # Create perplexity ticks based on loss values
+    loss_ticks = ax1.get_yticks()
+    perplexity_ticks = [math.exp(x) for x in loss_ticks if x > 0]
+    ax2.set_yticks(perplexity_ticks)
+    ax2.set_yticklabels([f'{x:.1f}' for x in perplexity_ticks])
+    ax2.set_ylabel('Perplexity', fontsize=12)
+    
+    plt.tight_layout()
+    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    # Print statistics
+    print("\nTraining Statistics:")
+    print(f"Initial Loss: {train_losses[0]:.4f}")
+    print(f"Final Loss: {train_losses[-1]:.4f}")
+    print(f"Best Loss: {min(train_losses):.4f}")
+    
+    if val_losses:
+        print("\nValidation Statistics:")
+        print(f"Initial Loss: {val_losses[0]:.4f}")
+        print(f"Final Loss: {val_losses[-1]:.4f}")
+        print(f"Best Loss: {min(val_losses):.4f}")
 
 def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, top_k=50, top_p=0.9, device='cuda'):
     """Generate text using the trained model"""
@@ -82,7 +133,7 @@ def main():
         
         # Train model
         print("Training model...")
-        model, _ = train_model(
+        model, (train_losses, val_losses) = train_model(
             model=model,
             train_batches=train_batches,
             val_batches=val_batches,
@@ -98,10 +149,18 @@ def main():
             use_cosine_schedule=True  # Use cosine learning rate schedule
         )
         
-        # Save model
+        # Save model and loss history
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
         print(f"Saving model to {model_path}")
-        torch.save(model.state_dict(), model_path)
+        torch.save({
+            'model_state_dict': model.state_dict(),
+            'train_losses': train_losses,
+            'val_losses': val_losses
+        }, model_path)
+        
+        # Visualize training history
+        print("Generating loss plot...")
+        visualize_loss(train_losses, val_losses, 'dense_model_training_loss.png')
     
     # Generate some example text
     print("\nGenerating example texts with different temperatures:")
@@ -140,4 +199,4 @@ def main():
         print(generated)
 
 if __name__ == "__main__":
-    main() 
+    main()
