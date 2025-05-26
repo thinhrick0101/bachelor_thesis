@@ -7,6 +7,8 @@ import numpy as np
 from typing import Optional, Tuple
 import math
 import time
+from stable_char_transformer import EnhancedCharTransformer, ByteTokenizer
+import os
 
 class AttentionPatternAnalyzer:
     """
@@ -604,4 +606,248 @@ def plot_comparison_results(results, save_path='attention_comparison.png'):
     
     plt.tight_layout()
     plt.savefig(save_path)
-    plt.close() 
+    plt.close()
+
+def load_model(model_path, device='cuda'):
+    """Load the trained model"""
+    config = {
+        'vocab_size': 256,
+        'd_model': 512,
+        'nhead': 8,
+        'num_layers': 12,
+        'dim_feedforward': 2048,
+        'dropout': 0.1,
+        'attention_dropout': 0.1,
+        'activation_dropout': 0.1,
+        'token_dropout': 0.05,
+        'use_checkpoint': True,
+        'stochastic_depth_prob': 0.1
+    }
+    
+    model = EnhancedCharTransformer(**config)
+    if os.path.exists(model_path):
+        state_dict = torch.load(model_path, map_location=device)
+        if isinstance(state_dict, dict) and 'model_state_dict' in state_dict:
+            model.load_state_dict(state_dict['model_state_dict'])
+        else:
+            model.load_state_dict(state_dict)
+    model = model.to(device)
+    model.eval()
+    return model
+
+def get_attention_patterns(model, text, tokenizer, device='cuda'):
+    """Extract attention patterns from the model for a given text"""
+    model.eval()
+    
+    # Tokenize input
+    input_ids = tokenizer.encode(text)
+    input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0).to(device)
+    
+    attention_patterns = []
+    
+    def attention_hook(module, input, output):
+        # Extract attention weights from the output
+        attn_weights = output[1]  # Shape: [batch_size, num_heads, seq_len, seq_len]
+        attention_patterns.append(attn_weights.detach().cpu())
+    
+    # Register hooks for all attention layers
+    hooks = []
+    for layer in model.transformer_blocks:
+        hook = layer.self_attn.register_forward_hook(attention_hook)
+        hooks.append(hook)
+    
+    # Forward pass
+    with torch.no_grad():
+        model(input_tensor)
+    
+    # Remove hooks
+    for hook in hooks:
+        hook.remove()
+    
+    return attention_patterns
+
+def visualize_attention_pattern(attention_pattern, layer_idx, head_idx, text, save_path=None):
+    """Visualize attention pattern for a specific layer and head"""
+    # Get attention weights for the specified layer and head
+    attn = attention_pattern[layer_idx][0, head_idx].numpy()
+    
+    # Reshape if necessary - handle non-square attention matrices
+    if len(attn.shape) == 1:
+        # For a flattened attention matrix of size N, we want to find dimensions that multiply to N
+        N = len(attn)
+        # Try to find factors close to sqrt(N)
+        target = int(np.sqrt(N))
+        for i in range(target, 0, -1):
+            if N % i == 0:
+                rows, cols = i, N // i
+                break
+        attn = attn.reshape(rows, cols)
+    
+    plt.figure(figsize=(12, 8))
+    plt.imshow(attn, cmap='viridis', aspect='auto')
+    plt.colorbar(label='Attention Weight')
+    
+    # Add labels
+    plt.title(f'Layer {layer_idx}, Head {head_idx} Attention Pattern')
+    plt.xlabel('Key Position')
+    plt.ylabel('Query Position')
+    
+    # Add ticks at regular intervals
+    rows, cols = attn.shape
+    x_tick_interval = max(1, cols // 10)  # Show at most 10 ticks
+    y_tick_interval = max(1, rows // 10)
+    plt.xticks(np.arange(0, cols, x_tick_interval))
+    plt.yticks(np.arange(0, rows, y_tick_interval))
+    
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
+
+def analyze_attention_sparsity(attention_patterns):
+    """Analyze sparsity patterns in attention weights"""
+    sparsity_stats = []
+    
+    for layer_idx, layer_attn in enumerate(attention_patterns):
+        layer_stats = []
+        
+        # Analyze each attention head
+        for head_idx in range(layer_attn.size(1)):
+            attn_weights = layer_attn[0, head_idx]
+            
+            # Calculate various statistics
+            avg_attention = attn_weights.mean().item()
+            max_attention = attn_weights.max().item()
+            entropy = -(attn_weights * torch.log(attn_weights + 1e-9)).sum().item()
+            
+            # Calculate effective sparsity (% of attention weight in top-k values)
+            values, _ = torch.sort(attn_weights.flatten(), descending=True)
+            cumsum = torch.cumsum(values, dim=0)
+            sparsity_90 = torch.searchsorted(cumsum, 0.9).item() / len(values)
+            
+            layer_stats.append({
+                'head': head_idx,
+                'avg_attention': avg_attention,
+                'max_attention': max_attention,
+                'entropy': entropy,
+                'sparsity_90': sparsity_90
+            })
+        
+        sparsity_stats.append(layer_stats)
+    
+    return sparsity_stats
+
+def plot_sparsity_analysis(sparsity_stats, save_path=None):
+    """Plot sparsity analysis results"""
+    num_layers = len(sparsity_stats)
+    num_heads = len(sparsity_stats[0])
+    
+    # Create figure with more space for legends
+    plt.figure(figsize=(20, 16))
+    fig, axes = plt.subplots(2, 2, figsize=(20, 16))
+    fig.suptitle('Attention Pattern Analysis', fontsize=16, y=1.05)
+    
+    # Prepare data
+    layers = np.arange(num_layers)
+    metrics = {
+        'Average Attention': np.array([[s['avg_attention'] for s in layer] for layer in sparsity_stats]),
+        'Entropy': np.array([[s['entropy'] for s in layer] for layer in sparsity_stats]),
+        'Max Attention': np.array([[s['max_attention'] for s in layer] for layer in sparsity_stats]),
+        'Sparsity (90% mass)': np.array([[s['sparsity_90'] for s in layer] for layer in sparsity_stats])
+    }
+    
+    # Plot each metric
+    for (title, data), ax in zip(metrics.items(), axes.flat):
+        for head in range(num_heads):
+            ax.plot(layers, data[:, head], label=f'Head {head}', marker='o', markersize=4)
+        ax.set_title(title, pad=20)
+        ax.set_xlabel('Layer')
+        ax.set_ylabel('Value')
+        ax.grid(True, alpha=0.3)
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    
+    # Adjust layout to prevent overlapping
+    plt.subplots_adjust(right=0.85, top=0.9, bottom=0.1, left=0.1, wspace=0.3, hspace=0.3)
+    
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
+
+def main():
+    # Setup
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model_path = 'bachelor_thesis/models/dense_char_transformer.pt'
+    
+    # Create output directory
+    os.makedirs('attention_analysis', exist_ok=True)
+    output_file = 'attention_analysis/attention_patterns_analysis.txt'
+    
+    # Open file for writing results
+    with open(output_file, 'w') as f:
+        # Load model and tokenizer
+        f.write("Loading model from: " + model_path + "\n\n")
+        model = load_model(model_path, device)
+        tokenizer = ByteTokenizer()
+        
+        # Sample text for analysis
+        text = """The quick brown fox jumps over the lazy dog. This pangram contains every letter of the English alphabet at least once. Pangrams are often used to display font samples and test keyboards."""
+        f.write("Analyzing text:\n" + text + "\n\n")
+        
+        # Get attention patterns
+        f.write("Extracting attention patterns...\n")
+        attention_patterns = get_attention_patterns(model, text, tokenizer, device)
+        
+        # Analyze patterns
+        f.write("Analyzing attention patterns...\n\n")
+        sparsity_stats = analyze_attention_sparsity(attention_patterns)
+        
+        # Write summary statistics
+        f.write("=== Summary of Attention Pattern Analysis ===\n\n")
+        
+        for layer_idx, layer_stats in enumerate(sparsity_stats):
+            f.write(f"\nLayer {layer_idx}:\n")
+            f.write("-" * 40 + "\n")
+            
+            # Calculate layer-level statistics
+            avg_attention = np.mean([h['avg_attention'] for h in layer_stats])
+            avg_entropy = np.mean([h['entropy'] for h in layer_stats])
+            avg_sparsity = np.mean([h['sparsity_90'] for h in layer_stats])
+            
+            f.write(f"Layer Average Statistics:\n")
+            f.write(f"  Average Attention: {avg_attention:.4f}\n")
+            f.write(f"  Average Entropy: {avg_entropy:.4f}\n")
+            f.write(f"  Average Sparsity (90% mass): {avg_sparsity:.4f}\n\n")
+            
+            f.write("Head-level Statistics:\n")
+            for head_stats in layer_stats:
+                f.write(f"  Head {head_stats['head']}:\n")
+                f.write(f"    Average attention: {head_stats['avg_attention']:.4f}\n")
+                f.write(f"    Entropy: {head_stats['entropy']:.4f}\n")
+                f.write(f"    Sparsity (90% mass): {head_stats['sparsity_90']:.4f}\n")
+                f.write("\n")
+        
+        # Calculate and write global statistics
+        f.write("\n=== Global Statistics ===\n")
+        f.write("-" * 40 + "\n")
+        all_heads = [head for layer in sparsity_stats for head in layer]
+        
+        global_stats = {
+            'Mean Attention': np.mean([h['avg_attention'] for h in all_heads]),
+            'Mean Entropy': np.mean([h['entropy'] for h in all_heads]),
+            'Mean Sparsity': np.mean([h['sparsity_90'] for h in all_heads]),
+            'Max Entropy': max(h['entropy'] for h in all_heads),
+            'Min Entropy': min(h['entropy'] for h in all_heads),
+            'Max Sparsity': max(h['sparsity_90'] for h in all_heads),
+            'Min Sparsity': min(h['sparsity_90'] for h in all_heads)
+        }
+        
+        for stat_name, value in global_stats.items():
+            f.write(f"{stat_name}: {value:.4f}\n")
+        
+        f.write("\nAnalysis complete! Results have been saved to: " + output_file)
+
+if __name__ == "__main__":
+    main() 
