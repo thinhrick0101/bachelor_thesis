@@ -104,26 +104,28 @@ class SparseAttention(nn.Module):
         # Later layers (9+): Highly selective sparse attention
         else:
             # Reduced local window
-            local_size = self.local_window // 2
+            local_size = max(1, self.local_window // 2)
             for i in range(seq_len):
                 start = max(0, i - local_size // 2)
                 end = min(seq_len, i + local_size // 2 + 1)
                 mask[i, start:end] = True
             
             # Selective global tokens
-            num_global = min(self.global_tokens, seq_len // 8)
+            num_global = max(1, min(self.global_tokens, seq_len // 8))
             stride = max(1, seq_len // num_global)
             global_idx = torch.arange(0, seq_len, stride, device=device)
             mask[:, global_idx] = True
             
             # Add learned important positions based on entropy analysis
-            sparsity_threshold = self.sparsity_factor * (1 + self.layer_idx / 12)
-            num_extra = int(seq_len * sparsity_threshold)
-            if num_extra > 0:
-                for i in range(seq_len):
-                    # Random but consistent extra connections
-                    rand_idx = torch.randperm(seq_len, device=device)[:num_extra]
-                    mask[i, rand_idx] = True
+            base_sparsity = max(0.1, min(0.5, self.sparsity_factor))  # Clamp between 0.1 and 0.5
+            layer_factor = min(1.0, (self.layer_idx - 8) / 4)  # Gradual increase from layer 9-12
+            sparsity_threshold = base_sparsity * (1 + layer_factor)
+            num_extra = max(1, min(seq_len // 4, int(seq_len * sparsity_threshold)))
+            
+            for i in range(seq_len):
+                # Random but consistent extra connections
+                rand_idx = torch.randperm(seq_len, device=device)[:num_extra]
+                mask[i, rand_idx] = True
         
         # Always attend to self
         mask.fill_diagonal_(True)
