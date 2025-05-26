@@ -65,8 +65,8 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 with autocast() if use_mixed_precision else nullcontext():
                     output, attention_weights = model(input_ids, src_mask=src_mask)
                     loss = nn.functional.cross_entropy(
-                        output.view(-1, output.size(-1)),
-                        target_ids.view(-1),
+                        output.reshape(-1, output.size(-1)),
+                        target_ids.reshape(-1),
                         ignore_index=-1
                     )
                     
@@ -154,8 +154,8 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         
                         output, _ = model(input_ids, src_mask=src_mask)
                         loss = nn.functional.cross_entropy(
-                            output.view(-1, output.size(-1)),
-                            target_ids.view(-1),
+                            output.reshape(-1, output.size(-1)),
+                            target_ids.reshape(-1),
                             ignore_index=-1
                         )
                         
