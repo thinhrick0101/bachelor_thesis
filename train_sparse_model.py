@@ -11,9 +11,9 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=1e-6, weight_decay=0.01, warmup_steps=10000,
-                      device='cuda', patience=8, min_lr=1e-7,
-                      gradient_accumulation_steps=32, use_mixed_precision=True):
+                      learning_rate=5e-4, weight_decay=0.01, warmup_steps=1000,
+                      device='cuda', patience=8, min_lr=1e-5,
+                      gradient_accumulation_steps=16, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
     # Enable gradient checkpointing for memory efficiency
@@ -22,24 +22,27 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Setup optimizer with conservative settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=learning_rate,
+        lr=1e-7,  # Start with very small lr, will be increased during warmup
         weight_decay=weight_decay,
         eps=1e-8,
         betas=(0.9, 0.98)
     )
     
-    # Simple linear warmup
+    # Warmup with linear schedule
     def get_lr(step):
+        # Linear warmup
         if step < warmup_steps:
             return learning_rate * (step / warmup_steps)
-        return learning_rate
+        # Cosine decay
+        progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
+        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training with very conservative settings
+    # Setup mixed precision training with conservative settings
     scaler = GradScaler(
-        init_scale=2**5,  # Very small initial scale
-        growth_factor=1.05,  # Very slow growth
+        init_scale=2**8,
+        growth_factor=1.1,
         backoff_factor=0.5,
-        growth_interval=4000
+        growth_interval=2000
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -48,6 +51,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     train_losses = []
     val_losses = []
     global_step = 0
+    
+    print(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.6f}")
+    print(f"Target learning rate: {learning_rate:.6f}")
+    print(f"Warmup steps: {warmup_steps}")
     
     # Training loop
     for epoch in range(num_epochs):
@@ -101,14 +108,14 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.01)
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.01)
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
                         optimizer.step()
                         optimizer.zero_grad()
                 
@@ -301,12 +308,12 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=1e-6,
+        learning_rate=5e-4,
         weight_decay=0.01,
-        warmup_steps=10000,
+        warmup_steps=1000,
         device=device,
         patience=8,
-        gradient_accumulation_steps=32,
+        gradient_accumulation_steps=16,
         use_mixed_precision=True
     )
     
