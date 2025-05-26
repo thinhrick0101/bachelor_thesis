@@ -117,6 +117,15 @@ class SparseCharTransformer(nn.Module):
         
         # Fixed small scaling factor
         self.embedding_scale = 0.1
+
+    def _layer_forward(self, layer, src, src_mask=None, src_key_padding_mask=None):
+        """Helper function for gradient checkpointing"""
+        def custom_forward(*inputs):
+            return layer(*inputs)
+
+        if self.gradient_checkpointing:
+            return checkpoint(custom_forward, src, src_mask, src_key_padding_mask)
+        return layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
         # Scale embeddings and add positional encoding
