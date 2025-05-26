@@ -68,37 +68,59 @@ class SparseCharTransformer(nn.Module):
         super().__init__()
         
         self.d_model = d_model
+        
+        # Initialize embedding with smaller weights
         self.embedding = nn.Embedding(vocab_size, d_model)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
+        
         self.pos_encoder = PositionalEncoding(d_model, dropout)
         
-        # Create encoder layers with sparse attention
+        # Create encoder layers with sparse attention and pre-norm architecture
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
                 nhead=nhead,
                 dim_feedforward=dim_feedforward,
-                dropout=dropout,
+                dropout=dropout * (1 + 0.1 * i),  # Progressive dropout
                 activation=activation,
                 layer_idx=i,
                 use_adaptive=use_adaptive_attention
             ) for i in range(num_layers)
         ])
         
+        # Pre-norm architecture: Add initial normalization
+        self.prenorm = nn.LayerNorm(d_model)
         self.norm = nn.LayerNorm(d_model)
+        
+        # Initialize output projection with smaller weights
         self.fc_out = nn.Linear(d_model, vocab_size)
+        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.02)
+        nn.init.zeros_(self.fc_out.bias)
         
         # Gradient checkpointing state
         self.gradient_checkpointing = False
         
-        # Initialize parameters
+        # Initialize parameters with better scaling
         self._reset_parameters()
         
     def _reset_parameters(self):
         """Initialize parameters with better scaling"""
-        for p in self.parameters():
-            if p.dim() > 1:
-                nn.init.xavier_uniform_(p)
-                
+        # Initialize attention weights with smaller values
+        for layer in self.layers:
+            if hasattr(layer.self_attn, 'q_proj'):
+                nn.init.normal_(layer.self_attn.q_proj.weight, mean=0.0, std=0.02)
+                nn.init.normal_(layer.self_attn.k_proj.weight, mean=0.0, std=0.02)
+                nn.init.normal_(layer.self_attn.v_proj.weight, mean=0.0, std=0.02)
+                nn.init.zeros_(layer.self_attn.q_proj.bias)
+                nn.init.zeros_(layer.self_attn.k_proj.bias)
+                nn.init.zeros_(layer.self_attn.v_proj.bias)
+            
+            # Initialize FFN with smaller values
+            nn.init.normal_(layer.linear1.weight, mean=0.0, std=0.02)
+            nn.init.normal_(layer.linear2.weight, mean=0.0, std=0.02)
+            nn.init.zeros_(layer.linear1.bias)
+            nn.init.zeros_(layer.linear2.bias)
+    
     def gradient_checkpointing_enable(self):
         """Enables gradient checkpointing for memory efficiency"""
         self.gradient_checkpointing = True
@@ -119,9 +141,12 @@ class SparseCharTransformer(nn.Module):
         return layer(src, src_mask, src_key_padding_mask)
                 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Embed and add positional encoding
-        src = self.embedding(src) * math.sqrt(self.d_model)
+        # Scale embeddings and add positional encoding
+        src = self.embedding(src) * (self.d_model ** 0.5)
         src = self.pos_encoder(src)
+        
+        # Apply initial normalization (pre-norm architecture)
+        src = self.prenorm(src)
         
         # Store attention weights for analysis
         attention_weights = []
@@ -133,12 +158,12 @@ class SparseCharTransformer(nn.Module):
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             attention_weights.append(attn_weights)
-            
+        
         # Final normalization
         output = self.norm(src)
         
-        # Project to vocabulary size
-        output = self.fc_out(output)
+        # Project to vocabulary size with scaled output
+        output = self.fc_out(output) / self.d_model ** 0.25  # Scale down logits
         
         return output, attention_weights
     

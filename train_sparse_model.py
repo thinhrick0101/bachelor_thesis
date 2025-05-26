@@ -11,7 +11,7 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
+                      learning_rate=1e-4, weight_decay=0.1, warmup_steps=2000,
                       device='cuda', patience=8, min_lr=1e-5,
                       gradient_accumulation_steps=8, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
@@ -19,17 +19,33 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing_enable()
     
-    # Setup optimizer and scheduler
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-7, weight_decay=weight_decay)  # Start with very small lr
+    # Setup optimizer with layer-wise learning rates
+    # Lower learning rates for embedding and output layers
+    optimizer = torch.optim.AdamW([
+        {'params': model.embedding.parameters(), 'lr': learning_rate * 0.1},
+        {'params': model.fc_out.parameters(), 'lr': learning_rate * 0.1},
+        {'params': [p for n, p in model.named_parameters() 
+                   if not any(layer in n for layer in ['embedding', 'fc_out'])],
+         'lr': learning_rate}
+    ], weight_decay=weight_decay)
     
-    # Custom warmup scheduler
+    # Custom warmup scheduler with longer warmup
     def get_lr(step):
         if step < warmup_steps:
-            return learning_rate * (step / warmup_steps)
-        return learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)))
+            return min(1e-8 + (learning_rate - 1e-8) * (step / warmup_steps), learning_rate)
+        return max(
+            min_lr,
+            learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / 
+                                              (num_epochs * len(train_batches) - warmup_steps)))
+        )
     
     # Setup mixed precision training
-    scaler = GradScaler() if use_mixed_precision else None
+    scaler = GradScaler(
+        init_scale=2**10,
+        growth_factor=2.0,
+        backoff_factor=0.5,
+        growth_interval=2000
+    ) if use_mixed_precision else None
     
     # Training metrics
     best_val_loss = float('inf')
@@ -75,20 +91,21 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         output.reshape(-1, output.size(-1)),
                         target_ids.reshape(-1),
                         ignore_index=-1,
-                        label_smoothing=0.1  # Add label smoothing
+                        label_smoothing=0.1
                     )
                     
                     # Add sparsity regularization based on attention patterns
                     sparsity_loss = 0
                     num_valid_layers = 0
+                    
                     for i, layer_weights in enumerate(attention_weights):
                         if layer_weights is not None:
                             # Ensure weights are valid
                             if not torch.isnan(layer_weights).any() and not torch.isinf(layer_weights).any():
                                 # Calculate sparsity factor based on layer position
-                                sparsity_factor = min(1.0, i / len(attention_weights))
+                                sparsity_factor = min(0.2, i / len(attention_weights))  # Reduced maximum factor
                                 # Clip attention weights for stability
-                                clipped_weights = torch.clamp(layer_weights, -100, 100)
+                                clipped_weights = torch.clamp(layer_weights, -10, 10)  # Tighter clipping
                                 layer_sparsity = torch.mean(torch.abs(clipped_weights))
                                 if not torch.isnan(layer_sparsity):
                                     sparsity_loss += layer_sparsity * sparsity_factor
@@ -97,7 +114,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     # Average sparsity loss and add to main loss with smaller weight
                     if num_valid_layers > 0:
                         sparsity_loss = sparsity_loss / num_valid_layers
-                        loss = loss + 0.001 * sparsity_loss  # Reduced weight from 0.01 to 0.001
+                        loss = loss + 0.0001 * sparsity_loss  # Further reduced weight
                     
                     loss = loss / gradient_accumulation_steps
                 
@@ -106,31 +123,36 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
-                        # Clip gradients
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                        # Clip gradients with tighter threshold
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        # Clip gradients
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                        # Clip gradients with tighter threshold
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
                         optimizer.step()
                         optimizer.zero_grad()
                 
                 # Update learning rate
-                global_step += 1
-                for param_group in optimizer.param_groups:
-                    param_group['lr'] = get_lr(global_step)
-                
                 if not torch.isnan(loss):
+                    global_step += 1
+                    current_lr = get_lr(global_step)
+                    for i, param_group in enumerate(optimizer.param_groups):
+                        # Apply different learning rates to different parameter groups
+                        if i < 2:  # embedding and output layers
+                            param_group['lr'] = current_lr * 0.1
+                        else:
+                            param_group['lr'] = current_lr
+                    
                     total_train_loss += loss.item() * gradient_accumulation_steps
                     num_batches += 1
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
-                    current_lr = optimizer.param_groups[0]['lr']
+                    current_lr = optimizer.param_groups[-1]['lr']
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
                           f"Loss: {loss.item():.4f} | LR: {current_lr:.6f}")
                     
@@ -227,7 +249,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         if val_batches:
             print(f"Average Validation Loss: {avg_val_loss:.4f}")
             print(f"Best Validation Loss: {best_val_loss:.4f}")
-        print(f"Learning Rate: {optimizer.param_groups[0]['lr']:.6f}")
+        print(f"Learning Rate: {optimizer.param_groups[-1]['lr']:.6f}")
         
         # Clear memory at end of epoch
         gc.collect()
@@ -310,7 +332,7 @@ def main():
         num_epochs=100,
         learning_rate=1e-4,
         weight_decay=0.1,
-        warmup_steps=1000,
+        warmup_steps=2000,
         device=device,
         patience=8,
         gradient_accumulation_steps=8,  # Increased from 4
