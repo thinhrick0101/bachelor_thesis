@@ -12,86 +12,84 @@ class SparseTransformerEncoderLayer(nn.Module):
                  activation="gelu", layer_idx=0, use_adaptive=False):
         super().__init__()
         
-        # Use proper sparse attention with layer-specific settings
-        if use_adaptive:
-            self.self_attn = AdaptiveSparseAttention(
+        # Use standard attention for early layers, sparse for later
+        if layer_idx < 4:  # Use standard attention for early layers
+            self.self_attn = nn.MultiheadAttention(
                 embed_dim=d_model,
                 num_heads=nhead,
-                layer_idx=layer_idx,
-                dropout=dropout
+                dropout=dropout,
+                batch_first=True
             )
-        else:
-            # Adjust sparsity parameters based on layer depth
-            if layer_idx < 4:
-                local_window = 64  # Larger window for early layers
-                global_tokens = 16
-                sparsity_factor = 0.3
-            elif layer_idx < 9:
-                local_window = 32  # Medium window for middle layers
-                global_tokens = 8
-                sparsity_factor = 0.2
-            else:
-                local_window = 16  # Smaller window for later layers
-                global_tokens = 4
-                sparsity_factor = 0.1
-                
+        else:  # Use sparse attention for later layers
             self.self_attn = SparseAttention(
                 embed_dim=d_model,
                 num_heads=nhead,
                 layer_idx=layer_idx,
                 dropout=dropout,
-                local_window=local_window,
-                global_tokens=global_tokens,
-                sparsity_factor=sparsity_factor
+                local_window=32,  # Conservative window size
+                global_tokens=4,   # Fewer global tokens
+                sparsity_factor=0.3  # More connections
             )
         
-        # Feed-forward network with better initialization
+        # Feed-forward network with better initialization and gradient control
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)
 
-        # Layer normalization
-        self.norm1 = nn.LayerNorm(d_model, eps=1e-5)
-        self.norm2 = nn.LayerNorm(d_model, eps=1e-5)
+        # Layer normalization with higher epsilon for stability
+        self.norm1 = nn.LayerNorm(d_model, eps=1e-4)
+        self.norm2 = nn.LayerNorm(d_model, eps=1e-4)
         
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
 
         self.activation = F.gelu if activation == "gelu" else F.relu
-
-        # Initialize weights with better scaling
+        
+        # Initialize weights with smaller values for stability
         with torch.no_grad():
-            nn.init.xavier_uniform_(self.linear1.weight, gain=0.2)
-            nn.init.xavier_uniform_(self.linear2.weight, gain=0.2)
+            nn.init.xavier_uniform_(self.linear1.weight, gain=0.1)
+            nn.init.xavier_uniform_(self.linear2.weight, gain=0.1)
             nn.init.zeros_(self.linear1.bias)
             nn.init.zeros_(self.linear2.bias)
 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Pre-norm architecture
+        # Pre-norm architecture with gradient scaling
         src2 = self.norm1(src)
         
-        # Self attention with sparse pattern
-        src2, attn_weights = self.self_attn(
-            src2, src2, src2,
-            attn_mask=src_mask,
-            key_padding_mask=src_key_padding_mask
-        )
+        # Apply attention with gradient clamping
+        if isinstance(self.self_attn, nn.MultiheadAttention):
+            src2, attn_weights = self.self_attn(
+                src2, src2, src2,
+                attn_mask=src_mask,
+                key_padding_mask=src_key_padding_mask,
+                need_weights=True
+            )
+        else:
+            src2, attn_weights = self.self_attn(
+                src2, src2, src2,
+                attn_mask=src_mask,
+                key_padding_mask=src_key_padding_mask
+            )
         
-        # Residual connection with dropout
-        src = src + self.dropout1(src2)
+        # Gradient clamping for stability
+        with torch.no_grad():
+            src2 = torch.clamp(src2, min=-1.0, max=1.0)
         
-        # Pre-norm for FFN
+        # Scaled residual connection
+        src = src + self.dropout1(src2) * 0.5
+        
+        # Pre-norm for FFN with gradient scaling
         src2 = self.norm2(src)
         
-        # FFN with less aggressive clamping
+        # FFN with gradient control
         src2 = self.linear1(src2)
         src2 = self.activation(src2)
-        src2 = torch.clamp(src2, min=-3.0, max=3.0)  # Less restrictive clamping
+        src2 = torch.clamp(src2, min=-2.0, max=2.0)
         src2 = self.dropout(src2)
         src2 = self.linear2(src2)
         
-        # Residual connection with dropout
-        src = src + self.dropout2(src2)
+        # Scaled residual connection
+        src = src + self.dropout2(src2) * 0.5
 
         return src, attn_weights
 
@@ -105,16 +103,16 @@ class SparseCharTransformer(nn.Module):
         
         self.d_model = d_model
         
-        # Better embedding initialization
+        # Conservative embedding initialization
         self.embedding = nn.Embedding(vocab_size, d_model)
-        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.1)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
         
         self.pos_encoder = PositionalEncoding(d_model, dropout)
         
-        # Input normalization
-        self.input_norm = nn.LayerNorm(d_model, eps=1e-5)
+        # Input normalization with higher epsilon
+        self.input_norm = nn.LayerNorm(d_model, eps=1e-4)
         
-        # Create encoder layers with sparse attention
+        # Create encoder layers
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
@@ -127,12 +125,12 @@ class SparseCharTransformer(nn.Module):
             ) for i in range(num_layers)
         ])
         
-        # Final normalization
-        self.norm = nn.LayerNorm(d_model, eps=1e-5)
+        # Final normalization with higher epsilon
+        self.norm = nn.LayerNorm(d_model, eps=1e-4)
         
-        # Output projection with better initialization
+        # Output projection with conservative initialization
         self.fc_out = nn.Linear(d_model, vocab_size)
-        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.1)
+        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.02)
         nn.init.zeros_(self.fc_out.bias)
         
         # Gradient checkpointing state
@@ -148,7 +146,7 @@ class SparseCharTransformer(nn.Module):
         return layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Single embedding scaling
+        # Embedding with proper scaling
         src = self.embedding(src) * math.sqrt(self.d_model)
         src = self.pos_encoder(src)
         
@@ -158,23 +156,24 @@ class SparseCharTransformer(nn.Module):
         # Store attention weights for analysis
         attention_weights = []
         
-        # Pass through encoder layers
+        # Pass through encoder layers with gradient control
         for layer in self.layers:
             if self.gradient_checkpointing:
                 src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             
-            # Less aggressive intermediate clamping
-            src = torch.clamp(src, min=-10.0, max=10.0)
+            # Gradient clamping between layers
+            with torch.no_grad():
+                src = torch.clamp(src, min=-5.0, max=5.0)
             
             attention_weights.append(attn_weights)
         
         # Final normalization
         output = self.norm(src)
         
-        # Project to vocabulary size without extra scaling
-        output = self.fc_out(output)
+        # Project to vocabulary size with scaling
+        output = self.fc_out(output) * 0.1  # Scale down logits
         
         return output, attention_weights
     
