@@ -25,22 +25,23 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         lr=1e-8,  # Even smaller initial lr for more stable warmup
         weight_decay=weight_decay,
         eps=1e-8,
-        betas=(0.9, 0.98)
+        betas=(0.9, 0.95)  # Reduced beta2 for more stable momentum
     )
     
-    # Warmup with linear schedule
-    def get_lr(step):
-        # Linear warmup
+    # Warmup with linear schedule and slower ramp-up
+    def get_lr(step, epoch):
+        # More gradual warmup
         if step < warmup_steps:
-            return learning_rate * (step / warmup_steps)
-        # Cosine decay with more gradual decline
+            return learning_rate * (step / warmup_steps) ** 2  # Quadratic warmup
+        # Cosine decay with epoch-based dampening
         progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
+        decay_factor = 0.9 ** epoch  # Reduce max learning rate each epoch
+        return max(min_lr, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
     
     # Setup mixed precision training with more conservative settings
     scaler = GradScaler(
-        init_scale=2**7,  # Reduced from 2**8
-        growth_factor=1.05,  # More conservative growth
+        init_scale=2**6,  # Even more conservative initial scale
+        growth_factor=1.02,  # Much slower growth
         backoff_factor=0.5,
         growth_interval=2000
     ) if use_mixed_precision else None
@@ -109,7 +110,13 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
                         # More aggressive gradient clipping
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        
+                        # Monitor gradient norms
+                        if grad_norm > 1.0:  # If gradients are too large
+                            print(f"WARNING: Large gradient norm {grad_norm:.4f}")
+                            continue  # Skip this update
+                            
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
@@ -117,14 +124,20 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         # More aggressive gradient clipping
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        
+                        # Monitor gradient norms
+                        if grad_norm > 1.0:  # If gradients are too large
+                            print(f"WARNING: Large gradient norm {grad_norm:.4f}")
+                            continue  # Skip this update
+                            
                         optimizer.step()
                         optimizer.zero_grad()
                 
-                # Update learning rate
+                # Update learning rate with epoch-aware scheduling
                 if not torch.isnan(loss):
                     global_step += 1
-                    current_lr = get_lr(global_step)
+                    current_lr = get_lr(global_step, epoch)
                     for param_group in optimizer.param_groups:
                         param_group['lr'] = current_lr
                     
