@@ -60,7 +60,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Training loop
     for epoch in range(num_epochs):
         model.train()
-        total_train_loss = 0
+        total_train_loss = 0.0
         num_batches = 0
         optimizer.zero_grad()
         
@@ -97,6 +97,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         label_smoothing=0.1
                     )
                     
+                    # Store the full loss for logging
+                    full_loss = loss.item()
+                    
+                    # Scale loss for gradient accumulation
                     loss = loss / gradient_accumulation_steps
                 
                 # Check for NaN loss before backward pass
@@ -141,13 +145,14 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     for param_group in optimizer.param_groups:
                         param_group['lr'] = current_lr
                     
-                    total_train_loss += loss.item() * gradient_accumulation_steps
+                    # Add the full (unscaled) loss to total
+                    total_train_loss += full_loss
                     num_batches += 1
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
-                          f"Loss: {loss.item():.4f} | LR: {current_lr:.6f}")
+                          f"Loss: {full_loss:.4f} | LR: {current_lr:.6f}")
                     
                 # Clear memory
                 del output, loss
@@ -164,8 +169,8 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 else:
                     raise e
         
-        # Calculate average training loss
-        avg_train_loss = total_train_loss / num_batches
+        # Calculate average training loss properly
+        avg_train_loss = total_train_loss / num_batches if num_batches > 0 else float('inf')
         train_losses.append(avg_train_loss)
         
         # Validation phase
