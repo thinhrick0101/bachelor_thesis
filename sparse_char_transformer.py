@@ -6,26 +6,32 @@ from sparse_attention import SparseAttention, AdaptiveSparseAttention
 from torch.utils.checkpoint import checkpoint
 
 class SparseTransformerEncoderLayer(nn.Module):
-    """Simplified Sparse Transformer Encoder Layer with aggressive normalization"""
+    """Sparse Transformer Encoder Layer with proper sparse attention"""
     
     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
                  activation="gelu", layer_idx=0, use_adaptive=False):
         super().__init__()
         
-        # Simplified attention
-        self.self_attn = nn.MultiheadAttention(
-            embed_dim=d_model,
-            num_heads=nhead,
-            dropout=dropout,
-            batch_first=True
-        )
+        # Use proper sparse attention
+        if use_adaptive:
+            self.self_attn = AdaptiveSparseAttention(
+                embed_dim=d_model,
+                num_heads=nhead,
+                dropout=dropout
+            )
+        else:
+            self.self_attn = SparseAttention(
+                embed_dim=d_model,
+                num_heads=nhead,
+                dropout=dropout
+            )
         
-        # Feed-forward network
+        # Feed-forward network with better initialization
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)
 
-        # Layer normalization with increased epsilon for stability
+        # Layer normalization
         self.norm1 = nn.LayerNorm(d_model, eps=1e-5)
         self.norm2 = nn.LayerNorm(d_model, eps=1e-5)
         
@@ -34,23 +40,22 @@ class SparseTransformerEncoderLayer(nn.Module):
 
         self.activation = F.gelu if activation == "gelu" else F.relu
 
-        # Initialize weights with smaller values
+        # Initialize weights with better scaling
         with torch.no_grad():
-            nn.init.xavier_uniform_(self.linear1.weight, gain=0.1)
-            nn.init.xavier_uniform_(self.linear2.weight, gain=0.1)
+            nn.init.xavier_uniform_(self.linear1.weight, gain=0.2)
+            nn.init.xavier_uniform_(self.linear2.weight, gain=0.2)
             nn.init.zeros_(self.linear1.bias)
             nn.init.zeros_(self.linear2.bias)
 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Pre-norm architecture (more stable)
+        # Pre-norm architecture
         src2 = self.norm1(src)
         
-        # Self attention
+        # Self attention with sparse pattern
         src2, attn_weights = self.self_attn(
             src2, src2, src2,
             attn_mask=src_mask,
-            key_padding_mask=src_key_padding_mask,
-            need_weights=True
+            key_padding_mask=src_key_padding_mask
         )
         
         # Residual connection with dropout
@@ -59,10 +64,10 @@ class SparseTransformerEncoderLayer(nn.Module):
         # Pre-norm for FFN
         src2 = self.norm2(src)
         
-        # FFN with activation clamping for stability
+        # FFN with less aggressive clamping
         src2 = self.linear1(src2)
         src2 = self.activation(src2)
-        src2 = torch.clamp(src2, min=-1.0, max=1.0)  # Clamp activations for stability
+        src2 = torch.clamp(src2, min=-3.0, max=3.0)  # Less restrictive clamping
         src2 = self.dropout(src2)
         src2 = self.linear2(src2)
         
@@ -72,7 +77,7 @@ class SparseTransformerEncoderLayer(nn.Module):
         return src, attn_weights
 
 class SparseCharTransformer(nn.Module):
-    """Simplified Character-level Transformer"""
+    """Character-level Transformer with Sparse Attention"""
     
     def __init__(self, vocab_size=256, d_model=512, nhead=8, num_layers=6,
                  dim_feedforward=2048, dropout=0.1, activation="gelu",
@@ -81,16 +86,16 @@ class SparseCharTransformer(nn.Module):
         
         self.d_model = d_model
         
-        # Initialize embedding with smaller weights
+        # Better embedding initialization
         self.embedding = nn.Embedding(vocab_size, d_model)
-        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.1)
         
         self.pos_encoder = PositionalEncoding(d_model, dropout)
         
-        # Input normalization with increased epsilon
+        # Input normalization
         self.input_norm = nn.LayerNorm(d_model, eps=1e-5)
         
-        # Create encoder layers
+        # Create encoder layers with sparse attention
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
@@ -106,16 +111,13 @@ class SparseCharTransformer(nn.Module):
         # Final normalization
         self.norm = nn.LayerNorm(d_model, eps=1e-5)
         
-        # Initialize output projection with smaller weights
+        # Output projection with better initialization
         self.fc_out = nn.Linear(d_model, vocab_size)
-        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.02)
+        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.1)
         nn.init.zeros_(self.fc_out.bias)
         
         # Gradient checkpointing state
         self.gradient_checkpointing = False
-        
-        # Scale embeddings by sqrt(d_model)
-        self.embedding_scale = math.sqrt(d_model)
         
     def _layer_forward(self, layer, src, src_mask=None, src_key_padding_mask=None):
         """Helper function for gradient checkpointing"""
@@ -127,8 +129,8 @@ class SparseCharTransformer(nn.Module):
         return layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Scale embeddings and add positional encoding
-        src = self.embedding(src) * (self.embedding_scale ** -0.5)  # Scale down embeddings
+        # Single embedding scaling
+        src = self.embedding(src) * math.sqrt(self.d_model)
         src = self.pos_encoder(src)
         
         # Input normalization
@@ -144,16 +146,16 @@ class SparseCharTransformer(nn.Module):
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             
-            # Clamp intermediate values for stability
-            src = torch.clamp(src, min=-5.0, max=5.0)
+            # Less aggressive intermediate clamping
+            src = torch.clamp(src, min=-10.0, max=10.0)
             
             attention_weights.append(attn_weights)
         
         # Final normalization
         output = self.norm(src)
         
-        # Project to vocabulary size with scaled output
-        output = self.fc_out(output) / math.sqrt(self.d_model)
+        # Project to vocabulary size without extra scaling
+        output = self.fc_out(output)
         
         return output, attention_weights
     

@@ -11,39 +11,39 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=5e-4, weight_decay=0.005, warmup_steps=800,
+                      learning_rate=1e-4, weight_decay=0.02, warmup_steps=2000,
                       device='cuda', patience=8, min_lr=1e-5,
-                      gradient_accumulation_steps=8, use_mixed_precision=True):
+                      gradient_accumulation_steps=16, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing = True
     
-    # Setup optimizer with more aggressive learning settings
+    # Setup optimizer with more conservative settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=1e-6,  # Higher starting point
+        lr=1e-8,  # Start very small
         weight_decay=weight_decay,
         eps=1e-8,
-        betas=(0.9, 0.99)  # Increased momentum
+        betas=(0.9, 0.95)  # More conservative momentum
     )
     
-    # Faster warmup and more aggressive learning rate schedule
+    # More conservative warmup and learning rate schedule
     def get_lr(step, epoch):
-        # Linear warmup
+        # Quadratic warmup for better stability
         if step < warmup_steps:
-            return learning_rate * (step / warmup_steps)
-        # Cosine decay with slower decay rate
+            return learning_rate * (step / warmup_steps) ** 2
+        # Cosine decay with stronger decay rate
         progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        decay_factor = 0.97 ** epoch  # Much gentler decay
+        decay_factor = 0.85 ** epoch  # Stronger decay
         return max(min_lr, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training with more aggressive settings
+    # Setup mixed precision training with conservative settings
     scaler = GradScaler(
-        init_scale=2**7,  # Back to original scale
-        growth_factor=1.1,  # More aggressive growth
+        init_scale=2**5,  # Start smaller
+        growth_factor=1.01,  # Very slow growth
         backoff_factor=0.5,
-        growth_interval=1000  # More frequent scaling
+        growth_interval=2000
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -57,13 +57,13 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     print(f"Target learning rate: {learning_rate:.6f}")
     print(f"Warmup steps: {warmup_steps}")
     
-    # Loss function with reduced label smoothing
+    # Loss function with more label smoothing for regularization
     def compute_loss(output, target):
         return F.cross_entropy(
             output.reshape(-1, output.size(-1)),
             target.reshape(-1),
             ignore_index=-1,
-            label_smoothing=0.05  # Reduced from 0.1 for faster convergence
+            label_smoothing=0.15  # Increased smoothing
         )
     
     # Training loop
@@ -326,12 +326,12 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=5e-4,
-        weight_decay=0.005,
-        warmup_steps=800,
+        learning_rate=1e-4,
+        weight_decay=0.02,
+        warmup_steps=2000,
         device=device,
         patience=8,
-        gradient_accumulation_steps=8,
+        gradient_accumulation_steps=16,
         use_mixed_precision=True
     )
     
