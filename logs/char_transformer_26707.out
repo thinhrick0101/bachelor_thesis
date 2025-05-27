@@ -1,0 +1,30 @@
+Using device: cuda
+Loading training data...
+Loading data from data/enwik8
+Training sparse transformer model...
+Epoch 1/100 | Batch 0/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 100/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 200/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 300/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 400/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 500/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 600/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 700/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 800/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 900/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 1000/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 1100/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 1200/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 1300/10986 | Loss: 0.1735 | LR: 0.000000
+Epoch 1/100 | Batch 1400/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 1500/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 1600/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 1700/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 1800/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 1900/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2000/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2100/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2200/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2300/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2400/10986 | Loss: 0.1734 | LR: 0.000000
+Epoch 1/100 | Batch 2500/10986 | Loss: 0.1734 | LR: 0.000000

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 321, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 280, in main
+    train_losses, val_losses = train_sparse_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 124, in train_sparse_model
+    raise e
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 69, in train_sparse_model
+    target_ids.view(-1),
+RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.

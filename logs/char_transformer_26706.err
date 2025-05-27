@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 340, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 299, in main
+    train_losses, val_losses = train_sparse_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 82, in train_sparse_model
+    output, _ = model(input_ids, src_mask=src_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 135, in forward
+    src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1207, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'SparseCharTransformer' object has no attribute '_layer_forward'. Did you mean: '_slow_forward'?

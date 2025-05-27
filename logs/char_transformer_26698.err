@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 321, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 280, in main
+    train_losses, val_losses = train_sparse_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 66, in train_sparse_model
+    output, attention_weights = model(input_ids, src_mask=src_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 132, in forward
+    src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 118, in _layer_forward
+    return checkpoint(create_custom_forward(layer), src, src_mask, src_key_padding_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 235, in checkpoint
+    return CheckpointFunction.apply(function, preserve, *args)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 96, in forward
+    outputs = run_function(*args)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 114, in custom_forward
+    return module(*inputs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 45, in forward
+    src2, attn_weights = self.self_attn(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 218, in forward
+    return self.base_attention(query, key, value, key_padding_mask, need_weights, attn_mask) 
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 155, in forward
+    sparse_mask = self._create_sparse_mask(seq_len, query.device)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 121, in _create_sparse_mask
+    num_extra = int(seq_len * sparsity_threshold)
+ValueError: cannot convert float NaN to integer

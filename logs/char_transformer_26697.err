@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 322, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 281, in main
+    train_losses, val_losses = train_sparse_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 19, in train_sparse_model
+    model.enable_input_require_grads()
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1207, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'SparseCharTransformer' object has no attribute 'enable_input_require_grads'

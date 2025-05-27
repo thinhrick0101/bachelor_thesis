@@ -1,0 +1,6 @@
+Using device: cuda
+Loading existing model from bachelor_thesis/models/dense_char_transformer.pt
+
+Generating example texts with different temperatures:
+
+Conservative sampling (temperature=0.6):
