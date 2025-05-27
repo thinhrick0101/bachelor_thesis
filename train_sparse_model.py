@@ -11,39 +11,39 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=1e-4, weight_decay=0.01, warmup_steps=2000,
+                      learning_rate=5e-4, weight_decay=0.005, warmup_steps=800,
                       device='cuda', patience=8, min_lr=1e-5,
-                      gradient_accumulation_steps=16, use_mixed_precision=True):
+                      gradient_accumulation_steps=8, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing = True
     
-    # Setup optimizer with more conservative settings
+    # Setup optimizer with more aggressive learning settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=1e-8,  # Even smaller initial lr for more stable warmup
+        lr=1e-6,  # Higher starting point
         weight_decay=weight_decay,
         eps=1e-8,
-        betas=(0.9, 0.95)  # Reduced beta2 for more stable momentum
+        betas=(0.9, 0.99)  # Increased momentum
     )
     
-    # Warmup with linear schedule and slower ramp-up
+    # Faster warmup and more aggressive learning rate schedule
     def get_lr(step, epoch):
-        # More gradual warmup
+        # Linear warmup
         if step < warmup_steps:
-            return learning_rate * (step / warmup_steps) ** 2  # Quadratic warmup
-        # Cosine decay with epoch-based dampening
+            return learning_rate * (step / warmup_steps)
+        # Cosine decay with slower decay rate
         progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        decay_factor = 0.9 ** epoch  # Reduce max learning rate each epoch
+        decay_factor = 0.97 ** epoch  # Much gentler decay
         return max(min_lr, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training with more conservative settings
+    # Setup mixed precision training with more aggressive settings
     scaler = GradScaler(
-        init_scale=2**6,  # Even more conservative initial scale
-        growth_factor=1.02,  # Much slower growth
+        init_scale=2**7,  # Back to original scale
+        growth_factor=1.1,  # More aggressive growth
         backoff_factor=0.5,
-        growth_interval=2000
+        growth_interval=1000  # More frequent scaling
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -56,6 +56,15 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     print(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.6f}")
     print(f"Target learning rate: {learning_rate:.6f}")
     print(f"Warmup steps: {warmup_steps}")
+    
+    # Loss function with reduced label smoothing
+    def compute_loss(output, target):
+        return F.cross_entropy(
+            output.reshape(-1, output.size(-1)),
+            target.reshape(-1),
+            ignore_index=-1,
+            label_smoothing=0.05  # Reduced from 0.1 for faster convergence
+        )
     
     # Training loop
     for epoch in range(num_epochs):
@@ -88,14 +97,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 # Forward pass with mixed precision
                 with autocast() if use_mixed_precision else nullcontext():
                     output, _ = model(input_ids, src_mask=src_mask)
-                    
-                    # Simple cross entropy loss
-                    loss = F.cross_entropy(
-                        output.reshape(-1, output.size(-1)),
-                        target_ids.reshape(-1),
-                        ignore_index=-1,
-                        label_smoothing=0.1
-                    )
+                    loss = compute_loss(output, target_ids)  # Use the new loss function
                     
                     # Store the full loss for logging
                     full_loss = loss.item()
@@ -199,11 +201,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         src_mask = generate_square_subsequent_mask(input_ids.size(1)).to(device)
                         
                         output, _ = model(input_ids, src_mask=src_mask)
-                        loss = nn.functional.cross_entropy(
-                            output.reshape(-1, output.size(-1)),
-                            target_ids.reshape(-1),
-                            ignore_index=-1
-                        )
+                        loss = compute_loss(output, target_ids)
                         
                         total_val_loss += loss.item()
                         num_val_batches += 1
@@ -291,8 +289,8 @@ def main():
         'num_layers': 12,
         'dim_feedforward': 2048,
         'dropout': 0.1,
-        'activation': 'gelu',  # Changed from relu to gelu for better stability
-        'use_adaptive_attention': True  # Use adaptive sparse attention
+        'activation': 'gelu',
+        'use_adaptive_attention': True
     }
     
     # Setup device
@@ -315,9 +313,9 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches with smaller batch size and sequence length
-    batch_size = 16  # Reduced from 32
-    seq_length = 512  # Reduced from 1024
+    # Create batches with optimized batch size and sequence length
+    batch_size = 32  # Increased from 16
+    seq_length = 384  # Reduced from 512 for faster iterations
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
@@ -328,12 +326,12 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=1e-4,
-        weight_decay=0.01,
-        warmup_steps=2000,
+        learning_rate=5e-4,
+        weight_decay=0.005,
+        warmup_steps=800,
         device=device,
         patience=8,
-        gradient_accumulation_steps=16,
+        gradient_accumulation_steps=8,
         use_mixed_precision=True
     )
     
