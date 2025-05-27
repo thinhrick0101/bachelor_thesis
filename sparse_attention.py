@@ -26,14 +26,18 @@ class SparseAttention(nn.Module):
         self.global_tokens = global_tokens
         self.sparsity_factor = sparsity_factor
         
-        # Learnable temperature parameter per head
+        # Learnable temperature parameter per head with constraints
         self.temperature = nn.Parameter(torch.ones(num_heads, 1, 1))
+        self.temperature_scale = 2.0  # Maximum temperature scale
         
         # Linear transformations
         self.q_proj = nn.Linear(embed_dim, embed_dim)
         self.k_proj = nn.Linear(embed_dim, embed_dim)
         self.v_proj = nn.Linear(embed_dim, embed_dim)
         self.out_proj = nn.Linear(embed_dim, embed_dim)
+        
+        # Layer normalization for stability
+        self.attn_norm = nn.LayerNorm(embed_dim)
         
         # Initialize with better scaling
         self._reset_parameters()
@@ -43,7 +47,7 @@ class SparseAttention(nn.Module):
 
     def _reset_parameters(self):
         # Initialize with scaled Xavier uniform
-        gain = math.sqrt(2.0)  # ReLU gain
+        gain = 1.0  # Use standard gain
         nn.init.xavier_uniform_(self.q_proj.weight, gain=gain)
         nn.init.xavier_uniform_(self.k_proj.weight, gain=gain)
         nn.init.xavier_uniform_(self.v_proj.weight, gain=gain)
@@ -55,10 +59,9 @@ class SparseAttention(nn.Module):
         nn.init.zeros_(self.v_proj.bias)
         nn.init.zeros_(self.out_proj.bias)
         
-        # Initialize temperature with slight noise
+        # Initialize temperature conservatively
         with torch.no_grad():
-            self.temperature.data.fill_(1.0)
-            self.temperature.data += torch.randn_like(self.temperature.data) * 0.01
+            self.temperature.data.fill_(0.5)
 
     def _create_sparse_mask(self, seq_len, device):
         """Create sparse attention mask based on layer position and analysis patterns"""
@@ -136,48 +139,53 @@ class SparseAttention(nn.Module):
 
     def forward(self, query, key, value, key_padding_mask=None, need_weights=True, attn_mask=None):
         """
-        Forward pass with sparse attention masking
+        Forward pass with numerically stable sparse attention
         query, key, value: (batch_size, seq_len, embed_dim)
         """
         batch_size, seq_len, embed_dim = query.shape
         scaling = self.scaling
+        
+        # Apply layer norm for stability
+        query = self.attn_norm(query)
+        key = self.attn_norm(key)
+        value = self.attn_norm(value)
         
         # Linear transformations and reshape
         q = self.q_proj(query).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         k = self.k_proj(key).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         v = self.v_proj(value).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         
-        # Scaled dot-product attention
-        attn_weights = torch.matmul(q, k.transpose(-2, -1)) * scaling  # [batch, heads, seq_len, seq_len]
+        # Scaled dot-product attention with numerical stability
+        attn_weights = torch.matmul(q, k.transpose(-2, -1)) * scaling
         
-        # Apply learned temperature scaling
-        attn_weights = attn_weights * F.softplus(self.temperature)
+        # Apply bounded temperature scaling
+        temp = torch.clamp(F.softplus(self.temperature), max=self.temperature_scale)
+        attn_weights = attn_weights * temp
         
-        # Create and apply sparse mask
+        # Create and apply sparse mask with numerical stability
         sparse_mask = self._create_sparse_mask(seq_len, query.device)
         sparse_mask = sparse_mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq_len, seq_len]
-        attn_weights = attn_weights.masked_fill(~sparse_mask, float('-inf'))
+        
+        # Use a large negative value instead of -inf
+        mask_fill_value = -1e4  # Large negative but not -inf
+        attn_weights = attn_weights.masked_fill(~sparse_mask, mask_fill_value)
         
         # Apply additional masks if provided
         if attn_mask is not None:
-            # Ensure attn_mask has correct shape [batch_size, seq_len, seq_len] or [seq_len, seq_len]
             if attn_mask.dim() == 2:
-                attn_mask = attn_mask.unsqueeze(0)  # Add batch dimension if needed
-            
-            # Add head dimension and convert to float
+                attn_mask = attn_mask.unsqueeze(0)
             attn_mask = attn_mask.unsqueeze(1).expand(-1, self.num_heads, -1, -1).to(dtype=torch.float32)
-            attn_mask = attn_mask.masked_fill(attn_mask == 0, float('-inf')).masked_fill(attn_mask == 1, 0.0)
+            attn_mask = attn_mask.masked_fill(attn_mask == 0, mask_fill_value).masked_fill(attn_mask == 1, 0.0)
             attn_weights = attn_weights + attn_mask
             
         if key_padding_mask is not None:
-            # key_padding_mask should be [batch_size, seq_len]
-            # Convert to attention mask shape [batch_size, 1, 1, seq_len]
             key_padding_mask = key_padding_mask.float().unsqueeze(1).unsqueeze(2)
             key_padding_mask = key_padding_mask.expand(-1, self.num_heads, seq_len, -1)
-            key_padding_mask = key_padding_mask.masked_fill(key_padding_mask == 0, float('-inf'))
+            key_padding_mask = key_padding_mask.masked_fill(key_padding_mask == 0, mask_fill_value)
             attn_weights = attn_weights + key_padding_mask
         
-        # Softmax and dropout
+        # Numerically stable softmax and dropout
+        attn_weights = attn_weights - attn_weights.max(dim=-1, keepdim=True)[0]  # Subtract max for stability
         attn_weights = F.softmax(attn_weights, dim=-1)
         attn_weights = F.dropout(attn_weights, p=self.dropout, training=self.training)
         
