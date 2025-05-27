@@ -273,9 +273,8 @@ def main():
         'num_layers': 12,
         'dim_feedforward': 2048,
         'dropout': 0.1,
-        'activation': 'gelu',  # Changed from relu to gelu for better stability
-        'use_adaptive_attention': True,
-        'layer_norm_eps': 1e-5  # Added layer norm epsilon
+        'activation': 'gelu',
+        'use_adaptive_attention': True  # Use adaptive sparse attention
     }
     
     # Setup device
