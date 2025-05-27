@@ -25,70 +25,70 @@ class SparseTransformerEncoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)
 
-        # Multiple normalization layers
-        self.norm1 = nn.LayerNorm(d_model, eps=1e-6)
-        self.norm2 = nn.LayerNorm(d_model, eps=1e-6)
-        self.norm3 = nn.LayerNorm(d_model, eps=1e-6)  # Extra norm after attention
-        self.norm4 = nn.LayerNorm(d_model, eps=1e-6)  # Extra norm after FFN
+        # Layer normalization with increased epsilon for stability
+        self.norm1 = nn.LayerNorm(d_model, eps=1e-5)
+        self.norm2 = nn.LayerNorm(d_model, eps=1e-5)
         
         self.dropout1 = nn.Dropout(dropout)
         self.dropout2 = nn.Dropout(dropout)
 
-        self.activation = F.gelu
+        self.activation = F.gelu if activation == "gelu" else F.relu
 
-        # Residual scaling
-        self.residual_scale = 0.1
+        # Initialize weights with smaller values
+        with torch.no_grad():
+            nn.init.xavier_uniform_(self.linear1.weight, gain=0.1)
+            nn.init.xavier_uniform_(self.linear2.weight, gain=0.1)
+            nn.init.zeros_(self.linear1.bias)
+            nn.init.zeros_(self.linear2.bias)
 
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
-        # Pre-norm
-        src_norm = self.norm1(src)
+        # Pre-norm architecture (more stable)
+        src2 = self.norm1(src)
         
         # Self attention
         src2, attn_weights = self.self_attn(
-            src_norm, src_norm, src_norm,
+            src2, src2, src2,
             attn_mask=src_mask,
             key_padding_mask=src_key_padding_mask,
             need_weights=True
         )
         
-        # Post-attention norm
-        src2 = self.norm3(src2)
+        # Residual connection with dropout
+        src = src + self.dropout1(src2)
         
-        # Residual with scaling
-        src = src + self.dropout1(src2) * self.residual_scale
-
         # Pre-norm for FFN
-        src_norm = self.norm2(src)
+        src2 = self.norm2(src)
         
-        # FFN
-        src2 = self.linear2(self.dropout(self.activation(self.linear1(src_norm))))
+        # FFN with gradient clipping
+        src2 = self.linear1(src2)
+        src2 = self.activation(src2)
+        src2 = torch.nn.functional.clip_grad_norm_(src2, max_norm=1.0) if self.training else src2
+        src2 = self.dropout(src2)
+        src2 = self.linear2(src2)
         
-        # Post-FFN norm
-        src2 = self.norm4(src2)
-        
-        # Residual with scaling
-        src = src + self.dropout2(src2) * self.residual_scale
+        # Residual connection with dropout
+        src = src + self.dropout2(src2)
 
         return src, attn_weights
 
 class SparseCharTransformer(nn.Module):
     """Simplified Character-level Transformer"""
     
-    def __init__(self, vocab_size=256, d_model=512, nhead=8, num_layers=6,  # Reduced layers
+    def __init__(self, vocab_size=256, d_model=512, nhead=8, num_layers=6,
                  dim_feedforward=2048, dropout=0.1, activation="gelu",
                  use_adaptive_attention=False):
         super().__init__()
         
         self.d_model = d_model
         
-        # Initialize embedding with very small weights
+        # Initialize embedding with smaller weights
         self.embedding = nn.Embedding(vocab_size, d_model)
-        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.01)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
         
         self.pos_encoder = PositionalEncoding(d_model, dropout)
         
-        # Input normalization
-        self.input_norm = nn.LayerNorm(d_model, eps=1e-6)
+        # Input normalization with increased epsilon
+        self.input_norm = nn.LayerNorm(d_model, eps=1e-5)
         
         # Create encoder layers
         self.layers = nn.ModuleList([
@@ -103,21 +103,20 @@ class SparseCharTransformer(nn.Module):
             ) for i in range(num_layers)
         ])
         
-        # Multiple final normalization layers
-        self.norm1 = nn.LayerNorm(d_model, eps=1e-6)
-        self.norm2 = nn.LayerNorm(d_model, eps=1e-6)
+        # Final normalization
+        self.norm = nn.LayerNorm(d_model, eps=1e-5)
         
-        # Initialize output projection with very small weights
+        # Initialize output projection with smaller weights
         self.fc_out = nn.Linear(d_model, vocab_size)
-        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.01)
+        nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.02)
         nn.init.zeros_(self.fc_out.bias)
         
         # Gradient checkpointing state
         self.gradient_checkpointing = False
         
-        # Fixed small scaling factor
-        self.embedding_scale = 0.1
-
+        # Scale embeddings by sqrt(d_model)
+        self.embedding_scale = math.sqrt(d_model)
+        
     def _layer_forward(self, layer, src, src_mask=None, src_key_padding_mask=None):
         """Helper function for gradient checkpointing"""
         def custom_forward(*inputs):
@@ -129,7 +128,7 @@ class SparseCharTransformer(nn.Module):
         
     def forward(self, src, src_mask=None, src_key_padding_mask=None):
         # Scale embeddings and add positional encoding
-        src = self.embedding(src) * self.embedding_scale
+        src = self.embedding(src) * (self.embedding_scale ** -0.5)  # Scale down embeddings
         src = self.pos_encoder(src)
         
         # Input normalization
@@ -138,20 +137,26 @@ class SparseCharTransformer(nn.Module):
         # Store attention weights for analysis
         attention_weights = []
         
-        # Pass through encoder layers
+        # Pass through encoder layers with gradient norm monitoring
         for layer in self.layers:
             if self.gradient_checkpointing:
                 src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            
+            # Monitor gradients during training
+            if self.training and src.requires_grad:
+                grad_norm = torch.norm(src.grad.data) if src.grad is not None else 0
+                if grad_norm > 1.0:
+                    src = torch.nn.functional.normalize(src, dim=-1) * grad_norm.clamp(max=1.0)
+            
             attention_weights.append(attn_weights)
         
-        # Double final normalization
-        output = self.norm1(src)
-        output = self.norm2(output)
+        # Final normalization
+        output = self.norm(src)
         
-        # Project to vocabulary size with small scale
-        output = self.fc_out(output) * 0.1
+        # Project to vocabulary size with scaled output
+        output = self.fc_out(output) / math.sqrt(self.d_model)
         
         return output, attention_weights
     
