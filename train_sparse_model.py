@@ -281,7 +281,7 @@ def visualize_sparse_attention(model, tokenizer, text, output_dir='attention_ana
                 plt.close()
 
 def main():
-    # Model configuration with more conservative settings
+    # Model configuration with stable settings
     config = {
         'vocab_size': 256,
         'd_model': 512,
@@ -290,7 +290,7 @@ def main():
         'dim_feedforward': 1024,  # Reduced from 2048
         'dropout': 0.1,
         'activation': 'gelu',
-        'use_adaptive_attention': False  # Disable adaptive attention for now
+        'use_adaptive_attention': False  # Use standard sparse attention
     }
     
     # Setup device
@@ -313,26 +313,26 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches with smaller initial size
-    batch_size = 8   # Start with small batches
+    # Create batches with conservative sizes
+    batch_size = 16  # Moderate batch size
     seq_length = 128  # Start with shorter sequences
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
-    # Train model with more conservative settings
+    # Train model with stable settings
     print("Training sparse transformer model...")
     train_losses, val_losses = train_sparse_model(
         model=model,
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=5e-5,  # Reduced learning rate
-        weight_decay=0.01,   # Reduced weight decay
-        warmup_steps=4000,   # Increased warmup
+        learning_rate=1e-4,  # Conservative learning rate
+        weight_decay=0.01,
+        warmup_steps=4000,  # Longer warmup
         device=device,
         patience=8,
-        gradient_accumulation_steps=32,  # Increased accumulation
-        use_mixed_precision=False  # Disable mixed precision initially
+        gradient_accumulation_steps=16,  # Reduced accumulation
+        use_mixed_precision=False  # Disable mixed precision for stability
     )
     
     # Save final model
