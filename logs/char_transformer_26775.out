@@ -1,0 +1,11 @@
+Using device: cuda
+Loading training data...
+Loading data from data/enwik8
+Training model...
+Training on device: cuda
+Using mixed precision training (FP16)
+Using gradient accumulation with 4 steps
+Effective batch size: 128
+Epoch 1/100, Batch 10/2746, Loss: 5.5222
+Epoch 1/100, Batch 20/2746, Loss: 5.5091
+Epoch 1/100, Batch 30/2746, Loss: 5.4536
