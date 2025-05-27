@@ -11,7 +11,7 @@ import gc
 import torch.nn.functional as F
 
 def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
-                      learning_rate=5e-4, weight_decay=0.01, warmup_steps=1000,
+                      learning_rate=1e-4, weight_decay=0.01, warmup_steps=2000,
                       device='cuda', patience=8, min_lr=1e-5,
                       gradient_accumulation_steps=16, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
@@ -19,10 +19,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing = True
     
-    # Setup optimizer with conservative settings
+    # Setup optimizer with more conservative settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=1e-7,  # Start with very small lr, will be increased during warmup
+        lr=1e-8,  # Even smaller initial lr for more stable warmup
         weight_decay=weight_decay,
         eps=1e-8,
         betas=(0.9, 0.98)
@@ -33,14 +33,14 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         # Linear warmup
         if step < warmup_steps:
             return learning_rate * (step / warmup_steps)
-        # Cosine decay
+        # Cosine decay with more gradual decline
         progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
         return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training with conservative settings
+    # Setup mixed precision training with more conservative settings
     scaler = GradScaler(
-        init_scale=2**8,
-        growth_factor=1.1,
+        init_scale=2**7,  # Reduced from 2**8
+        growth_factor=1.05,  # More conservative growth
         backoff_factor=0.5,
         growth_interval=2000
     ) if use_mixed_precision else None
@@ -108,14 +108,16 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         scaler.unscale_(optimizer)
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
+                        # More aggressive gradient clipping
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         scaler.step(optimizer)
                         scaler.update()
                         optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
+                        # More aggressive gradient clipping
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         optimizer.step()
                         optimizer.zero_grad()
                 
@@ -271,8 +273,9 @@ def main():
         'num_layers': 12,
         'dim_feedforward': 2048,
         'dropout': 0.1,
-        'activation': 'relu',
-        'use_adaptive_attention': True  # Use adaptive sparse attention
+        'activation': 'gelu',  # Changed from relu to gelu for better stability
+        'use_adaptive_attention': True,
+        'layer_norm_eps': 1e-5  # Added layer norm epsilon
     }
     
     # Setup device
@@ -308,9 +311,9 @@ def main():
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=5e-4,
+        learning_rate=1e-4,
         weight_decay=0.01,
-        warmup_steps=1000,
+        warmup_steps=2000,
         device=device,
         patience=8,
         gradient_accumulation_steps=16,
