@@ -281,16 +281,16 @@ def visualize_sparse_attention(model, tokenizer, text, output_dir='attention_ana
                 plt.close()
 
 def main():
-    # Model configuration
+    # Model configuration with more conservative settings
     config = {
         'vocab_size': 256,
         'd_model': 512,
         'nhead': 8,
         'num_layers': 12,
-        'dim_feedforward': 2048,
+        'dim_feedforward': 1024,  # Reduced from 2048
         'dropout': 0.1,
         'activation': 'gelu',
-        'use_adaptive_attention': True
+        'use_adaptive_attention': False  # Disable adaptive attention for now
     }
     
     # Setup device
@@ -313,26 +313,26 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches with optimized batch size and sequence length
-    batch_size = 32  # Increased from 16
-    seq_length = 384  # Reduced from 512 for faster iterations
+    # Create batches with smaller initial size
+    batch_size = 8   # Start with small batches
+    seq_length = 128  # Start with shorter sequences
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
-    # Train model
+    # Train model with more conservative settings
     print("Training sparse transformer model...")
     train_losses, val_losses = train_sparse_model(
         model=model,
         train_batches=train_batches,
         val_batches=val_batches,
         num_epochs=100,
-        learning_rate=1e-4,
-        weight_decay=0.02,
-        warmup_steps=2000,
+        learning_rate=5e-5,  # Reduced learning rate
+        weight_decay=0.01,   # Reduced weight decay
+        warmup_steps=4000,   # Increased warmup
         device=device,
         patience=8,
-        gradient_accumulation_steps=16,
-        use_mixed_precision=True
+        gradient_accumulation_steps=32,  # Increased accumulation
+        use_mixed_precision=False  # Disable mixed precision initially
     )
     
     # Save final model
