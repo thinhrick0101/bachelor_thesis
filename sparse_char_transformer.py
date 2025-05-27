@@ -59,10 +59,10 @@ class SparseTransformerEncoderLayer(nn.Module):
         # Pre-norm for FFN
         src2 = self.norm2(src)
         
-        # FFN with gradient clipping
+        # FFN with activation clamping for stability
         src2 = self.linear1(src2)
         src2 = self.activation(src2)
-        src2 = torch.nn.functional.clip_grad_norm_(src2, max_norm=1.0) if self.training else src2
+        src2 = torch.clamp(src2, min=-1.0, max=1.0)  # Clamp activations for stability
         src2 = self.dropout(src2)
         src2 = self.linear2(src2)
         
@@ -137,18 +137,15 @@ class SparseCharTransformer(nn.Module):
         # Store attention weights for analysis
         attention_weights = []
         
-        # Pass through encoder layers with gradient norm monitoring
+        # Pass through encoder layers
         for layer in self.layers:
             if self.gradient_checkpointing:
                 src, attn_weights = self._layer_forward(layer, src, src_mask, src_key_padding_mask)
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             
-            # Monitor gradients during training
-            if self.training and src.requires_grad:
-                grad_norm = torch.norm(src.grad.data) if src.grad is not None else 0
-                if grad_norm > 1.0:
-                    src = torch.nn.functional.normalize(src, dim=-1) * grad_norm.clamp(max=1.0)
+            # Clamp intermediate values for stability
+            src = torch.clamp(src, min=-5.0, max=5.0)
             
             attention_weights.append(attn_weights)
         
