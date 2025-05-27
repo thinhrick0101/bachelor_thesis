@@ -9,3 +9,15 @@ Effective batch size: 128
 Epoch 1/100, Batch 10/2746, Loss: 5.5222
 Epoch 1/100, Batch 20/2746, Loss: 5.5091
 Epoch 1/100, Batch 30/2746, Loss: 5.4536
+Epoch 1/100, Batch 40/2746, Loss: 5.4262
+Epoch 1/100, Batch 50/2746, Loss: 5.3966
+Epoch 1/100, Batch 60/2746, Loss: 5.3546
+Epoch 1/100, Batch 70/2746, Loss: 5.2813
+Epoch 1/100, Batch 80/2746, Loss: 5.3400
+Epoch 1/100, Batch 90/2746, Loss: 5.1661
+Epoch 1/100, Batch 100/2746, Loss: 5.1172
+Epoch 1/100, Batch 110/2746, Loss: 5.0227
+Epoch 1/100, Batch 120/2746, Loss: 4.8968
+Epoch 1/100, Batch 130/2746, Loss: 4.8491
+Epoch 1/100, Batch 140/2746, Loss: 4.8180
+Epoch 1/100, Batch 150/2746, Loss: 4.6327
