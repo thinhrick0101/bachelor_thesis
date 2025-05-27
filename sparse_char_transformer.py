@@ -12,18 +12,37 @@ class SparseTransformerEncoderLayer(nn.Module):
                  activation="gelu", layer_idx=0, use_adaptive=False):
         super().__init__()
         
-        # Use proper sparse attention
+        # Use proper sparse attention with layer-specific settings
         if use_adaptive:
             self.self_attn = AdaptiveSparseAttention(
                 embed_dim=d_model,
                 num_heads=nhead,
+                layer_idx=layer_idx,
                 dropout=dropout
             )
         else:
+            # Adjust sparsity parameters based on layer depth
+            if layer_idx < 4:
+                local_window = 64  # Larger window for early layers
+                global_tokens = 16
+                sparsity_factor = 0.3
+            elif layer_idx < 9:
+                local_window = 32  # Medium window for middle layers
+                global_tokens = 8
+                sparsity_factor = 0.2
+            else:
+                local_window = 16  # Smaller window for later layers
+                global_tokens = 4
+                sparsity_factor = 0.1
+                
             self.self_attn = SparseAttention(
                 embed_dim=d_model,
                 num_heads=nhead,
-                dropout=dropout
+                layer_idx=layer_idx,
+                dropout=dropout,
+                local_window=local_window,
+                global_tokens=global_tokens,
+                sparsity_factor=sparsity_factor
             )
         
         # Feed-forward network with better initialization
