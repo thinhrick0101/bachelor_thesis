@@ -48,8 +48,9 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     train_losses = []
     val_losses = []
     global_step = 0
+    current_lr = optimizer.param_groups[0]['lr']  # Initialize current_lr
     
-    print(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.6f}")
+    print(f"Initial learning rate: {current_lr:.6f}")
     print(f"Target learning rate: {learning_rate:.6f}")
     print(f"Warmup steps: {warmup_steps}")
     
@@ -72,6 +73,12 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         # Training phase
         for batch_idx, batch in enumerate(train_batches):
             try:
+                # Update learning rate at the start of each batch
+                if batch_idx == 0 or (batch_idx + 1) % gradient_accumulation_steps == 0:
+                    current_lr = get_lr(global_step)
+                    for param_group in optimizer.param_groups:
+                        param_group['lr'] = current_lr
+
                 # Handle batch data
                 if isinstance(batch, (tuple, list)):
                     batch_data = batch[0]
@@ -113,12 +120,9 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                             optimizer.step()
                         optimizer.zero_grad(set_to_none=True)
                 
-                # Update learning rate
-                if not torch.isnan(loss) and (batch_idx + 1) % gradient_accumulation_steps == 0:
+                # Update step counter after gradient accumulation
+                if (batch_idx + 1) % gradient_accumulation_steps == 0:
                     global_step += 1
-                    current_lr = get_lr(global_step)
-                    for param_group in optimizer.param_groups:
-                        param_group['lr'] = current_lr
                 
                 # Add the full (unscaled) loss to total
                 total_train_loss += loss.item() * gradient_accumulation_steps
