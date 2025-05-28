@@ -71,14 +71,13 @@ class SparseTransformerEncoderLayer(nn.Module):
                 key_padding_mask=src_key_padding_mask
             )
         
-        # Gradient clamping for stability
-        with torch.no_grad():
-            src2 = torch.clamp(src2, min=-1.0, max=1.0)
+        # Use gradient-preserving clamping
+        src2 = torch.clamp(src2, min=-1.0, max=1.0)
         
-        # Scaled residual connection
-        src = src + self.dropout1(src2) * 0.5
+        # Residual connection without scaling
+        src = src + self.dropout1(src2)
         
-        # Pre-norm for FFN with gradient scaling
+        # Pre-norm for FFN
         src2 = self.norm2(src)
         
         # FFN with gradient control
@@ -88,8 +87,8 @@ class SparseTransformerEncoderLayer(nn.Module):
         src2 = self.dropout(src2)
         src2 = self.linear2(src2)
         
-        # Scaled residual connection
-        src = src + self.dropout2(src2) * 0.5
+        # Residual connection without scaling
+        src = src + self.dropout2(src2)
 
         return src, attn_weights
 
@@ -165,9 +164,8 @@ class SparseCharTransformer(nn.Module):
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             
-            # Gradient clamping between layers
-            with torch.no_grad():
-                src = torch.clamp(src, min=-5.0, max=5.0)
+            # Use gradient-preserving clamping
+            src = torch.clamp(src, min=-5.0, max=5.0)
             
             attention_weights.append(attn_weights)
         
@@ -175,7 +173,7 @@ class SparseCharTransformer(nn.Module):
         output = self.norm(src)
         
         # Project to vocabulary size with scaling
-        output = self.fc_out(output) * 0.1  # Scale down logits
+        output = self.fc_out(output)  # Remove scaling factor that might break gradients
         
         return output, attention_weights
     
