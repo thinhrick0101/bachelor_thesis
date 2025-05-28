@@ -19,6 +19,12 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing = True
     
+    # Verify model parameters require gradients
+    for name, param in model.named_parameters():
+        if not param.requires_grad:
+            print(f"Warning: Parameter {name} does not require gradients")
+        param.requires_grad = True
+    
     # Setup optimizer with more conservative settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
@@ -63,6 +69,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     
     # Loss function with more label smoothing for regularization
     def compute_loss(output, target):
+        # Ensure output requires gradients
+        if not output.requires_grad:
+            print("Warning: Output tensor does not require gradients")
+        
         return F.cross_entropy(
             output.reshape(-1, output.size(-1)),
             target.reshape(-1),
