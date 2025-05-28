@@ -1,0 +1,20 @@
+/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py:277: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  input_ids = torch.tensor(tokenizer.encode(text)).unsqueeze(0)
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 380, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 375, in main
+    visualize_sparse_attention(model, tokenizer, sample_text)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 281, in visualize_sparse_attention
+    _, attention_weights = model(input_ids)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 151, in forward
+    src = self.embedding(src) * math.sqrt(self.d_model)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/sparse.py", line 158, in forward
+    return F.embedding(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 2199, in embedding
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument index in method wrapper__index_select)

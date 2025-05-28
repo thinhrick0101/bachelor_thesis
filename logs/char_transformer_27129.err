@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 365, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 301, in main
+    model = SparseCharTransformer(**config)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 99, in __init__
+    self.layers = nn.ModuleList([
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 100, in <listcomp>
+    SparseTransformerEncoderLayer(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_char_transformer.py", line 17, in __init__
+    self.self_attn = AdaptiveSparseAttention(
+TypeError: AdaptiveSparseAttention.__init__() missing 1 required positional argument: 'layer_idx'

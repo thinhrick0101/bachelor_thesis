@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 369, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 328, in main
+    train_losses, val_losses = train_sparse_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 176, in train_sparse_model
+    raise e
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 95, in train_sparse_model
+    input_ids = batch_data[:, :-1].requires_grad_(True)
+RuntimeError: only Tensors of floating point dtype can require gradients
