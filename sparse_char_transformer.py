@@ -71,8 +71,8 @@ class SparseTransformerEncoderLayer(nn.Module):
                 key_padding_mask=src_key_padding_mask
             )
         
-        # Use gradient-preserving clamping
-        src2 = torch.clamp(src2, min=-1.0, max=1.0)
+        # Use gradient-preserving activation
+        src2 = F.hardtanh(src2, min_val=-1.0, max_val=1.0)
         
         # Residual connection without scaling
         src = src + self.dropout1(src2)
@@ -83,7 +83,7 @@ class SparseTransformerEncoderLayer(nn.Module):
         # FFN with gradient control
         src2 = self.linear1(src2)
         src2 = self.activation(src2)
-        src2 = torch.clamp(src2, min=-2.0, max=2.0)
+        src2 = F.hardtanh(src2, min_val=-2.0, max_val=2.0)
         src2 = self.dropout(src2)
         src2 = self.linear2(src2)
         
@@ -141,8 +141,11 @@ class SparseCharTransformer(nn.Module):
             return layer(*inputs)
 
         if self.gradient_checkpointing:
-            # Ensure src requires gradients for checkpointing
-            src.requires_grad_(True)
+            # Ensure all inputs that need gradients have them enabled
+            if src_mask is not None:
+                src_mask.requires_grad_(False)  # Masks shouldn't need gradients
+            if src_key_padding_mask is not None:
+                src_key_padding_mask.requires_grad_(False)
             return checkpoint(custom_forward, src, src_mask, src_key_padding_mask)
         return layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
@@ -164,16 +167,16 @@ class SparseCharTransformer(nn.Module):
             else:
                 src, attn_weights = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
             
-            # Use gradient-preserving clamping
-            src = torch.clamp(src, min=-5.0, max=5.0)
+            # Use gradient-preserving activation
+            src = F.hardtanh(src, min_val=-5.0, max_val=5.0)
             
             attention_weights.append(attn_weights)
         
         # Final normalization
         output = self.norm(src)
         
-        # Project to vocabulary size with scaling
-        output = self.fc_out(output)  # Remove scaling factor that might break gradients
+        # Project to vocabulary size
+        output = self.fc_out(output)
         
         return output, attention_weights
     

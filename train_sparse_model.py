@@ -19,41 +19,27 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Enable gradient checkpointing for memory efficiency
     model.gradient_checkpointing = True
     
-    # Verify model parameters require gradients
-    for name, param in model.named_parameters():
-        if not param.requires_grad:
-            print(f"Warning: Parameter {name} does not require gradients")
-        param.requires_grad = True
-    
-    # Setup optimizer with more conservative settings
+    # Setup optimizer with more stable settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=1e-6,  # Still start small but not as extreme as 1e-8
+        lr=1e-6,  # Start small
         weight_decay=weight_decay,
         eps=1e-8,
-        betas=(0.9, 0.99)  # Increase momentum
+        betas=(0.9, 0.95)  # More stable momentum
     )
     
-    # More conservative warmup and learning rate schedule
-    def get_lr(step, epoch):
-        # Increase max learning rate
-        learning_rate = 5e-4  # Up from 1e-4
-        
-        # Shorter warmup with linear instead of quadratic
+    # Simpler learning rate schedule
+    def get_lr(step):
         if step < warmup_steps:
             return learning_rate * (step / warmup_steps)
-        
-        # Less aggressive decay
-        progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        decay_factor = 0.95 ** epoch  # More gentle decay from 0.85
-        return max(5e-5, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
+        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / (num_epochs * len(train_batches)))))
     
-    # Setup mixed precision training with conservative settings
+    # Setup mixed precision training with stable settings
     scaler = GradScaler(
-        init_scale=2**5,  # Start smaller
-        growth_factor=1.01,  # Very slow growth
+        init_scale=2**10,  # More reasonable initial scale
+        growth_factor=2.0,
         backoff_factor=0.5,
-        growth_interval=2000
+        growth_interval=100
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -67,17 +53,13 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     print(f"Target learning rate: {learning_rate:.6f}")
     print(f"Warmup steps: {warmup_steps}")
     
-    # Loss function with more label smoothing for regularization
+    # Loss function with less smoothing
     def compute_loss(output, target):
-        # Ensure output requires gradients
-        if not output.requires_grad:
-            print("Warning: Output tensor does not require gradients")
-        
         return F.cross_entropy(
             output.reshape(-1, output.size(-1)),
             target.reshape(-1),
             ignore_index=-1,
-            label_smoothing=0.05  # Down from 0.15
+            label_smoothing=0.1
         )
     
     # Training loop
@@ -85,7 +67,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         model.train()
         total_train_loss = 0.0
         num_batches = 0
-        optimizer.zero_grad()
+        optimizer.zero_grad(set_to_none=True)  # More efficient gradient clearing
         
         # Training phase
         for batch_idx, batch in enumerate(train_batches):
@@ -96,9 +78,6 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 else:
                     batch_data = batch
                     
-                # Ensure batch_data is a tensor and on the correct device
-                if not isinstance(batch_data, torch.Tensor):
-                    batch_data = torch.tensor(batch_data, dtype=torch.long)
                 batch_data = batch_data.to(device)
                     
                 # Split into input and target
@@ -111,65 +90,44 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 # Forward pass with mixed precision
                 with autocast() if use_mixed_precision else nullcontext():
                     output, _ = model(input_ids, src_mask=src_mask)
-                    loss = compute_loss(output, target_ids)  # Use the new loss function
-                    
-                    # Store the full loss for logging
-                    full_loss = loss.item()
-                    
-                    # Scale loss for gradient accumulation
+                    loss = compute_loss(output, target_ids)
                     loss = loss / gradient_accumulation_steps
-                
-                # Check for NaN loss before backward pass
-                if torch.isnan(loss) or torch.isinf(loss):
-                    print(f"WARNING: NaN/Inf loss detected at batch {batch_idx}, skipping...")
-                    continue
                 
                 # Backward pass with mixed precision
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        # Unscale only when we're ready to update
                         scaler.unscale_(optimizer)
-                        # More aggressive gradient clipping
-                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                         
-                        # Skip step if gradients are invalid
-                        if not torch.isfinite(grad_norm):
-                            print(f"WARNING: Invalid gradients with norm {grad_norm:.4f}")
-                            optimizer.zero_grad()
-                        else:
+                        if torch.isfinite(grad_norm):
                             scaler.step(optimizer)
                             scaler.update()
-                            optimizer.zero_grad()
+                        optimizer.zero_grad(set_to_none=True)
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
-                        # More aggressive gradient clipping
-                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
+                        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                         
-                        # Skip step if gradients are invalid
-                        if not torch.isfinite(grad_norm):
-                            print(f"WARNING: Invalid gradients with norm {grad_norm:.4f}")
-                            optimizer.zero_grad()
-                        else:
+                        if torch.isfinite(grad_norm):
                             optimizer.step()
-                            optimizer.zero_grad()
+                        optimizer.zero_grad(set_to_none=True)
                 
-                # Update learning rate with epoch-aware scheduling
-                if not torch.isnan(loss):
+                # Update learning rate
+                if not torch.isnan(loss) and (batch_idx + 1) % gradient_accumulation_steps == 0:
                     global_step += 1
-                    current_lr = get_lr(global_step, epoch)
+                    current_lr = get_lr(global_step)
                     for param_group in optimizer.param_groups:
                         param_group['lr'] = current_lr
-                    
-                    # Add the full (unscaled) loss to total
-                    total_train_loss += full_loss
-                    num_batches += 1
+                
+                # Add the full (unscaled) loss to total
+                total_train_loss += loss.item() * gradient_accumulation_steps
+                num_batches += 1
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
-                          f"Loss: {full_loss:.4f} | LR: {current_lr:.6f}")
+                          f"Loss: {loss.item() * gradient_accumulation_steps:.4f} | LR: {current_lr:.6f}")
                     
                 # Clear memory
                 del output, loss
@@ -182,6 +140,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     print("WARNING: out of memory, skipping batch")
                     if hasattr(torch.cuda, 'empty_cache'):
                         torch.cuda.empty_cache()
+                    optimizer.zero_grad(set_to_none=True)
                     continue
                 else:
                     raise e
@@ -205,9 +164,6 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                         else:
                             batch_data = batch
                             
-                        # Ensure batch_data is a tensor and on the correct device
-                        if not isinstance(batch_data, torch.Tensor):
-                            batch_data = torch.tensor(batch_data)
                         batch_data = batch_data.to(device)
                         
                         # Split into input and target
