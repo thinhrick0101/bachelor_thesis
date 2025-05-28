@@ -88,11 +88,11 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     
                 # Ensure batch_data is a tensor and on the correct device
                 if not isinstance(batch_data, torch.Tensor):
-                    batch_data = torch.tensor(batch_data)
+                    batch_data = torch.tensor(batch_data, dtype=torch.long)
                 batch_data = batch_data.to(device)
                     
                 # Split into input and target
-                input_ids = batch_data[:, :-1]
+                input_ids = batch_data[:, :-1].requires_grad_(True)
                 target_ids = batch_data[:, 1:]
                 
                 # Create attention mask for training
