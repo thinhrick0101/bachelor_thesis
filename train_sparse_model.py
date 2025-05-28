@@ -128,31 +128,32 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                        # Unscale only when we're ready to update
                         scaler.unscale_(optimizer)
                         # More aggressive gradient clipping
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         
-                        # Monitor gradient norms
-                        if grad_norm > 1.0:  # If gradients are too large
-                            print(f"WARNING: Large gradient norm {grad_norm:.4f}")
-                            continue  # Skip this update
-                            
-                        scaler.step(optimizer)
-                        scaler.update()
-                        optimizer.zero_grad()
+                        # Skip step if gradients are invalid
+                        if not torch.isfinite(grad_norm):
+                            print(f"WARNING: Invalid gradients with norm {grad_norm:.4f}")
+                            optimizer.zero_grad()
+                        else:
+                            scaler.step(optimizer)
+                            scaler.update()
+                            optimizer.zero_grad()
                 else:
                     loss.backward()
                     if (batch_idx + 1) % gradient_accumulation_steps == 0:
                         # More aggressive gradient clipping
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.05)
                         
-                        # Monitor gradient norms
-                        if grad_norm > 1.0:  # If gradients are too large
-                            print(f"WARNING: Large gradient norm {grad_norm:.4f}")
-                            continue  # Skip this update
-                            
-                        optimizer.step()
-                        optimizer.zero_grad()
+                        # Skip step if gradients are invalid
+                        if not torch.isfinite(grad_norm):
+                            print(f"WARNING: Invalid gradients with norm {grad_norm:.4f}")
+                            optimizer.zero_grad()
+                        else:
+                            optimizer.step()
+                            optimizer.zero_grad()
                 
                 # Update learning rate with epoch-aware scheduling
                 if not torch.isnan(loss):
