@@ -103,7 +103,12 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 # Backward pass with mixed precision
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
-                    if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                else:
+                    loss.backward()
+
+                # Step optimization after accumulation
+                if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                    if use_mixed_precision:
                         scaler.unscale_(optimizer)
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                         
@@ -111,17 +116,13 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                             scaler.step(optimizer)
                             scaler.update()
                         optimizer.zero_grad(set_to_none=True)
-                else:
-                    loss.backward()
-                    if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                    else:
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-                        
                         if torch.isfinite(grad_norm):
                             optimizer.step()
                         optimizer.zero_grad(set_to_none=True)
-                
-                # Update step counter after gradient accumulation
-                if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                    
+                    # Update step counter after optimization
                     global_step += 1
                 
                 # Add the full (unscaled) loss to total
@@ -145,6 +146,8 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     if hasattr(torch.cuda, 'empty_cache'):
                         torch.cuda.empty_cache()
                     optimizer.zero_grad(set_to_none=True)
+                    if use_mixed_precision:
+                        scaler.update()  # Make sure to update scaler state on OOM
                     continue
                 else:
                     raise e
