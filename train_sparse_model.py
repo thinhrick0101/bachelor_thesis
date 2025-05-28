@@ -92,7 +92,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                 batch_data = batch_data.to(device)
                     
                 # Split into input and target
-                input_ids = batch_data[:, :-1].requires_grad_(True)
+                input_ids = batch_data[:, :-1]
                 target_ids = batch_data[:, 1:]
                 
                 # Create attention mask for training
