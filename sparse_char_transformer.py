@@ -142,6 +142,8 @@ class SparseCharTransformer(nn.Module):
             return layer(*inputs)
 
         if self.gradient_checkpointing:
+            # Ensure src requires gradients for checkpointing
+            src.requires_grad_(True)
             return checkpoint(custom_forward, src, src_mask, src_key_padding_mask)
         return layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
