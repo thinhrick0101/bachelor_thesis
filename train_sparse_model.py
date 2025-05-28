@@ -22,21 +22,25 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
     # Setup optimizer with more conservative settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=1e-8,  # Start very small
+        lr=1e-6,  # Still start small but not as extreme as 1e-8
         weight_decay=weight_decay,
         eps=1e-8,
-        betas=(0.9, 0.95)  # More conservative momentum
+        betas=(0.9, 0.99)  # Increase momentum
     )
     
     # More conservative warmup and learning rate schedule
     def get_lr(step, epoch):
-        # Quadratic warmup for better stability
+        # Increase max learning rate
+        learning_rate = 5e-4  # Up from 1e-4
+        
+        # Shorter warmup with linear instead of quadratic
         if step < warmup_steps:
-            return learning_rate * (step / warmup_steps) ** 2
-        # Cosine decay with stronger decay rate
+            return learning_rate * (step / warmup_steps)
+        
+        # Less aggressive decay
         progress = (step - warmup_steps) / (num_epochs * len(train_batches) - warmup_steps)
-        decay_factor = 0.85 ** epoch  # Stronger decay
-        return max(min_lr, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
+        decay_factor = 0.95 ** epoch  # More gentle decay from 0.85
+        return max(5e-5, learning_rate * decay_factor * 0.5 * (1 + math.cos(math.pi * progress)))
     
     # Setup mixed precision training with conservative settings
     scaler = GradScaler(
@@ -63,7 +67,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
             output.reshape(-1, output.size(-1)),
             target.reshape(-1),
             ignore_index=-1,
-            label_smoothing=0.15  # Increased smoothing
+            label_smoothing=0.05  # Down from 0.15
         )
     
     # Training loop
@@ -314,8 +318,8 @@ def main():
     val_data = tokenizer.encode(train_text[split_idx:])
     
     # Create batches with conservative sizes
-    batch_size = 16  # Moderate batch size
-    seq_length = 128  # Start with shorter sequences
+    batch_size = 32  # From 16
+    seq_length = 384  # If currently using a larger value
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
@@ -327,12 +331,12 @@ def main():
         val_batches=val_batches,
         num_epochs=100,
         learning_rate=1e-4,  # Conservative learning rate
-        weight_decay=0.01,
+        weight_decay=0.005,  # Reduce weight decay
         warmup_steps=4000,  # Longer warmup
         device=device,
         patience=8,
-        gradient_accumulation_steps=16,  # Reduced accumulation
-        use_mixed_precision=False  # Disable mixed precision for stability
+        gradient_accumulation_steps=8,  # Reduce gradient accumulation
+        use_mixed_precision=True  # Keep mixed precision for speed
     )
     
     # Save final model
