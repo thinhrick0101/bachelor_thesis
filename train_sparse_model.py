@@ -68,7 +68,7 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
         model.train()
         total_train_loss = 0.0
         num_batches = 0
-        optimizer.zero_grad(set_to_none=True)  # More efficient gradient clearing
+        optimizer.zero_grad(set_to_none=True)
         
         # Training phase
         for batch_idx, batch in enumerate(train_batches):
@@ -100,29 +100,39 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     loss = compute_loss(output, target_ids)
                     loss = loss / gradient_accumulation_steps
                 
-                # Backward pass with mixed precision
+                # Backward pass
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
                 else:
                     loss.backward()
 
-                # Step optimization after accumulation
-                if (batch_idx + 1) % gradient_accumulation_steps == 0:
+                # Optimization step after accumulation
+                if (batch_idx + 1) % gradient_accumulation_steps == 0 or batch_idx == len(train_batches) - 1:
                     if use_mixed_precision:
+                        # Unscale the gradients
                         scaler.unscale_(optimizer)
+                        
+                        # Clip gradients
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                         
                         if torch.isfinite(grad_norm):
+                            # Step the optimizer and scaler
                             scaler.step(optimizer)
                             scaler.update()
+                        else:
+                            # Just update the scaler if gradients are not finite
+                            scaler.update()
+                            
+                        # Zero gradients
                         optimizer.zero_grad(set_to_none=True)
                     else:
+                        # Regular optimization step
                         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                         if torch.isfinite(grad_norm):
                             optimizer.step()
                         optimizer.zero_grad(set_to_none=True)
                     
-                    # Update step counter after optimization
+                    # Update step counter
                     global_step += 1
                 
                 # Add the full (unscaled) loss to total
@@ -145,9 +155,10 @@ def train_sparse_model(model, train_batches, val_batches=None, num_epochs=100,
                     print("WARNING: out of memory, skipping batch")
                     if hasattr(torch.cuda, 'empty_cache'):
                         torch.cuda.empty_cache()
+                    # Reset the optimizer and scaler state
                     optimizer.zero_grad(set_to_none=True)
                     if use_mixed_precision:
-                        scaler.update()  # Make sure to update scaler state on OOM
+                        scaler.update()
                     continue
                 else:
                     raise e
