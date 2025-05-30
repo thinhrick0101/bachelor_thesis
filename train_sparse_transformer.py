@@ -227,7 +227,7 @@ def main():
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     optimizer = optim.AdamW(
         model.parameters(),
-        lr=0.0,  # Start from 0 for warmup
+        lr=base_lr,  # Set to base_lr, schedule will handle scaling
         weight_decay=0.01,
         betas=(0.9, 0.98)
     )
@@ -237,14 +237,13 @@ def main():
     # Learning rate schedule with proper warmup and decay
     def lr_lambda(current_step: int):
         if current_step < warmup_steps:
-            # Linear warmup from 0 to base_lr
+            # Linear warmup from 0 to 1
             return float(current_step) / float(max(1, warmup_steps))
         
-        # Cosine decay from base_lr to min_lr
+        # Cosine decay from 1 to min_lr/base_lr
         progress = float(current_step - warmup_steps) / float(max(1, total_steps - warmup_steps))
         factor = 0.5 * (1.0 + math.cos(math.pi * progress))
-        # Normalize to [0, 1] range since LambdaLR multiplies by base_lr
-        return (base_lr * factor + min_lr) / base_lr
+        return factor * (1.0 - min_lr/base_lr) + min_lr/base_lr
     
     scheduler = LambdaLR(optimizer, lr_lambda)
     
