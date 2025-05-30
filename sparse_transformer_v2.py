@@ -95,20 +95,29 @@ class SparseMultiheadAttention(nn.Module):
                 sparsity = (left + right) / 2
                 temp_mask = mask.clone()
                 num_add = int(mask.size(-1) * sparsity)
+                
+                # Handle each row separately
                 for i in range(mask.size(0)):
-                    zero_indices = (~temp_mask[i]).nonzero().squeeze()
-                    if len(zero_indices) > 0:
-                        to_add = zero_indices[torch.randperm(len(zero_indices))[:num_add]]
+                    zero_indices = torch.where(~temp_mask[i])[0]  # Get indices where mask is False
+                    if zero_indices.numel() > 0:  # Check if there are any zeros
+                        # Select random indices to add
+                        num_to_add = min(num_add, zero_indices.numel())
+                        perm = torch.randperm(zero_indices.numel(), device=mask.device)
+                        to_add = zero_indices[perm[:num_to_add]]
                         temp_mask[i, to_add] = True
             else:
                 # Need fewer connections
                 sparsity = (left + right) / 2
                 temp_mask = mask.clone()
                 num_remove = int(mask.size(-1) * sparsity)
+                
+                # Handle each row separately
                 for i in range(mask.size(0)):
-                    one_indices = temp_mask[i].nonzero().squeeze()
-                    if len(one_indices) > num_remove:
-                        to_remove = one_indices[torch.randperm(len(one_indices))[num_remove:]]
+                    one_indices = torch.where(temp_mask[i])[0]  # Get indices where mask is True
+                    if one_indices.numel() > num_remove:  # Ensure we don't remove all connections
+                        # Select random indices to remove
+                        perm = torch.randperm(one_indices.numel(), device=mask.device)
+                        to_remove = one_indices[perm[num_remove:]]
                         temp_mask[i, to_remove] = False
             
             new_entropy = self._compute_entropy(temp_mask)
