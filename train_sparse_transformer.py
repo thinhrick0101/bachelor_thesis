@@ -136,6 +136,8 @@ def evaluate(model, val_batches, criterion, device):
 
 def main():
     # Setup device
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logging.info(f"Using device: {device}")
     
