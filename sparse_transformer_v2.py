@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from typing import Optional, Tuple
+from torch.utils.checkpoint import checkpoint
 
 class SparseMultiheadAttention(nn.Module):
     """Multihead attention with static sparse patterns based on cluster analysis."""
