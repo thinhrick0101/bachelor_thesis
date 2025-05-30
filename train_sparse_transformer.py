@@ -42,7 +42,7 @@ def create_sparse_transformer(vocab_size=256):
 
 def compute_bpb(loss):
     """Convert loss to bits per byte metric."""
-    return loss / math.log(2)
+    return float(loss) / math.log(2)  # Ensure float conversion
 
 def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_amp=True):
     model.train()
@@ -72,7 +72,7 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                 logging.info(f"Input range: [{input_ids.min().item()}, {input_ids.max().item()}]")
                 logging.info(f"Target range: [{target_ids.min().item()}, {target_ids.max().item()}]")
             
-            optimizer.zero_grad(set_to_none=True)  # More memory efficient
+            optimizer.zero_grad(set_to_none=True)
             
             # Forward pass with mixed precision
             with autocast() if use_amp else nullcontext():
@@ -90,7 +90,7 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                 loss = criterion(output, target_ids)
             
             # Debug loss value
-            if batch_idx == 0 or loss.item() < 0.1:
+            if batch_idx == 0:
                 logging.info(f"Raw loss value: {loss.item()}")
                 logging.info(f"Batch {batch_idx} loss stats - Mean: {output.mean().item():.4f}, Std: {output.std().item():.4f}")
             
@@ -98,7 +98,7 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             if use_amp:
                 scaler.scale(loss).backward()
                 scaler.unscale_(optimizer)
-                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  # Increased from 0.5
                 
                 # Debug gradient norm
                 if batch_idx % 100 == 0:
@@ -108,26 +108,33 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                 scaler.update()
             else:
                 loss.backward()
-                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                 optimizer.step()
             
-            scheduler.step()
+            if scheduler is not None:
+                scheduler.step()
             
-            batch_size = input_ids.size(0)
-            total_loss += loss.item() * batch_size
-            total_tokens += batch_size * input_ids.size(1)
+            # Update metrics
+            batch_tokens = input_ids.numel()
+            total_tokens += batch_tokens
+            total_loss += loss.item() * batch_tokens  # Multiply by number of tokens
             
             if batch_idx % 100 == 0:
                 ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
                 cur_loss = total_loss / total_tokens
                 cur_bpb = compute_bpb(cur_loss)
-                cur_ppl = math.exp(min(cur_loss, 100))  # Cap perplexity to avoid inf
+                cur_ppl = math.exp(min(cur_loss, 100))
+                
+                # Get current learning rate
+                current_lr = optimizer.param_groups[0]['lr']
+                
                 logging.info(
                     f'Train batch {batch_idx:5d}/{len(train_batches):5d} | '
                     f'ms/batch {ms_per_batch:5.2f} | '
+                    f'loss {cur_loss:.4f} | '
                     f'bpb {cur_bpb:5.2f} | '
                     f'ppl {cur_ppl:8.2f} | '
-                    f'lr {scheduler.get_last_lr()[0]:.2e}'
+                    f'lr {current_lr:.2e}'
                 )
             
             # Clear memory periodically
@@ -211,20 +218,35 @@ def main():
     # Training settings
     num_epochs = 50
     warmup_steps = 4000
+    base_lr = 3e-4
+    min_lr = 1e-5
     
     # Setup training with label smoothing
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
-    optimizer = optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.01, betas=(0.9, 0.98))  # Adjusted learning rate and betas
-    total_steps = len(train_batches) * num_epochs
+    optimizer = optim.AdamW(
+        model.parameters(),
+        lr=base_lr,
+        weight_decay=0.01,
+        betas=(0.9, 0.98)
+    )
     
-    # Learning rate schedule
+    # Learning rate schedule with proper warmup and decay
     def get_lr(step):
+        # Linear warmup
         if step < warmup_steps:
-            return 3e-4 * (step / warmup_steps)
+            return base_lr * (step / warmup_steps)
+        
+        # Cosine decay with minimum learning rate
         progress = (step - warmup_steps) / (total_steps - warmup_steps)
-        return 3e-4 * 0.5 * (1 + math.cos(math.pi * progress))
+        cosine_decay = 0.5 * (1 + math.cos(math.pi * progress))
+        return min_lr + (base_lr - min_lr) * cosine_decay
     
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, get_lr)
+    scheduler = torch.optim.LambdaLR(optimizer, get_lr)
+    
+    # Log initial learning rate
+    logging.info(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.2e}")
+    logging.info(f"Warmup steps: {warmup_steps}")
+    logging.info(f"Total steps: {total_steps}")
     
     # Create checkpoint directory
     checkpoint_dir = Path('models/sparse_transformer')
