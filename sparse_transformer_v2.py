@@ -305,21 +305,14 @@ class SparseTransformerEncoderLayer(nn.Module):
         nn.init.xavier_uniform_(self.linear2.weight, gain=0.1)
         nn.init.zeros_(self.linear1.bias)
         nn.init.zeros_(self.linear2.bias)
+        
+        # Enable gradient checkpointing by default
+        self.use_checkpoint = True
     
-    def forward(self, src: torch.Tensor,
+    def _forward_impl(self, src: torch.Tensor,
                 src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
-        """
-        Pass the input through the encoder layer.
-        
-        Args:
-            src: Source tensor [batch_size, seq_length, d_model]
-            src_mask: Optional mask [seq_length, seq_length]
-            src_key_padding_mask: Optional mask [batch_size, seq_length]
-            
-        Returns:
-            Output tensor of shape [batch_size, seq_length, d_model]
-        """
+        """Implementation of forward pass without checkpointing."""
         # Self attention
         src2 = self.norm1(src)
         src2, _ = self.self_attn(
@@ -335,6 +328,20 @@ class SparseTransformerEncoderLayer(nn.Module):
         src = src + self.dropout2(src2)
         
         return src
+    
+    def forward(self, src: torch.Tensor,
+                src_mask: Optional[torch.Tensor] = None,
+                src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """
+        Pass the input through the encoder layer with optional gradient checkpointing.
+        """
+        if self.use_checkpoint and self.training:
+            return checkpoint(
+                self._forward_impl,
+                src, src_mask, src_key_padding_mask,
+                preserve_rng_state=True
+            )
+        return self._forward_impl(src, src_mask, src_key_padding_mask)
 
 class SparseTransformer(nn.Module):
     """Transformer model with sparse attention patterns."""
@@ -351,7 +358,7 @@ class SparseTransformer(nn.Module):
         self.embedding = nn.Embedding(vocab_size, d_model)
         self.pos_encoder = PositionalEncoding(d_model, dropout, max_seq_length)
         
-        # Transformer layers
+        # Transformer layers with gradient checkpointing enabled
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
@@ -369,6 +376,9 @@ class SparseTransformer(nn.Module):
         self.fc_out = nn.Linear(d_model, vocab_size)
         
         self._reset_parameters()
+        
+        # Enable gradient checkpointing for the entire model
+        self.use_checkpoint = True
     
     def _reset_parameters(self):
         """Initialize parameters."""
@@ -380,23 +390,18 @@ class SparseTransformer(nn.Module):
                 src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Forward pass of the model.
-        
-        Args:
-            src: Source tensor [batch_size, seq_length]
-            src_mask: Optional mask [seq_length, seq_length]
-            src_key_padding_mask: Optional mask [batch_size, seq_length]
-            
-        Returns:
-            Output tensor of shape [batch_size, seq_length, vocab_size]
+        Forward pass of the model with gradient checkpointing.
         """
         # Embed tokens and positions
         src = self.embedding(src) * math.sqrt(self.d_model)
         src = self.pos_encoder(src)
         
-        # Pass through layers
+        # Pass through layers with gradient checkpointing
         for layer in self.layers:
-            src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            if self.use_checkpoint and self.training:
+                src = checkpoint(layer, src, src_mask, src_key_padding_mask)
+            else:
+                src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
         # Output projection
         output = self.norm(src)

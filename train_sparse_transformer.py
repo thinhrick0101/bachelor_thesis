@@ -39,70 +39,83 @@ def compute_bpb(loss):
     """Convert loss to bits per byte metric."""
     return loss / math.log(2)
 
-def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_mixed_precision=True):
+def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_amp=True):
     model.train()
     total_loss = 0
     total_tokens = 0
     start_time = time.time()
     
-    # Setup mixed precision training
-    scaler = GradScaler() if use_mixed_precision else None
+    # Create gradient scaler for AMP
+    scaler = GradScaler() if use_amp else None
     
     for batch_idx, batch in enumerate(train_batches):
-        # Handle batch data
-        if isinstance(batch, (tuple, list)):
-            batch_data = batch[0]
-        else:
-            batch_data = batch
-        batch_data = batch_data.to(device)
-        
-        # Split into input and target
-        input_ids = batch_data[:, :-1]
-        target_ids = batch_data[:, 1:]
-        
-        optimizer.zero_grad()
-        
-        # Forward pass with mixed precision
-        with autocast() if use_mixed_precision else nullcontext():
-            output = model(input_ids)
-            output = output.view(-1, output.size(-1))
-            target_ids = target_ids.view(-1)
-            loss = criterion(output, target_ids)
-        
-        # Backward pass with mixed precision
-        if use_mixed_precision:
-            scaler.scale(loss).backward()
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
-            scaler.step(optimizer)
-            scaler.update()
-        else:
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
-            optimizer.step()
-        
-        scheduler.step()
-        
-        batch_size = input_ids.size(0)
-        total_loss += loss.item() * batch_size
-        total_tokens += batch_size * input_ids.size(1)
-        
-        if batch_idx % 100 == 0:
-            ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
-            cur_loss = total_loss / total_tokens
-            cur_bpb = compute_bpb(cur_loss)
-            logging.info(
-                f'Train batch {batch_idx:5d}/{len(train_batches):5d} | '
-                f'ms/batch {ms_per_batch:5.2f} | '
-                f'bpb {cur_bpb:5.2f} | '
-                f'ppl {math.exp(cur_loss):8.2f}'
-            )
-        
-        # Clear memory periodically
-        if batch_idx % 10 == 0:
-            gc.collect()
-            if torch.cuda.is_available():
+        try:
+            # Handle batch data
+            if isinstance(batch, (tuple, list)):
+                batch_data = batch[0]
+            else:
+                batch_data = batch
+            batch_data = batch_data.to(device)
+            
+            # Split into input and target
+            input_ids = batch_data[:, :-1]
+            target_ids = batch_data[:, 1:]
+            
+            optimizer.zero_grad(set_to_none=True)  # More memory efficient
+            
+            # Forward pass with mixed precision
+            with autocast() if use_amp else nullcontext():
+                output = model(input_ids)
+                output = output.view(-1, output.size(-1))
+                target_ids = target_ids.view(-1)
+                loss = criterion(output, target_ids)
+            
+            # Backward pass with mixed precision
+            if use_amp:
+                scaler.scale(loss).backward()
+                scaler.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                optimizer.step()
+            
+            scheduler.step()
+            
+            batch_size = input_ids.size(0)
+            total_loss += loss.item() * batch_size
+            total_tokens += batch_size * input_ids.size(1)
+            
+            if batch_idx % 100 == 0:
+                ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
+                cur_loss = total_loss / total_tokens
+                cur_bpb = compute_bpb(cur_loss)
+                logging.info(
+                    f'Train batch {batch_idx:5d}/{len(train_batches):5d} | '
+                    f'ms/batch {ms_per_batch:5.2f} | '
+                    f'bpb {cur_bpb:5.2f} | '
+                    f'ppl {math.exp(cur_loss):8.2f}'
+                )
+            
+            # Clear memory periodically
+            if batch_idx % 10 == 0:
+                del output, loss
+                gc.collect()
                 torch.cuda.empty_cache()
+                
+        except RuntimeError as e:
+            if "out of memory" in str(e):
+                logging.warning("WARNING: out of memory, skipping batch")
+                if hasattr(torch.cuda, 'empty_cache'):
+                    torch.cuda.empty_cache()
+                optimizer.zero_grad(set_to_none=True)
+                if use_amp:
+                    scaler.update()
+                continue
+            else:
+                raise e
     
     return total_loss / total_tokens
 
@@ -135,15 +148,17 @@ def evaluate(model, val_batches, criterion, device):
     return total_loss / total_tokens
 
 def main():
-    # Setup device
+    # Setup device and clear cache
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logging.info(f"Using device: {device}")
     
-    # Create model
+    # Create model with gradient checkpointing enabled
     model = create_sparse_transformer()
     model = model.to(device)
+    for layer in model.layers:
+        layer.use_checkpoint = True
     logging.info(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
     
     # Create tokenizer and load data
@@ -156,9 +171,9 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches
-    batch_size = 32
-    seq_length = 1024
+    # Create batches with smaller batch size
+    batch_size = 16  # Reduced from 32
+    seq_length = 512  # Reduced from 1024
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
@@ -193,7 +208,8 @@ def main():
     for epoch in range(num_epochs):
         epoch_start_time = time.time()
         
-        train_loss = train_epoch(model, train_batches, criterion, optimizer, scheduler, device)
+        # Train with AMP enabled
+        train_loss = train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_amp=True)
         val_loss = evaluate(model, val_batches, criterion, device)
         
         train_bpb = compute_bpb(train_loss)
@@ -206,7 +222,7 @@ def main():
             f'train bpb {train_bpb:5.2f} | valid bpb {val_bpb:5.2f}'
         )
         
-        # Save metrics
+        # Save metrics and checkpoints
         metrics = {
             'epoch': epoch,
             'train_loss': train_loss,
@@ -218,25 +234,25 @@ def main():
         }
         metrics_list.append(metrics)
         
-        # Save checkpoint for each epoch
+        # Save checkpoint
         checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'scheduler_state_dict': scheduler.state_dict(),
-            **metrics  # Include all metrics
+            **metrics
         }
         torch.save(checkpoint, checkpoint_dir / f'checkpoint_epoch_{epoch:03d}.pt')
         
-        # Save best model separately
+        # Save best model
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             torch.save(checkpoint, checkpoint_dir / 'best_model.pt')
             logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f}')
-    
-    # Save final metrics for easy analysis
-    torch.save(metrics_list, checkpoint_dir / 'training_metrics.pt')
-    logging.info("Training complete! All checkpoints and metrics saved.")
+        
+        # Clear memory at end of epoch
+        gc.collect()
+        torch.cuda.empty_cache()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main() 
