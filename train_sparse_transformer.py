@@ -58,16 +58,16 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             batch_data = batch_data.to(device)
             
             # Split into input and target
-            input_ids = batch_data[:, :-1]
-            target_ids = batch_data[:, 1:]
+            input_ids = batch_data[:, :-1].contiguous()
+            target_ids = batch_data[:, 1:].contiguous()
             
             optimizer.zero_grad(set_to_none=True)  # More memory efficient
             
             # Forward pass with mixed precision
             with autocast() if use_amp else nullcontext():
                 output = model(input_ids)
-                output = output.view(-1, output.size(-1))
-                target_ids = target_ids.view(-1)
+                output = output.reshape(-1, output.size(-1))
+                target_ids = target_ids.reshape(-1)
                 loss = criterion(output, target_ids)
             
             # Backward pass with mixed precision
@@ -132,12 +132,12 @@ def evaluate(model, val_batches, criterion, device):
                 batch_data = batch
             batch_data = batch_data.to(device)
             
-            input_ids = batch_data[:, :-1]
-            target_ids = batch_data[:, 1:]
+            input_ids = batch_data[:, :-1].contiguous()
+            target_ids = batch_data[:, 1:].contiguous()
             
             output = model(input_ids)
-            output = output.view(-1, output.size(-1))
-            target_ids = target_ids.view(-1)
+            output = output.reshape(-1, output.size(-1))
+            target_ids = target_ids.reshape(-1)
             
             loss = criterion(output, target_ids)
             
