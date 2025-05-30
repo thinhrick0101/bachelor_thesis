@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from typing import Optional, Tuple
-from torch.utils.checkpoint import checkpoint
 
 class SparseMultiheadAttention(nn.Module):
     """Multihead attention with static sparse patterns based on cluster analysis."""
@@ -221,54 +220,22 @@ class SparseMultiheadAttention(nn.Module):
         k = k.transpose(1, 2)
         v = v.transpose(1, 2)
         
-        # Initialize output tensor
-        output = torch.zeros_like(q)
-        attn_weights_list = []
+        # Compute attention scores
+        attn_weights = torch.matmul(q * scaling, k.transpose(-2, -1))
         
-        # Process each head separately to save memory
+        # Apply sparse attention patterns
         for head_idx in range(self.num_heads):
-            # Get head-specific tensors
-            q_head = q[:, head_idx:head_idx+1]  # Keep dim for broadcasting
-            k_head = k[:, head_idx:head_idx+1]
-            v_head = v[:, head_idx:head_idx+1]
-            
-            # Compute attention scores for this head
-            attn_weights_head = torch.matmul(q_head * scaling, k_head.transpose(-2, -1))
-            
-            # Apply sparse attention pattern for this head
             head_mask = self._get_mask_for_head(head_idx, seq_length).to(query.device)
-            attn_weights_head = attn_weights_head.masked_fill(~head_mask, float('-inf'))
-            
-            # Apply key padding mask if provided
-            if key_padding_mask is not None:
-                attn_weights_head = attn_weights_head.masked_fill(
-                    key_padding_mask.unsqueeze(1).unsqueeze(2),
-                    float('-inf')
-                )
-            
-            # Compute softmax with improved numerical stability
-            attn_weights_head = attn_weights_head - attn_weights_head.max(dim=-1, keepdim=True)[0].detach()
-            attn_weights_head = F.softmax(attn_weights_head, dim=-1)
-            
-            # Apply dropout
-            attn_weights_head = F.dropout(attn_weights_head, p=self.dropout, training=self.training)
-            
-            # Compute output for this head
-            output[:, head_idx:head_idx+1] = torch.matmul(attn_weights_head, v_head)
-            
-            # Store attention weights if needed
-            if attn_mask is not None:
-                attn_weights_list.append(attn_weights_head)
+            attn_weights[:, head_idx] = attn_weights[:, head_idx].masked_fill(~head_mask, float('-inf'))
         
-        # Combine outputs from all heads
+        # Apply softmax and dropout
+        attn_weights = F.softmax(attn_weights, dim=-1)
+        attn_weights = F.dropout(attn_weights, p=self.dropout, training=self.training)
+        
+        # Compute output
+        output = torch.matmul(attn_weights, v)
         output = output.transpose(1, 2).contiguous().view(batch_size, seq_length, self.embed_dim)
         output = self.out_proj(output)
-        
-        # Combine attention weights if needed
-        if attn_mask is not None:
-            attn_weights = torch.cat(attn_weights_list, dim=1)
-        else:
-            attn_weights = None
         
         return output, attn_weights
 
@@ -305,14 +272,21 @@ class SparseTransformerEncoderLayer(nn.Module):
         nn.init.xavier_uniform_(self.linear2.weight, gain=0.1)
         nn.init.zeros_(self.linear1.bias)
         nn.init.zeros_(self.linear2.bias)
-        
-        # Enable gradient checkpointing by default
-        self.use_checkpoint = True
     
-    def _forward_impl(self, src: torch.Tensor,
+    def forward(self, src: torch.Tensor,
                 src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
-        """Implementation of forward pass without checkpointing."""
+        """
+        Pass the input through the encoder layer.
+        
+        Args:
+            src: Source tensor [batch_size, seq_length, d_model]
+            src_mask: Optional mask [seq_length, seq_length]
+            src_key_padding_mask: Optional mask [batch_size, seq_length]
+            
+        Returns:
+            Output tensor of shape [batch_size, seq_length, d_model]
+        """
         # Self attention
         src2 = self.norm1(src)
         src2, _ = self.self_attn(
@@ -328,20 +302,6 @@ class SparseTransformerEncoderLayer(nn.Module):
         src = src + self.dropout2(src2)
         
         return src
-    
-    def forward(self, src: torch.Tensor,
-                src_mask: Optional[torch.Tensor] = None,
-                src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
-        """
-        Pass the input through the encoder layer with optional gradient checkpointing.
-        """
-        if self.use_checkpoint and self.training:
-            return checkpoint(
-                self._forward_impl,
-                src, src_mask, src_key_padding_mask,
-                preserve_rng_state=True
-            )
-        return self._forward_impl(src, src_mask, src_key_padding_mask)
 
 class SparseTransformer(nn.Module):
     """Transformer model with sparse attention patterns."""
@@ -358,7 +318,7 @@ class SparseTransformer(nn.Module):
         self.embedding = nn.Embedding(vocab_size, d_model)
         self.pos_encoder = PositionalEncoding(d_model, dropout, max_seq_length)
         
-        # Transformer layers with gradient checkpointing enabled
+        # Transformer layers
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
@@ -376,9 +336,6 @@ class SparseTransformer(nn.Module):
         self.fc_out = nn.Linear(d_model, vocab_size)
         
         self._reset_parameters()
-        
-        # Enable gradient checkpointing for the entire model
-        self.use_checkpoint = True
     
     def _reset_parameters(self):
         """Initialize parameters."""
@@ -390,18 +347,23 @@ class SparseTransformer(nn.Module):
                 src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Forward pass of the model with gradient checkpointing.
+        Forward pass of the model.
+        
+        Args:
+            src: Source tensor [batch_size, seq_length]
+            src_mask: Optional mask [seq_length, seq_length]
+            src_key_padding_mask: Optional mask [batch_size, seq_length]
+            
+        Returns:
+            Output tensor of shape [batch_size, seq_length, vocab_size]
         """
         # Embed tokens and positions
         src = self.embedding(src) * math.sqrt(self.d_model)
         src = self.pos_encoder(src)
         
-        # Pass through layers with gradient checkpointing
+        # Pass through layers
         for layer in self.layers:
-            if self.use_checkpoint and self.training:
-                src = checkpoint(layer, src, src_mask, src_key_padding_mask)
-            else:
-                src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
         # Output projection
         output = self.norm(src)

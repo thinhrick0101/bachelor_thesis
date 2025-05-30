@@ -222,14 +222,14 @@ def main():
     warmup_steps = 2000
     base_lr = 3e-4
     min_lr = 1e-5
-    patience = 3  # Number of epochs to wait for improvement before stopping
-    min_delta = 1e-4  # Minimum change in validation loss to qualify as an improvement
+    patience = 3  # Early stopping patience
+    min_delta = 0.01  # Minimum bpb improvement required (1% or 0.01 bpb)
     
     # Setup training with label smoothing
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     optimizer = optim.AdamW(
         model.parameters(),
-        lr=base_lr,  # Set to base_lr, schedule will handle scaling
+        lr=base_lr,
         weight_decay=0.01,
         betas=(0.9, 0.98)
     )
@@ -267,7 +267,7 @@ def main():
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     
     # Training loop
-    best_val_loss = float('inf')
+    best_val_bpb = float('inf')
     metrics_list = []
     patience_counter = 0
     
@@ -290,9 +290,9 @@ def main():
             f'train bpb {train_bpb:5.2f} | valid bpb {val_bpb:5.2f}'
         )
         
-        # Early stopping check
-        if val_loss < best_val_loss - min_delta:
-            best_val_loss = val_loss
+        # Early stopping check based on validation bpb
+        if val_bpb < best_val_bpb - min_delta:
+            best_val_bpb = val_bpb
             patience_counter = 0
             # Save best model
             checkpoint = {
@@ -311,13 +311,13 @@ def main():
             logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f}')
         else:
             patience_counter += 1
-            logging.info(f'Validation loss did not improve. Patience: {patience_counter}/{patience}')
+            logging.info(f'Validation bpb did not improve by {min_delta:.4f}. Patience: {patience_counter}/{patience}')
             
             if patience_counter >= patience:
-                logging.info(f'Early stopping triggered after {epoch + 1} epochs')
+                logging.info(f'Early stopping triggered after {epoch + 1} epochs. Best validation bpb: {best_val_bpb:.4f}')
                 break
         
-        # Save metrics
+        # Save metrics and regular checkpoint
         metrics = {
             'epoch': epoch,
             'train_loss': train_loss,
@@ -328,15 +328,6 @@ def main():
             'val_ppl': math.exp(val_loss)
         }
         metrics_list.append(metrics)
-        
-        # Save regular checkpoint
-        checkpoint = {
-            'epoch': epoch,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
-            'scheduler_state_dict': scheduler.state_dict(),
-            **metrics
-        }
         torch.save(checkpoint, checkpoint_dir / f'checkpoint_epoch_{epoch:03d}.pt')
         
         # Clear memory at end of epoch
