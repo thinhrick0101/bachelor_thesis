@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.optim.lr_scheduler import LambdaLR
 import math
 import time
 import logging
@@ -230,6 +231,8 @@ def main():
         betas=(0.9, 0.98)
     )
     
+    total_steps = len(train_batches) * num_epochs
+    
     # Learning rate schedule with proper warmup and decay
     def get_lr(step):
         # Linear warmup
@@ -241,7 +244,7 @@ def main():
         cosine_decay = 0.5 * (1 + math.cos(math.pi * progress))
         return min_lr + (base_lr - min_lr) * cosine_decay
     
-    scheduler = torch.optim.LambdaLR(optimizer, get_lr)
+    scheduler = LambdaLR(optimizer, get_lr)
     
     # Log initial learning rate
     logging.info(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.2e}")
