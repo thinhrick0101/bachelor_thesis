@@ -234,22 +234,30 @@ def main():
     total_steps = len(train_batches) * num_epochs
     
     # Learning rate schedule with proper warmup and decay
-    def get_lr(step):
+    def lr_lambda(current_step: int):
         # Linear warmup
-        if step < warmup_steps:
-            return base_lr * (step / warmup_steps)
+        if current_step < warmup_steps:
+            return float(current_step) / float(max(1, warmup_steps))
         
         # Cosine decay with minimum learning rate
-        progress = (step - warmup_steps) / (total_steps - warmup_steps)
-        cosine_decay = 0.5 * (1 + math.cos(math.pi * progress))
-        return min_lr + (base_lr - min_lr) * cosine_decay
+        decay_ratio = float(current_step - warmup_steps) / float(max(1, total_steps - warmup_steps))
+        cosine_decay = 0.5 * (1.0 + math.cos(math.pi * decay_ratio))
+        return max(min_lr / base_lr, cosine_decay)  # Normalize by base_lr since LambdaLR multiplies by base_lr
     
-    scheduler = LambdaLR(optimizer, get_lr)
+    scheduler = LambdaLR(optimizer, lr_lambda)
     
-    # Log initial learning rate
+    # Log initial learning rate and schedule parameters
+    logging.info(f"Base learning rate: {base_lr:.2e}")
+    logging.info(f"Minimum learning rate: {min_lr:.2e}")
     logging.info(f"Initial learning rate: {optimizer.param_groups[0]['lr']:.2e}")
     logging.info(f"Warmup steps: {warmup_steps}")
     logging.info(f"Total steps: {total_steps}")
+    
+    # Test learning rate schedule
+    test_steps = [0, warmup_steps//2, warmup_steps, total_steps//2, total_steps-1]
+    for step in test_steps:
+        lr = base_lr * lr_lambda(step)
+        logging.info(f"Test LR at step {step}: {lr:.2e}")
     
     # Create checkpoint directory
     checkpoint_dir = Path('models/sparse_transformer')
