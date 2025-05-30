@@ -219,9 +219,11 @@ def main():
     
     # Training settings
     num_epochs = 50
-    warmup_steps = 2000  # Reduced from 4000
+    warmup_steps = 2000
     base_lr = 3e-4
     min_lr = 1e-5
+    patience = 3  # Number of epochs to wait for improvement before stopping
+    min_delta = 1e-4  # Minimum change in validation loss to qualify as an improvement
     
     # Setup training with label smoothing
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
@@ -267,6 +269,7 @@ def main():
     # Training loop
     best_val_loss = float('inf')
     metrics_list = []
+    patience_counter = 0
     
     logging.info("Starting training...")
     
@@ -287,7 +290,34 @@ def main():
             f'train bpb {train_bpb:5.2f} | valid bpb {val_bpb:5.2f}'
         )
         
-        # Save metrics and checkpoints
+        # Early stopping check
+        if val_loss < best_val_loss - min_delta:
+            best_val_loss = val_loss
+            patience_counter = 0
+            # Save best model
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+                'train_loss': train_loss,
+                'val_loss': val_loss,
+                'train_bpb': train_bpb,
+                'val_bpb': val_bpb,
+                'train_ppl': math.exp(train_loss),
+                'val_ppl': math.exp(val_loss)
+            }
+            torch.save(checkpoint, checkpoint_dir / 'best_model.pt')
+            logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f}')
+        else:
+            patience_counter += 1
+            logging.info(f'Validation loss did not improve. Patience: {patience_counter}/{patience}')
+            
+            if patience_counter >= patience:
+                logging.info(f'Early stopping triggered after {epoch + 1} epochs')
+                break
+        
+        # Save metrics
         metrics = {
             'epoch': epoch,
             'train_loss': train_loss,
@@ -299,7 +329,7 @@ def main():
         }
         metrics_list.append(metrics)
         
-        # Save checkpoint
+        # Save regular checkpoint
         checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
@@ -308,12 +338,6 @@ def main():
             **metrics
         }
         torch.save(checkpoint, checkpoint_dir / f'checkpoint_epoch_{epoch:03d}.pt')
-        
-        # Save best model
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            torch.save(checkpoint, checkpoint_dir / 'best_model.pt')
-            logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f}')
         
         # Clear memory at end of epoch
         gc.collect()
