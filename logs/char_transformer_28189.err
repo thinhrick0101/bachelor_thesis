@@ -1,0 +1,45 @@
+2025-05-30 08:37:00,990 | INFO | Using device: cuda
+2025-05-30 08:37:03,496 | INFO | Model parameters: 19,177,728
+2025-05-30 08:37:03,496 | INFO | Loading training data...
+2025-05-30 08:37:09,229 | INFO | Starting training...
+2025-05-30 08:37:09,230 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 08:37:09,231 | INFO | Input range: [10, 226]
+2025-05-30 08:37:09,231 | INFO | Target range: [10, 226]
+2025-05-30 08:37:14,635 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 08:37:14,636 | INFO | Output range: [-5.6015625, 5.48828125]
+2025-05-30 08:37:14,636 | INFO | Sample probabilities: max=0.07294634729623795, min=3.9065540477167815e-05
+2025-05-30 08:37:14,637 | INFO | Raw loss value: 6.237721920013428
+2025-05-30 08:37:14,638 | INFO | Batch 0 loss stats - Mean: -0.0271, Std: 1.1387
+2025-05-30 08:37:14,810 | INFO | Gradient norm: 6.7961
+2025-05-30 08:37:14,824 | INFO | Train batch     0/10986 | ms/batch 5594.22 | bpb  0.02 | ppl     1.01 | lr 2.25e-11
+2025-05-30 08:37:34,357 | INFO | Gradient norm: 6.5640
+2025-05-30 08:37:34,366 | INFO | Train batch   100/10986 | ms/batch 248.87 | bpb  0.02 | ppl     1.01 | lr 2.27e-09
+2025-05-30 08:37:54,017 | INFO | Gradient norm: 6.8668
+2025-05-30 08:37:54,025 | INFO | Train batch   200/10986 | ms/batch 222.86 | bpb  0.02 | ppl     1.01 | lr 4.52e-09
+2025-05-30 08:38:13,766 | INFO | Gradient norm: 7.1335
+2025-05-30 08:38:13,774 | INFO | Train batch   300/10986 | ms/batch 214.43 | bpb  0.02 | ppl     1.01 | lr 6.77e-09
+2025-05-30 08:38:33,541 | INFO | Gradient norm: 6.7739
+2025-05-30 08:38:33,549 | INFO | Train batch   400/10986 | ms/batch 210.27 | bpb  0.02 | ppl     1.01 | lr 9.02e-09
+2025-05-30 08:38:53,361 | INFO | Gradient norm: 6.9395
+2025-05-30 08:38:53,368 | INFO | Train batch   500/10986 | ms/batch 207.86 | bpb  0.02 | ppl     1.01 | lr 1.13e-08
+2025-05-30 08:39:13,170 | INFO | Gradient norm: 7.2601
+2025-05-30 08:39:13,178 | INFO | Train batch   600/10986 | ms/batch 206.24 | bpb  0.02 | ppl     1.01 | lr 1.35e-08
+2025-05-30 08:39:32,997 | INFO | Gradient norm: 7.2144
+2025-05-30 08:39:33,005 | INFO | Train batch   700/10986 | ms/batch 205.10 | bpb  0.02 | ppl     1.01 | lr 1.58e-08
+2025-05-30 08:39:52,812 | INFO | Gradient norm: 6.9550
+2025-05-30 08:39:52,820 | INFO | Train batch   800/10986 | ms/batch 204.23 | bpb  0.02 | ppl     1.01 | lr 1.80e-08
+2025-05-30 08:40:12,619 | INFO | Gradient norm: 7.2705
+2025-05-30 08:40:12,626 | INFO | Train batch   900/10986 | ms/batch 203.55 | bpb  0.02 | ppl     1.01 | lr 2.03e-08
+2025-05-30 08:40:32,429 | INFO | Gradient norm: 6.9000
+2025-05-30 08:40:32,437 | INFO | Train batch  1000/10986 | ms/batch 203.00 | bpb  0.02 | ppl     1.01 | lr 2.25e-08
+2025-05-30 08:40:52,216 | INFO | Gradient norm: 6.8885
+2025-05-30 08:40:52,224 | INFO | Train batch  1100/10986 | ms/batch 202.54 | bpb  0.02 | ppl     1.01 | lr 2.48e-08
+2025-05-30 08:41:12,020 | INFO | Gradient norm: 6.8997
+2025-05-30 08:41:12,028 | INFO | Train batch  1200/10986 | ms/batch 202.16 | bpb  0.02 | ppl     1.01 | lr 2.70e-08
+2025-05-30 08:41:31,820 | INFO | Gradient norm: 6.9484
+2025-05-30 08:41:31,828 | INFO | Train batch  1300/10986 | ms/batch 201.84 | bpb  0.02 | ppl     1.01 | lr 2.93e-08
+2025-05-30 08:41:51,596 | INFO | Gradient norm: 6.0788
+2025-05-30 08:41:51,604 | INFO | Train batch  1400/10986 | ms/batch 201.55 | bpb  0.02 | ppl     1.01 | lr 3.15e-08
+2025-05-30 08:42:11,381 | INFO | Gradient norm: 6.5249
+2025-05-30 08:42:11,389 | INFO | Train batch  1500/10986 | ms/batch 201.31 | bpb  0.02 | ppl     1.01 | lr 3.38e-08
+slurmstepd-node078: error: *** JOB 28189 ON node078 CANCELLED AT 2025-05-30T08:42:29 ***

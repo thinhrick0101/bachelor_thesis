@@ -1,0 +1,9 @@
+2025-05-30 08:42:46,073 | INFO | Using device: cuda
+2025-05-30 08:42:48,627 | INFO | Model parameters: 19,177,728
+2025-05-30 08:42:48,627 | INFO | Loading training data...
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 311, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 244, in main
+    scheduler = torch.optim.LambdaLR(optimizer, get_lr)
+AttributeError: module 'torch.optim' has no attribute 'LambdaLR'

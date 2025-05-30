@@ -1,0 +1,26 @@
+2025-05-30 08:28:05,140 | INFO | Using device: cuda
+2025-05-30 08:28:07,574 | INFO | Model parameters: 19,177,728
+2025-05-30 08:28:07,574 | INFO | Loading training data...
+2025-05-30 08:28:13,201 | INFO | Starting training...
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 242, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 196, in main
+    train_loss = train_epoch(model, train_batches, criterion, optimizer, scheduler, device)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 67, in train_epoch
+    output = model(input_ids)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_transformer_v2.py", line 399, in forward
+    src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_transformer_v2.py", line 325, in forward
+    src2, _ = self.self_attn(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_transformer_v2.py", line 254, in forward
+    attn_weights_head = F.dropout(attn_weights_head, p=self.dropout, training=self.training)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 1252, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+RuntimeError: CUDA out of memory. Tried to allocate 128.00 MiB (GPU 0; 10.57 GiB total capacity; 9.61 GiB already allocated; 110.00 MiB free; 9.62 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

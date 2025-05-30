@@ -1,0 +1,960 @@
+2025-05-30 08:44:18,086 | INFO | Using device: cuda
+2025-05-30 08:44:20,625 | INFO | Model parameters: 19,177,728
+2025-05-30 08:44:20,625 | INFO | Loading training data...
+2025-05-30 08:44:26,517 | INFO | Initial learning rate: 0.00e+00
+2025-05-30 08:44:26,517 | INFO | Warmup steps: 4000
+2025-05-30 08:44:26,517 | INFO | Total steps: 549300
+2025-05-30 08:44:26,518 | INFO | Starting training...
+2025-05-30 08:44:26,519 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 08:44:26,520 | INFO | Input range: [10, 226]
+2025-05-30 08:44:26,520 | INFO | Target range: [10, 226]
+2025-05-30 08:44:31,830 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 08:44:31,832 | INFO | Output range: [-5.41796875, 5.5234375]
+2025-05-30 08:44:31,832 | INFO | Sample probabilities: max=0.06419099867343903, min=4.46261401521042e-05
+2025-05-30 08:44:31,833 | INFO | Raw loss value: 6.093836784362793
+2025-05-30 08:44:31,833 | INFO | Batch 0 loss stats - Mean: -0.0641, Std: 1.1182
+2025-05-30 08:44:32,002 | INFO | Gradient norm: 6.8590
+2025-05-30 08:44:32,016 | INFO | Train batch     0/10986 | ms/batch 5497.22 | loss 6.0938 | bpb  8.79 | ppl   443.12 | lr 2.25e-11
+2025-05-30 08:44:51,526 | INFO | Gradient norm: 6.6789
+2025-05-30 08:44:51,534 | INFO | Train batch   100/10986 | ms/batch 247.68 | loss 6.1020 | bpb  8.80 | ppl   446.75 | lr 2.27e-09
+2025-05-30 08:45:11,098 | INFO | Gradient norm: 7.0517
+2025-05-30 08:45:11,107 | INFO | Train batch   200/10986 | ms/batch 221.83 | loss 6.0950 | bpb  8.79 | ppl   443.62 | lr 4.52e-09
+2025-05-30 08:45:30,782 | INFO | Gradient norm: 7.2361
+2025-05-30 08:45:30,790 | INFO | Train batch   300/10986 | ms/batch 213.53 | loss 6.0919 | bpb  8.79 | ppl   442.24 | lr 6.77e-09
+2025-05-30 08:45:50,510 | INFO | Gradient norm: 6.8787
+2025-05-30 08:45:50,518 | INFO | Train batch   400/10986 | ms/batch 209.47 | loss 6.0875 | bpb  8.78 | ppl   440.34 | lr 9.02e-09
+2025-05-30 08:46:10,411 | INFO | Gradient norm: 6.9837
+2025-05-30 08:46:10,419 | INFO | Train batch   500/10986 | ms/batch 207.39 | loss 6.0802 | bpb  8.77 | ppl   437.10 | lr 1.13e-08
+2025-05-30 08:46:30,390 | INFO | Gradient norm: 7.3910
+2025-05-30 08:46:30,398 | INFO | Train batch   600/10986 | ms/batch 206.12 | loss 6.0733 | bpb  8.76 | ppl   434.11 | lr 1.35e-08
+2025-05-30 08:46:50,397 | INFO | Gradient norm: 7.3454
+2025-05-30 08:46:50,405 | INFO | Train batch   700/10986 | ms/batch 205.26 | loss 6.0645 | bpb  8.75 | ppl   430.32 | lr 1.58e-08
+2025-05-30 08:47:10,410 | INFO | Gradient norm: 7.0264
+2025-05-30 08:47:10,418 | INFO | Train batch   800/10986 | ms/batch 204.62 | loss 6.0570 | bpb  8.74 | ppl   427.09 | lr 1.80e-08
+2025-05-30 08:47:30,423 | INFO | Gradient norm: 7.3202
+2025-05-30 08:47:30,431 | INFO | Train batch   900/10986 | ms/batch 204.12 | loss 6.0467 | bpb  8.72 | ppl   422.74 | lr 2.03e-08
+2025-05-30 08:47:50,430 | INFO | Gradient norm: 7.0611
+2025-05-30 08:47:50,438 | INFO | Train batch  1000/10986 | ms/batch 203.72 | loss 6.0357 | bpb  8.71 | ppl   418.08 | lr 2.25e-08
+2025-05-30 08:48:10,431 | INFO | Gradient norm: 6.9913
+2025-05-30 08:48:10,439 | INFO | Train batch  1100/10986 | ms/batch 203.38 | loss 6.0227 | bpb  8.69 | ppl   412.70 | lr 2.48e-08
+2025-05-30 08:48:30,426 | INFO | Gradient norm: 7.0359
+2025-05-30 08:48:30,434 | INFO | Train batch  1200/10986 | ms/batch 203.09 | loss 6.0090 | bpb  8.67 | ppl   407.08 | lr 2.70e-08
+2025-05-30 08:48:50,425 | INFO | Gradient norm: 7.0326
+2025-05-30 08:48:50,433 | INFO | Train batch  1300/10986 | ms/batch 202.85 | loss 5.9945 | bpb  8.65 | ppl   401.21 | lr 2.93e-08
+2025-05-30 08:49:10,419 | INFO | Gradient norm: 6.2424
+2025-05-30 08:49:10,426 | INFO | Train batch  1400/10986 | ms/batch 202.65 | loss 5.9799 | bpb  8.63 | ppl   395.42 | lr 3.15e-08
+2025-05-30 08:49:30,406 | INFO | Gradient norm: 6.6448
+2025-05-30 08:49:30,414 | INFO | Train batch  1500/10986 | ms/batch 202.46 | loss 5.9648 | bpb  8.61 | ppl   389.49 | lr 3.38e-08
+2025-05-30 08:49:50,403 | INFO | Gradient norm: 6.6034
+2025-05-30 08:49:50,411 | INFO | Train batch  1600/10986 | ms/batch 202.31 | loss 5.9479 | bpb  8.58 | ppl   382.96 | lr 3.60e-08
+2025-05-30 08:50:10,396 | INFO | Gradient norm: 5.8446
+2025-05-30 08:50:10,404 | INFO | Train batch  1700/10986 | ms/batch 202.17 | loss 5.9310 | bpb  8.56 | ppl   376.55 | lr 3.83e-08
+2025-05-30 08:50:30,370 | INFO | Gradient norm: 6.2589
+2025-05-30 08:50:30,378 | INFO | Train batch  1800/10986 | ms/batch 202.03 | loss 5.9136 | bpb  8.53 | ppl   370.04 | lr 4.05e-08
+2025-05-30 08:50:50,363 | INFO | Gradient norm: 6.5867
+2025-05-30 08:50:50,371 | INFO | Train batch  1900/10986 | ms/batch 201.92 | loss 5.8945 | bpb  8.50 | ppl   363.05 | lr 4.28e-08
+2025-05-30 08:51:10,355 | INFO | Gradient norm: 5.9238
+2025-05-30 08:51:10,363 | INFO | Train batch  2000/10986 | ms/batch 201.82 | loss 5.8727 | bpb  8.47 | ppl   355.22 | lr 4.50e-08
+2025-05-30 08:51:30,328 | INFO | Gradient norm: 6.4187
+2025-05-30 08:51:30,336 | INFO | Train batch  2100/10986 | ms/batch 201.72 | loss 5.8520 | bpb  8.44 | ppl   347.93 | lr 4.73e-08
+2025-05-30 08:51:50,307 | INFO | Gradient norm: 5.9940
+2025-05-30 08:51:50,315 | INFO | Train batch  2200/10986 | ms/batch 201.63 | loss 5.8298 | bpb  8.41 | ppl   340.29 | lr 4.95e-08
+2025-05-30 08:52:10,292 | INFO | Gradient norm: 5.7640
+2025-05-30 08:52:10,300 | INFO | Train batch  2300/10986 | ms/batch 201.56 | loss 5.8072 | bpb  8.38 | ppl   332.68 | lr 5.18e-08
+2025-05-30 08:52:30,278 | INFO | Gradient norm: 5.7201
+2025-05-30 08:52:30,286 | INFO | Train batch  2400/10986 | ms/batch 201.49 | loss 5.7835 | bpb  8.34 | ppl   324.90 | lr 5.40e-08
+2025-05-30 08:52:50,254 | INFO | Gradient norm: 5.0095
+2025-05-30 08:52:50,262 | INFO | Train batch  2500/10986 | ms/batch 201.42 | loss 5.7590 | bpb  8.31 | ppl   317.03 | lr 5.63e-08
+2025-05-30 08:53:10,249 | INFO | Gradient norm: 5.1534
+2025-05-30 08:53:10,257 | INFO | Train batch  2600/10986 | ms/batch 201.36 | loss 5.7337 | bpb  8.27 | ppl   309.11 | lr 5.85e-08
+2025-05-30 08:53:30,238 | INFO | Gradient norm: 4.9284
+2025-05-30 08:53:30,245 | INFO | Train batch  2700/10986 | ms/batch 201.31 | loss 5.7083 | bpb  8.24 | ppl   301.35 | lr 6.08e-08
+2025-05-30 08:53:50,212 | INFO | Gradient norm: 4.6962
+2025-05-30 08:53:50,219 | INFO | Train batch  2800/10986 | ms/batch 201.25 | loss 5.6840 | bpb  8.20 | ppl   294.11 | lr 6.30e-08
+2025-05-30 08:54:10,209 | INFO | Gradient norm: 4.3300
+2025-05-30 08:54:10,217 | INFO | Train batch  2900/10986 | ms/batch 201.21 | loss 5.6582 | bpb  8.16 | ppl   286.62 | lr 6.53e-08
+2025-05-30 08:54:30,202 | INFO | Gradient norm: 4.3960
+2025-05-30 08:54:30,210 | INFO | Train batch  3000/10986 | ms/batch 201.16 | loss 5.6318 | bpb  8.12 | ppl   279.16 | lr 6.75e-08
+2025-05-30 08:54:50,182 | INFO | Gradient norm: 4.0410
+2025-05-30 08:54:50,190 | INFO | Train batch  3100/10986 | ms/batch 201.12 | loss 5.6061 | bpb  8.09 | ppl   272.08 | lr 6.98e-08
+2025-05-30 08:55:10,178 | INFO | Gradient norm: 3.6308
+2025-05-30 08:55:10,186 | INFO | Train batch  3200/10986 | ms/batch 201.08 | loss 5.5798 | bpb  8.05 | ppl   265.01 | lr 7.20e-08
+2025-05-30 08:55:30,178 | INFO | Gradient norm: 3.5073
+2025-05-30 08:55:30,186 | INFO | Train batch  3300/10986 | ms/batch 201.05 | loss 5.5538 | bpb  8.01 | ppl   258.21 | lr 7.43e-08
+2025-05-30 08:55:50,151 | INFO | Gradient norm: 3.3579
+2025-05-30 08:55:50,159 | INFO | Train batch  3400/10986 | ms/batch 201.01 | loss 5.5282 | bpb  7.98 | ppl   251.69 | lr 7.65e-08
+2025-05-30 08:56:10,144 | INFO | Gradient norm: 2.8791
+2025-05-30 08:56:10,152 | INFO | Train batch  3500/10986 | ms/batch 200.98 | loss 5.5020 | bpb  7.94 | ppl   245.18 | lr 7.88e-08
+2025-05-30 08:56:30,136 | INFO | Gradient norm: 2.8386
+2025-05-30 08:56:30,144 | INFO | Train batch  3600/10986 | ms/batch 200.95 | loss 5.4767 | bpb  7.90 | ppl   239.06 | lr 8.10e-08
+2025-05-30 08:56:50,107 | INFO | Gradient norm: 2.8289
+2025-05-30 08:56:50,115 | INFO | Train batch  3700/10986 | ms/batch 200.92 | loss 5.4515 | bpb  7.86 | ppl   233.11 | lr 8.33e-08
+2025-05-30 08:57:10,095 | INFO | Gradient norm: 2.7175
+2025-05-30 08:57:10,103 | INFO | Train batch  3800/10986 | ms/batch 200.89 | loss 5.4263 | bpb  7.83 | ppl   227.30 | lr 8.55e-08
+2025-05-30 08:57:30,086 | INFO | Gradient norm: 2.4395
+2025-05-30 08:57:30,094 | INFO | Train batch  3900/10986 | ms/batch 200.87 | loss 5.4009 | bpb  7.79 | ppl   221.60 | lr 8.78e-08
+2025-05-30 08:57:50,055 | INFO | Gradient norm: 2.2233
+2025-05-30 08:57:50,063 | INFO | Train batch  4000/10986 | ms/batch 200.84 | loss 5.3753 | bpb  7.75 | ppl   216.01 | lr 9.00e-08
+2025-05-30 08:58:10,044 | INFO | Gradient norm: 2.1169
+2025-05-30 08:58:10,052 | INFO | Train batch  4100/10986 | ms/batch 200.81 | loss 5.3499 | bpb  7.72 | ppl   210.59 | lr 9.00e-08
+2025-05-30 08:58:30,033 | INFO | Gradient norm: 2.0947
+2025-05-30 08:58:30,041 | INFO | Train batch  4200/10986 | ms/batch 200.79 | loss 5.3269 | bpb  7.69 | ppl   205.81 | lr 9.00e-08
+2025-05-30 08:58:50,005 | INFO | Gradient norm: 1.9570
+2025-05-30 08:58:50,013 | INFO | Train batch  4300/10986 | ms/batch 200.77 | loss 5.3033 | bpb  7.65 | ppl   200.99 | lr 9.00e-08
+2025-05-30 08:59:09,990 | INFO | Gradient norm: 1.8270
+2025-05-30 08:59:09,998 | INFO | Train batch  4400/10986 | ms/batch 200.75 | loss 5.2809 | bpb  7.62 | ppl   196.54 | lr 9.00e-08
+2025-05-30 08:59:29,985 | INFO | Gradient norm: 1.7095
+2025-05-30 08:59:29,993 | INFO | Train batch  4500/10986 | ms/batch 200.73 | loss 5.2584 | bpb  7.59 | ppl   192.17 | lr 9.00e-08
+2025-05-30 08:59:49,956 | INFO | Gradient norm: 1.6994
+2025-05-30 08:59:49,964 | INFO | Train batch  4600/10986 | ms/batch 200.71 | loss 5.2359 | bpb  7.55 | ppl   187.90 | lr 9.00e-08
+2025-05-30 09:00:09,946 | INFO | Gradient norm: 1.5911
+2025-05-30 09:00:09,954 | INFO | Train batch  4700/10986 | ms/batch 200.69 | loss 5.2136 | bpb  7.52 | ppl   183.75 | lr 9.00e-08
+2025-05-30 09:00:29,942 | INFO | Gradient norm: 1.6016
+2025-05-30 09:00:29,950 | INFO | Train batch  4800/10986 | ms/batch 200.67 | loss 5.1928 | bpb  7.49 | ppl   179.98 | lr 9.00e-08
+2025-05-30 09:00:49,915 | INFO | Gradient norm: 1.5574
+2025-05-30 09:00:49,923 | INFO | Train batch  4900/10986 | ms/batch 200.65 | loss 5.1709 | bpb  7.46 | ppl   176.07 | lr 9.00e-08
+2025-05-30 09:01:09,901 | INFO | Gradient norm: 1.3930
+2025-05-30 09:01:09,909 | INFO | Train batch  5000/10986 | ms/batch 200.64 | loss 5.1498 | bpb  7.43 | ppl   172.39 | lr 9.00e-08
+2025-05-30 09:01:29,885 | INFO | Gradient norm: 1.3326
+2025-05-30 09:01:29,893 | INFO | Train batch  5100/10986 | ms/batch 200.62 | loss 5.1289 | bpb  7.40 | ppl   168.83 | lr 9.00e-08
+2025-05-30 09:01:49,867 | INFO | Gradient norm: 1.3661
+2025-05-30 09:01:49,875 | INFO | Train batch  5200/10986 | ms/batch 200.61 | loss 5.1079 | bpb  7.37 | ppl   165.32 | lr 9.00e-08
+2025-05-30 09:02:09,858 | INFO | Gradient norm: 1.3531
+2025-05-30 09:02:09,866 | INFO | Train batch  5300/10986 | ms/batch 200.59 | loss 5.0878 | bpb  7.34 | ppl   162.03 | lr 9.00e-08
+2025-05-30 09:02:29,851 | INFO | Gradient norm: 1.2816
+2025-05-30 09:02:29,859 | INFO | Train batch  5400/10986 | ms/batch 200.58 | loss 5.0681 | bpb  7.31 | ppl   158.88 | lr 9.00e-08
+2025-05-30 09:02:49,823 | INFO | Gradient norm: 1.2721
+2025-05-30 09:02:49,831 | INFO | Train batch  5500/10986 | ms/batch 200.57 | loss 5.0487 | bpb  7.28 | ppl   155.81 | lr 9.00e-08
+2025-05-30 09:03:09,812 | INFO | Gradient norm: 1.2513
+2025-05-30 09:03:09,820 | INFO | Train batch  5600/10986 | ms/batch 200.55 | loss 5.0305 | bpb  7.26 | ppl   153.01 | lr 9.00e-08
+2025-05-30 09:03:29,805 | INFO | Gradient norm: 1.1670
+2025-05-30 09:03:29,813 | INFO | Train batch  5700/10986 | ms/batch 200.54 | loss 5.0124 | bpb  7.23 | ppl   150.27 | lr 9.00e-08
+2025-05-30 09:03:49,776 | INFO | Gradient norm: 1.1711
+2025-05-30 09:03:49,784 | INFO | Train batch  5800/10986 | ms/batch 200.53 | loss 4.9946 | bpb  7.21 | ppl   147.61 | lr 9.00e-08
+2025-05-30 09:04:09,768 | INFO | Gradient norm: 1.0729
+2025-05-30 09:04:09,776 | INFO | Train batch  5900/10986 | ms/batch 200.52 | loss 4.9764 | bpb  7.18 | ppl   144.96 | lr 9.00e-08
+2025-05-30 09:04:29,754 | INFO | Gradient norm: 1.0785
+2025-05-30 09:04:29,761 | INFO | Train batch  6000/10986 | ms/batch 200.51 | loss 4.9586 | bpb  7.15 | ppl   142.39 | lr 9.00e-08
+2025-05-30 09:04:49,725 | INFO | Gradient norm: 1.0784
+2025-05-30 09:04:49,733 | INFO | Train batch  6100/10986 | ms/batch 200.49 | loss 4.9420 | bpb  7.13 | ppl   140.05 | lr 9.00e-08
+2025-05-30 09:05:09,713 | INFO | Gradient norm: 1.0652
+2025-05-30 09:05:09,721 | INFO | Train batch  6200/10986 | ms/batch 200.48 | loss 4.9254 | bpb  7.11 | ppl   137.74 | lr 9.00e-08
+2025-05-30 09:05:29,693 | INFO | Gradient norm: 1.0248
+2025-05-30 09:05:29,701 | INFO | Train batch  6300/10986 | ms/batch 200.47 | loss 4.9091 | bpb  7.08 | ppl   135.52 | lr 9.00e-08
+2025-05-30 09:05:49,664 | INFO | Gradient norm: 1.0252
+2025-05-30 09:05:49,672 | INFO | Train batch  6400/10986 | ms/batch 200.46 | loss 4.8934 | bpb  7.06 | ppl   133.40 | lr 9.00e-08
+2025-05-30 09:06:09,652 | INFO | Gradient norm: 0.9521
+2025-05-30 09:06:09,660 | INFO | Train batch  6500/10986 | ms/batch 200.45 | loss 4.8782 | bpb  7.04 | ppl   131.39 | lr 9.00e-08
+2025-05-30 09:06:29,642 | INFO | Gradient norm: 1.1388
+2025-05-30 09:06:29,650 | INFO | Train batch  6600/10986 | ms/batch 200.44 | loss 4.8636 | bpb  7.02 | ppl   129.49 | lr 9.00e-08
+2025-05-30 09:06:49,611 | INFO | Gradient norm: 0.9967
+2025-05-30 09:06:49,619 | INFO | Train batch  6700/10986 | ms/batch 200.43 | loss 4.8486 | bpb  7.00 | ppl   127.57 | lr 9.00e-08
+2025-05-30 09:07:09,597 | INFO | Gradient norm: 0.8817
+2025-05-30 09:07:09,605 | INFO | Train batch  6800/10986 | ms/batch 200.42 | loss 4.8339 | bpb  6.97 | ppl   125.69 | lr 9.00e-08
+2025-05-30 09:07:29,592 | INFO | Gradient norm: 1.0937
+2025-05-30 09:07:29,600 | INFO | Train batch  6900/10986 | ms/batch 200.42 | loss 4.8197 | bpb  6.95 | ppl   123.93 | lr 9.00e-08
+2025-05-30 09:07:49,565 | INFO | Gradient norm: 0.8818
+2025-05-30 09:07:49,573 | INFO | Train batch  7000/10986 | ms/batch 200.41 | loss 4.8065 | bpb  6.93 | ppl   122.31 | lr 9.00e-08
+2025-05-30 09:08:09,554 | INFO | Gradient norm: 0.9189
+2025-05-30 09:08:09,562 | INFO | Train batch  7100/10986 | ms/batch 200.40 | loss 4.7933 | bpb  6.92 | ppl   120.70 | lr 9.00e-08
+2025-05-30 09:08:29,545 | INFO | Gradient norm: 0.9848
+2025-05-30 09:08:29,553 | INFO | Train batch  7200/10986 | ms/batch 200.39 | loss 4.7804 | bpb  6.90 | ppl   119.16 | lr 9.00e-08
+2025-05-30 09:08:49,518 | INFO | Gradient norm: 0.8884
+2025-05-30 09:08:49,526 | INFO | Train batch  7300/10986 | ms/batch 200.38 | loss 4.7674 | bpb  6.88 | ppl   117.62 | lr 9.00e-08
+2025-05-30 09:09:09,507 | INFO | Gradient norm: 0.8033
+2025-05-30 09:09:09,515 | INFO | Train batch  7400/10986 | ms/batch 200.38 | loss 4.7541 | bpb  6.86 | ppl   116.06 | lr 9.00e-08
+2025-05-30 09:09:29,489 | INFO | Gradient norm: 1.0641
+2025-05-30 09:09:29,497 | INFO | Train batch  7500/10986 | ms/batch 200.37 | loss 4.7417 | bpb  6.84 | ppl   114.63 | lr 9.00e-08
+2025-05-30 09:09:49,460 | INFO | Gradient norm: 0.9878
+2025-05-30 09:09:49,468 | INFO | Train batch  7600/10986 | ms/batch 200.36 | loss 4.7297 | bpb  6.82 | ppl   113.26 | lr 9.00e-08
+2025-05-30 09:10:09,448 | INFO | Gradient norm: 0.9267
+2025-05-30 09:10:09,456 | INFO | Train batch  7700/10986 | ms/batch 200.36 | loss 4.7183 | bpb  6.81 | ppl   111.98 | lr 9.00e-08
+2025-05-30 09:10:29,433 | INFO | Gradient norm: 0.9321
+2025-05-30 09:10:29,441 | INFO | Train batch  7800/10986 | ms/batch 200.35 | loss 4.7073 | bpb  6.79 | ppl   110.75 | lr 9.00e-08
+2025-05-30 09:10:49,401 | INFO | Gradient norm: 0.8481
+2025-05-30 09:10:49,409 | INFO | Train batch  7900/10986 | ms/batch 200.34 | loss 4.6956 | bpb  6.77 | ppl   109.46 | lr 9.00e-08
+2025-05-30 09:11:09,386 | INFO | Gradient norm: 0.8548
+2025-05-30 09:11:09,394 | INFO | Train batch  8000/10986 | ms/batch 200.33 | loss 4.6841 | bpb  6.76 | ppl   108.21 | lr 9.00e-08
+2025-05-30 09:11:29,369 | INFO | Gradient norm: 1.0139
+2025-05-30 09:11:29,376 | INFO | Train batch  8100/10986 | ms/batch 200.33 | loss 4.6732 | bpb  6.74 | ppl   107.04 | lr 9.00e-08
+2025-05-30 09:11:49,337 | INFO | Gradient norm: 0.8227
+2025-05-30 09:11:49,344 | INFO | Train batch  8200/10986 | ms/batch 200.32 | loss 4.6622 | bpb  6.73 | ppl   105.87 | lr 9.00e-08
+2025-05-30 09:12:09,317 | INFO | Gradient norm: 0.8304
+2025-05-30 09:12:09,325 | INFO | Train batch  8300/10986 | ms/batch 200.31 | loss 4.6512 | bpb  6.71 | ppl   104.71 | lr 9.00e-08
+2025-05-30 09:12:29,299 | INFO | Gradient norm: 0.9206
+2025-05-30 09:12:29,307 | INFO | Train batch  8400/10986 | ms/batch 200.31 | loss 4.6408 | bpb  6.70 | ppl   103.62 | lr 9.00e-08
+2025-05-30 09:12:49,265 | INFO | Gradient norm: 0.8728
+2025-05-30 09:12:49,273 | INFO | Train batch  8500/10986 | ms/batch 200.30 | loss 4.6313 | bpb  6.68 | ppl   102.64 | lr 9.00e-08
+2025-05-30 09:13:09,247 | INFO | Gradient norm: 0.7543
+2025-05-30 09:13:09,255 | INFO | Train batch  8600/10986 | ms/batch 200.29 | loss 4.6210 | bpb  6.67 | ppl   101.59 | lr 9.00e-08
+2025-05-30 09:13:29,227 | INFO | Gradient norm: 0.7833
+2025-05-30 09:13:29,235 | INFO | Train batch  8700/10986 | ms/batch 200.29 | loss 4.6108 | bpb  6.65 | ppl   100.57 | lr 9.00e-08
+2025-05-30 09:13:49,195 | INFO | Gradient norm: 0.7793
+2025-05-30 09:13:49,203 | INFO | Train batch  8800/10986 | ms/batch 200.28 | loss 4.6006 | bpb  6.64 | ppl    99.55 | lr 9.00e-08
+2025-05-30 09:14:09,171 | INFO | Gradient norm: 0.7430
+2025-05-30 09:14:09,179 | INFO | Train batch  8900/10986 | ms/batch 200.28 | loss 4.5911 | bpb  6.62 | ppl    98.61 | lr 9.00e-08
+2025-05-30 09:14:29,155 | INFO | Gradient norm: 0.7108
+2025-05-30 09:14:29,163 | INFO | Train batch  9000/10986 | ms/batch 200.27 | loss 4.5813 | bpb  6.61 | ppl    97.65 | lr 9.00e-08
+2025-05-30 09:14:49,121 | INFO | Gradient norm: 0.9281
+2025-05-30 09:14:49,129 | INFO | Train batch  9100/10986 | ms/batch 200.26 | loss 4.5719 | bpb  6.60 | ppl    96.72 | lr 9.00e-08
+2025-05-30 09:15:09,098 | INFO | Gradient norm: 0.7327
+2025-05-30 09:15:09,106 | INFO | Train batch  9200/10986 | ms/batch 200.26 | loss 4.5624 | bpb  6.58 | ppl    95.81 | lr 9.00e-08
+2025-05-30 09:15:29,080 | INFO | Gradient norm: 0.7251
+2025-05-30 09:15:29,088 | INFO | Train batch  9300/10986 | ms/batch 200.25 | loss 4.5527 | bpb  6.57 | ppl    94.89 | lr 9.00e-08
+2025-05-30 09:15:49,044 | INFO | Gradient norm: 0.8167
+2025-05-30 09:15:49,052 | INFO | Train batch  9400/10986 | ms/batch 200.25 | loss 4.5437 | bpb  6.56 | ppl    94.04 | lr 9.00e-08
+2025-05-30 09:16:09,021 | INFO | Gradient norm: 0.7271
+2025-05-30 09:16:09,028 | INFO | Train batch  9500/10986 | ms/batch 200.24 | loss 4.5344 | bpb  6.54 | ppl    93.16 | lr 9.00e-08
+2025-05-30 09:16:29,002 | INFO | Gradient norm: 0.7677
+2025-05-30 09:16:29,010 | INFO | Train batch  9600/10986 | ms/batch 200.24 | loss 4.5256 | bpb  6.53 | ppl    92.35 | lr 9.00e-08
+2025-05-30 09:16:48,971 | INFO | Gradient norm: 0.7912
+2025-05-30 09:16:48,979 | INFO | Train batch  9700/10986 | ms/batch 200.23 | loss 4.5167 | bpb  6.52 | ppl    91.53 | lr 9.00e-08
+2025-05-30 09:17:08,950 | INFO | Gradient norm: 0.7103
+2025-05-30 09:17:08,958 | INFO | Train batch  9800/10986 | ms/batch 200.23 | loss 4.5081 | bpb  6.50 | ppl    90.75 | lr 9.00e-08
+2025-05-30 09:17:28,929 | INFO | Gradient norm: 0.6469
+2025-05-30 09:17:28,937 | INFO | Train batch  9900/10986 | ms/batch 200.22 | loss 4.4994 | bpb  6.49 | ppl    89.96 | lr 9.00e-08
+2025-05-30 09:17:48,898 | INFO | Gradient norm: 0.7026
+2025-05-30 09:17:48,905 | INFO | Train batch 10000/10986 | ms/batch 200.22 | loss 4.4909 | bpb  6.48 | ppl    89.21 | lr 9.00e-08
+2025-05-30 09:18:08,887 | INFO | Gradient norm: 0.6105
+2025-05-30 09:18:08,895 | INFO | Train batch 10100/10986 | ms/batch 200.22 | loss 4.4828 | bpb  6.47 | ppl    88.49 | lr 9.00e-08
+2025-05-30 09:18:28,851 | INFO | Gradient norm: 0.6414
+2025-05-30 09:18:28,859 | INFO | Train batch 10200/10986 | ms/batch 200.21 | loss 4.4746 | bpb  6.46 | ppl    87.76 | lr 9.00e-08
+2025-05-30 09:18:48,826 | INFO | Gradient norm: 0.6721
+2025-05-30 09:18:48,834 | INFO | Train batch 10300/10986 | ms/batch 200.21 | loss 4.4666 | bpb  6.44 | ppl    87.06 | lr 9.00e-08
+2025-05-30 09:19:08,810 | INFO | Gradient norm: 0.6874
+2025-05-30 09:19:08,818 | INFO | Train batch 10400/10986 | ms/batch 200.20 | loss 4.4585 | bpb  6.43 | ppl    86.36 | lr 9.00e-08
+2025-05-30 09:19:28,778 | INFO | Gradient norm: 0.6771
+2025-05-30 09:19:28,785 | INFO | Train batch 10500/10986 | ms/batch 200.20 | loss 4.4507 | bpb  6.42 | ppl    85.68 | lr 9.00e-08
+2025-05-30 09:19:48,755 | INFO | Gradient norm: 0.6961
+2025-05-30 09:19:48,763 | INFO | Train batch 10600/10986 | ms/batch 200.19 | loss 4.4433 | bpb  6.41 | ppl    85.06 | lr 9.00e-08
+2025-05-30 09:20:08,737 | INFO | Gradient norm: 0.7107
+2025-05-30 09:20:08,745 | INFO | Train batch 10700/10986 | ms/batch 200.19 | loss 4.4357 | bpb  6.40 | ppl    84.41 | lr 9.00e-08
+2025-05-30 09:20:28,707 | INFO | Gradient norm: 0.7154
+2025-05-30 09:20:28,715 | INFO | Train batch 10800/10986 | ms/batch 200.18 | loss 4.4283 | bpb  6.39 | ppl    83.79 | lr 9.00e-08
+2025-05-30 09:20:48,685 | INFO | Gradient norm: 0.6021
+2025-05-30 09:20:48,693 | INFO | Train batch 10900/10986 | ms/batch 200.18 | loss 4.4210 | bpb  6.38 | ppl    83.18 | lr 9.00e-08
+2025-05-30 09:22:18,376 | INFO | Epoch   0 | time: 2271.86s | train bpb  6.37 | valid bpb  0.01
+2025-05-30 09:22:19,760 | INFO | Saved new best model with validation bpb:  0.01
+2025-05-30 09:22:19,836 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 09:22:19,836 | INFO | Input range: [10, 226]
+2025-05-30 09:22:19,836 | INFO | Target range: [10, 226]
+2025-05-30 09:22:19,873 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 09:22:19,874 | INFO | Output range: [-5.7578125, 9.03125]
+2025-05-30 09:22:19,874 | INFO | Sample probabilities: max=0.32395774126052856, min=2.7316995328874327e-05
+2025-05-30 09:22:19,875 | INFO | Raw loss value: 3.6922237873077393
+2025-05-30 09:22:19,875 | INFO | Batch 0 loss stats - Mean: -0.0933, Std: 1.3594
+2025-05-30 09:22:20,025 | INFO | Gradient norm: 0.6841
+2025-05-30 09:22:20,033 | INFO | Train batch     0/10986 | ms/batch 197.25 | loss 3.6922 | bpb  5.33 | ppl    40.13 | lr 9.00e-08
+2025-05-30 09:22:39,944 | INFO | Gradient norm: 0.7807
+2025-05-30 09:22:39,952 | INFO | Train batch   100/10986 | ms/batch 199.17 | loss 3.6517 | bpb  5.27 | ppl    38.54 | lr 9.00e-08
+2025-05-30 09:22:59,894 | INFO | Gradient norm: 0.6556
+2025-05-30 09:22:59,902 | INFO | Train batch   200/10986 | ms/batch 199.34 | loss 3.6389 | bpb  5.25 | ppl    38.05 | lr 9.00e-08
+2025-05-30 09:23:19,864 | INFO | Gradient norm: 0.7378
+2025-05-30 09:23:19,872 | INFO | Train batch   300/10986 | ms/batch 199.46 | loss 3.6383 | bpb  5.25 | ppl    38.03 | lr 9.00e-08
+2025-05-30 09:23:39,821 | INFO | Gradient norm: 0.7135
+2025-05-30 09:23:39,828 | INFO | Train batch   400/10986 | ms/batch 199.48 | loss 3.6313 | bpb  5.24 | ppl    37.76 | lr 9.00e-08
+2025-05-30 09:23:59,783 | INFO | Gradient norm: 0.6749
+2025-05-30 09:23:59,791 | INFO | Train batch   500/10986 | ms/batch 199.51 | loss 3.6168 | bpb  5.22 | ppl    37.22 | lr 9.00e-08
+2025-05-30 09:24:19,754 | INFO | Gradient norm: 0.6198
+2025-05-30 09:24:19,762 | INFO | Train batch   600/10986 | ms/batch 199.55 | loss 3.6162 | bpb  5.22 | ppl    37.20 | lr 9.00e-08
+2025-05-30 09:24:39,706 | INFO | Gradient norm: 0.6927
+2025-05-30 09:24:39,714 | INFO | Train batch   700/10986 | ms/batch 199.54 | loss 3.6085 | bpb  5.21 | ppl    36.91 | lr 9.00e-08
+2025-05-30 09:24:59,659 | INFO | Gradient norm: 0.6098
+2025-05-30 09:24:59,666 | INFO | Train batch   800/10986 | ms/batch 199.54 | loss 3.6076 | bpb  5.20 | ppl    36.88 | lr 9.00e-08
+2025-05-30 09:25:19,633 | INFO | Gradient norm: 0.7150
+2025-05-30 09:25:19,641 | INFO | Train batch   900/10986 | ms/batch 199.56 | loss 3.6027 | bpb  5.20 | ppl    36.70 | lr 9.00e-08
+2025-05-30 09:25:39,584 | INFO | Gradient norm: 0.5722
+2025-05-30 09:25:39,592 | INFO | Train batch  1000/10986 | ms/batch 199.56 | loss 3.6003 | bpb  5.19 | ppl    36.61 | lr 9.00e-08
+2025-05-30 09:25:59,535 | INFO | Gradient norm: 0.5639
+2025-05-30 09:25:59,543 | INFO | Train batch  1100/10986 | ms/batch 199.55 | loss 3.5973 | bpb  5.19 | ppl    36.50 | lr 9.00e-08
+2025-05-30 09:26:19,494 | INFO | Gradient norm: 0.6829
+2025-05-30 09:26:19,502 | INFO | Train batch  1200/10986 | ms/batch 199.56 | loss 3.5941 | bpb  5.19 | ppl    36.38 | lr 9.00e-08
+2025-05-30 09:26:39,453 | INFO | Gradient norm: 0.6681
+2025-05-30 09:26:39,461 | INFO | Train batch  1300/10986 | ms/batch 199.56 | loss 3.5921 | bpb  5.18 | ppl    36.31 | lr 9.00e-08
+2025-05-30 09:26:59,401 | INFO | Gradient norm: 0.7531
+2025-05-30 09:26:59,409 | INFO | Train batch  1400/10986 | ms/batch 199.55 | loss 3.5912 | bpb  5.18 | ppl    36.28 | lr 8.99e-08
+2025-05-30 09:27:19,358 | INFO | Gradient norm: 0.7023
+2025-05-30 09:27:19,366 | INFO | Train batch  1500/10986 | ms/batch 199.55 | loss 3.5915 | bpb  5.18 | ppl    36.29 | lr 8.99e-08
+2025-05-30 09:27:39,316 | INFO | Gradient norm: 0.6256
+2025-05-30 09:27:39,324 | INFO | Train batch  1600/10986 | ms/batch 199.56 | loss 3.5892 | bpb  5.18 | ppl    36.21 | lr 8.99e-08
+2025-05-30 09:27:59,265 | INFO | Gradient norm: 0.8871
+2025-05-30 09:27:59,273 | INFO | Train batch  1700/10986 | ms/batch 199.55 | loss 3.5903 | bpb  5.18 | ppl    36.25 | lr 8.99e-08
+2025-05-30 09:28:19,223 | INFO | Gradient norm: 0.5898
+2025-05-30 09:28:19,231 | INFO | Train batch  1800/10986 | ms/batch 199.55 | loss 3.5919 | bpb  5.18 | ppl    36.30 | lr 8.99e-08
+2025-05-30 09:28:39,191 | INFO | Gradient norm: 0.6337
+2025-05-30 09:28:39,199 | INFO | Train batch  1900/10986 | ms/batch 199.56 | loss 3.5915 | bpb  5.18 | ppl    36.29 | lr 8.99e-08
+2025-05-30 09:28:59,141 | INFO | Gradient norm: 0.7502
+2025-05-30 09:28:59,149 | INFO | Train batch  2000/10986 | ms/batch 199.56 | loss 3.5879 | bpb  5.18 | ppl    36.16 | lr 8.99e-08
+2025-05-30 09:29:19,100 | INFO | Gradient norm: 0.6950
+2025-05-30 09:29:19,108 | INFO | Train batch  2100/10986 | ms/batch 199.56 | loss 3.5870 | bpb  5.17 | ppl    36.12 | lr 8.99e-08
+2025-05-30 09:29:39,064 | INFO | Gradient norm: 0.6314
+2025-05-30 09:29:39,072 | INFO | Train batch  2200/10986 | ms/batch 199.56 | loss 3.5849 | bpb  5.17 | ppl    36.05 | lr 8.99e-08
+2025-05-30 09:29:59,012 | INFO | Gradient norm: 0.6147
+2025-05-30 09:29:59,020 | INFO | Train batch  2300/10986 | ms/batch 199.56 | loss 3.5835 | bpb  5.17 | ppl    36.00 | lr 8.99e-08
+2025-05-30 09:30:18,971 | INFO | Gradient norm: 0.5559
+2025-05-30 09:30:18,979 | INFO | Train batch  2400/10986 | ms/batch 199.56 | loss 3.5817 | bpb  5.17 | ppl    35.93 | lr 8.99e-08
+2025-05-30 09:30:38,931 | INFO | Gradient norm: 0.6306
+2025-05-30 09:30:38,939 | INFO | Train batch  2500/10986 | ms/batch 199.56 | loss 3.5794 | bpb  5.16 | ppl    35.85 | lr 8.99e-08
+2025-05-30 09:30:58,880 | INFO | Gradient norm: 0.8353
+2025-05-30 09:30:58,888 | INFO | Train batch  2600/10986 | ms/batch 199.56 | loss 3.5774 | bpb  5.16 | ppl    35.78 | lr 8.99e-08
+2025-05-30 09:31:18,840 | INFO | Gradient norm: 0.5419
+2025-05-30 09:31:18,848 | INFO | Train batch  2700/10986 | ms/batch 199.56 | loss 3.5755 | bpb  5.16 | ppl    35.71 | lr 8.99e-08
+2025-05-30 09:31:38,802 | INFO | Gradient norm: 0.6210
+2025-05-30 09:31:38,809 | INFO | Train batch  2800/10986 | ms/batch 199.56 | loss 3.5751 | bpb  5.16 | ppl    35.70 | lr 8.99e-08
+2025-05-30 09:31:58,749 | INFO | Gradient norm: 0.5680
+2025-05-30 09:31:58,757 | INFO | Train batch  2900/10986 | ms/batch 199.56 | loss 3.5734 | bpb  5.16 | ppl    35.64 | lr 8.99e-08
+2025-05-30 09:32:18,706 | INFO | Gradient norm: 0.6129
+2025-05-30 09:32:18,714 | INFO | Train batch  3000/10986 | ms/batch 199.56 | loss 3.5714 | bpb  5.15 | ppl    35.57 | lr 8.99e-08
+2025-05-30 09:32:38,669 | INFO | Gradient norm: 0.6207
+2025-05-30 09:32:38,676 | INFO | Train batch  3100/10986 | ms/batch 199.56 | loss 3.5705 | bpb  5.15 | ppl    35.53 | lr 8.99e-08
+2025-05-30 09:32:58,618 | INFO | Gradient norm: 0.6763
+2025-05-30 09:32:58,626 | INFO | Train batch  3200/10986 | ms/batch 199.56 | loss 3.5691 | bpb  5.15 | ppl    35.48 | lr 8.99e-08
+2025-05-30 09:33:18,578 | INFO | Gradient norm: 0.7719
+2025-05-30 09:33:18,586 | INFO | Train batch  3300/10986 | ms/batch 199.56 | loss 3.5677 | bpb  5.15 | ppl    35.44 | lr 8.99e-08
+2025-05-30 09:33:38,539 | INFO | Gradient norm: 0.5723
+2025-05-30 09:33:38,547 | INFO | Train batch  3400/10986 | ms/batch 199.56 | loss 3.5676 | bpb  5.15 | ppl    35.43 | lr 8.99e-08
+2025-05-30 09:33:58,487 | INFO | Gradient norm: 0.6424
+2025-05-30 09:33:58,495 | INFO | Train batch  3500/10986 | ms/batch 199.56 | loss 3.5660 | bpb  5.14 | ppl    35.37 | lr 8.99e-08
+2025-05-30 09:34:18,444 | INFO | Gradient norm: 0.6957
+2025-05-30 09:34:18,452 | INFO | Train batch  3600/10986 | ms/batch 199.56 | loss 3.5648 | bpb  5.14 | ppl    35.33 | lr 8.99e-08
+2025-05-30 09:34:38,405 | INFO | Gradient norm: 0.6178
+2025-05-30 09:34:38,413 | INFO | Train batch  3700/10986 | ms/batch 199.56 | loss 3.5641 | bpb  5.14 | ppl    35.31 | lr 8.99e-08
+2025-05-30 09:34:58,353 | INFO | Gradient norm: 0.5588
+2025-05-30 09:34:58,361 | INFO | Train batch  3800/10986 | ms/batch 199.56 | loss 3.5633 | bpb  5.14 | ppl    35.28 | lr 8.99e-08
+2025-05-30 09:35:18,316 | INFO | Gradient norm: 0.6157
+2025-05-30 09:35:18,324 | INFO | Train batch  3900/10986 | ms/batch 199.56 | loss 3.5618 | bpb  5.14 | ppl    35.22 | lr 8.99e-08
+2025-05-30 09:35:38,274 | INFO | Gradient norm: 0.6285
+2025-05-30 09:35:38,282 | INFO | Train batch  4000/10986 | ms/batch 199.56 | loss 3.5601 | bpb  5.14 | ppl    35.17 | lr 8.99e-08
+2025-05-30 09:35:58,229 | INFO | Gradient norm: 0.5544
+2025-05-30 09:35:58,237 | INFO | Train batch  4100/10986 | ms/batch 199.56 | loss 3.5585 | bpb  5.13 | ppl    35.11 | lr 8.99e-08
+2025-05-30 09:36:18,192 | INFO | Gradient norm: 0.6493
+2025-05-30 09:36:18,200 | INFO | Train batch  4200/10986 | ms/batch 199.56 | loss 3.5588 | bpb  5.13 | ppl    35.12 | lr 8.99e-08
+2025-05-30 09:36:38,141 | INFO | Gradient norm: 0.8135
+2025-05-30 09:36:38,148 | INFO | Train batch  4300/10986 | ms/batch 199.56 | loss 3.5578 | bpb  5.13 | ppl    35.08 | lr 8.99e-08
+2025-05-30 09:36:58,093 | INFO | Gradient norm: 0.6085
+2025-05-30 09:36:58,101 | INFO | Train batch  4400/10986 | ms/batch 199.56 | loss 3.5578 | bpb  5.13 | ppl    35.08 | lr 8.99e-08
+2025-05-30 09:37:18,059 | INFO | Gradient norm: 0.6352
+2025-05-30 09:37:18,067 | INFO | Train batch  4500/10986 | ms/batch 199.56 | loss 3.5576 | bpb  5.13 | ppl    35.08 | lr 8.99e-08
+2025-05-30 09:37:38,005 | INFO | Gradient norm: 0.7611
+2025-05-30 09:37:38,013 | INFO | Train batch  4600/10986 | ms/batch 199.56 | loss 3.5570 | bpb  5.13 | ppl    35.06 | lr 8.99e-08
+2025-05-30 09:37:57,960 | INFO | Gradient norm: 0.6021
+2025-05-30 09:37:57,967 | INFO | Train batch  4700/10986 | ms/batch 199.56 | loss 3.5558 | bpb  5.13 | ppl    35.02 | lr 8.99e-08
+2025-05-30 09:38:17,925 | INFO | Gradient norm: 0.6637
+2025-05-30 09:38:17,932 | INFO | Train batch  4800/10986 | ms/batch 199.56 | loss 3.5555 | bpb  5.13 | ppl    35.00 | lr 8.99e-08
+2025-05-30 09:38:37,871 | INFO | Gradient norm: 0.6053
+2025-05-30 09:38:37,879 | INFO | Train batch  4900/10986 | ms/batch 199.56 | loss 3.5538 | bpb  5.13 | ppl    34.95 | lr 8.99e-08
+2025-05-30 09:38:57,829 | INFO | Gradient norm: 0.5976
+2025-05-30 09:38:57,836 | INFO | Train batch  5000/10986 | ms/batch 199.56 | loss 3.5525 | bpb  5.13 | ppl    34.90 | lr 8.99e-08
+2025-05-30 09:39:17,789 | INFO | Gradient norm: 0.5634
+2025-05-30 09:39:17,796 | INFO | Train batch  5100/10986 | ms/batch 199.56 | loss 3.5509 | bpb  5.12 | ppl    34.85 | lr 8.99e-08
+2025-05-30 09:39:37,735 | INFO | Gradient norm: 0.5987
+2025-05-30 09:39:37,743 | INFO | Train batch  5200/10986 | ms/batch 199.56 | loss 3.5491 | bpb  5.12 | ppl    34.78 | lr 8.99e-08
+2025-05-30 09:39:57,696 | INFO | Gradient norm: 0.6027
+2025-05-30 09:39:57,704 | INFO | Train batch  5300/10986 | ms/batch 199.56 | loss 3.5474 | bpb  5.12 | ppl    34.72 | lr 8.99e-08
+2025-05-30 09:40:17,660 | INFO | Gradient norm: 0.6403
+2025-05-30 09:40:17,668 | INFO | Train batch  5400/10986 | ms/batch 199.56 | loss 3.5459 | bpb  5.12 | ppl    34.67 | lr 8.99e-08
+2025-05-30 09:40:37,606 | INFO | Gradient norm: 0.5524
+2025-05-30 09:40:37,614 | INFO | Train batch  5500/10986 | ms/batch 199.56 | loss 3.5444 | bpb  5.11 | ppl    34.62 | lr 8.99e-08
+2025-05-30 09:40:57,563 | INFO | Gradient norm: 0.5836
+2025-05-30 09:40:57,571 | INFO | Train batch  5600/10986 | ms/batch 199.56 | loss 3.5434 | bpb  5.11 | ppl    34.59 | lr 8.99e-08
+2025-05-30 09:41:17,526 | INFO | Gradient norm: 0.6450
+2025-05-30 09:41:17,534 | INFO | Train batch  5700/10986 | ms/batch 199.56 | loss 3.5424 | bpb  5.11 | ppl    34.55 | lr 8.99e-08
+2025-05-30 09:41:37,472 | INFO | Gradient norm: 0.5708
+2025-05-30 09:41:37,479 | INFO | Train batch  5800/10986 | ms/batch 199.56 | loss 3.5413 | bpb  5.11 | ppl    34.51 | lr 8.99e-08
+2025-05-30 09:41:57,430 | INFO | Gradient norm: 0.5535
+2025-05-30 09:41:57,438 | INFO | Train batch  5900/10986 | ms/batch 199.56 | loss 3.5396 | bpb  5.11 | ppl    34.45 | lr 8.99e-08
+2025-05-30 09:42:17,390 | INFO | Gradient norm: 0.5566
+2025-05-30 09:42:17,398 | INFO | Train batch  6000/10986 | ms/batch 199.56 | loss 3.5380 | bpb  5.10 | ppl    34.40 | lr 8.99e-08
+2025-05-30 09:42:37,335 | INFO | Gradient norm: 0.5830
+2025-05-30 09:42:37,343 | INFO | Train batch  6100/10986 | ms/batch 199.56 | loss 3.5369 | bpb  5.10 | ppl    34.36 | lr 8.99e-08
+2025-05-30 09:42:57,294 | INFO | Gradient norm: 0.6259
+2025-05-30 09:42:57,302 | INFO | Train batch  6200/10986 | ms/batch 199.56 | loss 3.5356 | bpb  5.10 | ppl    34.32 | lr 8.99e-08
+2025-05-30 09:43:17,254 | INFO | Gradient norm: 0.5706
+2025-05-30 09:43:17,262 | INFO | Train batch  6300/10986 | ms/batch 199.56 | loss 3.5343 | bpb  5.10 | ppl    34.27 | lr 8.99e-08
+2025-05-30 09:43:37,203 | INFO | Gradient norm: 0.5479
+2025-05-30 09:43:37,211 | INFO | Train batch  6400/10986 | ms/batch 199.56 | loss 3.5331 | bpb  5.10 | ppl    34.23 | lr 8.99e-08
+2025-05-30 09:43:57,161 | INFO | Gradient norm: 0.4883
+2025-05-30 09:43:57,169 | INFO | Train batch  6500/10986 | ms/batch 199.56 | loss 3.5321 | bpb  5.10 | ppl    34.19 | lr 8.99e-08
+2025-05-30 09:44:17,122 | INFO | Gradient norm: 0.7557
+2025-05-30 09:44:17,130 | INFO | Train batch  6600/10986 | ms/batch 199.56 | loss 3.5312 | bpb  5.09 | ppl    34.17 | lr 8.99e-08
+2025-05-30 09:44:37,072 | INFO | Gradient norm: 0.6447
+2025-05-30 09:44:37,079 | INFO | Train batch  6700/10986 | ms/batch 199.56 | loss 3.5300 | bpb  5.09 | ppl    34.12 | lr 8.99e-08
+2025-05-30 09:44:57,032 | INFO | Gradient norm: 0.5198
+2025-05-30 09:44:57,040 | INFO | Train batch  6800/10986 | ms/batch 199.56 | loss 3.5288 | bpb  5.09 | ppl    34.08 | lr 8.99e-08
+2025-05-30 09:45:16,990 | INFO | Gradient norm: 0.6757
+2025-05-30 09:45:16,997 | INFO | Train batch  6900/10986 | ms/batch 199.56 | loss 3.5278 | bpb  5.09 | ppl    34.05 | lr 8.99e-08
+2025-05-30 09:45:36,941 | INFO | Gradient norm: 0.5627
+2025-05-30 09:45:36,949 | INFO | Train batch  7000/10986 | ms/batch 199.56 | loss 3.5273 | bpb  5.09 | ppl    34.03 | lr 8.99e-08
+2025-05-30 09:45:56,904 | INFO | Gradient norm: 0.6502
+2025-05-30 09:45:56,912 | INFO | Train batch  7100/10986 | ms/batch 199.56 | loss 3.5265 | bpb  5.09 | ppl    34.01 | lr 8.99e-08
+2025-05-30 09:46:16,849 | INFO | Gradient norm: 0.6694
+2025-05-30 09:46:16,857 | INFO | Train batch  7200/10986 | ms/batch 199.56 | loss 3.5257 | bpb  5.09 | ppl    33.98 | lr 8.99e-08
+2025-05-30 09:46:36,798 | INFO | Gradient norm: 0.5738
+2025-05-30 09:46:36,806 | INFO | Train batch  7300/10986 | ms/batch 199.56 | loss 3.5246 | bpb  5.08 | ppl    33.94 | lr 8.99e-08
+2025-05-30 09:46:56,758 | INFO | Gradient norm: 0.5335
+2025-05-30 09:46:56,766 | INFO | Train batch  7400/10986 | ms/batch 199.56 | loss 3.5232 | bpb  5.08 | ppl    33.89 | lr 8.99e-08
+2025-05-30 09:47:16,704 | INFO | Gradient norm: 0.7225
+2025-05-30 09:47:16,712 | INFO | Train batch  7500/10986 | ms/batch 199.56 | loss 3.5224 | bpb  5.08 | ppl    33.87 | lr 8.98e-08
+2025-05-30 09:47:36,656 | INFO | Gradient norm: 0.7231
+2025-05-30 09:47:36,664 | INFO | Train batch  7600/10986 | ms/batch 199.56 | loss 3.5216 | bpb  5.08 | ppl    33.84 | lr 8.98e-08
+2025-05-30 09:47:56,612 | INFO | Gradient norm: 0.6231
+2025-05-30 09:47:56,620 | INFO | Train batch  7700/10986 | ms/batch 199.56 | loss 3.5211 | bpb  5.08 | ppl    33.82 | lr 8.98e-08
+2025-05-30 09:48:16,556 | INFO | Gradient norm: 0.6684
+2025-05-30 09:48:16,564 | INFO | Train batch  7800/10986 | ms/batch 199.56 | loss 3.5205 | bpb  5.08 | ppl    33.80 | lr 8.98e-08
+2025-05-30 09:48:36,502 | INFO | Gradient norm: 0.5900
+2025-05-30 09:48:36,510 | INFO | Train batch  7900/10986 | ms/batch 199.55 | loss 3.5195 | bpb  5.08 | ppl    33.77 | lr 8.98e-08
+2025-05-30 09:48:56,458 | INFO | Gradient norm: 0.5968
+2025-05-30 09:48:56,466 | INFO | Train batch  8000/10986 | ms/batch 199.55 | loss 3.5185 | bpb  5.08 | ppl    33.73 | lr 8.98e-08
+2025-05-30 09:49:16,403 | INFO | Gradient norm: 0.7132
+2025-05-30 09:49:16,411 | INFO | Train batch  8100/10986 | ms/batch 199.55 | loss 3.5176 | bpb  5.07 | ppl    33.70 | lr 8.98e-08
+2025-05-30 09:49:36,348 | INFO | Gradient norm: 0.5360
+2025-05-30 09:49:36,356 | INFO | Train batch  8200/10986 | ms/batch 199.55 | loss 3.5166 | bpb  5.07 | ppl    33.67 | lr 8.98e-08
+2025-05-30 09:49:56,305 | INFO | Gradient norm: 0.5605
+2025-05-30 09:49:56,313 | INFO | Train batch  8300/10986 | ms/batch 199.55 | loss 3.5155 | bpb  5.07 | ppl    33.63 | lr 8.98e-08
+2025-05-30 09:50:16,248 | INFO | Gradient norm: 0.6946
+2025-05-30 09:50:16,256 | INFO | Train batch  8400/10986 | ms/batch 199.55 | loss 3.5147 | bpb  5.07 | ppl    33.61 | lr 8.98e-08
+2025-05-30 09:50:36,190 | INFO | Gradient norm: 0.6707
+2025-05-30 09:50:36,198 | INFO | Train batch  8500/10986 | ms/batch 199.55 | loss 3.5145 | bpb  5.07 | ppl    33.60 | lr 8.98e-08
+2025-05-30 09:50:56,145 | INFO | Gradient norm: 0.5387
+2025-05-30 09:50:56,153 | INFO | Train batch  8600/10986 | ms/batch 199.55 | loss 3.5136 | bpb  5.07 | ppl    33.57 | lr 8.98e-08
+2025-05-30 09:51:16,085 | INFO | Gradient norm: 0.5716
+2025-05-30 09:51:16,093 | INFO | Train batch  8700/10986 | ms/batch 199.55 | loss 3.5126 | bpb  5.07 | ppl    33.53 | lr 8.98e-08
+2025-05-30 09:51:36,027 | INFO | Gradient norm: 0.5525
+2025-05-30 09:51:36,035 | INFO | Train batch  8800/10986 | ms/batch 199.55 | loss 3.5115 | bpb  5.07 | ppl    33.50 | lr 8.98e-08
+2025-05-30 09:51:55,984 | INFO | Gradient norm: 0.5276
+2025-05-30 09:51:55,992 | INFO | Train batch  8900/10986 | ms/batch 199.55 | loss 3.5106 | bpb  5.06 | ppl    33.47 | lr 8.98e-08
+2025-05-30 09:52:15,825 | INFO | Gradient norm: 0.4946
+2025-05-30 09:52:15,833 | INFO | Train batch  9000/10986 | ms/batch 199.53 | loss 3.5097 | bpb  5.06 | ppl    33.44 | lr 8.98e-08
+2025-05-30 09:52:35,587 | INFO | Gradient norm: 0.7571
+2025-05-30 09:52:35,595 | INFO | Train batch  9100/10986 | ms/batch 199.51 | loss 3.5087 | bpb  5.06 | ppl    33.41 | lr 8.98e-08
+2025-05-30 09:52:55,366 | INFO | Gradient norm: 0.5446
+2025-05-30 09:52:55,374 | INFO | Train batch  9200/10986 | ms/batch 199.49 | loss 3.5077 | bpb  5.06 | ppl    33.37 | lr 8.98e-08
+2025-05-30 09:53:15,128 | INFO | Gradient norm: 0.5434
+2025-05-30 09:53:15,136 | INFO | Train batch  9300/10986 | ms/batch 199.47 | loss 3.5065 | bpb  5.06 | ppl    33.33 | lr 8.98e-08
+2025-05-30 09:53:34,889 | INFO | Gradient norm: 0.6161
+2025-05-30 09:53:34,897 | INFO | Train batch  9400/10986 | ms/batch 199.45 | loss 3.5056 | bpb  5.06 | ppl    33.30 | lr 8.98e-08
+2025-05-30 09:53:54,663 | INFO | Gradient norm: 0.5529
+2025-05-30 09:53:54,671 | INFO | Train batch  9500/10986 | ms/batch 199.44 | loss 3.5044 | bpb  5.06 | ppl    33.26 | lr 8.98e-08
+2025-05-30 09:54:14,425 | INFO | Gradient norm: 0.5726
+2025-05-30 09:54:14,433 | INFO | Train batch  9600/10986 | ms/batch 199.42 | loss 3.5034 | bpb  5.05 | ppl    33.23 | lr 8.98e-08
+2025-05-30 09:54:34,188 | INFO | Gradient norm: 0.6570
+2025-05-30 09:54:34,196 | INFO | Train batch  9700/10986 | ms/batch 199.40 | loss 3.5022 | bpb  5.05 | ppl    33.19 | lr 8.98e-08
+2025-05-30 09:54:53,959 | INFO | Gradient norm: 0.5672
+2025-05-30 09:54:53,967 | INFO | Train batch  9800/10986 | ms/batch 199.38 | loss 3.5012 | bpb  5.05 | ppl    33.16 | lr 8.98e-08
+2025-05-30 09:55:13,722 | INFO | Gradient norm: 0.5213
+2025-05-30 09:55:13,730 | INFO | Train batch  9900/10986 | ms/batch 199.36 | loss 3.5000 | bpb  5.05 | ppl    33.12 | lr 8.98e-08
+2025-05-30 09:55:33,494 | INFO | Gradient norm: 0.5513
+2025-05-30 09:55:33,502 | INFO | Train batch 10000/10986 | ms/batch 199.35 | loss 3.4990 | bpb  5.05 | ppl    33.08 | lr 8.98e-08
+2025-05-30 09:55:53,248 | INFO | Gradient norm: 0.4832
+2025-05-30 09:55:53,256 | INFO | Train batch 10100/10986 | ms/batch 199.33 | loss 3.4980 | bpb  5.05 | ppl    33.05 | lr 8.98e-08
+2025-05-30 09:56:13,008 | INFO | Gradient norm: 0.4937
+2025-05-30 09:56:13,016 | INFO | Train batch 10200/10986 | ms/batch 199.31 | loss 3.4970 | bpb  5.05 | ppl    33.02 | lr 8.98e-08
+2025-05-30 09:56:32,784 | INFO | Gradient norm: 0.5323
+2025-05-30 09:56:32,792 | INFO | Train batch 10300/10986 | ms/batch 199.30 | loss 3.4961 | bpb  5.04 | ppl    32.99 | lr 8.98e-08
+2025-05-30 09:56:52,545 | INFO | Gradient norm: 0.5567
+2025-05-30 09:56:52,553 | INFO | Train batch 10400/10986 | ms/batch 199.28 | loss 3.4951 | bpb  5.04 | ppl    32.95 | lr 8.98e-08
+2025-05-30 09:57:12,303 | INFO | Gradient norm: 0.5396
+2025-05-30 09:57:12,311 | INFO | Train batch 10500/10986 | ms/batch 199.26 | loss 3.4941 | bpb  5.04 | ppl    32.92 | lr 8.98e-08
+2025-05-30 09:57:32,077 | INFO | Gradient norm: 0.5568
+2025-05-30 09:57:32,085 | INFO | Train batch 10600/10986 | ms/batch 199.25 | loss 3.4934 | bpb  5.04 | ppl    32.90 | lr 8.98e-08
+2025-05-30 09:57:51,836 | INFO | Gradient norm: 0.5554
+2025-05-30 09:57:51,843 | INFO | Train batch 10700/10986 | ms/batch 199.23 | loss 3.4924 | bpb  5.04 | ppl    32.86 | lr 8.98e-08
+2025-05-30 09:58:11,596 | INFO | Gradient norm: 0.5948
+2025-05-30 09:58:11,603 | INFO | Train batch 10800/10986 | ms/batch 199.22 | loss 3.4916 | bpb  5.04 | ppl    32.84 | lr 8.98e-08
+2025-05-30 09:58:31,368 | INFO | Gradient norm: 0.4457
+2025-05-30 09:58:31,376 | INFO | Train batch 10900/10986 | ms/batch 199.21 | loss 3.4908 | bpb  5.04 | ppl    32.81 | lr 8.98e-08
+2025-05-30 10:00:00,288 | INFO | Epoch   1 | time: 2260.45s | train bpb  5.03 | valid bpb  0.01
+2025-05-30 10:00:01,772 | INFO | Saved new best model with validation bpb:  0.01
+2025-05-30 10:00:01,839 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 10:00:01,839 | INFO | Input range: [10, 226]
+2025-05-30 10:00:01,839 | INFO | Target range: [10, 226]
+2025-05-30 10:00:01,876 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 10:00:01,877 | INFO | Output range: [-4.953125, 9.3515625]
+2025-05-30 10:00:01,877 | INFO | Sample probabilities: max=0.20860400795936584, min=4.560149318422191e-05
+2025-05-30 10:00:01,878 | INFO | Raw loss value: 3.4510724544525146
+2025-05-30 10:00:01,878 | INFO | Batch 0 loss stats - Mean: -0.1530, Std: 1.3916
+2025-05-30 10:00:02,027 | INFO | Gradient norm: 0.5618
+2025-05-30 10:00:02,035 | INFO | Train batch     0/10986 | ms/batch 196.02 | loss 3.4511 | bpb  4.98 | ppl    31.53 | lr 8.98e-08
+2025-05-30 10:00:21,756 | INFO | Gradient norm: 0.6229
+2025-05-30 10:00:21,764 | INFO | Train batch   100/10986 | ms/batch 197.28 | loss 3.4163 | bpb  4.93 | ppl    30.46 | lr 8.98e-08
+2025-05-30 10:00:41,493 | INFO | Gradient norm: 0.5469
+2025-05-30 10:00:41,501 | INFO | Train batch   200/10986 | ms/batch 197.32 | loss 3.4033 | bpb  4.91 | ppl    30.06 | lr 8.98e-08
+2025-05-30 10:01:01,232 | INFO | Gradient norm: 0.6053
+2025-05-30 10:01:01,240 | INFO | Train batch   300/10986 | ms/batch 197.35 | loss 3.4063 | bpb  4.91 | ppl    30.15 | lr 8.98e-08
+2025-05-30 10:01:20,989 | INFO | Gradient norm: 0.6445
+2025-05-30 10:01:20,997 | INFO | Train batch   400/10986 | ms/batch 197.40 | loss 3.4015 | bpb  4.91 | ppl    30.01 | lr 8.98e-08
+2025-05-30 10:01:40,733 | INFO | Gradient norm: 0.5415
+2025-05-30 10:01:40,741 | INFO | Train batch   500/10986 | ms/batch 197.41 | loss 3.3921 | bpb  4.89 | ppl    29.73 | lr 8.98e-08
+2025-05-30 10:02:00,478 | INFO | Gradient norm: 0.4892
+2025-05-30 10:02:00,486 | INFO | Train batch   600/10986 | ms/batch 197.42 | loss 3.3922 | bpb  4.89 | ppl    29.73 | lr 8.98e-08
+2025-05-30 10:02:20,232 | INFO | Gradient norm: 0.5883
+2025-05-30 10:02:20,240 | INFO | Train batch   700/10986 | ms/batch 197.43 | loss 3.3871 | bpb  4.89 | ppl    29.58 | lr 8.97e-08
+2025-05-30 10:02:39,975 | INFO | Gradient norm: 0.4988
+2025-05-30 10:02:39,983 | INFO | Train batch   800/10986 | ms/batch 197.43 | loss 3.3859 | bpb  4.88 | ppl    29.55 | lr 8.97e-08
+2025-05-30 10:02:59,715 | INFO | Gradient norm: 0.5956
+2025-05-30 10:02:59,723 | INFO | Train batch   900/10986 | ms/batch 197.43 | loss 3.3829 | bpb  4.88 | ppl    29.46 | lr 8.97e-08
+2025-05-30 10:03:19,469 | INFO | Gradient norm: 0.4559
+2025-05-30 10:03:19,477 | INFO | Train batch  1000/10986 | ms/batch 197.44 | loss 3.3821 | bpb  4.88 | ppl    29.43 | lr 8.97e-08
+2025-05-30 10:03:39,212 | INFO | Gradient norm: 0.5023
+2025-05-30 10:03:39,220 | INFO | Train batch  1100/10986 | ms/batch 197.44 | loss 3.3811 | bpb  4.88 | ppl    29.40 | lr 8.97e-08
+2025-05-30 10:03:58,954 | INFO | Gradient norm: 0.5738
+2025-05-30 10:03:58,962 | INFO | Train batch  1200/10986 | ms/batch 197.44 | loss 3.3797 | bpb  4.88 | ppl    29.36 | lr 8.97e-08
+2025-05-30 10:04:18,709 | INFO | Gradient norm: 0.5407
+2025-05-30 10:04:18,717 | INFO | Train batch  1300/10986 | ms/batch 197.45 | loss 3.3792 | bpb  4.88 | ppl    29.35 | lr 8.97e-08
+2025-05-30 10:04:38,451 | INFO | Gradient norm: 0.5776
+2025-05-30 10:04:38,459 | INFO | Train batch  1400/10986 | ms/batch 197.44 | loss 3.3790 | bpb  4.87 | ppl    29.34 | lr 8.97e-08
+2025-05-30 10:04:58,191 | INFO | Gradient norm: 0.6081
+2025-05-30 10:04:58,199 | INFO | Train batch  1500/10986 | ms/batch 197.44 | loss 3.3796 | bpb  4.88 | ppl    29.36 | lr 8.97e-08
+2025-05-30 10:05:17,948 | INFO | Gradient norm: 0.5411
+2025-05-30 10:05:17,956 | INFO | Train batch  1600/10986 | ms/batch 197.45 | loss 3.3786 | bpb  4.87 | ppl    29.33 | lr 8.97e-08
+2025-05-30 10:05:37,689 | INFO | Gradient norm: 0.7232
+2025-05-30 10:05:37,696 | INFO | Train batch  1700/10986 | ms/batch 197.45 | loss 3.3798 | bpb  4.88 | ppl    29.36 | lr 8.97e-08
+2025-05-30 10:05:57,428 | INFO | Gradient norm: 0.5072
+2025-05-30 10:05:57,436 | INFO | Train batch  1800/10986 | ms/batch 197.44 | loss 3.3817 | bpb  4.88 | ppl    29.42 | lr 8.97e-08
+2025-05-30 10:06:17,181 | INFO | Gradient norm: 0.5253
+2025-05-30 10:06:17,189 | INFO | Train batch  1900/10986 | ms/batch 197.45 | loss 3.3819 | bpb  4.88 | ppl    29.43 | lr 8.97e-08
+2025-05-30 10:06:36,920 | INFO | Gradient norm: 0.6358
+2025-05-30 10:06:36,928 | INFO | Train batch  2000/10986 | ms/batch 197.45 | loss 3.3802 | bpb  4.88 | ppl    29.38 | lr 8.97e-08
+2025-05-30 10:06:56,663 | INFO | Gradient norm: 0.5762
+2025-05-30 10:06:56,671 | INFO | Train batch  2100/10986 | ms/batch 197.45 | loss 3.3797 | bpb  4.88 | ppl    29.36 | lr 8.97e-08
+2025-05-30 10:07:16,417 | INFO | Gradient norm: 0.5324
+2025-05-30 10:07:16,425 | INFO | Train batch  2200/10986 | ms/batch 197.45 | loss 3.3784 | bpb  4.87 | ppl    29.32 | lr 8.97e-08
+2025-05-30 10:07:36,158 | INFO | Gradient norm: 0.5380
+2025-05-30 10:07:36,166 | INFO | Train batch  2300/10986 | ms/batch 197.45 | loss 3.3779 | bpb  4.87 | ppl    29.31 | lr 8.97e-08
+2025-05-30 10:07:55,900 | INFO | Gradient norm: 0.4925
+2025-05-30 10:07:55,907 | INFO | Train batch  2400/10986 | ms/batch 197.45 | loss 3.3770 | bpb  4.87 | ppl    29.28 | lr 8.97e-08
+2025-05-30 10:08:15,657 | INFO | Gradient norm: 0.5245
+2025-05-30 10:08:15,665 | INFO | Train batch  2500/10986 | ms/batch 197.45 | loss 3.3759 | bpb  4.87 | ppl    29.25 | lr 8.97e-08
+2025-05-30 10:08:35,398 | INFO | Gradient norm: 0.7355
+2025-05-30 10:08:35,406 | INFO | Train batch  2600/10986 | ms/batch 197.45 | loss 3.3751 | bpb  4.87 | ppl    29.23 | lr 8.97e-08
+2025-05-30 10:08:55,142 | INFO | Gradient norm: 0.4652
+2025-05-30 10:08:55,150 | INFO | Train batch  2700/10986 | ms/batch 197.45 | loss 3.3741 | bpb  4.87 | ppl    29.20 | lr 8.97e-08
+2025-05-30 10:09:14,897 | INFO | Gradient norm: 0.5146
+2025-05-30 10:09:14,905 | INFO | Train batch  2800/10986 | ms/batch 197.45 | loss 3.3742 | bpb  4.87 | ppl    29.20 | lr 8.97e-08
+2025-05-30 10:09:34,637 | INFO | Gradient norm: 0.4962
+2025-05-30 10:09:34,645 | INFO | Train batch  2900/10986 | ms/batch 197.45 | loss 3.3732 | bpb  4.87 | ppl    29.17 | lr 8.97e-08
+2025-05-30 10:09:54,377 | INFO | Gradient norm: 0.5289
+2025-05-30 10:09:54,385 | INFO | Train batch  3000/10986 | ms/batch 197.45 | loss 3.3722 | bpb  4.87 | ppl    29.14 | lr 8.97e-08
+2025-05-30 10:10:14,134 | INFO | Gradient norm: 0.5457
+2025-05-30 10:10:14,142 | INFO | Train batch  3100/10986 | ms/batch 197.45 | loss 3.3719 | bpb  4.86 | ppl    29.13 | lr 8.97e-08
+2025-05-30 10:10:33,878 | INFO | Gradient norm: 0.6136
+2025-05-30 10:10:33,886 | INFO | Train batch  3200/10986 | ms/batch 197.45 | loss 3.3715 | bpb  4.86 | ppl    29.12 | lr 8.97e-08
+2025-05-30 10:10:53,633 | INFO | Gradient norm: 0.5997
+2025-05-30 10:10:53,641 | INFO | Train batch  3300/10986 | ms/batch 197.46 | loss 3.3709 | bpb  4.86 | ppl    29.11 | lr 8.97e-08
+2025-05-30 10:11:13,377 | INFO | Gradient norm: 0.4981
+2025-05-30 10:11:13,385 | INFO | Train batch  3400/10986 | ms/batch 197.46 | loss 3.3715 | bpb  4.86 | ppl    29.12 | lr 8.97e-08
+2025-05-30 10:11:33,123 | INFO | Gradient norm: 0.5740
+2025-05-30 10:11:33,131 | INFO | Train batch  3500/10986 | ms/batch 197.46 | loss 3.3707 | bpb  4.86 | ppl    29.10 | lr 8.97e-08
+2025-05-30 10:11:52,883 | INFO | Gradient norm: 0.6068
+2025-05-30 10:11:52,891 | INFO | Train batch  3600/10986 | ms/batch 197.46 | loss 3.3699 | bpb  4.86 | ppl    29.08 | lr 8.97e-08
+2025-05-30 10:12:12,629 | INFO | Gradient norm: 0.5276
+2025-05-30 10:12:12,636 | INFO | Train batch  3700/10986 | ms/batch 197.46 | loss 3.3699 | bpb  4.86 | ppl    29.07 | lr 8.97e-08
+2025-05-30 10:12:32,374 | INFO | Gradient norm: 0.4741
+2025-05-30 10:12:32,382 | INFO | Train batch  3800/10986 | ms/batch 197.46 | loss 3.3698 | bpb  4.86 | ppl    29.07 | lr 8.97e-08
+2025-05-30 10:12:52,130 | INFO | Gradient norm: 0.5264
+2025-05-30 10:12:52,138 | INFO | Train batch  3900/10986 | ms/batch 197.46 | loss 3.3691 | bpb  4.86 | ppl    29.05 | lr 8.97e-08
+2025-05-30 10:13:11,873 | INFO | Gradient norm: 0.5651
+2025-05-30 10:13:11,881 | INFO | Train batch  4000/10986 | ms/batch 197.46 | loss 3.3681 | bpb  4.86 | ppl    29.02 | lr 8.97e-08
+2025-05-30 10:13:31,618 | INFO | Gradient norm: 0.4912
+2025-05-30 10:13:31,626 | INFO | Train batch  4100/10986 | ms/batch 197.46 | loss 3.3676 | bpb  4.86 | ppl    29.01 | lr 8.96e-08
+2025-05-30 10:13:51,374 | INFO | Gradient norm: 0.6152
+2025-05-30 10:13:51,382 | INFO | Train batch  4200/10986 | ms/batch 197.46 | loss 3.3685 | bpb  4.86 | ppl    29.04 | lr 8.96e-08
+2025-05-30 10:14:11,120 | INFO | Gradient norm: 0.6455
+2025-05-30 10:14:11,128 | INFO | Train batch  4300/10986 | ms/batch 197.46 | loss 3.3681 | bpb  4.86 | ppl    29.02 | lr 8.96e-08
+2025-05-30 10:14:30,870 | INFO | Gradient norm: 0.5444
+2025-05-30 10:14:30,877 | INFO | Train batch  4400/10986 | ms/batch 197.46 | loss 3.3687 | bpb  4.86 | ppl    29.04 | lr 8.96e-08
+2025-05-30 10:14:50,628 | INFO | Gradient norm: 0.5608
+2025-05-30 10:14:50,636 | INFO | Train batch  4500/10986 | ms/batch 197.47 | loss 3.3694 | bpb  4.86 | ppl    29.06 | lr 8.96e-08
+2025-05-30 10:15:10,370 | INFO | Gradient norm: 0.6480
+2025-05-30 10:15:10,378 | INFO | Train batch  4600/10986 | ms/batch 197.47 | loss 3.3696 | bpb  4.86 | ppl    29.07 | lr 8.96e-08
+2025-05-30 10:15:30,117 | INFO | Gradient norm: 0.5182
+2025-05-30 10:15:30,125 | INFO | Train batch  4700/10986 | ms/batch 197.47 | loss 3.3692 | bpb  4.86 | ppl    29.05 | lr 8.96e-08
+2025-05-30 10:15:49,868 | INFO | Gradient norm: 0.5827
+2025-05-30 10:15:49,876 | INFO | Train batch  4800/10986 | ms/batch 197.47 | loss 3.3693 | bpb  4.86 | ppl    29.06 | lr 8.96e-08
+2025-05-30 10:16:09,611 | INFO | Gradient norm: 0.5103
+2025-05-30 10:16:09,619 | INFO | Train batch  4900/10986 | ms/batch 197.47 | loss 3.3683 | bpb  4.86 | ppl    29.03 | lr 8.96e-08
+2025-05-30 10:16:29,366 | INFO | Gradient norm: 0.5575
+2025-05-30 10:16:29,374 | INFO | Train batch  5000/10986 | ms/batch 197.47 | loss 3.3676 | bpb  4.86 | ppl    29.01 | lr 8.96e-08
+2025-05-30 10:16:49,109 | INFO | Gradient norm: 0.4932
+2025-05-30 10:16:49,117 | INFO | Train batch  5100/10986 | ms/batch 197.47 | loss 3.3668 | bpb  4.86 | ppl    28.99 | lr 8.96e-08
+2025-05-30 10:17:08,853 | INFO | Gradient norm: 0.5212
+2025-05-30 10:17:08,861 | INFO | Train batch  5200/10986 | ms/batch 197.47 | loss 3.3657 | bpb  4.86 | ppl    28.95 | lr 8.96e-08
+2025-05-30 10:17:28,609 | INFO | Gradient norm: 0.4962
+2025-05-30 10:17:28,617 | INFO | Train batch  5300/10986 | ms/batch 197.47 | loss 3.3648 | bpb  4.85 | ppl    28.93 | lr 8.96e-08
+2025-05-30 10:17:48,352 | INFO | Gradient norm: 0.5818
+2025-05-30 10:17:48,359 | INFO | Train batch  5400/10986 | ms/batch 197.47 | loss 3.3640 | bpb  4.85 | ppl    28.90 | lr 8.96e-08
+2025-05-30 10:18:08,097 | INFO | Gradient norm: 0.4945
+2025-05-30 10:18:08,104 | INFO | Train batch  5500/10986 | ms/batch 197.47 | loss 3.3633 | bpb  4.85 | ppl    28.88 | lr 8.96e-08
+2025-05-30 10:18:27,850 | INFO | Gradient norm: 0.4886
+2025-05-30 10:18:27,858 | INFO | Train batch  5600/10986 | ms/batch 197.47 | loss 3.3630 | bpb  4.85 | ppl    28.88 | lr 8.96e-08
+2025-05-30 10:18:47,593 | INFO | Gradient norm: 0.5777
+2025-05-30 10:18:47,601 | INFO | Train batch  5700/10986 | ms/batch 197.47 | loss 3.3626 | bpb  4.85 | ppl    28.86 | lr 8.96e-08
+2025-05-30 10:19:07,336 | INFO | Gradient norm: 0.4844
+2025-05-30 10:19:07,343 | INFO | Train batch  5800/10986 | ms/batch 197.47 | loss 3.3621 | bpb  4.85 | ppl    28.85 | lr 8.96e-08
+2025-05-30 10:19:27,087 | INFO | Gradient norm: 0.4930
+2025-05-30 10:19:27,095 | INFO | Train batch  5900/10986 | ms/batch 197.47 | loss 3.3611 | bpb  4.85 | ppl    28.82 | lr 8.96e-08
+2025-05-30 10:19:46,828 | INFO | Gradient norm: 0.5040
+2025-05-30 10:19:46,836 | INFO | Train batch  6000/10986 | ms/batch 197.47 | loss 3.3604 | bpb  4.85 | ppl    28.80 | lr 8.96e-08
+2025-05-30 10:20:06,572 | INFO | Gradient norm: 0.5318
+2025-05-30 10:20:06,580 | INFO | Train batch  6100/10986 | ms/batch 197.47 | loss 3.3599 | bpb  4.85 | ppl    28.79 | lr 8.96e-08
+2025-05-30 10:20:26,326 | INFO | Gradient norm: 0.6102
+2025-05-30 10:20:26,334 | INFO | Train batch  6200/10986 | ms/batch 197.47 | loss 3.3593 | bpb  4.85 | ppl    28.77 | lr 8.96e-08
+2025-05-30 10:20:46,067 | INFO | Gradient norm: 0.5007
+2025-05-30 10:20:46,075 | INFO | Train batch  6300/10986 | ms/batch 197.47 | loss 3.3587 | bpb  4.85 | ppl    28.75 | lr 8.96e-08
+2025-05-30 10:21:05,816 | INFO | Gradient norm: 0.4750
+2025-05-30 10:21:05,824 | INFO | Train batch  6400/10986 | ms/batch 197.47 | loss 3.3581 | bpb  4.84 | ppl    28.73 | lr 8.96e-08
+2025-05-30 10:21:25,558 | INFO | Gradient norm: 0.4148
+2025-05-30 10:21:25,566 | INFO | Train batch  6500/10986 | ms/batch 197.47 | loss 3.3577 | bpb  4.84 | ppl    28.72 | lr 8.96e-08
+2025-05-30 10:21:45,299 | INFO | Gradient norm: 0.6377
+2025-05-30 10:21:45,306 | INFO | Train batch  6600/10986 | ms/batch 197.47 | loss 3.3575 | bpb  4.84 | ppl    28.72 | lr 8.96e-08
+2025-05-30 10:22:05,051 | INFO | Gradient norm: 0.5905
+2025-05-30 10:22:05,059 | INFO | Train batch  6700/10986 | ms/batch 197.47 | loss 3.3569 | bpb  4.84 | ppl    28.70 | lr 8.96e-08
+2025-05-30 10:22:24,793 | INFO | Gradient norm: 0.4826
+2025-05-30 10:22:24,801 | INFO | Train batch  6800/10986 | ms/batch 197.47 | loss 3.3564 | bpb  4.84 | ppl    28.68 | lr 8.96e-08
+2025-05-30 10:22:44,533 | INFO | Gradient norm: 0.5879
+2025-05-30 10:22:44,541 | INFO | Train batch  6900/10986 | ms/batch 197.46 | loss 3.3560 | bpb  4.84 | ppl    28.67 | lr 8.96e-08
+2025-05-30 10:23:04,286 | INFO | Gradient norm: 0.5279
+2025-05-30 10:23:04,294 | INFO | Train batch  7000/10986 | ms/batch 197.47 | loss 3.3560 | bpb  4.84 | ppl    28.67 | lr 8.96e-08
+2025-05-30 10:23:24,027 | INFO | Gradient norm: 0.5824
+2025-05-30 10:23:24,035 | INFO | Train batch  7100/10986 | ms/batch 197.46 | loss 3.3558 | bpb  4.84 | ppl    28.67 | lr 8.95e-08
+2025-05-30 10:23:43,769 | INFO | Gradient norm: 0.5851
+2025-05-30 10:23:43,776 | INFO | Train batch  7200/10986 | ms/batch 197.46 | loss 3.3555 | bpb  4.84 | ppl    28.66 | lr 8.95e-08
+2025-05-30 10:24:03,523 | INFO | Gradient norm: 0.5287
+2025-05-30 10:24:03,530 | INFO | Train batch  7300/10986 | ms/batch 197.46 | loss 3.3550 | bpb  4.84 | ppl    28.64 | lr 8.95e-08
+2025-05-30 10:24:23,263 | INFO | Gradient norm: 0.4874
+2025-05-30 10:24:23,271 | INFO | Train batch  7400/10986 | ms/batch 197.46 | loss 3.3542 | bpb  4.84 | ppl    28.62 | lr 8.95e-08
+2025-05-30 10:24:43,002 | INFO | Gradient norm: 0.6273
+2025-05-30 10:24:43,010 | INFO | Train batch  7500/10986 | ms/batch 197.46 | loss 3.3540 | bpb  4.84 | ppl    28.62 | lr 8.95e-08
+2025-05-30 10:25:02,759 | INFO | Gradient norm: 0.6452
+2025-05-30 10:25:02,767 | INFO | Train batch  7600/10986 | ms/batch 197.46 | loss 3.3537 | bpb  4.84 | ppl    28.61 | lr 8.95e-08
+2025-05-30 10:25:22,500 | INFO | Gradient norm: 0.5592
+2025-05-30 10:25:22,508 | INFO | Train batch  7700/10986 | ms/batch 197.46 | loss 3.3536 | bpb  4.84 | ppl    28.61 | lr 8.95e-08
+2025-05-30 10:25:42,244 | INFO | Gradient norm: 0.6034
+2025-05-30 10:25:42,252 | INFO | Train batch  7800/10986 | ms/batch 197.46 | loss 3.3535 | bpb  4.84 | ppl    28.60 | lr 8.95e-08
+2025-05-30 10:26:01,995 | INFO | Gradient norm: 0.5309
+2025-05-30 10:26:02,003 | INFO | Train batch  7900/10986 | ms/batch 197.46 | loss 3.3531 | bpb  4.84 | ppl    28.59 | lr 8.95e-08
+2025-05-30 10:26:21,736 | INFO | Gradient norm: 0.5534
+2025-05-30 10:26:21,743 | INFO | Train batch  8000/10986 | ms/batch 197.46 | loss 3.3527 | bpb  4.84 | ppl    28.58 | lr 8.95e-08
+2025-05-30 10:26:41,487 | INFO | Gradient norm: 0.6340
+2025-05-30 10:26:41,494 | INFO | Train batch  8100/10986 | ms/batch 197.46 | loss 3.3522 | bpb  4.84 | ppl    28.57 | lr 8.95e-08
+2025-05-30 10:27:01,227 | INFO | Gradient norm: 0.4998
+2025-05-30 10:27:01,235 | INFO | Train batch  8200/10986 | ms/batch 197.46 | loss 3.3517 | bpb  4.84 | ppl    28.55 | lr 8.95e-08
+2025-05-30 10:27:20,966 | INFO | Gradient norm: 0.4968
+2025-05-30 10:27:20,974 | INFO | Train batch  8300/10986 | ms/batch 197.46 | loss 3.3512 | bpb  4.83 | ppl    28.54 | lr 8.95e-08
+2025-05-30 10:27:40,719 | INFO | Gradient norm: 0.6334
+2025-05-30 10:27:40,727 | INFO | Train batch  8400/10986 | ms/batch 197.46 | loss 3.3509 | bpb  4.83 | ppl    28.53 | lr 8.95e-08
+2025-05-30 10:28:00,460 | INFO | Gradient norm: 0.5950
+2025-05-30 10:28:00,468 | INFO | Train batch  8500/10986 | ms/batch 197.46 | loss 3.3510 | bpb  4.83 | ppl    28.53 | lr 8.95e-08
+2025-05-30 10:28:20,202 | INFO | Gradient norm: 0.5014
+2025-05-30 10:28:20,210 | INFO | Train batch  8600/10986 | ms/batch 197.46 | loss 3.3506 | bpb  4.83 | ppl    28.52 | lr 8.95e-08
+2025-05-30 10:28:39,955 | INFO | Gradient norm: 0.5094
+2025-05-30 10:28:39,963 | INFO | Train batch  8700/10986 | ms/batch 197.46 | loss 3.3501 | bpb  4.83 | ppl    28.51 | lr 8.95e-08
+2025-05-30 10:28:59,697 | INFO | Gradient norm: 0.4908
+2025-05-30 10:28:59,705 | INFO | Train batch  8800/10986 | ms/batch 197.46 | loss 3.3496 | bpb  4.83 | ppl    28.49 | lr 8.95e-08
+2025-05-30 10:29:19,440 | INFO | Gradient norm: 0.4751
+2025-05-30 10:29:19,447 | INFO | Train batch  8900/10986 | ms/batch 197.46 | loss 3.3492 | bpb  4.83 | ppl    28.48 | lr 8.95e-08
+2025-05-30 10:29:39,194 | INFO | Gradient norm: 0.4532
+2025-05-30 10:29:39,202 | INFO | Train batch  9000/10986 | ms/batch 197.46 | loss 3.3487 | bpb  4.83 | ppl    28.47 | lr 8.95e-08
+2025-05-30 10:29:58,937 | INFO | Gradient norm: 0.6598
+2025-05-30 10:29:58,945 | INFO | Train batch  9100/10986 | ms/batch 197.46 | loss 3.3483 | bpb  4.83 | ppl    28.46 | lr 8.95e-08
+2025-05-30 10:30:18,680 | INFO | Gradient norm: 0.5075
+2025-05-30 10:30:18,688 | INFO | Train batch  9200/10986 | ms/batch 197.46 | loss 3.3479 | bpb  4.83 | ppl    28.44 | lr 8.95e-08
+2025-05-30 10:30:38,431 | INFO | Gradient norm: 0.4840
+2025-05-30 10:30:38,439 | INFO | Train batch  9300/10986 | ms/batch 197.46 | loss 3.3472 | bpb  4.83 | ppl    28.42 | lr 8.95e-08
+2025-05-30 10:30:58,172 | INFO | Gradient norm: 0.5376
+2025-05-30 10:30:58,180 | INFO | Train batch  9400/10986 | ms/batch 197.46 | loss 3.3468 | bpb  4.83 | ppl    28.41 | lr 8.95e-08
+2025-05-30 10:31:17,925 | INFO | Gradient norm: 0.5156
+2025-05-30 10:31:17,933 | INFO | Train batch  9500/10986 | ms/batch 197.46 | loss 3.3461 | bpb  4.83 | ppl    28.39 | lr 8.95e-08
+2025-05-30 10:31:37,667 | INFO | Gradient norm: 0.5048
+2025-05-30 10:31:37,674 | INFO | Train batch  9600/10986 | ms/batch 197.46 | loss 3.3456 | bpb  4.83 | ppl    28.38 | lr 8.95e-08
+2025-05-30 10:31:57,412 | INFO | Gradient norm: 0.5652
+2025-05-30 10:31:57,420 | INFO | Train batch  9700/10986 | ms/batch 197.46 | loss 3.3449 | bpb  4.83 | ppl    28.36 | lr 8.94e-08
+2025-05-30 10:32:17,167 | INFO | Gradient norm: 0.5138
+2025-05-30 10:32:17,175 | INFO | Train batch  9800/10986 | ms/batch 197.46 | loss 3.3444 | bpb  4.82 | ppl    28.34 | lr 8.94e-08
+2025-05-30 10:32:36,908 | INFO | Gradient norm: 0.4854
+2025-05-30 10:32:36,916 | INFO | Train batch  9900/10986 | ms/batch 197.46 | loss 3.3437 | bpb  4.82 | ppl    28.32 | lr 8.94e-08
+2025-05-30 10:32:56,651 | INFO | Gradient norm: 0.5268
+2025-05-30 10:32:56,659 | INFO | Train batch 10000/10986 | ms/batch 197.46 | loss 3.3431 | bpb  4.82 | ppl    28.31 | lr 8.94e-08
+2025-05-30 10:33:16,400 | INFO | Gradient norm: 0.4472
+2025-05-30 10:33:16,408 | INFO | Train batch 10100/10986 | ms/batch 197.46 | loss 3.3426 | bpb  4.82 | ppl    28.29 | lr 8.94e-08
+2025-05-30 10:33:36,141 | INFO | Gradient norm: 0.4490
+2025-05-30 10:33:36,149 | INFO | Train batch 10200/10986 | ms/batch 197.46 | loss 3.3421 | bpb  4.82 | ppl    28.28 | lr 8.94e-08
+2025-05-30 10:33:55,884 | INFO | Gradient norm: 0.4810
+2025-05-30 10:33:55,892 | INFO | Train batch 10300/10986 | ms/batch 197.46 | loss 3.3418 | bpb  4.82 | ppl    28.27 | lr 8.94e-08
+2025-05-30 10:34:15,638 | INFO | Gradient norm: 0.5104
+2025-05-30 10:34:15,646 | INFO | Train batch 10400/10986 | ms/batch 197.46 | loss 3.3412 | bpb  4.82 | ppl    28.25 | lr 8.94e-08
+2025-05-30 10:34:35,383 | INFO | Gradient norm: 0.4996
+2025-05-30 10:34:35,391 | INFO | Train batch 10500/10986 | ms/batch 197.46 | loss 3.3407 | bpb  4.82 | ppl    28.24 | lr 8.94e-08
+2025-05-30 10:34:55,126 | INFO | Gradient norm: 0.5109
+2025-05-30 10:34:55,134 | INFO | Train batch 10600/10986 | ms/batch 197.46 | loss 3.3405 | bpb  4.82 | ppl    28.23 | lr 8.94e-08
+2025-05-30 10:35:14,882 | INFO | Gradient norm: 0.5021
+2025-05-30 10:35:14,889 | INFO | Train batch 10700/10986 | ms/batch 197.46 | loss 3.3399 | bpb  4.82 | ppl    28.22 | lr 8.94e-08
+2025-05-30 10:35:34,623 | INFO | Gradient norm: 0.5643
+2025-05-30 10:35:34,631 | INFO | Train batch 10800/10986 | ms/batch 197.46 | loss 3.3396 | bpb  4.82 | ppl    28.21 | lr 8.94e-08
+2025-05-30 10:35:54,376 | INFO | Gradient norm: 0.4188
+2025-05-30 10:35:54,384 | INFO | Train batch 10900/10986 | ms/batch 197.46 | loss 3.3393 | bpb  4.82 | ppl    28.20 | lr 8.94e-08
+2025-05-30 10:37:23,277 | INFO | Epoch   2 | time: 2241.44s | train bpb  4.82 | valid bpb  0.01
+2025-05-30 10:37:24,595 | INFO | Saved new best model with validation bpb:  0.01
+2025-05-30 10:37:24,658 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 10:37:24,658 | INFO | Input range: [10, 226]
+2025-05-30 10:37:24,658 | INFO | Target range: [10, 226]
+2025-05-30 10:37:24,696 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 10:37:24,697 | INFO | Output range: [-5.1328125, 9.4296875]
+2025-05-30 10:37:24,697 | INFO | Sample probabilities: max=0.637265145778656, min=3.5865825338987634e-05
+2025-05-30 10:37:24,698 | INFO | Raw loss value: 3.3499836921691895
+2025-05-30 10:37:24,698 | INFO | Batch 0 loss stats - Mean: -0.1885, Std: 1.3936
+2025-05-30 10:37:24,848 | INFO | Gradient norm: 0.5176
+2025-05-30 10:37:24,856 | INFO | Train batch     0/10986 | ms/batch 198.42 | loss 3.3500 | bpb  4.83 | ppl    28.50 | lr 8.94e-08
+2025-05-30 10:37:44,568 | INFO | Gradient norm: 0.5782
+2025-05-30 10:37:44,576 | INFO | Train batch   100/10986 | ms/batch 197.21 | loss 3.3133 | bpb  4.78 | ppl    27.47 | lr 8.94e-08
+2025-05-30 10:38:04,307 | INFO | Gradient norm: 0.4914
+2025-05-30 10:38:04,315 | INFO | Train batch   200/10986 | ms/batch 197.30 | loss 3.3002 | bpb  4.76 | ppl    27.12 | lr 8.94e-08
+2025-05-30 10:38:24,060 | INFO | Gradient norm: 0.5406
+2025-05-30 10:38:24,068 | INFO | Train batch   300/10986 | ms/batch 197.38 | loss 3.3033 | bpb  4.77 | ppl    27.20 | lr 8.94e-08
+2025-05-30 10:38:43,806 | INFO | Gradient norm: 0.5737
+2025-05-30 10:38:43,814 | INFO | Train batch   400/10986 | ms/batch 197.40 | loss 3.2988 | bpb  4.76 | ppl    27.08 | lr 8.94e-08
+2025-05-30 10:39:03,551 | INFO | Gradient norm: 0.4938
+2025-05-30 10:39:03,559 | INFO | Train batch   500/10986 | ms/batch 197.41 | loss 3.2918 | bpb  4.75 | ppl    26.89 | lr 8.94e-08
+2025-05-30 10:39:23,310 | INFO | Gradient norm: 0.4430
+2025-05-30 10:39:23,318 | INFO | Train batch   600/10986 | ms/batch 197.44 | loss 3.2919 | bpb  4.75 | ppl    26.90 | lr 8.94e-08
+2025-05-30 10:39:43,055 | INFO | Gradient norm: 0.5066
+2025-05-30 10:39:43,063 | INFO | Train batch   700/10986 | ms/batch 197.44 | loss 3.2879 | bpb  4.74 | ppl    26.79 | lr 8.94e-08
+2025-05-30 10:40:02,802 | INFO | Gradient norm: 0.4619
+2025-05-30 10:40:02,810 | INFO | Train batch   800/10986 | ms/batch 197.44 | loss 3.2866 | bpb  4.74 | ppl    26.75 | lr 8.94e-08
+2025-05-30 10:40:22,559 | INFO | Gradient norm: 0.5168
+2025-05-30 10:40:22,567 | INFO | Train batch   900/10986 | ms/batch 197.46 | loss 3.2841 | bpb  4.74 | ppl    26.68 | lr 8.94e-08
+2025-05-30 10:40:42,304 | INFO | Gradient norm: 0.4240
+2025-05-30 10:40:42,312 | INFO | Train batch  1000/10986 | ms/batch 197.46 | loss 3.2838 | bpb  4.74 | ppl    26.68 | lr 8.94e-08
+2025-05-30 10:41:02,050 | INFO | Gradient norm: 0.4665
+2025-05-30 10:41:02,058 | INFO | Train batch  1100/10986 | ms/batch 197.46 | loss 3.2836 | bpb  4.74 | ppl    26.67 | lr 8.93e-08
+2025-05-30 10:41:21,804 | INFO | Gradient norm: 0.5305
+2025-05-30 10:41:21,812 | INFO | Train batch  1200/10986 | ms/batch 197.46 | loss 3.2829 | bpb  4.74 | ppl    26.65 | lr 8.93e-08
+2025-05-30 10:41:41,547 | INFO | Gradient norm: 0.4967
+2025-05-30 10:41:41,555 | INFO | Train batch  1300/10986 | ms/batch 197.46 | loss 3.2826 | bpb  4.74 | ppl    26.65 | lr 8.93e-08
+2025-05-30 10:42:01,292 | INFO | Gradient norm: 0.5576
+2025-05-30 10:42:01,300 | INFO | Train batch  1400/10986 | ms/batch 197.46 | loss 3.2826 | bpb  4.74 | ppl    26.65 | lr 8.93e-08
+2025-05-30 10:42:21,044 | INFO | Gradient norm: 0.5401
+2025-05-30 10:42:21,051 | INFO | Train batch  1500/10986 | ms/batch 197.46 | loss 3.2832 | bpb  4.74 | ppl    26.66 | lr 8.93e-08
+2025-05-30 10:42:40,788 | INFO | Gradient norm: 0.5062
+2025-05-30 10:42:40,796 | INFO | Train batch  1600/10986 | ms/batch 197.46 | loss 3.2825 | bpb  4.74 | ppl    26.64 | lr 8.93e-08
+2025-05-30 10:43:00,533 | INFO | Gradient norm: 0.6638
+2025-05-30 10:43:00,541 | INFO | Train batch  1700/10986 | ms/batch 197.46 | loss 3.2835 | bpb  4.74 | ppl    26.67 | lr 8.93e-08
+2025-05-30 10:43:20,286 | INFO | Gradient norm: 0.4859
+2025-05-30 10:43:20,294 | INFO | Train batch  1800/10986 | ms/batch 197.47 | loss 3.2854 | bpb  4.74 | ppl    26.72 | lr 8.93e-08
+2025-05-30 10:43:40,028 | INFO | Gradient norm: 0.4690
+2025-05-30 10:43:40,036 | INFO | Train batch  1900/10986 | ms/batch 197.46 | loss 3.2858 | bpb  4.74 | ppl    26.73 | lr 8.93e-08
+2025-05-30 10:43:59,770 | INFO | Gradient norm: 0.5850
+2025-05-30 10:43:59,778 | INFO | Train batch  2000/10986 | ms/batch 197.46 | loss 3.2847 | bpb  4.74 | ppl    26.70 | lr 8.93e-08
+2025-05-30 10:44:19,524 | INFO | Gradient norm: 0.4919
+2025-05-30 10:44:19,532 | INFO | Train batch  2100/10986 | ms/batch 197.47 | loss 3.2842 | bpb  4.74 | ppl    26.69 | lr 8.93e-08
+2025-05-30 10:44:39,268 | INFO | Gradient norm: 0.5054
+2025-05-30 10:44:39,276 | INFO | Train batch  2200/10986 | ms/batch 197.46 | loss 3.2831 | bpb  4.74 | ppl    26.66 | lr 8.93e-08
+2025-05-30 10:44:59,014 | INFO | Gradient norm: 0.4936
+2025-05-30 10:44:59,022 | INFO | Train batch  2300/10986 | ms/batch 197.46 | loss 3.2828 | bpb  4.74 | ppl    26.65 | lr 8.93e-08
+2025-05-30 10:45:18,769 | INFO | Gradient norm: 0.4659
+2025-05-30 10:45:18,777 | INFO | Train batch  2400/10986 | ms/batch 197.47 | loss 3.2822 | bpb  4.74 | ppl    26.64 | lr 8.93e-08
+2025-05-30 10:45:38,516 | INFO | Gradient norm: 0.4927
+2025-05-30 10:45:38,524 | INFO | Train batch  2500/10986 | ms/batch 197.47 | loss 3.2815 | bpb  4.73 | ppl    26.62 | lr 8.93e-08
+2025-05-30 10:45:58,259 | INFO | Gradient norm: 0.6398
+2025-05-30 10:45:58,267 | INFO | Train batch  2600/10986 | ms/batch 197.47 | loss 3.2812 | bpb  4.73 | ppl    26.61 | lr 8.93e-08
+2025-05-30 10:46:18,014 | INFO | Gradient norm: 0.4362
+2025-05-30 10:46:18,022 | INFO | Train batch  2700/10986 | ms/batch 197.47 | loss 3.2805 | bpb  4.73 | ppl    26.59 | lr 8.93e-08
+2025-05-30 10:46:37,759 | INFO | Gradient norm: 0.4671
+2025-05-30 10:46:37,767 | INFO | Train batch  2800/10986 | ms/batch 197.47 | loss 3.2806 | bpb  4.73 | ppl    26.59 | lr 8.93e-08
+2025-05-30 10:46:57,512 | INFO | Gradient norm: 0.4608
+2025-05-30 10:46:57,520 | INFO | Train batch  2900/10986 | ms/batch 197.47 | loss 3.2800 | bpb  4.73 | ppl    26.57 | lr 8.93e-08
+2025-05-30 10:47:17,256 | INFO | Gradient norm: 0.4915
+2025-05-30 10:47:17,264 | INFO | Train batch  3000/10986 | ms/batch 197.47 | loss 3.2793 | bpb  4.73 | ppl    26.56 | lr 8.93e-08
+2025-05-30 10:47:37,000 | INFO | Gradient norm: 0.4898
+2025-05-30 10:47:37,008 | INFO | Train batch  3100/10986 | ms/batch 197.47 | loss 3.2791 | bpb  4.73 | ppl    26.55 | lr 8.93e-08
+2025-05-30 10:47:56,755 | INFO | Gradient norm: 0.5514
+2025-05-30 10:47:56,763 | INFO | Train batch  3200/10986 | ms/batch 197.47 | loss 3.2789 | bpb  4.73 | ppl    26.55 | lr 8.93e-08
+2025-05-30 10:48:16,499 | INFO | Gradient norm: 0.5439
+2025-05-30 10:48:16,507 | INFO | Train batch  3300/10986 | ms/batch 197.47 | loss 3.2786 | bpb  4.73 | ppl    26.54 | lr 8.93e-08
+2025-05-30 10:48:36,243 | INFO | Gradient norm: 0.4644
+2025-05-30 10:48:36,251 | INFO | Train batch  3400/10986 | ms/batch 197.47 | loss 3.2794 | bpb  4.73 | ppl    26.56 | lr 8.92e-08
+2025-05-30 10:48:56,000 | INFO | Gradient norm: 0.5498
+2025-05-30 10:48:56,008 | INFO | Train batch  3500/10986 | ms/batch 197.47 | loss 3.2788 | bpb  4.73 | ppl    26.54 | lr 8.92e-08
+2025-05-30 10:49:15,744 | INFO | Gradient norm: 0.5654
+2025-05-30 10:49:15,752 | INFO | Train batch  3600/10986 | ms/batch 197.47 | loss 3.2780 | bpb  4.73 | ppl    26.52 | lr 8.92e-08
+2025-05-30 10:49:35,486 | INFO | Gradient norm: 0.4792
+2025-05-30 10:49:35,493 | INFO | Train batch  3700/10986 | ms/batch 197.47 | loss 3.2781 | bpb  4.73 | ppl    26.52 | lr 8.92e-08
+2025-05-30 10:49:55,243 | INFO | Gradient norm: 0.4364
+2025-05-30 10:49:55,251 | INFO | Train batch  3800/10986 | ms/batch 197.47 | loss 3.2782 | bpb  4.73 | ppl    26.53 | lr 8.92e-08
+2025-05-30 10:50:14,990 | INFO | Gradient norm: 0.4631
+2025-05-30 10:50:14,998 | INFO | Train batch  3900/10986 | ms/batch 197.47 | loss 3.2777 | bpb  4.73 | ppl    26.51 | lr 8.92e-08
+2025-05-30 10:50:34,734 | INFO | Gradient norm: 0.5312
+2025-05-30 10:50:34,742 | INFO | Train batch  4000/10986 | ms/batch 197.47 | loss 3.2769 | bpb  4.73 | ppl    26.49 | lr 8.92e-08
+2025-05-30 10:50:54,486 | INFO | Gradient norm: 0.4588
+2025-05-30 10:50:54,494 | INFO | Train batch  4100/10986 | ms/batch 197.47 | loss 3.2766 | bpb  4.73 | ppl    26.49 | lr 8.92e-08
+2025-05-30 10:51:14,228 | INFO | Gradient norm: 0.5894
+2025-05-30 10:51:14,236 | INFO | Train batch  4200/10986 | ms/batch 197.47 | loss 3.2777 | bpb  4.73 | ppl    26.52 | lr 8.92e-08
+2025-05-30 10:51:33,980 | INFO | Gradient norm: 0.5426
+2025-05-30 10:51:33,988 | INFO | Train batch  4300/10986 | ms/batch 197.47 | loss 3.2775 | bpb  4.73 | ppl    26.51 | lr 8.92e-08
+2025-05-30 10:51:53,722 | INFO | Gradient norm: 0.5063
+2025-05-30 10:51:53,730 | INFO | Train batch  4400/10986 | ms/batch 197.47 | loss 3.2783 | bpb  4.73 | ppl    26.53 | lr 8.92e-08
+2025-05-30 10:52:13,465 | INFO | Gradient norm: 0.5322
+2025-05-30 10:52:13,473 | INFO | Train batch  4500/10986 | ms/batch 197.47 | loss 3.2791 | bpb  4.73 | ppl    26.55 | lr 8.92e-08
+2025-05-30 10:52:33,217 | INFO | Gradient norm: 0.5691
+2025-05-30 10:52:33,225 | INFO | Train batch  4600/10986 | ms/batch 197.47 | loss 3.2796 | bpb  4.73 | ppl    26.57 | lr 8.92e-08
+2025-05-30 10:52:52,959 | INFO | Gradient norm: 0.4812
+2025-05-30 10:52:52,967 | INFO | Train batch  4700/10986 | ms/batch 197.47 | loss 3.2793 | bpb  4.73 | ppl    26.56 | lr 8.92e-08
+2025-05-30 10:53:12,698 | INFO | Gradient norm: 0.5050
+2025-05-30 10:53:12,706 | INFO | Train batch  4800/10986 | ms/batch 197.47 | loss 3.2795 | bpb  4.73 | ppl    26.56 | lr 8.92e-08
+2025-05-30 10:53:32,450 | INFO | Gradient norm: 0.4633
+2025-05-30 10:53:32,458 | INFO | Train batch  4900/10986 | ms/batch 197.47 | loss 3.2787 | bpb  4.73 | ppl    26.54 | lr 8.92e-08
+2025-05-30 10:53:52,190 | INFO | Gradient norm: 0.5142
+2025-05-30 10:53:52,198 | INFO | Train batch  5000/10986 | ms/batch 197.47 | loss 3.2782 | bpb  4.73 | ppl    26.53 | lr 8.92e-08
+2025-05-30 10:54:11,932 | INFO | Gradient norm: 0.4910
+2025-05-30 10:54:11,940 | INFO | Train batch  5100/10986 | ms/batch 197.47 | loss 3.2776 | bpb  4.73 | ppl    26.51 | lr 8.92e-08
+2025-05-30 10:54:31,683 | INFO | Gradient norm: 0.4828
+2025-05-30 10:54:31,691 | INFO | Train batch  5200/10986 | ms/batch 197.47 | loss 3.2768 | bpb  4.73 | ppl    26.49 | lr 8.92e-08
+2025-05-30 10:54:51,425 | INFO | Gradient norm: 0.4577
+2025-05-30 10:54:51,432 | INFO | Train batch  5300/10986 | ms/batch 197.47 | loss 3.2761 | bpb  4.73 | ppl    26.47 | lr 8.92e-08
+2025-05-30 10:55:11,165 | INFO | Gradient norm: 0.5329
+2025-05-30 10:55:11,173 | INFO | Train batch  5400/10986 | ms/batch 197.47 | loss 3.2755 | bpb  4.73 | ppl    26.46 | lr 8.92e-08
+2025-05-30 10:55:30,917 | INFO | Gradient norm: 0.4799
+2025-05-30 10:55:30,925 | INFO | Train batch  5500/10986 | ms/batch 197.47 | loss 3.2750 | bpb  4.72 | ppl    26.44 | lr 8.91e-08
+2025-05-30 10:55:50,657 | INFO | Gradient norm: 0.4269
+2025-05-30 10:55:50,665 | INFO | Train batch  5600/10986 | ms/batch 197.47 | loss 3.2749 | bpb  4.72 | ppl    26.44 | lr 8.91e-08
+2025-05-30 10:56:10,410 | INFO | Gradient norm: 0.5299
+2025-05-30 10:56:10,418 | INFO | Train batch  5700/10986 | ms/batch 197.47 | loss 3.2747 | bpb  4.72 | ppl    26.43 | lr 8.91e-08
+2025-05-30 10:56:30,150 | INFO | Gradient norm: 0.4560
+2025-05-30 10:56:30,158 | INFO | Train batch  5800/10986 | ms/batch 197.47 | loss 3.2744 | bpb  4.72 | ppl    26.43 | lr 8.91e-08
+2025-05-30 10:56:49,889 | INFO | Gradient norm: 0.4823
+2025-05-30 10:56:49,897 | INFO | Train batch  5900/10986 | ms/batch 197.46 | loss 3.2736 | bpb  4.72 | ppl    26.41 | lr 8.91e-08
+2025-05-30 10:57:09,641 | INFO | Gradient norm: 0.4557
+2025-05-30 10:57:09,649 | INFO | Train batch  6000/10986 | ms/batch 197.47 | loss 3.2732 | bpb  4.72 | ppl    26.39 | lr 8.91e-08
+2025-05-30 10:57:29,382 | INFO | Gradient norm: 0.5077
+2025-05-30 10:57:29,390 | INFO | Train batch  6100/10986 | ms/batch 197.46 | loss 3.2728 | bpb  4.72 | ppl    26.39 | lr 8.91e-08
+2025-05-30 10:57:49,122 | INFO | Gradient norm: 0.5595
+2025-05-30 10:57:49,130 | INFO | Train batch  6200/10986 | ms/batch 197.46 | loss 3.2724 | bpb  4.72 | ppl    26.37 | lr 8.91e-08
+2025-05-30 10:58:08,875 | INFO | Gradient norm: 0.4695
+2025-05-30 10:58:08,883 | INFO | Train batch  6300/10986 | ms/batch 197.46 | loss 3.2720 | bpb  4.72 | ppl    26.37 | lr 8.91e-08
+2025-05-30 10:58:28,615 | INFO | Gradient norm: 0.4376
+2025-05-30 10:58:28,623 | INFO | Train batch  6400/10986 | ms/batch 197.46 | loss 3.2716 | bpb  4.72 | ppl    26.35 | lr 8.91e-08
+2025-05-30 10:58:48,355 | INFO | Gradient norm: 0.3921
+2025-05-30 10:58:48,363 | INFO | Train batch  6500/10986 | ms/batch 197.46 | loss 3.2714 | bpb  4.72 | ppl    26.35 | lr 8.91e-08
+2025-05-30 10:59:08,339 | INFO | Gradient norm: 0.5721
+2025-05-30 10:59:08,352 | INFO | Train batch  6600/10986 | ms/batch 197.50 | loss 3.2713 | bpb  4.72 | ppl    26.35 | lr 8.91e-08
+2025-05-30 10:59:28,706 | INFO | Gradient norm: 0.5472
+2025-05-30 10:59:28,718 | INFO | Train batch  6700/10986 | ms/batch 197.59 | loss 3.2709 | bpb  4.72 | ppl    26.34 | lr 8.91e-08
+2025-05-30 10:59:49,070 | INFO | Gradient norm: 0.4352
+2025-05-30 10:59:49,082 | INFO | Train batch  6800/10986 | ms/batch 197.68 | loss 3.2706 | bpb  4.72 | ppl    26.33 | lr 8.91e-08
+2025-05-30 11:00:09,442 | INFO | Gradient norm: 0.5353
+2025-05-30 11:00:09,454 | INFO | Train batch  6900/10986 | ms/batch 197.77 | loss 3.2704 | bpb  4.72 | ppl    26.32 | lr 8.91e-08
+2025-05-30 11:00:29,799 | INFO | Gradient norm: 0.5162
+2025-05-30 11:00:29,812 | INFO | Train batch  7000/10986 | ms/batch 197.85 | loss 3.2705 | bpb  4.72 | ppl    26.33 | lr 8.91e-08
+2025-05-30 11:00:50,168 | INFO | Gradient norm: 0.5094
+2025-05-30 11:00:50,181 | INFO | Train batch  7100/10986 | ms/batch 197.93 | loss 3.2705 | bpb  4.72 | ppl    26.32 | lr 8.91e-08
+2025-05-30 11:01:10,526 | INFO | Gradient norm: 0.5169
+2025-05-30 11:01:10,539 | INFO | Train batch  7200/10986 | ms/batch 198.01 | loss 3.2703 | bpb  4.72 | ppl    26.32 | lr 8.91e-08
+2025-05-30 11:01:30,886 | INFO | Gradient norm: 0.5128
+2025-05-30 11:01:30,898 | INFO | Train batch  7300/10986 | ms/batch 198.09 | loss 3.2699 | bpb  4.72 | ppl    26.31 | lr 8.91e-08
+2025-05-30 11:01:51,256 | INFO | Gradient norm: 0.4578
+2025-05-30 11:01:51,269 | INFO | Train batch  7400/10986 | ms/batch 198.16 | loss 3.2694 | bpb  4.72 | ppl    26.30 | lr 8.90e-08
+2025-05-30 11:02:11,613 | INFO | Gradient norm: 0.5997
+2025-05-30 11:02:11,625 | INFO | Train batch  7500/10986 | ms/batch 198.24 | loss 3.2693 | bpb  4.72 | ppl    26.29 | lr 8.90e-08
+2025-05-30 11:02:31,972 | INFO | Gradient norm: 0.5964
+2025-05-30 11:02:31,985 | INFO | Train batch  7600/10986 | ms/batch 198.31 | loss 3.2692 | bpb  4.72 | ppl    26.29 | lr 8.90e-08
+2025-05-30 11:02:52,344 | INFO | Gradient norm: 0.5214
+2025-05-30 11:02:52,356 | INFO | Train batch  7700/10986 | ms/batch 198.38 | loss 3.2692 | bpb  4.72 | ppl    26.29 | lr 8.90e-08
+2025-05-30 11:03:12,703 | INFO | Gradient norm: 0.5507
+2025-05-30 11:03:12,715 | INFO | Train batch  7800/10986 | ms/batch 198.44 | loss 3.2691 | bpb  4.72 | ppl    26.29 | lr 8.90e-08
+2025-05-30 11:03:33,064 | INFO | Gradient norm: 0.4936
+2025-05-30 11:03:33,077 | INFO | Train batch  7900/10986 | ms/batch 198.51 | loss 3.2689 | bpb  4.72 | ppl    26.28 | lr 8.90e-08
+2025-05-30 11:03:53,436 | INFO | Gradient norm: 0.5013
+2025-05-30 11:03:53,449 | INFO | Train batch  8000/10986 | ms/batch 198.57 | loss 3.2687 | bpb  4.72 | ppl    26.28 | lr 8.90e-08
+2025-05-30 11:04:13,798 | INFO | Gradient norm: 0.5747
+2025-05-30 11:04:13,810 | INFO | Train batch  8100/10986 | ms/batch 198.64 | loss 3.2683 | bpb  4.72 | ppl    26.27 | lr 8.90e-08
+2025-05-30 11:04:34,161 | INFO | Gradient norm: 0.4844
+2025-05-30 11:04:34,174 | INFO | Train batch  8200/10986 | ms/batch 198.70 | loss 3.2679 | bpb  4.71 | ppl    26.26 | lr 8.90e-08
+2025-05-30 11:04:54,534 | INFO | Gradient norm: 0.4585
+2025-05-30 11:04:54,547 | INFO | Train batch  8300/10986 | ms/batch 198.76 | loss 3.2675 | bpb  4.71 | ppl    26.25 | lr 8.90e-08
+2025-05-30 11:05:14,896 | INFO | Gradient norm: 0.5797
+2025-05-30 11:05:14,909 | INFO | Train batch  8400/10986 | ms/batch 198.82 | loss 3.2674 | bpb  4.71 | ppl    26.24 | lr 8.90e-08
+2025-05-30 11:05:35,258 | INFO | Gradient norm: 0.5404
+2025-05-30 11:05:35,270 | INFO | Train batch  8500/10986 | ms/batch 198.87 | loss 3.2676 | bpb  4.71 | ppl    26.25 | lr 8.90e-08
+2025-05-30 11:05:55,636 | INFO | Gradient norm: 0.4773
+2025-05-30 11:05:55,648 | INFO | Train batch  8600/10986 | ms/batch 198.93 | loss 3.2673 | bpb  4.71 | ppl    26.24 | lr 8.90e-08
+2025-05-30 11:06:15,997 | INFO | Gradient norm: 0.4706
+2025-05-30 11:06:16,009 | INFO | Train batch  8700/10986 | ms/batch 198.98 | loss 3.2670 | bpb  4.71 | ppl    26.23 | lr 8.90e-08
+2025-05-30 11:06:36,370 | INFO | Gradient norm: 0.4671
+2025-05-30 11:06:36,383 | INFO | Train batch  8800/10986 | ms/batch 199.04 | loss 3.2665 | bpb  4.71 | ppl    26.22 | lr 8.90e-08
+2025-05-30 11:06:56,734 | INFO | Gradient norm: 0.4592
+2025-05-30 11:06:56,746 | INFO | Train batch  8900/10986 | ms/batch 199.09 | loss 3.2663 | bpb  4.71 | ppl    26.21 | lr 8.90e-08
+2025-05-30 11:07:17,099 | INFO | Gradient norm: 0.4161
+2025-05-30 11:07:17,112 | INFO | Train batch  9000/10986 | ms/batch 199.14 | loss 3.2660 | bpb  4.71 | ppl    26.21 | lr 8.90e-08
+2025-05-30 11:07:37,476 | INFO | Gradient norm: 0.5735
+2025-05-30 11:07:37,489 | INFO | Train batch  9100/10986 | ms/batch 199.19 | loss 3.2658 | bpb  4.71 | ppl    26.20 | lr 8.90e-08
+2025-05-30 11:07:57,839 | INFO | Gradient norm: 0.4523
+2025-05-30 11:07:57,851 | INFO | Train batch  9200/10986 | ms/batch 199.24 | loss 3.2655 | bpb  4.71 | ppl    26.19 | lr 8.90e-08
+2025-05-30 11:08:18,200 | INFO | Gradient norm: 0.4429
+2025-05-30 11:08:18,212 | INFO | Train batch  9300/10986 | ms/batch 199.29 | loss 3.2650 | bpb  4.71 | ppl    26.18 | lr 8.89e-08
+2025-05-30 11:08:38,577 | INFO | Gradient norm: 0.4846
+2025-05-30 11:08:38,589 | INFO | Train batch  9400/10986 | ms/batch 199.33 | loss 3.2648 | bpb  4.71 | ppl    26.18 | lr 8.89e-08
+2025-05-30 11:08:58,940 | INFO | Gradient norm: 0.4873
+2025-05-30 11:08:58,952 | INFO | Train batch  9500/10986 | ms/batch 199.38 | loss 3.2643 | bpb  4.71 | ppl    26.16 | lr 8.89e-08
+2025-05-30 11:09:19,306 | INFO | Gradient norm: 0.4685
+2025-05-30 11:09:19,318 | INFO | Train batch  9600/10986 | ms/batch 199.42 | loss 3.2638 | bpb  4.71 | ppl    26.15 | lr 8.89e-08
+2025-05-30 11:09:39,681 | INFO | Gradient norm: 0.4665
+2025-05-30 11:09:39,694 | INFO | Train batch  9700/10986 | ms/batch 199.47 | loss 3.2633 | bpb  4.71 | ppl    26.14 | lr 8.89e-08
+2025-05-30 11:10:00,042 | INFO | Gradient norm: 0.4729
+2025-05-30 11:10:00,055 | INFO | Train batch  9800/10986 | ms/batch 199.51 | loss 3.2629 | bpb  4.71 | ppl    26.13 | lr 8.89e-08
+2025-05-30 11:10:20,409 | INFO | Gradient norm: 0.4622
+2025-05-30 11:10:20,421 | INFO | Train batch  9900/10986 | ms/batch 199.55 | loss 3.2624 | bpb  4.71 | ppl    26.11 | lr 8.89e-08
+2025-05-30 11:10:40,784 | INFO | Gradient norm: 0.4905
+2025-05-30 11:10:40,797 | INFO | Train batch 10000/10986 | ms/batch 199.59 | loss 3.2621 | bpb  4.71 | ppl    26.10 | lr 8.89e-08
+2025-05-30 11:11:01,149 | INFO | Gradient norm: 0.4264
+2025-05-30 11:11:01,161 | INFO | Train batch 10100/10986 | ms/batch 199.63 | loss 3.2616 | bpb  4.71 | ppl    26.09 | lr 8.89e-08
+2025-05-30 11:11:21,516 | INFO | Gradient norm: 0.4276
+2025-05-30 11:11:21,528 | INFO | Train batch 10200/10986 | ms/batch 199.67 | loss 3.2613 | bpb  4.71 | ppl    26.08 | lr 8.89e-08
+2025-05-30 11:11:41,877 | INFO | Gradient norm: 0.4461
+2025-05-30 11:11:41,890 | INFO | Train batch 10300/10986 | ms/batch 199.71 | loss 3.2611 | bpb  4.70 | ppl    26.08 | lr 8.89e-08
+2025-05-30 11:12:02,241 | INFO | Gradient norm: 0.4792
+2025-05-30 11:12:02,254 | INFO | Train batch 10400/10986 | ms/batch 199.75 | loss 3.2607 | bpb  4.70 | ppl    26.07 | lr 8.89e-08
+2025-05-30 11:12:22,619 | INFO | Gradient norm: 0.4890
+2025-05-30 11:12:22,632 | INFO | Train batch 10500/10986 | ms/batch 199.79 | loss 3.2604 | bpb  4.70 | ppl    26.06 | lr 8.89e-08
+2025-05-30 11:12:42,984 | INFO | Gradient norm: 0.4861
+2025-05-30 11:12:42,996 | INFO | Train batch 10600/10986 | ms/batch 199.82 | loss 3.2603 | bpb  4.70 | ppl    26.06 | lr 8.89e-08
+2025-05-30 11:13:03,351 | INFO | Gradient norm: 0.4762
+2025-05-30 11:13:03,363 | INFO | Train batch 10700/10986 | ms/batch 199.86 | loss 3.2599 | bpb  4.70 | ppl    26.05 | lr 8.89e-08
+2025-05-30 11:13:23,727 | INFO | Gradient norm: 0.5423
+2025-05-30 11:13:23,740 | INFO | Train batch 10800/10986 | ms/batch 199.90 | loss 3.2597 | bpb  4.70 | ppl    26.04 | lr 8.89e-08
+2025-05-30 11:13:44,092 | INFO | Gradient norm: 0.3996
+2025-05-30 11:13:44,104 | INFO | Train batch 10900/10986 | ms/batch 199.93 | loss 3.2595 | bpb  4.70 | ppl    26.04 | lr 8.89e-08
+2025-05-30 11:15:13,966 | INFO | Epoch   3 | time: 2269.31s | train bpb  4.70 | valid bpb  0.01
+2025-05-30 11:15:15,301 | INFO | Saved new best model with validation bpb:  0.01
+2025-05-30 11:15:15,361 | INFO | Input shape: torch.Size([16, 511]), Target shape: torch.Size([16, 511])
+2025-05-30 11:15:15,361 | INFO | Input range: [10, 226]
+2025-05-30 11:15:15,361 | INFO | Target range: [10, 226]
+2025-05-30 11:15:15,399 | INFO | Output shape: torch.Size([8176, 256]), Reshaped target shape: torch.Size([8176])
+2025-05-30 11:15:15,400 | INFO | Output range: [-4.90625, 9.359375]
+2025-05-30 11:15:15,400 | INFO | Sample probabilities: max=0.6775848865509033, min=1.5742567484267056e-05
+2025-05-30 11:15:15,401 | INFO | Raw loss value: 3.282691240310669
+2025-05-30 11:15:15,401 | INFO | Batch 0 loss stats - Mean: -0.1942, Std: 1.3818
+2025-05-30 11:15:15,549 | INFO | Gradient norm: 0.4909
+2025-05-30 11:15:15,562 | INFO | Train batch     0/10986 | ms/batch 201.01 | loss 3.2827 | bpb  4.74 | ppl    26.65 | lr 8.89e-08
+2025-05-30 11:15:35,925 | INFO | Gradient norm: 0.5500
+2025-05-30 11:15:35,937 | INFO | Train batch   100/10986 | ms/batch 203.72 | loss 3.2481 | bpb  4.69 | ppl    25.74 | lr 8.88e-08
+2025-05-30 11:15:56,296 | INFO | Gradient norm: 0.4517
+2025-05-30 11:15:56,309 | INFO | Train batch   200/10986 | ms/batch 203.72 | loss 3.2350 | bpb  4.67 | ppl    25.41 | lr 8.88e-08
+2025-05-30 11:16:16,666 | INFO | Gradient norm: 0.5038
+2025-05-30 11:16:16,679 | INFO | Train batch   300/10986 | ms/batch 203.71 | loss 3.2384 | bpb  4.67 | ppl    25.49 | lr 8.88e-08
+2025-05-30 11:16:37,045 | INFO | Gradient norm: 0.5123
+2025-05-30 11:16:37,057 | INFO | Train batch   400/10986 | ms/batch 203.73 | loss 3.2340 | bpb  4.67 | ppl    25.38 | lr 8.88e-08
+2025-05-30 11:16:57,412 | INFO | Gradient norm: 0.4693
+2025-05-30 11:16:57,425 | INFO | Train batch   500/10986 | ms/batch 203.72 | loss 3.2283 | bpb  4.66 | ppl    25.24 | lr 8.88e-08
+2025-05-30 11:17:17,782 | INFO | Gradient norm: 0.4137
+2025-05-30 11:17:17,795 | INFO | Train batch   600/10986 | ms/batch 203.72 | loss 3.2288 | bpb  4.66 | ppl    25.25 | lr 8.88e-08
+2025-05-30 11:17:38,162 | INFO | Gradient norm: 0.4775
+2025-05-30 11:17:38,175 | INFO | Train batch   700/10986 | ms/batch 203.73 | loss 3.2254 | bpb  4.65 | ppl    25.16 | lr 8.88e-08
+2025-05-30 11:17:58,531 | INFO | Gradient norm: 0.4338
+2025-05-30 11:17:58,543 | INFO | Train batch   800/10986 | ms/batch 203.72 | loss 3.2242 | bpb  4.65 | ppl    25.13 | lr 8.88e-08
+2025-05-30 11:18:18,899 | INFO | Gradient norm: 0.4505
+2025-05-30 11:18:18,911 | INFO | Train batch   900/10986 | ms/batch 203.72 | loss 3.2219 | bpb  4.65 | ppl    25.08 | lr 8.88e-08
+2025-05-30 11:18:39,277 | INFO | Gradient norm: 0.4128
+2025-05-30 11:18:39,289 | INFO | Train batch  1000/10986 | ms/batch 203.72 | loss 3.2219 | bpb  4.65 | ppl    25.08 | lr 8.88e-08
+2025-05-30 11:18:59,645 | INFO | Gradient norm: 0.4574
+2025-05-30 11:18:59,657 | INFO | Train batch  1100/10986 | ms/batch 203.72 | loss 3.2220 | bpb  4.65 | ppl    25.08 | lr 8.88e-08
+slurmstepd-node078: error: *** JOB 28191 ON node078 CANCELLED AT 2025-05-30T11:19:16 ***
