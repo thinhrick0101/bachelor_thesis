@@ -180,9 +180,10 @@ def evaluate(model, val_batches, criterion, device):
             
             loss = criterion(output, target_ids)
             
-            batch_size = input_ids.size(0)
-            total_loss += loss.item() * batch_size
-            total_tokens += batch_size * input_ids.size(1)
+            # Update metrics using number of tokens
+            batch_tokens = input_ids.numel()
+            total_tokens += batch_tokens
+            total_loss += loss.item() * batch_tokens
     
     return total_loss / total_tokens
 
@@ -218,7 +219,7 @@ def main():
     
     # Training settings
     num_epochs = 50
-    warmup_steps = 4000
+    warmup_steps = 2000  # Reduced from 4000
     base_lr = 3e-4
     min_lr = 1e-5
     
@@ -226,7 +227,7 @@ def main():
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     optimizer = optim.AdamW(
         model.parameters(),
-        lr=base_lr,
+        lr=0.0,  # Start from 0 for warmup
         weight_decay=0.01,
         betas=(0.9, 0.98)
     )
@@ -235,14 +236,15 @@ def main():
     
     # Learning rate schedule with proper warmup and decay
     def lr_lambda(current_step: int):
-        # Linear warmup
         if current_step < warmup_steps:
+            # Linear warmup from 0 to base_lr
             return float(current_step) / float(max(1, warmup_steps))
         
-        # Cosine decay with minimum learning rate
-        decay_ratio = float(current_step - warmup_steps) / float(max(1, total_steps - warmup_steps))
-        cosine_decay = 0.5 * (1.0 + math.cos(math.pi * decay_ratio))
-        return max(min_lr / base_lr, cosine_decay)  # Normalize by base_lr since LambdaLR multiplies by base_lr
+        # Cosine decay from base_lr to min_lr
+        progress = float(current_step - warmup_steps) / float(max(1, total_steps - warmup_steps))
+        factor = 0.5 * (1.0 + math.cos(math.pi * progress))
+        # Normalize to [0, 1] range since LambdaLR multiplies by base_lr
+        return (base_lr * factor + min_lr) / base_lr
     
     scheduler = LambdaLR(optimizer, lr_lambda)
     
