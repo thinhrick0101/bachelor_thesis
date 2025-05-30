@@ -220,22 +220,54 @@ class SparseMultiheadAttention(nn.Module):
         k = k.transpose(1, 2)
         v = v.transpose(1, 2)
         
-        # Compute attention scores
-        attn_weights = torch.matmul(q * scaling, k.transpose(-2, -1))
+        # Initialize output tensor
+        output = torch.zeros_like(q)
+        attn_weights_list = []
         
-        # Apply sparse attention patterns
+        # Process each head separately to save memory
         for head_idx in range(self.num_heads):
+            # Get head-specific tensors
+            q_head = q[:, head_idx:head_idx+1]  # Keep dim for broadcasting
+            k_head = k[:, head_idx:head_idx+1]
+            v_head = v[:, head_idx:head_idx+1]
+            
+            # Compute attention scores for this head
+            attn_weights_head = torch.matmul(q_head * scaling, k_head.transpose(-2, -1))
+            
+            # Apply sparse attention pattern for this head
             head_mask = self._get_mask_for_head(head_idx, seq_length).to(query.device)
-            attn_weights[:, head_idx] = attn_weights[:, head_idx].masked_fill(~head_mask, float('-inf'))
+            attn_weights_head = attn_weights_head.masked_fill(~head_mask, float('-inf'))
+            
+            # Apply key padding mask if provided
+            if key_padding_mask is not None:
+                attn_weights_head = attn_weights_head.masked_fill(
+                    key_padding_mask.unsqueeze(1).unsqueeze(2),
+                    float('-inf')
+                )
+            
+            # Compute softmax with improved numerical stability
+            attn_weights_head = attn_weights_head - attn_weights_head.max(dim=-1, keepdim=True)[0].detach()
+            attn_weights_head = F.softmax(attn_weights_head, dim=-1)
+            
+            # Apply dropout
+            attn_weights_head = F.dropout(attn_weights_head, p=self.dropout, training=self.training)
+            
+            # Compute output for this head
+            output[:, head_idx:head_idx+1] = torch.matmul(attn_weights_head, v_head)
+            
+            # Store attention weights if needed
+            if attn_mask is not None:
+                attn_weights_list.append(attn_weights_head)
         
-        # Apply softmax and dropout
-        attn_weights = F.softmax(attn_weights, dim=-1)
-        attn_weights = F.dropout(attn_weights, p=self.dropout, training=self.training)
-        
-        # Compute output
-        output = torch.matmul(attn_weights, v)
+        # Combine outputs from all heads
         output = output.transpose(1, 2).contiguous().view(batch_size, seq_length, self.embed_dim)
         output = self.out_proj(output)
+        
+        # Combine attention weights if needed
+        if attn_mask is not None:
+            attn_weights = torch.cat(attn_weights_list, dim=1)
+        else:
+            attn_weights = None
         
         return output, attn_weights
 
