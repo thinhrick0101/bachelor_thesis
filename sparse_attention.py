@@ -1,233 +1,105 @@
+"""
+Sparse attention implementation with efficient masking and caching.
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
 
+
 class SparseMultiHeadAttention(nn.Module):
-    """
-    Multi-head attention with sparse attention patterns based on cluster analysis.
-    Each head uses a different sparse pattern based on its cluster assignment.
-    """
-    def __init__(self, embedding_dim, num_heads=8, dropout=0.1, attention_dropout=0.1):
-        super(SparseMultiHeadAttention, self).__init__()
-        
-        assert embedding_dim % num_heads == 0, "Embedding dimension must be divisible by number of heads"
-        
-        # Store parameters
+    def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
+        super().__init__()
         self.embedding_dim = embedding_dim
         self.num_heads = num_heads
+        self.dropout = dropout
         self.head_dim = embedding_dim // num_heads
+        assert self.head_dim * num_heads == embedding_dim, "embedding_dim must be divisible by num_heads"
         
-        # Projections for query, key, and value
-        self.query_proj = nn.Linear(embedding_dim, embedding_dim)
-        self.key_proj = nn.Linear(embedding_dim, embedding_dim)
-        self.value_proj = nn.Linear(embedding_dim, embedding_dim)
+        self.q_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        self.k_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        self.v_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        self.out_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
         
-        # Output projection
-        self.output_proj = nn.Linear(embedding_dim, embedding_dim)
-        
-        # Dropout
-        self.attention_dropout = nn.Dropout(attention_dropout)
-        self.output_dropout = nn.Dropout(dropout)
-        
-        # Scaling factor
+        self.cache = {}
         self.scale = math.sqrt(self.head_dim)
-        
-        # Initialize weights
-        self._reset_parameters()
-        
-        # Cluster assignments for each head
-        self.cluster_assignments = [0, 1, 2, 3, 0, 1, 2, 3]  # For 8 heads
-        
-        # Cache for sparse attention masks
-        self._mask_cache = {}
-
-    def _reset_parameters(self):
-        nn.init.xavier_uniform_(self.query_proj.weight)
-        nn.init.xavier_uniform_(self.key_proj.weight)
-        nn.init.xavier_uniform_(self.value_proj.weight)
-        nn.init.xavier_uniform_(self.output_proj.weight)
-        
-        nn.init.constant_(self.query_proj.bias, 0.)
-        nn.init.constant_(self.key_proj.bias, 0.)
-        nn.init.constant_(self.value_proj.bias, 0.)
-        nn.init.constant_(self.output_proj.bias, 0.)
     
-    def _create_sparse_mask(self, seq_length):
-        """
-        Internal method to create sparse attention masks.
-        Creates masks on CPU for caching efficiency.
-        """
-        # Initialize mask: [num_heads, seq_length, seq_length]
-        mask = torch.zeros(self.num_heads, seq_length, seq_length)
-        
-        for h in range(self.num_heads):
-            cluster = self.cluster_assignments[h]
-            
-            for i in range(seq_length):
-                if cluster == 0:  # Narrow local window (±8)
-                    start_idx = max(0, i - 8)
-                    end_idx = min(seq_length, i + 9)
-                    mask[h, i, start_idx:end_idx] = 1
-                
-                elif cluster == 3:  # Wide local window (±16)
-                    start_idx = max(0, i - 16)
-                    end_idx = min(seq_length, i + 17)
-                    mask[h, i, start_idx:end_idx] = 1
-                
-                elif cluster == 1:  # Local + Strided
-                    # Local window (±16)
-                    start_idx = max(0, i - 16)
-                    end_idx = min(seq_length, i + 17)
-                    mask[h, i, start_idx:end_idx] = 1
-                    # Strided attention (every 8th token)
-                    mask[h, i, ::8] = 1
-                
-                elif cluster == 2:  # Global anchors
-                    # Only apply strided attention if sequence is long enough
-                    if seq_length >= 32:
-                        mask[h, i, ::32] = 1
-                    
-                    # Global anchor positions
-                    global_pos = [
-                        0,  # Start
-                        seq_length // 2,  # Middle
-                        seq_length - 1,  # End
-                    ]
-                    mask[h, i, global_pos] = 1
-        
-        # Convert to boolean tensor
-        return mask > 0
-
-    def get_sparse_mask(self, seq_length, device):
-        """
-        Get cached sparse attention mask or create a new one.
-        Masks are stored on CPU and moved to the correct device when needed.
-        """
-        if seq_length not in self._mask_cache:
-            mask = self._create_sparse_mask(seq_length)
-            self._mask_cache[seq_length] = mask
-        
-        # Move mask to the correct device
-        return self._mask_cache[seq_length].to(device)
-
+    def _shape(self, tensor, seq_len, bsz):
+        return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+    
     def forward(self, x, mask=None, return_attention=False):
-        batch_size, seq_length, _ = x.size()
+        """
+        Args:
+            x: Input of shape [batch_size, seq_len, embedding_dim]
+            mask: Boolean mask of shape [batch_size, seq_len, seq_len]
+            return_attention: Whether to return attention weights
+        """
+        bsz, seq_len, _ = x.shape
         
-        # Project input to query, key, and value
-        query = self.query_proj(x)
-        key = self.key_proj(x)
-        value = self.value_proj(x)
+        # Project and reshape
+        q = self._shape(self.q_proj(x), seq_len, bsz)  # [B, H, L, D]
+        k = self._shape(self.k_proj(x), seq_len, bsz)  # [B, H, L, D]
+        v = self._shape(self.v_proj(x), seq_len, bsz)  # [B, H, L, D]
         
-        # Reshape for multi-head attention
-        query = query.view(batch_size, seq_length, self.num_heads, self.head_dim)
-        key = key.view(batch_size, seq_length, self.num_heads, self.head_dim)
-        value = value.view(batch_size, seq_length, self.num_heads, self.head_dim)
+        # Compute attention scores
+        attention_scores = torch.matmul(q, k.transpose(2, 3)) / self.scale  # [B, H, L, L]
         
-        # Transpose to [batch_size, num_heads, seq_length, head_dim]
-        query = query.transpose(1, 2)
-        key = key.transpose(1, 2)
-        value = value.transpose(1, 2)
-        
-        # Compute scaled dot-product attention
-        attention_scores = torch.matmul(query, key.transpose(2, 3)) / self.scale
-        
-        # Get cached sparse attention mask
-        sparse_mask = self.get_sparse_mask(seq_length, x.device)
-        attention_scores = attention_scores.masked_fill(~sparse_mask.unsqueeze(0), -1e9)
-        
-        # Apply additional mask if provided (e.g., padding mask)
+        # Apply mask if provided
         if mask is not None:
-            # Ensure mask has correct shape for broadcasting
-            if mask.dim() == 2:  # [B, L]
-                mask = mask.unsqueeze(1).unsqueeze(2)  # [B, 1, 1, L]
-            elif mask.dim() == 3:  # [B, 1, L]
-                mask = mask.unsqueeze(1)  # [B, 1, 1, L]
-            attention_scores = attention_scores.masked_fill(~mask, -1e9)
+            # Use a smaller negative value that works with float16
+            mask_value = -65504.0 if attention_scores.dtype == torch.float16 else -1e9
+            attention_scores = attention_scores.masked_fill(~mask.unsqueeze(1), mask_value)
         
-        # Apply softmax to get attention weights
-        attention_weights = F.softmax(attention_scores, dim=-1)
+        # Apply softmax and dropout
+        attention_probs = F.softmax(attention_scores, dim=-1)
+        attention_probs = F.dropout(attention_probs, p=self.dropout, training=self.training)
         
-        # Apply dropout to attention weights
-        attention_weights = self.attention_dropout(attention_weights)
-        
-        # Compute weighted sum
-        context = torch.matmul(attention_weights, value)
-        
-        # Transpose back to [batch_size, seq_length, num_heads, head_dim]
-        context = context.transpose(1, 2)
-        
-        # Reshape to [batch_size, seq_length, embedding_dim]
-        context = context.reshape(batch_size, seq_length, self.embedding_dim)
-        
-        # Apply output projection
-        output = self.output_proj(context)
-        
-        # Apply output dropout
-        output = self.output_dropout(output)
-        
-        # Residual connection
-        output = output + x
+        # Get output
+        output = torch.matmul(attention_probs, v)  # [B, H, L, D]
+        output = output.transpose(1, 2).reshape(bsz, seq_len, self.embedding_dim)
+        output = self.out_proj(output)
         
         if return_attention:
-            # Average attention weights across heads for visualization
-            avg_attention_weights = attention_weights.mean(dim=1)
-            return output, avg_attention_weights
-        else:
-            return output
+            return output, attention_probs
+        return output
+
 
 class SparseTransformerLayer(nn.Module):
-    """
-    Transformer layer with sparse multi-head attention using pre-norm architecture
-    """
-    def __init__(self, embedding_dim, num_heads=8, ffn_dim=None, dropout=0.1, attention_dropout=0.1):
-        super(SparseTransformerLayer, self).__init__()
+    def __init__(self, embedding_dim, num_heads, ffn_dim, dropout=0.0, attention_dropout=0.0):
+        super().__init__()
         
-        if ffn_dim is None:
-            ffn_dim = 4 * embedding_dim
-        
-        # Sparse multi-head attention
+        # First normalization and attention
+        self.norm1 = nn.LayerNorm(embedding_dim)
         self.attention = SparseMultiHeadAttention(
             embedding_dim=embedding_dim,
             num_heads=num_heads,
-            dropout=dropout,
-            attention_dropout=attention_dropout
+            dropout=attention_dropout
         )
+        self.dropout1 = nn.Dropout(dropout)
         
-        # Feed-forward network
+        # Second normalization and FFN
+        self.norm2 = nn.LayerNorm(embedding_dim)
         self.ffn = nn.Sequential(
             nn.Linear(embedding_dim, ffn_dim),
             nn.GELU(),
             nn.Dropout(dropout),
-            nn.Linear(ffn_dim, embedding_dim),
-            nn.Dropout(dropout)
+            nn.Linear(ffn_dim, embedding_dim)
         )
-        
-        # Layer normalization
-        self.norm1 = nn.LayerNorm(embedding_dim)
-        self.norm2 = nn.LayerNorm(embedding_dim)
-        
+        self.dropout2 = nn.Dropout(dropout)
+    
     def forward(self, x, mask=None, return_attention=False):
-        # Pre-norm for attention
+        # First sub-layer: Multi-head attention
         x2 = self.norm1(x)
-        
-        # Multi-head attention block
         if return_attention:
-            attn_out, attention_weights = self.attention(x2, mask, return_attention=True)
+            attn_out, attn_weights = self.attention(x2, mask, return_attention=True)
+            x = x + self.dropout1(attn_out)
+            return x, attn_weights
         else:
-            attn_out = self.attention(x2, mask)
+            x = x + self.dropout1(self.attention(x2, mask))
         
-        # First residual connection
-        x = x + attn_out
-        
-        # Pre-norm for FFN
-        x2 = self.norm2(x)
-        
-        # Feed-forward block with residual
-        x = x + self.ffn(x2)
-        
-        if return_attention:
-            return x, attention_weights
+        # Second sub-layer: FFN
+        x = x + self.dropout2(self.ffn(self.norm2(x)))
         return x
 
 class SparseTransformer(nn.Module):
