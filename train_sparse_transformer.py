@@ -7,9 +7,27 @@ import math
 import time
 import torch
 import torch.nn as nn
+import gc
 from torch.cuda.amp import GradScaler, autocast
 from byte_dataset import create_dataloaders
 from sparse_byte_transformer import SparseByteTransformer
+
+
+def clear_gpu_memory():
+    """Clear GPU memory cache and run garbage collection."""
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats()
+
+
+def print_gpu_memory():
+    """Print current GPU memory usage."""
+    if torch.cuda.is_available():
+        allocated = torch.cuda.memory_allocated() / 1024**3
+        reserved = torch.cuda.memory_reserved() / 1024**3
+        max_reserved = torch.cuda.max_memory_reserved() / 1024**3
+        print(f"\nGPU Memory: Allocated={allocated:.2f}GB, Reserved={reserved:.2f}GB, Peak={max_reserved:.2f}GB")
 
 
 def calculate_bpb(loss):
@@ -33,42 +51,64 @@ def train_epoch(
     start_time = time.time()
     
     for batch_idx, (data, target) in enumerate(train_loader):
-        # Move to device
-        data = data.to(device)
-        target = target.to(device)
-        
-        # Forward pass with mixed precision
-        with autocast():
-            output = model(data)
-            loss = nn.functional.cross_entropy(
-                output.view(-1, 256),
-                target.view(-1)
-            )
-        
-        # Backward pass with gradient scaling
-        scaler.scale(loss).backward()
-        
-        # Gradient clipping
-        scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
-        
-        # Optimizer step with scaling
-        scaler.step(optimizer)
-        scaler.update()
-        optimizer.zero_grad()
-        
-        if scheduler is not None:
-            scheduler.step()
-        
-        # Logging
-        total_loss += loss.item()
-        if batch_idx % 50 == 0:
-            ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
-            cur_loss = total_loss / (batch_idx + 1)
-            cur_bpb = calculate_bpb(cur_loss)
-            lr = optimizer.param_groups[0]['lr']
-            print(f'| epoch {epoch:3d} | {batch_idx:5d}/{len(train_loader):5d} batches | '
-                  f'ms/batch {ms_per_batch:5.2f} | loss {cur_loss:5.2f} | bpb {cur_bpb:5.2f} | lr {lr:.2e}')
+        try:
+            # Move to device
+            data = data.to(device)
+            target = target.to(device)
+            
+            # Forward pass with mixed precision
+            with autocast():
+                output = model(data)
+                loss = nn.functional.cross_entropy(
+                    output.view(-1, 256),
+                    target.view(-1)
+                )
+            
+            # Backward pass with gradient scaling
+            scaler.scale(loss).backward()
+            
+            # Gradient clipping
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            
+            # Optimizer step with scaling
+            scaler.step(optimizer)
+            scaler.update()
+            optimizer.zero_grad(set_to_none=True)  # More efficient than zero_grad()
+            
+            if scheduler is not None:
+                scheduler.step()
+            
+            # Logging
+            total_loss += loss.item()
+            if batch_idx % 50 == 0:
+                ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
+                cur_loss = total_loss / (batch_idx + 1)
+                cur_bpb = calculate_bpb(cur_loss)
+                lr = optimizer.param_groups[0]['lr']
+                print(f'| epoch {epoch:3d} | {batch_idx:5d}/{len(train_loader):5d} batches | '
+                      f'ms/batch {ms_per_batch:5.2f} | loss {cur_loss:5.2f} | bpb {cur_bpb:5.2f} | lr {lr:.2e}')
+                print_gpu_memory()
+            
+            # Clear memory every 500 batches
+            if batch_idx % 500 == 0:
+                clear_gpu_memory()
+                
+        except RuntimeError as e:
+            if "out of memory" in str(e):
+                print('| WARNING: out of memory, clearing cache and skipping batch')
+                clear_gpu_memory()
+                if 'data' in locals():
+                    del data
+                if 'target' in locals():
+                    del target
+                if 'output' in locals():
+                    del output
+                if 'loss' in locals():
+                    del loss
+                continue
+            else:
+                raise e
     
     return total_loss / len(train_loader)
 
@@ -80,19 +120,28 @@ def evaluate(model, val_loader, device):
     total_loss = 0
     
     for data, target in val_loader:
-        # Move to device
-        data = data.to(device)
-        target = target.to(device)
-        
-        # Forward pass
-        with autocast():
-            output = model(data)
-            loss = nn.functional.cross_entropy(
-                output.view(-1, 256),
-                target.view(-1)
-            )
-        
-        total_loss += loss.item()
+        try:
+            # Move to device
+            data = data.to(device)
+            target = target.to(device)
+            
+            # Forward pass
+            with autocast():
+                output = model(data)
+                loss = nn.functional.cross_entropy(
+                    output.view(-1, 256),
+                    target.view(-1)
+                )
+            
+            total_loss += loss.item()
+            
+        except RuntimeError as e:
+            if "out of memory" in str(e):
+                print('| WARNING: out of memory during evaluation, clearing cache and skipping batch')
+                clear_gpu_memory()
+                continue
+            else:
+                raise e
     
     avg_loss = total_loss / len(val_loader)
     avg_bpb = calculate_bpb(avg_loss)
@@ -101,6 +150,9 @@ def evaluate(model, val_loader, device):
 
 
 def main():
+    # Clear memory before starting
+    clear_gpu_memory()
+    
     # Model configuration
     config = {
         # Smaller model configuration to reduce memory usage
@@ -111,8 +163,8 @@ def main():
         "dropout": 0.1,
         "attention_dropout": 0.1,
         "token_dropout": 0.0,
-        "batch_size": 8,          # Reduced from 32
-        "seq_length": 2048,       # Reduced from 4096
+        "batch_size": 4,          # Further reduced from 8
+        "seq_length": 1024,       # Further reduced from 2048
         "learning_rate": 1e-4,
         "warmup_steps": 4000,
         "grad_clip": 1.0
@@ -143,7 +195,7 @@ def main():
     # Create dataloaders
     train_loader, val_loader = create_dataloaders(
         train_path=os.path.join("data", "enwik8_splits", "train.bin"),
-        val_path=os.path.join( "data", "enwik8_splits", "val.bin"),
+        val_path=os.path.join("data", "enwik8_splits", "val.bin"),
         seq_length=config["seq_length"],
         batch_size=config["batch_size"],
         num_workers=4
@@ -175,45 +227,56 @@ def main():
     print("\nStarting training...")
     print('-' * 89)
     
-    for epoch in range(1, 51):  # 50 epochs
-        epoch_start_time = time.time()
-        
-        # Train
-        train_loss = train_epoch(
-            model=model,
-            train_loader=train_loader,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            scaler=scaler,
-            device=device,
-            epoch=epoch,
-            grad_clip=config["grad_clip"]
-        )
-        
-        # Evaluate
-        val_loss, val_bpb = evaluate(model, val_loader, device)
-        
-        # Print metrics
+    try:
+        for epoch in range(1, 51):  # 50 epochs
+            epoch_start_time = time.time()
+            
+            # Train
+            train_loss = train_epoch(
+                model=model,
+                train_loader=train_loader,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                scaler=scaler,
+                device=device,
+                epoch=epoch,
+                grad_clip=config["grad_clip"]
+            )
+            
+            # Clear memory before evaluation
+            clear_gpu_memory()
+            
+            # Evaluate
+            val_loss, val_bpb = evaluate(model, val_loader, device)
+            
+            # Print metrics
+            print('-' * 89)
+            print(f'| end of epoch {epoch:3d} | time: {time.time() - epoch_start_time:5.2f}s | '
+                  f'valid loss {val_loss:5.2f} | valid bpb {val_bpb:5.2f}')
+            print('-' * 89)
+            
+            # Save checkpoint if best validation loss
+            if val_loss < best_val_loss:
+                best_val_loss = val_loss
+                checkpoint = {
+                    'epoch': epoch,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'scheduler_state_dict': scheduler.state_dict(),
+                    'val_loss': val_loss,
+                    'val_bpb': val_bpb,
+                    'config': config
+                }
+                checkpoint_path = os.path.join(checkpoint_dir, 'best_model.pt')
+                torch.save(checkpoint, checkpoint_path)
+                print(f'| saved checkpoint with val_loss {val_loss:5.2f}')
+            
+            # Clear memory after each epoch
+            clear_gpu_memory()
+            
+    except KeyboardInterrupt:
         print('-' * 89)
-        print(f'| end of epoch {epoch:3d} | time: {time.time() - epoch_start_time:5.2f}s | '
-              f'valid loss {val_loss:5.2f} | valid bpb {val_bpb:5.2f}')
-        print('-' * 89)
-        
-        # Save checkpoint if best validation loss
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            checkpoint = {
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'scheduler_state_dict': scheduler.state_dict(),
-                'val_loss': val_loss,
-                'val_bpb': val_bpb,
-                'config': config
-            }
-            checkpoint_path = os.path.join(checkpoint_dir, 'best_model.pt')
-            torch.save(checkpoint, checkpoint_path)
-            print(f'| saved checkpoint with val_loss {val_loss:5.2f}')
+        print('Exiting from training early')
 
 
 if __name__ == '__main__':
