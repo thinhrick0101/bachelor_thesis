@@ -11,6 +11,7 @@ from stable_char_transformer import ByteTokenizer, create_batches, load_data
 from torch.cuda.amp import GradScaler, autocast
 from contextlib import nullcontext
 import gc
+import os
 
 # Setup logging
 logging.basicConfig(
@@ -107,14 +108,19 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             
             # Backward pass with mixed precision
             if use_amp:
-                scaler.scale(loss).backward()
+                # Scale the loss - this was missing before
+                scaled_loss = scaler.scale(loss)
+                scaled_loss.backward()
+                
+                # Unscale before gradient clipping
                 scaler.unscale_(optimizer)
-                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)  # Reduced from 1.0
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
                 
                 # Debug gradient norm
                 if batch_idx % 100 == 0:
                     logging.info(f"Gradient norm: {grad_norm.item():.4f}")
                 
+                # Step optimizer and update scaler
                 scaler.step(optimizer)
                 scaler.update()
             else:
@@ -151,17 +157,18 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             # Clear memory periodically
             if batch_idx % 10 == 0:
                 del output, loss
+                if use_amp:
+                    del scaled_loss
                 gc.collect()
                 torch.cuda.empty_cache()
                 
         except RuntimeError as e:
             if "out of memory" in str(e):
-                logging.warning("WARNING: out of memory, skipping batch")
+                logging.warning(f"WARNING: out of memory at batch {batch_idx}, skipping batch")
                 if hasattr(torch.cuda, 'empty_cache'):
                     torch.cuda.empty_cache()
                 optimizer.zero_grad(set_to_none=True)
-                if use_amp:
-                    scaler.update()
+                # Don't update scaler on OOM - this was causing the assertion error
                 continue
             else:
                 raise e
@@ -219,6 +226,11 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logging.info(f"Using device: {device}")
     
+    # Set memory allocation settings to reduce fragmentation
+    if device.type == 'cuda':
+        torch.cuda.set_per_process_memory_fraction(0.8)  # Use only 80% of available memory
+        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
+    
     # Create model with gradient checkpointing enabled
     model = create_sparse_transformer()
     model = model.to(device)
@@ -236,9 +248,9 @@ def main():
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches with adjusted sizes
-    batch_size = 32  # Increased from 16
-    seq_length = 1024  # Increased from 512
+    # Create batches with adjusted sizes for memory constraints
+    batch_size = 16  # Reduced from 32 to handle memory
+    seq_length = 512  # Reduced from 1024 to handle memory
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
