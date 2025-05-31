@@ -321,13 +321,16 @@ class SparseTransformer(nn.Module):
                  max_seq_length: int = 1024):
         super().__init__()
         
+        self.model_type = 'Transformer'
         self.d_model = d_model
+        self.nhead = nhead
+        self.num_layers = num_layers
+        self.max_seq_length = max_seq_length
         
-        # Token embedding
-        self.embedding = nn.Embedding(vocab_size, d_model)
         self.pos_encoder = PositionalEncoding(d_model, dropout, max_seq_length)
+        self.embedding = nn.Embedding(vocab_size, d_model)
         
-        # Transformer layers
+        # Create transformer layers with exact naming to match checkpoint
         self.layers = nn.ModuleList([
             SparseTransformerEncoderLayer(
                 d_model=d_model,
@@ -336,19 +339,21 @@ class SparseTransformer(nn.Module):
                 dropout=dropout,
                 activation=activation,
                 layer_idx=i
-            )
-            for i in range(num_layers)
+            ) for i in range(num_layers)
         ])
         
-        # Output layer
-        self.norm = nn.LayerNorm(d_model, eps=1e-4)
+        # Use exact names from checkpoint
+        self.norm = nn.LayerNorm(d_model)
         self.fc_out = nn.Linear(d_model, vocab_size)
         
         self._reset_parameters()
     
     def _reset_parameters(self):
         """Initialize parameters."""
+        # Initialize embedding
         nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
+        
+        # Initialize output projection
         nn.init.normal_(self.fc_out.weight, mean=0.0, std=0.02)
         nn.init.zeros_(self.fc_out.bias)
     
@@ -356,27 +361,33 @@ class SparseTransformer(nn.Module):
                 src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Forward pass of the model.
-        
         Args:
-            src: Source tensor [batch_size, seq_length]
-            src_mask: Optional mask [seq_length, seq_length]
-            src_key_padding_mask: Optional mask [batch_size, seq_length]
+            src: Tensor, shape [batch_size, seq_len]
+            src_mask: Optional tensor, shape [seq_len, seq_len]
+            src_key_padding_mask: Optional tensor, shape [batch_size, seq_len]
             
         Returns:
-            Output tensor of shape [batch_size, seq_length, vocab_size]
+            output Tensor of shape [batch_size, seq_len, vocab_size]
         """
-        # Embed tokens and positions
-        src = self.embedding(src) * math.sqrt(self.d_model)
-        src = self.pos_encoder(src)
+        # Ensure input sequence length doesn't exceed maximum
+        if src.size(1) > self.max_seq_length:
+            src = src[:, :self.max_seq_length]
+            if src_mask is not None:
+                src_mask = src_mask[:self.max_seq_length, :self.max_seq_length]
+            if src_key_padding_mask is not None:
+                src_key_padding_mask = src_key_padding_mask[:, :self.max_seq_length]
         
-        # Pass through layers
+        # Embedding and positional encoding
+        x = self.embedding(src) * math.sqrt(self.d_model)
+        x = self.pos_encoder(x)
+        
+        # Apply transformer layers
         for layer in self.layers:
-            src = layer(src, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+            x = layer(x, src_mask=src_mask, src_key_padding_mask=src_key_padding_mask)
         
-        # Output projection
-        output = self.norm(src)
-        output = self.fc_out(output)
+        # Final layer norm and output projection
+        x = self.norm(x)
+        output = self.fc_out(x)
         
         return output
 

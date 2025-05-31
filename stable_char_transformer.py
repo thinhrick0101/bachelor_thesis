@@ -14,43 +14,6 @@ from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
 
 
-class ByteTokenizer:
-    """
-    Byte-level tokenizer with a fixed vocabulary size of 256
-    """
-    def __init__(self):
-        # Fixed vocabulary size of 256 (all possible bytes)
-        self.vocab_size = 256
-        
-        # Create byte-to-index and index-to-byte mappings
-        self.byte_to_idx = {i: i for i in range(256)}
-        self.idx_to_byte = {i: i for i in range(256)}
-        
-    def encode(self, text):
-        """Convert text to byte indices"""
-        if isinstance(text, str):
-            # Convert string to bytes and then to indices
-            bytes_data = text.encode('utf-8', errors='replace')
-            return torch.tensor([b for b in bytes_data], dtype=torch.long)
-        elif isinstance(text, bytes):
-            # Already in bytes format
-            return torch.tensor([b for b in text], dtype=torch.long)
-        else:
-            raise ValueError("Input must be string or bytes")
-    
-    def decode(self, indices):
-        """Convert byte indices back to text"""
-        if torch.is_tensor(indices):
-            indices = indices.tolist()
-        
-        # Convert indices to bytes and then to string
-        try:
-            bytes_data = bytes(indices)
-            return bytes_data.decode('utf-8', errors='replace')
-        except Exception as e:
-            print(f"Warning: Error decoding bytes: {e}")
-            return ''.join([chr(i) if i < 128 else '?' for i in indices])
-
 def load_data(data_path, data_url=None):
     """
     Load text data from file or download if not available
@@ -68,12 +31,54 @@ def load_data(data_path, data_url=None):
             with open(data_path, 'wb') as f_out:
                 f_out.write(f_in.read())
 
-    # Load data
+    # Load data as raw bytes
     print(f"Loading data from {data_path}")
-    with open(data_path, 'r', encoding='utf-8', errors='replace') as f:
-        text = f.read()
+    with open(data_path, 'rb') as f:
+        data = f.read()
 
-    return text
+    return data
+
+class ByteTokenizer:
+    """
+    Byte-level tokenizer with a fixed vocabulary size of 256
+    """
+    def __init__(self):
+        # Fixed vocabulary size of 256 (all possible bytes)
+        self.vocab_size = 256
+        
+        # Create byte-to-index and index-to-byte mappings
+        self.byte_to_idx = {i: i for i in range(256)}
+        self.idx_to_byte = {i: i for i in range(256)}
+        
+    def encode(self, data):
+        """Convert data to byte indices"""
+        if isinstance(data, str):
+            # Convert string to bytes
+            data = data.encode('utf-8', errors='ignore')
+        
+        if isinstance(data, bytes):
+            return torch.tensor([b for b in data], dtype=torch.long)
+        elif isinstance(data, (list, tuple)):
+            return torch.tensor([b % 256 for b in data], dtype=torch.long)
+        elif torch.is_tensor(data):
+            return data.long() % 256
+        else:
+            raise ValueError("Input must be string, bytes, list/tuple of integers, or tensor")
+    
+    def decode(self, indices):
+        """Convert byte indices back to bytes/text"""
+        if torch.is_tensor(indices):
+            indices = indices.tolist()
+        
+        # Ensure all indices are within valid byte range
+        bytes_data = bytes(i % 256 for i in indices)
+        
+        # Try to decode as UTF-8 first
+        try:
+            return bytes_data.decode('utf-8', errors='replace')
+        except UnicodeDecodeError:
+            # If UTF-8 decoding fails, return raw bytes for analysis
+            return bytes_data
 
 def create_batches(data, batch_size, seq_length):
     """
@@ -434,25 +439,14 @@ class EnhancedCharTransformer(nn.Module):
     def generate(self, prompt, max_length, temperature=0.7, top_k=20, top_p=0.9,
                 repetition_penalty=1.2, tokenizer=None, device='cpu'):
         """
-        Generate text from a prompt with improved sampling strategies and stability
-
-        Args:
-            prompt: Initial text prompt
-            max_length: Maximum length of the generated text
-            temperature: Sampling temperature (higher = more random)
-            top_k: Number of highest probability tokens to keep for top-k sampling
-            top_p: Cumulative probability threshold for nucleus sampling
-            repetition_penalty: Penalty for repeating tokens (1.0 = no penalty)
-            tokenizer: Character tokenizer
-            device: Device to use for generation
-
-        Returns:
-            Generated text
+        Generate text from a prompt using byte-level sampling
         """
-        self.eval()
+        self.eval()  # Set model to evaluation mode
 
-        # Encode the prompt
-        if isinstance(prompt, str) and tokenizer is not None:
+        # Convert prompt to tensor if needed
+        if isinstance(prompt, str) or isinstance(prompt, bytes):
+            if tokenizer is None:
+                raise ValueError("Tokenizer is required when prompt is a string or bytes")
             prompt_ids = tokenizer.encode(prompt)
             prompt_tensor = torch.tensor(prompt_ids, dtype=torch.long).unsqueeze(0).to(device)
         else:
@@ -482,11 +476,17 @@ class EnhancedCharTransformer(nn.Module):
                     # Apply temperature scaling with a safety check
                     next_token_logits = outputs[:, -1, :].clone()
 
-                    # Check for NaN values
-                    if torch.isnan(next_token_logits).any():
-                        print("Warning: NaN values detected in logits. Using uniform sampling.")
-                        # Fall back to uniform sampling
-                        next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                    # Ensure logits are valid for all 256 bytes
+                    if next_token_logits.size(-1) != 256:
+                        print(f"Warning: Expected 256 logits but got {next_token_logits.size(-1)}. Padding with -inf.")
+                        padded_logits = torch.full((next_token_logits.size(0), 256), float('-inf'), device=device)
+                        padded_logits[:, :next_token_logits.size(-1)] = next_token_logits
+                        next_token_logits = padded_logits
+
+                    # Check for NaN or infinite values
+                    if torch.isnan(next_token_logits).any() or torch.isinf(next_token_logits).any():
+                        print("Warning: NaN or infinite values detected in logits. Using uniform sampling.")
+                        next_token = torch.randint(0, 256, (1, 1), device=device)
                     else:
                         # Apply repetition penalty
                         if repetition_penalty > 1.0:
@@ -518,7 +518,7 @@ class EnhancedCharTransformer(nn.Module):
                             # Check for NaN values
                             if torch.isnan(sorted_probs).any():
                                 print("Warning: NaN values detected in probabilities. Using uniform sampling.")
-                                next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                                next_token = torch.randint(0, 256, (1, 1), device=device)
                                 continue
 
                             # Calculate cumulative probabilities
@@ -546,13 +546,16 @@ class EnhancedCharTransformer(nn.Module):
                         # Apply softmax to get probabilities with a safety check
                         probs = F.softmax(next_token_logits, dim=-1)
 
-                        # Check for NaN values
-                        if torch.isnan(probs).any() or (probs < 0).any():
+                        # Check for NaN values or invalid probabilities
+                        if torch.isnan(probs).any() or (probs < 0).any() or (probs > 1).any():
                             print("Warning: Invalid probability values. Using uniform sampling.")
-                            next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                            next_token = torch.randint(0, 256, (1, 1), device=device)
                         else:
                             # Sample from the distribution
                             next_token = torch.multinomial(probs, num_samples=1)
+
+                    # Ensure the token is within valid byte range
+                    next_token = next_token % 256
 
                     # Add the new token to past tokens for repetition penalty
                     past_tokens.add(next_token.item())
@@ -563,18 +566,21 @@ class EnhancedCharTransformer(nn.Module):
                 except Exception as e:
                     print(f"Error during generation: {e}")
                     # Fall back to a safe token
-                    next_token = torch.randint(0, tokenizer.vocab_size, (1, 1), device=device)
+                    next_token = torch.randint(0, 256, (1, 1), device=device)
                     generated = torch.cat((generated, next_token), dim=1)
 
         # Decode the generated text
         try:
             if tokenizer is not None:
-                return tokenizer.decode(generated[0].tolist())
+                # First ensure all tokens are valid bytes
+                valid_bytes = generated[0].clamp(0, 255)
+                return tokenizer.decode(valid_bytes.tolist())
             else:
                 return generated
         except Exception as e:
             print(f"Error during decoding: {e}")
-            return prompt  # Return the original prompt as a fallback
+            # Return raw bytes as a fallback
+            return bytes(generated[0].clamp(0, 255).tolist())
 
 def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, last_epoch=-1):
     """
@@ -960,43 +966,37 @@ def main():
         torch.cuda.set_per_process_memory_fraction(0.85)
         os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:512'
 
-    # Load data
+    # Load data as raw bytes
     print("Loading data...")
-    text = load_data(data_path, data_url)
-    print(f"Data loaded: {len(text)} bytes")
+    data = load_data(data_path, data_url)
+    print(f"Data loaded: {len(data)} bytes")
 
     # Create byte tokenizer
     print("Creating byte tokenizer...")
     tokenizer = ByteTokenizer()
     print(f"Vocabulary size: {tokenizer.vocab_size} bytes (fixed)")
 
-    # Encode the text
-    print("Encoding text...")
-    data = tokenizer.encode(text)
-    print(f"Encoded length: {len(data)} tokens")
+    # Encode the data
+    print("Encoding data...")
+    encoded_data = tokenizer.encode(data)
+    print(f"Encoded length: {len(encoded_data)} tokens")
 
-    # Analyze tokenization
-    print("\nAnalyzing byte-level tokenization...")
-    sample_text = text[:100]
-    encoded = tokenizer.encode(sample_text)
-    print(f"Sample text length: {len(sample_text)} bytes")
-    print(f"Encoded length: {len(encoded)} tokens")
-    print(f"Token-to-byte ratio: {len(encoded) / len(sample_text):.2f}")
-    
-    # Print some example tokenization
-    print("\nExample byte values (first 10):")
-    for i in range(min(10, len(encoded))):
-        byte_val = encoded[i].item()
-        try:
-            char = chr(byte_val) if 32 <= byte_val <= 126 else f"<byte {byte_val}>"
-            print(f"Byte {i}: {char} (ID: {byte_val})")
-        except:
-            print(f"Byte {i}: <byte {byte_val}> (ID: {byte_val})")
+    # Analyze byte distribution
+    print("\nAnalyzing byte distribution...")
+    byte_counts = torch.bincount(encoded_data, minlength=256)
+    print(f"Number of unique bytes: {(byte_counts > 0).sum().item()}")
+    print(f"Min byte value: {encoded_data.min().item()}")
+    print(f"Max byte value: {encoded_data.max().item()}")
+    print("\nMost common bytes:")
+    top_bytes = torch.topk(byte_counts, k=10)
+    for value, count in zip(top_bytes.indices.tolist(), top_bytes.values.tolist()):
+        char_repr = chr(value) if 32 <= value <= 126 else f"<byte {value}>"
+        print(f"Byte {value} ({char_repr}): {count:,} occurrences")
 
     # Split data into training and validation sets (90% / 10%)
-    split_idx = int(len(data) * 0.9)
-    train_data = data[:split_idx]
-    val_data = data[split_idx:]
+    split_idx = int(len(encoded_data) * 0.9)
+    train_data = encoded_data[:split_idx]
+    val_data = encoded_data[split_idx:]
 
     # Determine device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
