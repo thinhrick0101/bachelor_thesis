@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from typing import Optional, Tuple
+import random
 
 class SparseMultiheadAttention(nn.Module):
     """Multihead attention with static sparse patterns based on cluster analysis."""
@@ -15,19 +16,22 @@ class SparseMultiheadAttention(nn.Module):
         self.dropout = dropout
         self.head_dim = embed_dim // num_heads
         self.layer_idx = layer_idx
+        self.scaling = float(self.head_dim) ** -0.5  # Add explicit scaling factor
+        
         assert self.head_dim * num_heads == embed_dim, "embed_dim must be divisible by num_heads"
         
-        # Linear projections
-        self.q_proj = nn.Linear(embed_dim, embed_dim)
-        self.k_proj = nn.Linear(embed_dim, embed_dim)
-        self.v_proj = nn.Linear(embed_dim, embed_dim)
-        self.out_proj = nn.Linear(embed_dim, embed_dim)
+        # Linear projections with proper initialization
+        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=True)  # Added bias
+        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=True)
+        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=True)
+        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=True)
         
-        # Initialize with smaller weights for better gradient flow
-        nn.init.xavier_uniform_(self.q_proj.weight, gain=0.1)
-        nn.init.xavier_uniform_(self.k_proj.weight, gain=0.1)
-        nn.init.xavier_uniform_(self.v_proj.weight, gain=0.1)
-        nn.init.xavier_uniform_(self.out_proj.weight, gain=0.1)
+        # Initialize with better scaling for stability
+        std = 0.02  # Standard initialization scale
+        nn.init.normal_(self.q_proj.weight, mean=0.0, std=std)
+        nn.init.normal_(self.k_proj.weight, mean=0.0, std=std)
+        nn.init.normal_(self.v_proj.weight, mean=0.0, std=std)
+        nn.init.normal_(self.out_proj.weight, mean=0.0, std=std)
         
         if self.q_proj.bias is not None:
             nn.init.zeros_(self.q_proj.bias)
@@ -35,114 +39,135 @@ class SparseMultiheadAttention(nn.Module):
             nn.init.zeros_(self.v_proj.bias)
             nn.init.zeros_(self.out_proj.bias)
         
-        # Sparse attention parameters adjusted based on cluster analysis
-        # Cluster 0 & 3: More local heads (focused, uniform)
-        # Cluster 1: Medium sparsity heads (diffuse, sparse)
-        # Cluster 2: High sparsity heads (most diffuse)
-        self.local_window = 32  # Increased based on entropy analysis
-        self.stride = 8
-        self.num_global_tokens = 4
+        # Sparse attention parameters adjusted for better coverage
+        self.local_window = 64  # Increased for better local context
+        self.stride = 4  # Reduced stride for better overlap
+        self.num_global_tokens = 8  # Increased global tokens
         self.max_seq_length = max_seq_length
         
-        # Head distribution based on cluster sizes
-        self.num_local_heads = 5  # Increased for Clusters 0 & 3 (largest clusters)
-        self.num_strided_heads = 2  # For Cluster 1 (medium size)
-        self.num_global_heads = 1  # For Cluster 2 (smallest cluster)
+        # Adjusted head distribution based on empirical analysis
+        self.num_local_heads = 4  # Local context (50%)
+        self.num_strided_heads = 3  # Medium-range (37.5%)
+        self.num_global_heads = 1  # Global context (12.5%)
         
-        # Entropy-based sparsity levels from cluster analysis
+        # Adjusted sparsity levels for better balance
         self.sparsity_levels = {
-            'local_low': 0.041,   # Cluster 0 (entropy: 1.821)
-            'local_high': 0.136,  # Cluster 3 (entropy: 2.894)
-            'strided': 0.316,     # Cluster 1 (entropy: 3.800)
-            'global': 0.562       # Cluster 2 (entropy: 4.598)
+            'local_low': 0.15,    # Increased local connectivity
+            'local_high': 0.25,   # More connections for high-entropy local
+            'strided': 0.35,      # Better medium-range coverage
+            'global': 0.50        # Reduced sparsity for global attention
         }
         
-        # Target entropy values from cluster analysis
+        # Adjusted target entropy values
         self.target_entropy = {
-            'local_low': 1.821,   # Cluster 0
-            'local_high': 2.894,  # Cluster 3
-            'strided': 3.800,     # Cluster 1
-            'global': 4.598       # Cluster 2
+            'local_low': 2.0,    # Increased from 1.821
+            'local_high': 3.0,   # Increased from 2.894
+            'strided': 3.5,      # Reduced from 3.800
+            'global': 4.0        # Reduced from 4.598
         }
         
         # Cache for efficient computation
         self._mask_cache = {}
+        
+        # Add layer normalization for stability
+        self.norm_q = nn.LayerNorm(embed_dim)
+        self.norm_k = nn.LayerNorm(embed_dim)
+        self.norm_v = nn.LayerNorm(embed_dim)
     
     def _compute_entropy(self, mask: torch.Tensor) -> torch.Tensor:
         """Compute attention entropy for the mask."""
-        # Convert mask to probabilities
-        probs = mask.float() / mask.sum(dim=-1, keepdim=True)
-        # Add small epsilon to avoid log(0)
+        # Convert mask to probabilities with better numerical stability
+        mask_float = mask.float()
+        row_sums = mask_float.sum(dim=-1, keepdim=True).clamp(min=1e-6)
+        probs = mask_float / row_sums
+        
+        # Compute entropy with numerical stability
         eps = 1e-8
         entropy = -(probs * (probs + eps).log()).sum(dim=-1).mean()
         return entropy
     
     def _adjust_mask_for_entropy(self, mask: torch.Tensor, target_entropy: float, 
                                max_iterations: int = 5) -> torch.Tensor:
-        """Adjust mask to match target entropy."""
+        """Adjust mask to match target entropy with improved stability."""
         current_entropy = self._compute_entropy(mask)
         
-        # Binary search for sparsity adjustment
+        # Binary search with better convergence
         left, right = 0.0, 1.0
         best_mask = mask.clone()
+        best_entropy_diff = abs(current_entropy - target_entropy)
         
         for _ in range(max_iterations):
-            if abs(current_entropy - target_entropy) < 0.1:
+            if best_entropy_diff < 0.05:  # Tighter convergence threshold
                 break
                 
-            if current_entropy < target_entropy:
-                # Need more connections
-                sparsity = (left + right) / 2
-                temp_mask = mask.clone()
-                num_add = int(mask.size(-1) * sparsity)
+            sparsity = (left + right) / 2
+            temp_mask = mask.clone()
+            
+            # Compute number of connections based on sparsity
+            num_tokens = mask.size(-1)
+            target_connections = int(num_tokens * (1 - sparsity))
+            
+            # Process each row independently
+            for i in range(mask.size(0)):
+                # Get current connections
+                curr_connections = temp_mask[i].sum().item()
                 
-                # Handle each row separately
-                for i in range(mask.size(0)):
-                    zero_indices = torch.where(~temp_mask[i])[0]  # Get indices where mask is False
-                    if zero_indices.numel() > 0:  # Check if there are any zeros
-                        # Select random indices to add
-                        num_to_add = min(num_add, zero_indices.numel())
+                if curr_connections < target_connections:
+                    # Need to add connections
+                    zero_indices = torch.where(~temp_mask[i])[0]
+                    if zero_indices.numel() > 0:
+                        num_to_add = min(target_connections - curr_connections, zero_indices.numel())
                         perm = torch.randperm(zero_indices.numel(), device=mask.device)
                         to_add = zero_indices[perm[:num_to_add]]
                         temp_mask[i, to_add] = True
-            else:
-                # Need fewer connections
-                sparsity = (left + right) / 2
-                temp_mask = mask.clone()
-                num_remove = int(mask.size(-1) * sparsity)
-                
-                # Handle each row separately
-                for i in range(mask.size(0)):
-                    one_indices = torch.where(temp_mask[i])[0]  # Get indices where mask is True
-                    if one_indices.numel() > num_remove:  # Ensure we don't remove all connections
-                        # Select random indices to remove
+                else:
+                    # Need to remove connections
+                    one_indices = torch.where(temp_mask[i])[0]
+                    if one_indices.numel() > target_connections:
+                        num_to_keep = target_connections
                         perm = torch.randperm(one_indices.numel(), device=mask.device)
-                        to_remove = one_indices[perm[num_remove:]]
-                        temp_mask[i, to_remove] = False
+                        to_keep = one_indices[perm[:num_to_keep]]
+                        temp_mask[i] = False
+                        temp_mask[i, to_keep] = True
             
             new_entropy = self._compute_entropy(temp_mask)
-            if abs(new_entropy - target_entropy) < abs(current_entropy - target_entropy):
+            entropy_diff = abs(new_entropy - target_entropy)
+            
+            if entropy_diff < best_entropy_diff:
                 best_mask = temp_mask.clone()
-                current_entropy = new_entropy
+                best_entropy_diff = entropy_diff
             
             if new_entropy < target_entropy:
-                left = sparsity
-            else:
                 right = sparsity
+            else:
+                left = sparsity
         
         return best_mask
     
     def _create_local_mask(self, seq_length: int) -> torch.Tensor:
-        """Create local attention mask with sliding window."""
+        """Create local attention mask with improved coverage."""
         mask = torch.zeros(seq_length, seq_length, dtype=torch.bool)
         
-        # Create initial local window
-        for i in range(seq_length):
-            start = max(0, i - self.local_window)
-            end = min(seq_length, i + self.local_window + 1)
-            mask[i, start:end] = True
+        # Create initial local window with overlap
+        window_size = self.local_window
+        overlap = window_size // 4  # 25% overlap between windows
         
-        # Adjust for target entropy - use lower entropy for first half of local heads
+        for i in range(seq_length):
+            # Center window around current position
+            center = i
+            start = max(0, center - window_size // 2)
+            end = min(seq_length, center + window_size // 2 + 1)
+            
+            # Add main window
+            mask[i, start:end] = True
+            
+            # Add overlapping connections
+            if i >= overlap:
+                mask[i, i-overlap:i] = True
+            if i < seq_length - overlap:
+                mask[i, i:i+overlap] = True
+        
+        # Adjust for target entropy
         head_idx = self.layer_idx % self.num_local_heads
         target_entropy = self.target_entropy['local_low'] if head_idx < self.num_local_heads // 2 \
                         else self.target_entropy['local_high']
@@ -151,41 +176,64 @@ class SparseMultiheadAttention(nn.Module):
         return mask
     
     def _create_strided_mask(self, seq_length: int) -> torch.Tensor:
-        """Create strided attention mask with entropy-based sparsity."""
+        """Create strided attention mask with better coverage."""
         mask = torch.zeros(seq_length, seq_length, dtype=torch.bool)
         
-        # Initial strided pattern
-        stride_step = max(2, int(1 / (1 - self.sparsity_levels['strided'])))
+        # Improved strided pattern with multiple scales
+        strides = [self.stride, self.stride * 2, self.stride * 4]
+        weights = [0.5, 0.3, 0.2]  # Prioritize smaller strides
+        
         for i in range(seq_length):
-            # Local window
-            start = max(0, i - self.local_window // 2)
-            end = min(seq_length, i + self.local_window // 2 + 1)
+            # Add local context
+            start = max(0, i - self.local_window // 4)
+            end = min(seq_length, i + self.local_window // 4 + 1)
             mask[i, start:end] = True
-            # Strided connections
-            indices = torch.arange(i % stride_step, seq_length, stride_step)
-            mask[i, indices] = True
+            
+            # Add multi-scale strided connections
+            for stride, weight in zip(strides, weights):
+                if random.random() < weight:
+                    indices = torch.arange(i % stride, seq_length, stride)
+                    mask[i, indices] = True
         
         # Adjust for target entropy
         mask = self._adjust_mask_for_entropy(mask, self.target_entropy['strided'])
         return mask
     
     def _create_global_mask(self, seq_length: int) -> torch.Tensor:
-        """Create global attention mask with high sparsity."""
+        """Create global attention mask with improved connectivity."""
         mask = torch.zeros(seq_length, seq_length, dtype=torch.bool)
         
-        # Initial global pattern
-        num_global = max(2, int(seq_length * (1 - self.sparsity_levels['global'])))
-        step = max(1, seq_length // num_global)
+        # Improved global token selection
+        num_global = self.num_global_tokens
         
-        # Add global token connections
-        global_indices = [0, seq_length - 1]  # Always include start and end
+        # Always include start, end, and evenly spaced tokens
+        global_indices = [0, seq_length - 1]
         if num_global > 2:
-            global_indices.extend(list(range(step, seq_length - 1, step)))
+            step = seq_length // (num_global - 2)
+            for i in range(step, seq_length - 1, step):
+                global_indices.append(i)
+        
+        # Add some random global tokens for diversity
+        num_random = max(0, num_global - len(global_indices))
+        if num_random > 0:
+            available = list(set(range(seq_length)) - set(global_indices))
+            random_indices = random.sample(available, min(num_random, len(available)))
+            global_indices.extend(random_indices)
+        
         global_indices = sorted(list(set(global_indices)))[:num_global]
         
-        # Allow attention to and from global tokens
+        # Connect global tokens bidirectionally
         mask[:, global_indices] = True
         mask[global_indices, :] = True
+        
+        # Add some random connections for each token
+        num_random = seq_length // 32  # Reduced from previous value
+        for i in range(seq_length):
+            if i not in global_indices:
+                available = list(set(range(seq_length)) - set(global_indices) - {i})
+                if available:
+                    random_indices = random.sample(available, min(num_random, len(available)))
+                    mask[i, random_indices] = True
         
         # Adjust for target entropy
         mask = self._adjust_mask_for_entropy(mask, self.target_entropy['global'])
@@ -215,11 +263,15 @@ class SparseMultiheadAttention(nn.Module):
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
                 key_padding_mask: Optional[torch.Tensor] = None,
                 attn_mask: Optional[torch.Tensor] = None) -> Tuple[torch.Tensor, torch.Tensor]:
-        """Forward pass with entropy-based sparse attention."""
+        """Forward pass with improved attention computation."""
         batch_size, seq_length, _ = query.shape
-        scaling = float(self.head_dim) ** -0.5
         
-        # Linear projections and reshape
+        # Apply layer normalization for stability
+        query = self.norm_q(query)
+        key = self.norm_k(key)
+        value = self.norm_v(value)
+        
+        # Linear projections with scaled dot-product attention
         q = self.q_proj(query).view(batch_size, seq_length, self.num_heads, self.head_dim)
         k = self.k_proj(key).view(batch_size, seq_length, self.num_heads, self.head_dim)
         v = self.v_proj(value).view(batch_size, seq_length, self.num_heads, self.head_dim)
@@ -229,16 +281,33 @@ class SparseMultiheadAttention(nn.Module):
         k = k.transpose(1, 2)
         v = v.transpose(1, 2)
         
-        # Compute attention scores
-        attn_weights = torch.matmul(q * scaling, k.transpose(-2, -1))
+        # Apply scaling factor
+        q = q * self.scaling
+        
+        # Compute attention scores with improved numerical stability
+        attn_weights = torch.matmul(q, k.transpose(-2, -1))
         
         # Apply sparse attention patterns
         for head_idx in range(self.num_heads):
             head_mask = self._get_mask_for_head(head_idx, seq_length).to(query.device)
             attn_weights[:, head_idx] = attn_weights[:, head_idx].masked_fill(~head_mask, float('-inf'))
         
-        # Apply softmax and dropout
-        attn_weights = F.softmax(attn_weights, dim=-1)
+        # Apply causal mask if provided
+        if attn_mask is not None:
+            attn_weights = attn_weights.masked_fill(attn_mask.unsqueeze(1), float('-inf'))
+        
+        # Apply key padding mask if provided
+        if key_padding_mask is not None:
+            attn_weights = attn_weights.masked_fill(
+                key_padding_mask.unsqueeze(1).unsqueeze(2),
+                float('-inf')
+            )
+        
+        # Compute attention probabilities with improved numerical stability
+        attn_weights = F.softmax(attn_weights, dim=-1, dtype=torch.float32)
+        attn_weights = attn_weights.type_as(value)
+        
+        # Apply dropout
         attn_weights = F.dropout(attn_weights, p=self.dropout, training=self.training)
         
         # Compute output

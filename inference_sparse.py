@@ -46,8 +46,8 @@ def load_model(model_path, device):
     
     return model
 
-def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, top_k=50, repetition_penalty=1.15, device='cuda'):
-    """Generate text using the trained model with ASCII-only output."""
+def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, top_k=50, top_p=0.9, repetition_penalty=1.15, device='cuda'):
+    """Generate text using the trained model with full byte range support."""
     # Encode prompt
     input_ids = tokenizer.encode(prompt)
     
@@ -61,8 +61,8 @@ def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, to
         mask = torch.triu(torch.ones(size, size), diagonal=1).bool()
         return mask.to(device)
     
-    # Function to detect repetition with smaller window
-    def is_repetitive(tokens, window_size=3):  # Reduced window size
+    # Function to detect repetition with larger window
+    def is_repetitive(tokens, window_size=8):  # Increased window size
         if len(tokens) < window_size * 2:
             return False
         last_window = tokens[-window_size:]
@@ -74,14 +74,10 @@ def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, to
         # Apply temperature
         logits = logits / temperature
         
-        # Restrict to printable ASCII range (32-126)
-        logits[:32] = float('-inf')  # Control characters
-        logits[127:] = float('-inf')  # Extended ASCII and Unicode
-        
         # Apply repetition penalty more gently
         if len(prev_tokens) > 0:
-            # Look at last 10 tokens for repetition
-            for token in set(prev_tokens[-10:]):
+            # Look at last 20 tokens for repetition
+            for token in set(prev_tokens[-20:]):
                 logits[token] /= repetition_penalty
         
         # Apply top-k filtering
@@ -90,11 +86,26 @@ def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, to
             min_score = top_k_scores[-1]
             logits[logits < min_score] = float('-inf')
         
+        # Apply nucleus (top-p) sampling
+        if top_p < 1.0:
+            sorted_logits, sorted_indices = torch.sort(logits, descending=True)
+            cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
+            
+            # Remove tokens with cumulative probability above the threshold
+            sorted_indices_to_remove = cumulative_probs > top_p
+            
+            # Shift the indices to the right to keep also the first token above the threshold
+            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+            sorted_indices_to_remove[..., 0] = 0
+            
+            indices_to_remove = sorted_indices_to_remove.scatter(0, sorted_indices, sorted_indices_to_remove)
+            logits[indices_to_remove] = float('-inf')
+        
         # Convert to probabilities
         probs = torch.softmax(logits, dim=-1)
         
         # Add small noise for diversity
-        noise = torch.randn_like(probs) * 0.01
+        noise = torch.randn_like(probs) * 0.005  # Reduced noise
         probs = probs + noise
         probs = torch.clamp(probs, min=0.0)
         probs = probs / probs.sum()  # Renormalize
@@ -126,36 +137,37 @@ def generate_text(model, tokenizer, prompt, max_length=512, temperature=0.85, to
             # Sample next token
             next_token = torch.multinomial(probs, num_samples=1).item()
             
-            # Ensure token is in printable ASCII range
-            if not (32 <= next_token <= 126):
-                # Try sampling again
-                probs = get_next_token_probs(next_token_logits, generated)
-                next_token = torch.multinomial(probs, num_samples=1).item()
-                if not (32 <= next_token <= 126):
-                    # If still not printable ASCII, use a space
-                    next_token = 32
-            
             # Add the token to the sequence
             generated.append(next_token)
             
             # Check for repetition
             if is_repetitive(generated):
-                # Try sampling again with higher temperature
+                # Try sampling again with higher temperature and diversity
                 generated.pop()
                 retry_temp = temperature * 1.2
+                retry_top_k = min(top_k * 2, 256)  # Increase top_k but cap at vocab size
                 next_token_logits = outputs[0, -1, :] / retry_temp
+                
+                # Get probabilities with adjusted parameters
                 probs = get_next_token_probs(next_token_logits, generated)
                 next_token = torch.multinomial(probs, num_samples=1).item()
                 generated.append(next_token)
                 
-                # If still repetitive, stop generation
+                # If still repetitive after multiple attempts, stop generation
                 if is_repetitive(generated):
-                    break
-            
-            # Stop if we generate sentence-ending punctuation and have generated enough tokens
-            if (next_token in [ord('.'), ord('!'), ord('?')] and 
-                len(generated) > len(input_ids) + 5):  # At least 5 tokens after prompt
-                break
+                    attempts = 0
+                    while is_repetitive(generated) and attempts < 3:
+                        generated.pop()
+                        retry_temp *= 1.2
+                        retry_top_k = min(retry_top_k * 2, 256)
+                        next_token_logits = outputs[0, -1, :] / retry_temp
+                        probs = get_next_token_probs(next_token_logits, generated)
+                        next_token = torch.multinomial(probs, num_samples=1).item()
+                        generated.append(next_token)
+                        attempts += 1
+                    
+                    if is_repetitive(generated):
+                        break
             
             # Print progress for long generations
             if len(generated) % 100 == 0:
@@ -175,13 +187,15 @@ def main():
                       help='Path to the trained model checkpoint')
     parser.add_argument('--prompt', type=str, required=True,
                       help='Text prompt to start generation')
-    parser.add_argument('--max_length', type=int, default=512,  # Reduced to match training
+    parser.add_argument('--max_length', type=int, default=512,
                       help='Maximum length of generated text')
-    parser.add_argument('--temperature', type=float, default=0.85,  # Slightly increased for more diversity
+    parser.add_argument('--temperature', type=float, default=0.85,
                       help='Sampling temperature (higher = more random)')
-    parser.add_argument('--top_k', type=int, default=50,  # Increased for more options
+    parser.add_argument('--top_k', type=int, default=50,
                       help='Top-k sampling parameter (0 = disabled)')
-    parser.add_argument('--repetition_penalty', type=float, default=1.15,  # Reduced to be less aggressive
+    parser.add_argument('--top_p', type=float, default=0.9,
+                      help='Nucleus sampling threshold (1.0 = disabled)')
+    parser.add_argument('--repetition_penalty', type=float, default=1.15,
                       help='Penalty for repeating tokens (1.0 = disabled)')
     args = parser.parse_args()
     
@@ -202,6 +216,7 @@ def main():
         max_length=args.max_length,
         temperature=args.temperature,
         top_k=args.top_k,
+        top_p=args.top_p,
         repetition_penalty=args.repetition_penalty,
         device=device
     )

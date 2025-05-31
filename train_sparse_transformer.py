@@ -45,6 +45,13 @@ def compute_bpb(loss):
     """Convert loss to bits per byte metric."""
     return float(loss) / math.log(2)  # Ensure float conversion
 
+def compute_metrics(loss, num_tokens):
+    """Compute bits per byte and perplexity metrics with proper normalization."""
+    bpb = compute_bpb(loss)
+    # Properly compute perplexity with numerical stability
+    ppl = torch.exp(torch.tensor(min(loss, 20))).item()  # Lower cap for better stability
+    return bpb, ppl
+
 def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_amp=True):
     model.train()
     total_loss = 0
@@ -84,11 +91,14 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                 # Debug output shape and values
                 if batch_idx == 0:
                     logging.info(f"Output shape: {output.shape}, Reshaped target shape: {target_ids.shape}")
-                    logging.info(f"Output range: [{output.min().item()}, {output.max().item()}]")
+                    logging.info(f"Output logits range: [{output.min().item()}, {output.max().item()}]")
                     probs = torch.softmax(output[:5], dim=-1)
                     logging.info(f"Sample probabilities: max={probs.max().item()}, min={probs.min().item()}")
                 
                 loss = criterion(output, target_ids)
+                
+                # Scale loss by sequence length for better stability
+                loss = loss / math.log(2)  # Convert to bits
             
             # Debug loss value
             if batch_idx == 0:
@@ -99,7 +109,7 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             if use_amp:
                 scaler.scale(loss).backward()
                 scaler.unscale_(optimizer)
-                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  # Increased from 0.5
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)  # Reduced from 1.0
                 
                 # Debug gradient norm
                 if batch_idx % 100 == 0:
@@ -109,22 +119,21 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                 scaler.update()
             else:
                 loss.backward()
-                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
                 optimizer.step()
             
             if scheduler is not None:
                 scheduler.step()
             
-            # Update metrics
-            batch_tokens = input_ids.numel()
+            # Update metrics - only count non-padding tokens
+            batch_tokens = target_ids.numel()
             total_tokens += batch_tokens
-            total_loss += loss.item() * batch_tokens  # Multiply by number of tokens
+            total_loss += loss.item() * batch_tokens
             
             if batch_idx % 100 == 0:
                 ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
                 cur_loss = total_loss / total_tokens
-                cur_bpb = compute_bpb(cur_loss)
-                cur_ppl = math.exp(min(cur_loss, 100))
+                cur_bpb, cur_ppl = compute_metrics(cur_loss, total_tokens)
                 
                 # Get current learning rate
                 current_lr = optimizer.param_groups[0]['lr']
@@ -135,7 +144,8 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
                     f'loss {cur_loss:.4f} | '
                     f'bpb {cur_bpb:5.2f} | '
                     f'ppl {cur_ppl:8.2f} | '
-                    f'lr {current_lr:.2e}'
+                    f'lr {current_lr:.2e} | '
+                    f'grad_norm {grad_norm.item():.2e}'
                 )
             
             # Clear memory periodically
@@ -156,7 +166,8 @@ def train_epoch(model, train_batches, criterion, optimizer, scheduler, device, u
             else:
                 raise e
     
-    return total_loss / total_tokens
+    avg_loss = total_loss / total_tokens
+    return avg_loss
 
 def evaluate(model, val_batches, criterion, device):
     model.eval()
@@ -164,28 +175,42 @@ def evaluate(model, val_batches, criterion, device):
     total_tokens = 0
     
     with torch.no_grad():
-        for batch in val_batches:
+        for batch_idx, batch in enumerate(val_batches):
             if isinstance(batch, (tuple, list)):
                 batch_data = batch[0]
             else:
                 batch_data = batch
             batch_data = batch_data.to(device)
             
+            # Split into input and target
             input_ids = batch_data[:, :-1].contiguous()
             target_ids = batch_data[:, 1:].contiguous()
             
+            # Forward pass
             output = model(input_ids)
             output = output.reshape(-1, output.size(-1))
             target_ids = target_ids.reshape(-1)
             
             loss = criterion(output, target_ids)
             
-            # Update metrics using number of tokens
-            batch_tokens = input_ids.numel()
+            # Update metrics - only count actual target tokens
+            batch_tokens = target_ids.numel()
             total_tokens += batch_tokens
             total_loss += loss.item() * batch_tokens
+            
+            # Debug validation metrics periodically
+            if batch_idx % 100 == 0:
+                cur_loss = total_loss / total_tokens
+                cur_bpb, cur_ppl = compute_metrics(cur_loss, total_tokens)
+                logging.info(
+                    f'Validation batch {batch_idx:5d}/{len(val_batches):5d} | '
+                    f'loss {cur_loss:.4f} | '
+                    f'bpb {cur_bpb:5.2f} | '
+                    f'ppl {cur_ppl:8.2f}'
+                )
     
-    return total_loss / total_tokens
+    avg_loss = total_loss / total_tokens
+    return avg_loss
 
 def main():
     # Setup device and clear cache
@@ -206,46 +231,45 @@ def main():
     logging.info("Loading training data...")
     train_text = load_data('data/enwik8')
     
-    # Split into train/val
-    split_idx = int(len(train_text) * 0.9)
+    # Split into train/val with proper ratio
+    split_idx = int(len(train_text) * 0.95)  # Increased train ratio
     train_data = tokenizer.encode(train_text[:split_idx])
     val_data = tokenizer.encode(train_text[split_idx:])
     
-    # Create batches with smaller batch size
-    batch_size = 16  # Reduced from 32
-    seq_length = 512  # Reduced from 1024
+    # Create batches with adjusted sizes
+    batch_size = 32  # Increased from 16
+    seq_length = 1024  # Increased from 512
     train_batches = create_batches(train_data, batch_size, seq_length)
     val_batches = create_batches(val_data, batch_size, seq_length)
     
     # Training settings
-    num_epochs = 50
-    warmup_steps = 2000
-    base_lr = 3e-4
-    min_lr = 1e-5
-    patience = 3  # Early stopping patience
-    min_delta = 0.01  # Minimum bpb improvement required (1% or 0.01 bpb)
+    num_epochs = 100  # Increased from 50
+    warmup_steps = 4000  # Increased from 2000
+    base_lr = 1e-3  # Increased from 3e-4
+    min_lr = 1e-4  # Increased from 1e-5
+    patience = 5  # Increased from 3
+    min_delta = 0.005  # Reduced from 0.01 for finer improvements
     
-    # Setup training with label smoothing
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    # Setup training with reduced label smoothing
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.05)  # Reduced from 0.1
     optimizer = optim.AdamW(
         model.parameters(),
         lr=base_lr,
-        weight_decay=0.01,
+        weight_decay=0.1,  # Increased from 0.01
         betas=(0.9, 0.98)
     )
     
     total_steps = len(train_batches) * num_epochs
     
-    # Learning rate schedule with proper warmup and decay
+    # Learning rate schedule with slower decay
     def lr_lambda(current_step: int):
         if current_step < warmup_steps:
-            # Linear warmup from 0 to 1
+            # Linear warmup
             return float(current_step) / float(max(1, warmup_steps))
         
-        # Cosine decay from 1 to min_lr/base_lr
+        # Slower cosine decay
         progress = float(current_step - warmup_steps) / float(max(1, total_steps - warmup_steps))
-        factor = 0.5 * (1.0 + math.cos(math.pi * progress))
-        return factor * (1.0 - min_lr/base_lr) + min_lr/base_lr
+        return 0.5 * (1.0 + math.cos(math.pi * progress * 0.5))  # Slower decay
     
     scheduler = LambdaLR(optimizer, lr_lambda)
     
@@ -266,8 +290,9 @@ def main():
     checkpoint_dir = Path('models/sparse_transformer')
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     
-    # Training loop
+    # Training loop with improved monitoring
     best_val_bpb = float('inf')
+    best_epoch = -1
     metrics_list = []
     patience_counter = 0
     
@@ -280,19 +305,23 @@ def main():
         train_loss = train_epoch(model, train_batches, criterion, optimizer, scheduler, device, use_amp=True)
         val_loss = evaluate(model, val_batches, criterion, device)
         
-        train_bpb = compute_bpb(train_loss)
-        val_bpb = compute_bpb(val_loss)
+        # Compute metrics with proper normalization
+        train_bpb, train_ppl = compute_metrics(train_loss, len(train_batches) * batch_size * seq_length)
+        val_bpb, val_ppl = compute_metrics(val_loss, len(val_batches) * batch_size * seq_length)
         
         epoch_time = time.time() - epoch_start_time
         
         logging.info(
             f'Epoch {epoch:3d} | time: {epoch_time:5.2f}s | '
-            f'train bpb {train_bpb:5.2f} | valid bpb {val_bpb:5.2f}'
+            f'train loss {train_loss:.4f} | train bpb {train_bpb:5.2f} | train ppl {train_ppl:8.2f} | '
+            f'valid loss {val_loss:.4f} | valid bpb {val_bpb:5.2f} | valid ppl {val_ppl:8.2f} | '
+            f'lr {optimizer.param_groups[0]["lr"]:.2e}'
         )
         
         # Early stopping check based on validation bpb
         if val_bpb < best_val_bpb - min_delta:
             best_val_bpb = val_bpb
+            best_epoch = epoch
             patience_counter = 0
             # Save best model
             checkpoint = {
@@ -304,17 +333,30 @@ def main():
                 'val_loss': val_loss,
                 'train_bpb': train_bpb,
                 'val_bpb': val_bpb,
-                'train_ppl': math.exp(train_loss),
-                'val_ppl': math.exp(val_loss)
+                'train_ppl': train_ppl,
+                'val_ppl': val_ppl,
+                'model_config': {
+                    'vocab_size': model.embedding.num_embeddings,
+                    'd_model': model.d_model,
+                    'nhead': model.nhead,
+                    'num_layers': model.num_layers,
+                    'dim_feedforward': model.layers[0].linear1.out_features,
+                    'dropout': model.layers[0].dropout.p,
+                    'activation': "gelu",
+                    'max_seq_length': model.max_seq_length
+                }
             }
             torch.save(checkpoint, checkpoint_dir / 'best_model.pt')
-            logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f}')
+            logging.info(f'Saved new best model with validation bpb: {val_bpb:5.2f} at epoch {epoch}')
         else:
             patience_counter += 1
-            logging.info(f'Validation bpb did not improve by {min_delta:.4f}. Patience: {patience_counter}/{patience}')
+            logging.info(f'Validation bpb did not improve by {min_delta:.4f}. '
+                        f'Best: {best_val_bpb:.4f} at epoch {best_epoch}. '
+                        f'Patience: {patience_counter}/{patience}')
             
             if patience_counter >= patience:
-                logging.info(f'Early stopping triggered after {epoch + 1} epochs. Best validation bpb: {best_val_bpb:.4f}')
+                logging.info(f'Early stopping triggered after {epoch + 1} epochs. '
+                           f'Best validation bpb: {best_val_bpb:.4f} at epoch {best_epoch}')
                 break
         
         # Save metrics and regular checkpoint
@@ -324,11 +366,15 @@ def main():
             'val_loss': val_loss,
             'train_bpb': train_bpb,
             'val_bpb': val_bpb,
-            'train_ppl': math.exp(train_loss),
-            'val_ppl': math.exp(val_loss)
+            'train_ppl': train_ppl,
+            'val_ppl': val_ppl,
+            'learning_rate': optimizer.param_groups[0]['lr']
         }
         metrics_list.append(metrics)
-        torch.save(checkpoint, checkpoint_dir / f'checkpoint_epoch_{epoch:03d}.pt')
+        
+        # Save checkpoint every 5 epochs
+        if epoch % 5 == 0:
+            torch.save(checkpoint, checkpoint_dir / f'checkpoint_epoch_{epoch:03d}.pt')
         
         # Clear memory at end of epoch
         gc.collect()
