@@ -103,15 +103,16 @@ def evaluate(model, val_loader, device):
 def main():
     # Model configuration
     config = {
-        "model_dim": 512,
-        "num_heads": 8,
-        "num_layers": 12,
-        "ffn_dim": 2048,
+        # Smaller model configuration to reduce memory usage
+        "model_dim": 384,          # Reduced from 512
+        "num_heads": 6,           # Reduced from 8
+        "num_layers": 8,          # Reduced from 12
+        "ffn_dim": 1536,         # Reduced from 2048
         "dropout": 0.1,
         "attention_dropout": 0.1,
         "token_dropout": 0.0,
-        "batch_size": 32,
-        "seq_length": 4096,
+        "batch_size": 8,          # Reduced from 32
+        "seq_length": 2048,       # Reduced from 4096
         "learning_rate": 1e-4,
         "warmup_steps": 4000,
         "grad_clip": 1.0
@@ -120,6 +121,12 @@ def main():
     # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+    
+    if torch.cuda.is_available():
+        # Print GPU info
+        print(f"GPU: {torch.cuda.get_device_name(0)}")
+        print(f"Total GPU memory: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+        print(f"Available GPU memory: {torch.cuda.mem_get_info()[0] / 1024**3:.1f} GB")
     
     # Create model
     model = SparseByteTransformer(
