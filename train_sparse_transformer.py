@@ -135,8 +135,8 @@ def main():
     
     # Create dataloaders
     train_loader, val_loader = create_dataloaders(
-        train_path=os.path.join("bachelor_thesis", "data", "enwik8_splits", "train.bin"),
-        val_path=os.path.join("bachelor_thesis", "data", "enwik8_splits", "val.bin"),
+        train_path=os.path.join("data", "enwik8_splits", "train.bin"),
+        val_path=os.path.join( "data", "enwik8_splits", "val.bin"),
         seq_length=config["seq_length"],
         batch_size=config["batch_size"],
         num_workers=4
