@@ -2,227 +2,301 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
-import numpy as np
 
-class SparseAttention(nn.Module):
+class SparseMultiHeadAttention(nn.Module):
     """
-    Sparse Attention mechanism with multiple sparsity patterns based on analysis:
-    - Early layers (0-3): More dense attention with local focus
-    - Middle layers (4-8): Mixed local and global attention
-    - Later layers (9+): Highly sparse attention with selective global connections
+    Multi-head attention with sparse attention patterns based on cluster analysis.
+    Each head uses a different sparse pattern based on its cluster assignment.
     """
-    def __init__(self, embed_dim, num_heads, layer_idx, dropout=0.1, 
-                 local_window=32, global_tokens=8, sparsity_factor=0.2):
-        super().__init__()
-        self.embed_dim = embed_dim
+    def __init__(self, embedding_dim, num_heads=8, dropout=0.1, attention_dropout=0.1):
+        super(SparseMultiHeadAttention, self).__init__()
+        
+        assert embedding_dim % num_heads == 0, "Embedding dimension must be divisible by number of heads"
+        
+        # Store parameters
+        self.embedding_dim = embedding_dim
         self.num_heads = num_heads
-        self.dropout = dropout
-        self.head_dim = embed_dim // num_heads
-        self.scaling = self.head_dim ** -0.5
-        self.layer_idx = layer_idx
+        self.head_dim = embedding_dim // num_heads
         
-        # Sparsity hyperparameters
-        self.local_window = local_window
-        self.global_tokens = global_tokens
-        self.sparsity_factor = sparsity_factor
+        # Projections for query, key, and value
+        self.query_proj = nn.Linear(embedding_dim, embedding_dim)
+        self.key_proj = nn.Linear(embedding_dim, embedding_dim)
+        self.value_proj = nn.Linear(embedding_dim, embedding_dim)
         
-        # Learnable temperature parameter per head with constraints
-        self.temperature = nn.Parameter(torch.ones(num_heads, 1, 1))
-        self.temperature_scale = 2.0  # Maximum temperature scale
+        # Output projection
+        self.output_proj = nn.Linear(embedding_dim, embedding_dim)
         
-        # Linear transformations
-        self.q_proj = nn.Linear(embed_dim, embed_dim)
-        self.k_proj = nn.Linear(embed_dim, embed_dim)
-        self.v_proj = nn.Linear(embed_dim, embed_dim)
-        self.out_proj = nn.Linear(embed_dim, embed_dim)
+        # Dropout
+        self.attention_dropout = nn.Dropout(attention_dropout)
+        self.output_dropout = nn.Dropout(dropout)
         
-        # Layer normalization for stability
-        self.attn_norm = nn.LayerNorm(embed_dim)
+        # Scaling factor
+        self.scale = math.sqrt(self.head_dim)
         
-        # Initialize with better scaling
+        # Initialize weights
         self._reset_parameters()
         
-        # Cache for attention masks
+        # Cluster assignments for each head
+        self.cluster_assignments = [0, 1, 2, 3, 0, 1, 2, 3]  # For 8 heads
+        
+        # Cache for sparse attention masks
         self._mask_cache = {}
 
     def _reset_parameters(self):
-        # Initialize with scaled Xavier uniform
-        gain = 1.0  # Use standard gain
-        nn.init.xavier_uniform_(self.q_proj.weight, gain=gain)
-        nn.init.xavier_uniform_(self.k_proj.weight, gain=gain)
-        nn.init.xavier_uniform_(self.v_proj.weight, gain=gain)
-        nn.init.xavier_uniform_(self.out_proj.weight, gain=gain)
+        nn.init.xavier_uniform_(self.query_proj.weight)
+        nn.init.xavier_uniform_(self.key_proj.weight)
+        nn.init.xavier_uniform_(self.value_proj.weight)
+        nn.init.xavier_uniform_(self.output_proj.weight)
         
-        # Initialize biases to zero
-        nn.init.zeros_(self.q_proj.bias)
-        nn.init.zeros_(self.k_proj.bias)
-        nn.init.zeros_(self.v_proj.bias)
-        nn.init.zeros_(self.out_proj.bias)
+        nn.init.constant_(self.query_proj.bias, 0.)
+        nn.init.constant_(self.key_proj.bias, 0.)
+        nn.init.constant_(self.value_proj.bias, 0.)
+        nn.init.constant_(self.output_proj.bias, 0.)
+    
+    def _create_sparse_mask(self, seq_length):
+        """
+        Internal method to create sparse attention masks.
+        Creates masks on CPU for caching efficiency.
+        """
+        # Initialize mask: [num_heads, seq_length, seq_length]
+        mask = torch.zeros(self.num_heads, seq_length, seq_length)
         
-        # Initialize temperature conservatively
-        with torch.no_grad():
-            self.temperature.data.fill_(0.5)
-
-    def _create_sparse_mask(self, seq_len, device):
-        """Create sparse attention mask based on layer position and analysis patterns"""
-        cache_key = f"{seq_len}_{self.layer_idx}"
-        if cache_key in self._mask_cache:
-            return self._mask_cache[cache_key].to(device)
-        
-        # Initialize mask
-        mask = torch.zeros(seq_len, seq_len, device=device, dtype=torch.bool)
-        
-        # Early layers (0-3): Dense local attention with gradual sparsification
-        if self.layer_idx < 4:
-            local_size = min(self.local_window * 2, seq_len)
-            for i in range(seq_len):
-                start = max(0, i - local_size // 2)
-                end = min(seq_len, i + local_size // 2 + 1)
-                mask[i, start:end] = True
+        for h in range(self.num_heads):
+            cluster = self.cluster_assignments[h]
+            
+            for i in range(seq_length):
+                if cluster == 0:  # Narrow local window (±8)
+                    start_idx = max(0, i - 8)
+                    end_idx = min(seq_length, i + 9)
+                    mask[h, i, start_idx:end_idx] = 1
                 
-            # Add some global connections
-            if self.layer_idx > 0:
-                stride = max(1, seq_len // (self.global_tokens * (4 - self.layer_idx)))
-                global_idx = torch.arange(0, seq_len, stride, device=device)
-                mask[:, global_idx] = True
+                elif cluster == 3:  # Wide local window (±16)
+                    start_idx = max(0, i - 16)
+                    end_idx = min(seq_length, i + 17)
+                    mask[h, i, start_idx:end_idx] = 1
+                
+                elif cluster == 1:  # Local + Strided
+                    # Local window (±16)
+                    start_idx = max(0, i - 16)
+                    end_idx = min(seq_length, i + 17)
+                    mask[h, i, start_idx:end_idx] = 1
+                    # Strided attention (every 8th token)
+                    mask[h, i, ::8] = 1
+                
+                elif cluster == 2:  # Global anchors
+                    # Only apply strided attention if sequence is long enough
+                    if seq_length >= 32:
+                        mask[h, i, ::32] = 1
+                    
+                    # Global anchor positions
+                    global_pos = [
+                        0,  # Start
+                        seq_length // 2,  # Middle
+                        seq_length - 1,  # End
+                    ]
+                    mask[h, i, global_pos] = 1
         
-        # Middle layers (4-8): Mixed local and global attention
-        elif self.layer_idx < 9:
-            # Local window attention
-            for i in range(seq_len):
-                start = max(0, i - self.local_window // 2)
-                end = min(seq_len, i + self.local_window // 2 + 1)
-                mask[i, start:end] = True
-            
-            # Global tokens with adaptive stride
-            stride = max(1, seq_len // (self.global_tokens * 2))
-            global_idx = torch.arange(0, seq_len, stride, device=device)
-            mask[:, global_idx] = True
-            
-            # Add periodic attention
-            period = max(1, seq_len // 16)
-            for i in range(seq_len):
-                mask[i, i::period] = True
+        # Convert to boolean tensor
+        return mask > 0
+
+    def get_sparse_mask(self, seq_length, device):
+        """
+        Get cached sparse attention mask or create a new one.
+        Masks are stored on CPU and moved to the correct device when needed.
+        """
+        if seq_length not in self._mask_cache:
+            mask = self._create_sparse_mask(seq_length)
+            self._mask_cache[seq_length] = mask
         
-        # Later layers (9+): Highly selective sparse attention
+        # Move mask to the correct device
+        return self._mask_cache[seq_length].to(device)
+
+    def forward(self, x, mask=None, return_attention=False):
+        batch_size, seq_length, _ = x.size()
+        
+        # Project input to query, key, and value
+        query = self.query_proj(x)
+        key = self.key_proj(x)
+        value = self.value_proj(x)
+        
+        # Reshape for multi-head attention
+        query = query.view(batch_size, seq_length, self.num_heads, self.head_dim)
+        key = key.view(batch_size, seq_length, self.num_heads, self.head_dim)
+        value = value.view(batch_size, seq_length, self.num_heads, self.head_dim)
+        
+        # Transpose to [batch_size, num_heads, seq_length, head_dim]
+        query = query.transpose(1, 2)
+        key = key.transpose(1, 2)
+        value = value.transpose(1, 2)
+        
+        # Compute scaled dot-product attention
+        attention_scores = torch.matmul(query, key.transpose(2, 3)) / self.scale
+        
+        # Get cached sparse attention mask
+        sparse_mask = self.get_sparse_mask(seq_length, x.device)
+        attention_scores = attention_scores.masked_fill(~sparse_mask.unsqueeze(0), -1e9)
+        
+        # Apply additional mask if provided (e.g., padding mask)
+        if mask is not None:
+            # Ensure mask has correct shape for broadcasting
+            if mask.dim() == 2:  # [B, L]
+                mask = mask.unsqueeze(1).unsqueeze(2)  # [B, 1, 1, L]
+            elif mask.dim() == 3:  # [B, 1, L]
+                mask = mask.unsqueeze(1)  # [B, 1, 1, L]
+            attention_scores = attention_scores.masked_fill(~mask, -1e9)
+        
+        # Apply softmax to get attention weights
+        attention_weights = F.softmax(attention_scores, dim=-1)
+        
+        # Apply dropout to attention weights
+        attention_weights = self.attention_dropout(attention_weights)
+        
+        # Compute weighted sum
+        context = torch.matmul(attention_weights, value)
+        
+        # Transpose back to [batch_size, seq_length, num_heads, head_dim]
+        context = context.transpose(1, 2)
+        
+        # Reshape to [batch_size, seq_length, embedding_dim]
+        context = context.reshape(batch_size, seq_length, self.embedding_dim)
+        
+        # Apply output projection
+        output = self.output_proj(context)
+        
+        # Apply output dropout
+        output = self.output_dropout(output)
+        
+        # Residual connection
+        output = output + x
+        
+        if return_attention:
+            # Average attention weights across heads for visualization
+            avg_attention_weights = attention_weights.mean(dim=1)
+            return output, avg_attention_weights
         else:
-            # Reduced local window
-            local_size = max(1, self.local_window // 2)
-            for i in range(seq_len):
-                start = max(0, i - local_size // 2)
-                end = min(seq_len, i + local_size // 2 + 1)
-                mask[i, start:end] = True
-            
-            # Selective global tokens
-            num_global = max(1, min(self.global_tokens, seq_len // 8))
-            stride = max(1, seq_len // num_global)
-            global_idx = torch.arange(0, seq_len, stride, device=device)
-            mask[:, global_idx] = True
-            
-            # Add learned important positions based on entropy analysis
-            base_sparsity = max(0.1, min(0.5, self.sparsity_factor))  # Clamp between 0.1 and 0.5
-            layer_factor = min(1.0, (self.layer_idx - 8) / 4)  # Gradual increase from layer 9-12
-            sparsity_threshold = base_sparsity * (1 + layer_factor)
-            num_extra = max(1, min(seq_len // 4, int(seq_len * sparsity_threshold)))
-            
-            for i in range(seq_len):
-                # Random but consistent extra connections
-                rand_idx = torch.randperm(seq_len, device=device)[:num_extra]
-                mask[i, rand_idx] = True
-        
-        # Always attend to self
-        mask.fill_diagonal_(True)
-        
-        # Cache the mask
-        self._mask_cache[cache_key] = mask.cpu()
-        return mask
+            return output
 
-    def forward(self, query, key, value, key_padding_mask=None, need_weights=True, attn_mask=None):
-        """
-        Forward pass with numerically stable sparse attention
-        query, key, value: (batch_size, seq_len, embed_dim)
-        """
-        batch_size, seq_len, embed_dim = query.shape
-        scaling = self.scaling
-        
-        # Apply layer norm for stability
-        query = self.attn_norm(query)
-        key = self.attn_norm(key)
-        value = self.attn_norm(value)
-        
-        # Linear transformations and reshape
-        q = self.q_proj(query).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-        k = self.k_proj(key).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-        v = self.v_proj(value).reshape(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-        
-        # Scaled dot-product attention with numerical stability
-        attn_weights = torch.matmul(q, k.transpose(-2, -1)) * scaling
-        
-        # Apply bounded temperature scaling
-        temp = torch.clamp(F.softplus(self.temperature), max=self.temperature_scale)
-        attn_weights = attn_weights * temp
-        
-        # Create and apply sparse mask with numerical stability
-        sparse_mask = self._create_sparse_mask(seq_len, query.device)
-        sparse_mask = sparse_mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq_len, seq_len]
-        
-        # Use a large negative value instead of -inf
-        mask_fill_value = -1e4  # Large negative but not -inf
-        attn_weights = attn_weights.masked_fill(~sparse_mask, mask_fill_value)
-        
-        # Apply additional masks if provided
-        if attn_mask is not None:
-            if attn_mask.dim() == 2:
-                attn_mask = attn_mask.unsqueeze(0)
-            attn_mask = attn_mask.unsqueeze(1).expand(-1, self.num_heads, -1, -1).to(dtype=torch.float32)
-            attn_mask = attn_mask.masked_fill(attn_mask == 0, mask_fill_value).masked_fill(attn_mask == 1, 0.0)
-            attn_weights = attn_weights + attn_mask
-            
-        if key_padding_mask is not None:
-            key_padding_mask = key_padding_mask.float().unsqueeze(1).unsqueeze(2)
-            key_padding_mask = key_padding_mask.expand(-1, self.num_heads, seq_len, -1)
-            key_padding_mask = key_padding_mask.masked_fill(key_padding_mask == 0, mask_fill_value)
-            attn_weights = attn_weights + key_padding_mask
-        
-        # Numerically stable softmax and dropout
-        attn_weights = attn_weights - attn_weights.max(dim=-1, keepdim=True)[0]  # Subtract max for stability
-        attn_weights = F.softmax(attn_weights, dim=-1)
-        attn_weights = F.dropout(attn_weights, p=self.dropout, training=self.training)
-        
-        # Compute output
-        output = torch.matmul(attn_weights, v)
-        output = output.transpose(1, 2).reshape(batch_size, seq_len, embed_dim)
-        output = self.out_proj(output)
-        
-        if need_weights:
-            return output, attn_weights
-        return output, None
-
-class AdaptiveSparseAttention(nn.Module):
+class SparseTransformerLayer(nn.Module):
     """
-    Adaptive sparse attention that learns sparsity patterns during training
+    Transformer layer with sparse multi-head attention using pre-norm architecture
     """
-    def __init__(self, embed_dim, num_heads, layer_idx, dropout=0.1):
-        super().__init__()
-        self.base_attention = SparseAttention(
-            embed_dim=embed_dim,
+    def __init__(self, embedding_dim, num_heads=8, ffn_dim=None, dropout=0.1, attention_dropout=0.1):
+        super(SparseTransformerLayer, self).__init__()
+        
+        if ffn_dim is None:
+            ffn_dim = 4 * embedding_dim
+        
+        # Sparse multi-head attention
+        self.attention = SparseMultiHeadAttention(
+            embedding_dim=embedding_dim,
             num_heads=num_heads,
-            layer_idx=layer_idx,
-            dropout=dropout
+            dropout=dropout,
+            attention_dropout=attention_dropout
         )
         
-        # Learnable sparsity parameters
-        self.sparsity_control = nn.Parameter(torch.ones(num_heads, 1, 1))
-        self.content_importance = nn.Linear(embed_dim, num_heads)
+        # Feed-forward network
+        self.ffn = nn.Sequential(
+            nn.Linear(embedding_dim, ffn_dim),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(ffn_dim, embedding_dim),
+            nn.Dropout(dropout)
+        )
         
-    def forward(self, query, key, value, key_padding_mask=None, need_weights=True, attn_mask=None):
-        # Get content-based importance scores
-        importance = torch.sigmoid(self.content_importance(query))
-        importance = importance.transpose(1, 2).unsqueeze(-1)  # [batch, heads, seq_len, 1]
+        # Layer normalization
+        self.norm1 = nn.LayerNorm(embedding_dim)
+        self.norm2 = nn.LayerNorm(embedding_dim)
         
-        # Modify the sparsity pattern based on content
-        sparsity_factor = torch.sigmoid(self.sparsity_control) * importance
+    def forward(self, x, mask=None, return_attention=False):
+        # Pre-norm for attention
+        x2 = self.norm1(x)
         
-        # Apply base attention with adaptive sparsity
-        self.base_attention.sparsity_factor = sparsity_factor.mean().item()
-        return self.base_attention(query, key, value, key_padding_mask, need_weights, attn_mask) 
+        # Multi-head attention block
+        if return_attention:
+            attn_out, attention_weights = self.attention(x2, mask, return_attention=True)
+        else:
+            attn_out = self.attention(x2, mask)
+        
+        # First residual connection
+        x = x + attn_out
+        
+        # Pre-norm for FFN
+        x2 = self.norm2(x)
+        
+        # Feed-forward block with residual
+        x = x + self.ffn(x2)
+        
+        if return_attention:
+            return x, attention_weights
+        return x
+
+class SparseTransformer(nn.Module):
+    """
+    Full transformer model with sparse attention
+    """
+    def __init__(self, vocab_size, embedding_dim, num_classes, num_heads=8,
+                 num_layers=6, ffn_dim=None, dropout=0.1, attention_dropout=0.1):
+        super(SparseTransformer, self).__init__()
+        
+        # Token embedding
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding_dropout = nn.Dropout(dropout)
+        
+        # Transformer layers
+        self.layers = nn.ModuleList([
+            SparseTransformerLayer(
+                embedding_dim=embedding_dim,
+                num_heads=num_heads,
+                ffn_dim=ffn_dim,
+                dropout=dropout,
+                attention_dropout=attention_dropout
+            )
+            for _ in range(num_layers)
+        ])
+        
+        # Classification head
+        self.classifier = nn.Sequential(
+            nn.Linear(embedding_dim, embedding_dim),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(embedding_dim, num_classes)
+        )
+        
+        # Initialize weights
+        self._init_weights()
+        
+    def _init_weights(self):
+        # Initialize embedding
+        nn.init.normal_(self.embedding.weight, mean=0, std=0.02)
+        
+        # Initialize classifier
+        for module in self.classifier.modules():
+            if isinstance(module, nn.Linear):
+                nn.init.xavier_uniform_(module.weight)
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0)
+    
+    def forward(self, x, mask=None, return_attention=False):
+        # Get embeddings
+        x = self.embedding(x)
+        x = self.embedding_dropout(x)
+        
+        attention_weights = []
+        
+        # Pass through transformer layers
+        for layer in self.layers:
+            if return_attention:
+                x, attn = layer(x, mask, return_attention=True)
+                attention_weights.append(attn)
+            else:
+                x = layer(x, mask)
+        
+        # Global average pooling
+        x = x.mean(dim=1)
+        
+        # Classification
+        logits = self.classifier(x)
+        
+        if return_attention:
+            return logits, attention_weights
+        return logits 
