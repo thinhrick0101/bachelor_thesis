@@ -294,24 +294,24 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
     # Setup optimizer with revised stable settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=learning_rate / 20,  # Even lower initial learning rate
+        lr=learning_rate / 100,  # Start very small but non-zero
         weight_decay=weight_decay,
         betas=(0.9, 0.999),    # Standard Adam betas
         eps=1e-8               # Standard epsilon
     )
     
-    # Learning rate scheduler with longer warmup
+    # Learning rate scheduler with linear warmup
     def get_lr(step):
         if step < warmup_steps:
-            # Slower warmup
-            return learning_rate * (step / warmup_steps) ** 2
+            # Linear warmup from initial_lr to target_lr
+            return learning_rate * (step + 1) / warmup_steps  # Add 1 to avoid 0
         progress = (step - warmup_steps) / (num_epochs * len(train_batches))
         return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
     # Setup mixed precision training with stable settings
     scaler = GradScaler(
-        init_scale=2**7,       # Even more conservative
-        growth_factor=1.1,     # Very slow growth
+        init_scale=2**7,       # Conservative
+        growth_factor=1.1,     # Slow growth
         backoff_factor=0.5,
         growth_interval=2000,
         enabled=use_mixed_precision
@@ -327,25 +327,43 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
     grad_norm_window = []  # Track recent gradient norms
     
     # Loss function with minimal label smoothing
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.01)  # Further reduced
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.01)
     
-    # Gradient norm monitoring with more lenient thresholds
+    # Gradient norm monitoring with adaptive thresholds
     def is_grad_norm_safe(norm):
-        if norm > 5.0:  # Reduced from 10.0
+        if norm > 10.0:  # Hard upper limit
             return False
-        if last_grad_norm is not None:
-            # Allow more fluctuation
-            if norm > last_grad_norm * 3:  # Increased from 2
-                return False
+            
         grad_norm_window.append(norm)
-        if len(grad_norm_window) > 100:  # Increased window
+        if len(grad_norm_window) > 100:  # Keep last 100 values
             grad_norm_window.pop(0)
-        if len(grad_norm_window) >= 20:  # Need more values
+            
+        if len(grad_norm_window) >= 20:
             mean = sum(grad_norm_window[-20:]) / 20
             std = (sum((x - mean) ** 2 for x in grad_norm_window[-20:]) / 20) ** 0.5
-            if norm > mean + 5 * std:  # More lenient (5 std dev)
-                return False
+            
+            # Adaptive thresholds based on training progress
+            if global_step < warmup_steps:
+                # More permissive during warmup
+                if norm > mean + 10 * std:  # Very lenient during warmup
+                    return False
+            else:
+                # Stricter after warmup
+                if norm > mean + 5 * std:
+                    return False
+                
+            # Check for sudden spikes relative to recent history
+            if last_grad_norm is not None:
+                recent_mean = sum(grad_norm_window[-5:]) / 5  # Average of last 5
+                if norm > recent_mean * 5:  # Allow up to 5x spike
+                    return False
+        
         return True
+    
+    # Initialize learning rate
+    current_lr = get_lr(0)
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = current_lr
     
     for epoch in range(num_epochs):
         model.train()
@@ -380,7 +398,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
                     print(f"Warning: Non-finite loss detected: {loss.item()}")
                     optimizer.zero_grad(set_to_none=True)
                     grad_reset_counter += 1
-                    if grad_reset_counter > 3:  # Reduced threshold
+                    if grad_reset_counter > 3:
                         print("Too many resets, reducing batch size")
                         data = data[:data.size(0)//2]
                         target = target[:target.size(0)//2]
@@ -398,10 +416,11 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
                     if use_mixed_precision:
                         scaler.unscale_(optimizer)
                     
-                    # Gradient clipping with more conservative threshold
+                    # Gradient clipping with adaptive threshold
+                    clip_threshold = 1.0 if global_step < warmup_steps else 0.5
                     grad_norm = torch.nn.utils.clip_grad_norm_(
                         model.parameters(),
-                        max_norm=0.5,  # Reduced from 1.0
+                        max_norm=clip_threshold,
                         error_if_nonfinite=False
                     )
                     
@@ -410,9 +429,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
                         print(f"Warning: Unsafe gradient norm detected: {grad_norm}")
                         optimizer.zero_grad(set_to_none=True)
                         grad_reset_counter += 1
-                        if grad_reset_counter > 3:  # Reduced threshold
+                        if grad_reset_counter > 3:
                             print("Too many resets, reducing learning rate")
-                            current_lr *= 0.5  # More aggressive reduction
+                            current_lr *= 0.5
                             for param_group in optimizer.param_groups:
                                 param_group['lr'] = current_lr
                         continue
@@ -428,7 +447,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
                     
                     optimizer.zero_grad(set_to_none=True)
                     global_step += 1
-                    grad_reset_counter = 0  # Reset counter after successful step
+                    grad_reset_counter = 0
                 
                 # Update metrics
                 total_train_loss += loss.item() * gradient_accumulation_steps
