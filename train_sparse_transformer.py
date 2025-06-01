@@ -35,6 +35,17 @@ def calculate_bpb(loss):
     return loss / math.log(2)
 
 
+def check_gradients(model):
+    """Check if all gradients are valid (finite)."""
+    valid_gradients = True
+    for name, param in model.named_parameters():
+        if param.grad is not None:
+            if not torch.isfinite(param.grad).all():
+                print(f"Invalid gradients detected in {name}")
+                valid_gradients = False
+    return valid_gradients
+
+
 def train_epoch(
     model,
     train_loader,
@@ -43,12 +54,13 @@ def train_epoch(
     scaler,
     device,
     epoch,
-    grad_clip=1.0
+    grad_clip=0.5  # Reduced from 1.0 for more stability
 ):
     """Train for one epoch."""
     model.train()
     total_loss = 0
     start_time = time.time()
+    num_updates = 0
     
     for batch_idx, (data, target) in enumerate(train_loader):
         try:
@@ -61,23 +73,47 @@ def train_epoch(
                 output = model(data)
                 loss = nn.functional.cross_entropy(
                     output.view(-1, 256),
-                    target.view(-1)
+                    target.view(-1),
+                    label_smoothing=0.1  # Add label smoothing for better generalization
                 )
             
+            # Check if loss is valid
+            if not torch.isfinite(loss):
+                print(f"Non-finite loss detected: {loss.item()}")
+                optimizer.zero_grad(set_to_none=True)
+                continue
+                
             # Backward pass with gradient scaling
             scaler.scale(loss).backward()
             
+            # Check gradients before optimization
+            if not check_gradients(model):
+                print("Invalid gradients detected, skipping batch")
+                optimizer.zero_grad(set_to_none=True)
+                continue
+            
             # Gradient clipping
             scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+            
+            # Skip step if gradient norm is not finite
+            if not torch.isfinite(grad_norm):
+                print(f"Invalid gradient norm detected: {grad_norm}")
+                optimizer.zero_grad(set_to_none=True)
+                continue
             
             # Optimizer step with scaling
             scaler.step(optimizer)
+            scale = scaler.get_scale()
             scaler.update()
-            optimizer.zero_grad(set_to_none=True)  # More efficient than zero_grad()
             
-            if scheduler is not None:
-                scheduler.step()
+            # Check if optimizer step was skipped due to gradient scaling
+            if scale <= scaler.get_scale():
+                num_updates += 1
+                if scheduler is not None:
+                    scheduler.step()
+            
+            optimizer.zero_grad(set_to_none=True)
             
             # Logging
             total_loss += loss.item()
@@ -87,7 +123,8 @@ def train_epoch(
                 cur_bpb = calculate_bpb(cur_loss)
                 lr = optimizer.param_groups[0]['lr']
                 print(f'| epoch {epoch:3d} | {batch_idx:5d}/{len(train_loader):5d} batches | '
-                      f'ms/batch {ms_per_batch:5.2f} | loss {cur_loss:5.2f} | bpb {cur_bpb:5.2f} | lr {lr:.2e}')
+                      f'ms/batch {ms_per_batch:5.2f} | loss {cur_loss:5.2f} | bpb {cur_bpb:5.2f} | '
+                      f'lr {lr:.2e} | updates {num_updates}')
                 print_gpu_memory()
             
             # Clear memory every 500 batches
@@ -162,12 +199,12 @@ def main():
         "ffn_dim": 1536,         # Reduced from 2048
         "dropout": 0.1,
         "attention_dropout": 0.1,
-        "token_dropout": 0.0,
+        "token_dropout": 0.1,     # Added token dropout
         "batch_size": 4,          # Further reduced from 8
         "seq_length": 1024,       # Further reduced from 2048
-        "learning_rate": 1e-4,
-        "warmup_steps": 4000,
-        "grad_clip": 1.0
+        "learning_rate": 5e-5,    # Reduced from 1e-4 for more stability
+        "warmup_steps": 8000,     # Increased from 4000
+        "grad_clip": 0.5          # Reduced from 1.0
     }
     
     # Set device
@@ -210,7 +247,7 @@ def main():
         model.parameters(),
         lr=config["learning_rate"],
         betas=(0.9, 0.98),
-        eps=1e-9,
+        eps=1e-8,  # Changed from 1e-9 for more stability
         weight_decay=0.01
     )
     
@@ -219,8 +256,13 @@ def main():
         lambda step: min((step + 1) / config["warmup_steps"], 1.0)
     )
     
-    # Gradient scaler for mixed precision
-    scaler = GradScaler()
+    # Gradient scaler for mixed precision with more conservative settings
+    scaler = GradScaler(
+        init_scale=2**10,
+        growth_factor=1.5,     # More conservative growth (from 2.0)
+        backoff_factor=0.5,
+        growth_interval=2000   # Longer interval between scaling updates
+    )
     
     # Training loop
     best_val_loss = float('inf')
@@ -263,6 +305,7 @@ def main():
                     'model_state_dict': model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
                     'scheduler_state_dict': scheduler.state_dict(),
+                    'scaler_state_dict': scaler.state_dict(),
                     'val_loss': val_loss,
                     'val_bpb': val_bpb,
                     'config': config
