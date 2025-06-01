@@ -462,14 +462,14 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
 def main():
     # Model configuration
     config = {
-        'd_model': 512,
-        'nhead': 8,
-        'num_layers': 12,
-        'dim_feedforward': 2048,
+        'd_model': 384,          # Reduced from 512
+        'nhead': 6,             # Reduced from 8
+        'num_layers': 8,        # Reduced from 12
+        'dim_feedforward': 1536, # Reduced from 2048
         'dropout': 0.1,
         'attention_dropout': 0.1,
         'token_dropout': 0.05,
-        'max_len': 1024
+        'max_len': 512          # Reduced from 1024
     }
     
     # Setup device
@@ -495,8 +495,8 @@ def main():
             train_path=os.path.join("data", "enwik8_splits", "train.bin"),
             val_path=os.path.join("data", "enwik8_splits", "val.bin"),
             seq_length=config['max_len'],
-            batch_size=32,
-            num_workers=4
+            batch_size=16,       # Reduced from 32
+            num_workers=2        # Reduced from 4
         )
         
         # Train model
@@ -506,13 +506,13 @@ def main():
             train_batches=train_loader,
             val_batches=val_loader,
             num_epochs=100,
-            learning_rate=1e-4,
+            learning_rate=5e-5,  # Reduced from 1e-4
             weight_decay=0.1,
             warmup_steps=4000,
             device=device,
             patience=3,
             min_lr=1e-5,
-            gradient_accumulation_steps=4,
+            gradient_accumulation_steps=8,  # Increased from 4
             use_mixed_precision=True
         )
         
