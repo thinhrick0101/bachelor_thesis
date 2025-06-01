@@ -291,13 +291,13 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                 gradient_accumulation_steps=16, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
-    # Setup optimizer with stable settings
+    # Setup optimizer with even more stable settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=learning_rate / 10,  # Start with lower learning rate
         weight_decay=weight_decay,
-        betas=(0.9, 0.95),     # More stable momentum
-        eps=1e-8
+        betas=(0.9, 0.98),     # Back to transformer defaults
+        eps=1e-7               # Smaller epsilon for more stable updates
     )
     
     # Learning rate scheduler with warmup and cosine decay
@@ -307,10 +307,10 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
         progress = (step - warmup_steps) / (num_epochs * len(train_batches))
         return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training with stable settings
+    # Setup mixed precision training with more conservative settings
     scaler = GradScaler(
-        init_scale=2**10,      # More conservative initial scale
-        growth_factor=1.5,     # Slower growth
+        init_scale=2**8,       # Start even smaller
+        growth_factor=1.2,     # Even slower growth
         backoff_factor=0.5,
         growth_interval=2000,
         enabled=use_mixed_precision
@@ -322,15 +322,34 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
     train_losses = []
     val_losses = []
     global_step = 0
+    last_grad_norm = None
+    grad_norm_window = []  # Track recent gradient norms
     
-    # Loss function with label smoothing
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    # Loss function with reduced label smoothing
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.05)  # Reduced from 0.1
+    
+    # Gradient norm monitoring
+    def is_grad_norm_safe(norm):
+        if norm > 10.0:  # Hard clip at 10
+            return False
+        if last_grad_norm is not None and norm > last_grad_norm * 2:
+            return False  # Detect sudden spikes
+        grad_norm_window.append(norm)
+        if len(grad_norm_window) > 50:  # Keep last 50 values
+            grad_norm_window.pop(0)
+        if len(grad_norm_window) >= 10:  # Need at least 10 values
+            mean = sum(grad_norm_window[-10:]) / 10
+            std = (sum((x - mean) ** 2 for x in grad_norm_window[-10:]) / 10) ** 0.5
+            if norm > mean + 3 * std:  # Outside 3 standard deviations
+                return False
+        return True
     
     for epoch in range(num_epochs):
         model.train()
         total_train_loss = 0
         num_batches = 0
         start_time = time.time()
+        grad_reset_counter = 0  # Count gradient resets
         
         # Training phase
         for batch_idx, (data, target) in enumerate(train_batches):
@@ -357,6 +376,11 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                 if not torch.isfinite(loss):
                     print(f"Warning: Non-finite loss detected: {loss.item()}")
                     optimizer.zero_grad(set_to_none=True)
+                    grad_reset_counter += 1
+                    if grad_reset_counter > 5:  # If too many resets, reduce batch size
+                        print("Too many gradient resets, reducing batch size")
+                        data = data[:data.size(0)//2]
+                        target = target[:target.size(0)//2]
                     continue
                 
                 # Backward pass with gradient scaling
@@ -371,18 +395,26 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                     if use_mixed_precision:
                         scaler.unscale_(optimizer)
                     
-                    # Gradient clipping
+                    # Gradient clipping with dynamic threshold
                     grad_norm = torch.nn.utils.clip_grad_norm_(
                         model.parameters(),
-                        max_norm=1.0,  # Increased from 0.5
+                        max_norm=1.0,  # Base threshold
                         error_if_nonfinite=False
                     )
                     
-                    # Skip step if gradient norm is not finite
-                    if not torch.isfinite(grad_norm):
-                        print(f"Warning: Invalid gradient norm detected: {grad_norm}")
+                    # Skip step if gradient norm is not safe
+                    if not torch.isfinite(grad_norm) or (grad_norm is not None and not is_grad_norm_safe(grad_norm.item())):
+                        print(f"Warning: Unsafe gradient norm detected: {grad_norm}")
                         optimizer.zero_grad(set_to_none=True)
+                        grad_reset_counter += 1
+                        if grad_reset_counter > 5:
+                            print("Too many gradient resets, reducing learning rate")
+                            current_lr *= 0.8  # Reduce learning rate
+                            for param_group in optimizer.param_groups:
+                                param_group['lr'] = current_lr
                         continue
+                    
+                    last_grad_norm = grad_norm.item() if grad_norm is not None else None
                     
                     # Optimizer step
                     if use_mixed_precision:
@@ -393,6 +425,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                     
                     optimizer.zero_grad(set_to_none=True)
                     global_step += 1
+                    grad_reset_counter = 0  # Reset counter after successful step
                 
                 # Update metrics
                 total_train_loss += loss.item() * gradient_accumulation_steps
@@ -403,9 +436,10 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                     ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
                     cur_loss = total_train_loss / num_batches
                     cur_bpb = calculate_bpb(cur_loss)
+                    grad_norm_str = f"GradNorm: {last_grad_norm:.4f}" if last_grad_norm is not None else ""
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
                           f"Loss: {cur_loss:.4f} | BPB: {cur_bpb:.4f} | "
-                          f"LR: {current_lr:.6f} | ms/batch: {ms_per_batch:.1f}")
+                          f"LR: {current_lr:.6f} | {grad_norm_str} | ms/batch: {ms_per_batch:.1f}")
                 
                 # Memory management
                 if batch_idx % 500 == 0:
@@ -539,7 +573,7 @@ def main():
             model=model,
             train_batches=train_loader,
             val_batches=val_loader,
-            num_epochs=100,
+            num_epochs=330,
             learning_rate=1e-5,  # Reduced from 5e-5
             weight_decay=0.01,   # Reduced from 0.1
             warmup_steps=8000,   # Increased from 4000
