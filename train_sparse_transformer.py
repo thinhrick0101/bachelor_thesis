@@ -573,7 +573,7 @@ def main():
             model=model,
             train_batches=train_loader,
             val_batches=val_loader,
-            num_epochs=330,
+            num_epochs=30,
             learning_rate=1e-5,  # Reduced from 5e-5
             weight_decay=0.01,   # Reduced from 0.1
             warmup_steps=8000,   # Increased from 4000
