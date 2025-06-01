@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 220, in <module>
+    main() 
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 182, in main
+    train_loss = train_epoch(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 42, in train_epoch
+    output = model(data)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_byte_transformer.py", line 159, in forward
+    x = layer(x, mask=~causal_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 99, in forward
+    x = x + self.dropout1(self.attention(x2, mask))
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 55, in forward
+    attention_probs = F.softmax(attention_scores, dim=-1)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 1834, in softmax
+    ret = input.softmax(dim)
+RuntimeError: CUDA out of memory. Tried to allocate 768.00 MiB (GPU 0; 10.57 GiB total capacity; 8.62 GiB already allocated; 408.00 MiB free; 9.33 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
