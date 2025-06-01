@@ -286,32 +286,34 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
 
 
 def train_model(model, train_batches, val_batches=None, num_epochs=100,
-                learning_rate=1e-4, weight_decay=0.1, warmup_steps=4000,
-                device='cuda', patience=8, min_lr=1e-5,
-                gradient_accumulation_steps=4, use_mixed_precision=True):
+                learning_rate=1e-5, weight_decay=0.01, warmup_steps=8000,
+                device='cuda', patience=5, min_lr=5e-6,
+                gradient_accumulation_steps=16, use_mixed_precision=True):
     """Train the sparse transformer model with advanced training techniques"""
     
     # Setup optimizer with stable settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=learning_rate,
+        lr=learning_rate / 10,  # Start with lower learning rate
         weight_decay=weight_decay,
-        betas=(0.9, 0.98),
+        betas=(0.9, 0.95),     # More stable momentum
         eps=1e-8
     )
     
-    # Learning rate scheduler with warmup
+    # Learning rate scheduler with warmup and cosine decay
     def get_lr(step):
         if step < warmup_steps:
             return learning_rate * (step / warmup_steps)
-        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / (num_epochs * len(train_batches)))))
+        progress = (step - warmup_steps) / (num_epochs * len(train_batches))
+        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Setup mixed precision training
+    # Setup mixed precision training with stable settings
     scaler = GradScaler(
-        init_scale=2**10,
-        growth_factor=1.5,
+        init_scale=2**10,      # More conservative initial scale
+        growth_factor=1.5,     # Slower growth
         backoff_factor=0.5,
-        growth_interval=2000
+        growth_interval=2000,
+        enabled=use_mixed_precision
     ) if use_mixed_precision else None
     
     # Training metrics
@@ -321,10 +323,14 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
     val_losses = []
     global_step = 0
     
+    # Loss function with label smoothing
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    
     for epoch in range(num_epochs):
         model.train()
         total_train_loss = 0
         num_batches = 0
+        start_time = time.time()
         
         # Training phase
         for batch_idx, (data, target) in enumerate(train_batches):
@@ -340,30 +346,49 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                 target = target.to(device)
                 
                 # Forward pass with mixed precision
-                with autocast() if use_mixed_precision else nullcontext():
+                with autocast(enabled=use_mixed_precision):
                     output = model(data)
-                    loss = nn.functional.cross_entropy(
+                    loss = criterion(
                         output.view(-1, 256),
-                        target.view(-1),
-                        label_smoothing=0.1
-                    )
-                    loss = loss / gradient_accumulation_steps
+                        target.view(-1)
+                    ) / gradient_accumulation_steps
                 
-                # Backward pass
+                # Check if loss is valid
+                if not torch.isfinite(loss):
+                    print(f"Warning: Non-finite loss detected: {loss.item()}")
+                    optimizer.zero_grad(set_to_none=True)
+                    continue
+                
+                # Backward pass with gradient scaling
                 if use_mixed_precision:
                     scaler.scale(loss).backward()
                 else:
                     loss.backward()
                 
-                # Optimization step after accumulation
+                # Gradient accumulation step
                 if (batch_idx + 1) % gradient_accumulation_steps == 0 or batch_idx == len(train_batches) - 1:
+                    # Unscale gradients for clipping
                     if use_mixed_precision:
                         scaler.unscale_(optimizer)
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                    
+                    # Gradient clipping
+                    grad_norm = torch.nn.utils.clip_grad_norm_(
+                        model.parameters(),
+                        max_norm=1.0,  # Increased from 0.5
+                        error_if_nonfinite=False
+                    )
+                    
+                    # Skip step if gradient norm is not finite
+                    if not torch.isfinite(grad_norm):
+                        print(f"Warning: Invalid gradient norm detected: {grad_norm}")
+                        optimizer.zero_grad(set_to_none=True)
+                        continue
+                    
+                    # Optimizer step
+                    if use_mixed_precision:
                         scaler.step(optimizer)
                         scaler.update()
                     else:
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
                         optimizer.step()
                     
                     optimizer.zero_grad(set_to_none=True)
@@ -375,15 +400,25 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                 
                 # Progress logging
                 if batch_idx % 100 == 0:
+                    ms_per_batch = (time.time() - start_time) * 1000 / (batch_idx + 1)
+                    cur_loss = total_train_loss / num_batches
+                    cur_bpb = calculate_bpb(cur_loss)
                     print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
-                          f"Loss: {loss.item() * gradient_accumulation_steps:.4f} | LR: {current_lr:.6f}")
+                          f"Loss: {cur_loss:.4f} | BPB: {cur_bpb:.4f} | "
+                          f"LR: {current_lr:.6f} | ms/batch: {ms_per_batch:.1f}")
+                
+                # Memory management
+                if batch_idx % 500 == 0:
+                    clear_gpu_memory()
             
             except RuntimeError as e:
                 if "out of memory" in str(e):
-                    print("WARNING: out of memory, skipping batch")
-                    if torch.cuda.is_available():
-                        torch.cuda.empty_cache()
-                    optimizer.zero_grad(set_to_none=True)
+                    print("Warning: OOM, clearing cache and skipping batch")
+                    clear_gpu_memory()
+                    if 'data' in locals(): del data
+                    if 'target' in locals(): del target
+                    if 'output' in locals(): del output
+                    if 'loss' in locals(): del loss
                     continue
                 else:
                     raise e
@@ -404,9 +439,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                         data = data.to(device)
                         target = target.to(device)
                         
-                        with autocast() if use_mixed_precision else nullcontext():
+                        with autocast(enabled=use_mixed_precision):
                             output = model(data)
-                            loss = nn.functional.cross_entropy(
+                            loss = criterion(
                                 output.view(-1, 256),
                                 target.view(-1)
                             )
@@ -416,9 +451,8 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                         
                     except RuntimeError as e:
                         if "out of memory" in str(e):
-                            print("WARNING: out of memory during validation, skipping batch")
-                            if torch.cuda.is_available():
-                                torch.cuda.empty_cache()
+                            print("Warning: OOM during validation, skipping batch")
+                            clear_gpu_memory()
                             continue
                         else:
                             raise e
@@ -437,6 +471,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                     'optimizer_state_dict': optimizer.state_dict(),
                     'train_loss': avg_train_loss,
                     'val_loss': avg_val_loss,
+                    'config': model.config if hasattr(model, 'config') else None
                 }, 'models/best_sparse_transformer.pt')
             else:
                 patience_counter += 1
@@ -444,31 +479,30 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
                     print(f"Early stopping triggered after {epoch + 1} epochs")
                     break
         
-        # Print epoch statistics
+        # Print epoch summary
         print(f"\nEpoch {epoch+1}/{num_epochs} Summary:")
-        print(f"Average Training Loss: {avg_train_loss:.4f}")
+        print(f"Training Loss: {avg_train_loss:.4f} (BPB: {calculate_bpb(avg_train_loss):.4f})")
         if val_batches:
-            print(f"Average Validation Loss: {avg_val_loss:.4f}")
+            print(f"Validation Loss: {avg_val_loss:.4f} (BPB: {calculate_bpb(avg_val_loss):.4f})")
             print(f"Best Validation Loss: {best_val_loss:.4f}")
         print(f"Learning Rate: {current_lr:.6f}")
         
         # Clear memory at end of epoch
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+        clear_gpu_memory()
     
     return model, (train_losses, val_losses)
 
 
 def main():
-    # Model configuration
+    # Model configuration with more stable settings
     config = {
         'd_model': 384,          # Reduced from 512
         'nhead': 6,             # Reduced from 8
         'num_layers': 8,        # Reduced from 12
         'dim_feedforward': 1536, # Reduced from 2048
-        'dropout': 0.1,
-        'attention_dropout': 0.1,
-        'token_dropout': 0.05,
+        'dropout': 0.2,         # Increased from 0.1
+        'attention_dropout': 0.2, # Increased from 0.1
+        'token_dropout': 0.1,    # Added token dropout
         'max_len': 512          # Reduced from 1024
     }
     
@@ -490,29 +524,29 @@ def main():
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint['model_state_dict'])
     else:
-        # Create dataloaders
+        # Create dataloaders with smaller batch size
         train_loader, val_loader = create_dataloaders(
             train_path=os.path.join("data", "enwik8_splits", "train.bin"),
             val_path=os.path.join("data", "enwik8_splits", "val.bin"),
             seq_length=config['max_len'],
-            batch_size=16,       # Reduced from 32
+            batch_size=8,        # Reduced from 16
             num_workers=2        # Reduced from 4
         )
         
-        # Train model
+        # Train model with more stable settings
         print("Training model...")
         model, (train_losses, val_losses) = train_model(
             model=model,
             train_batches=train_loader,
             val_batches=val_loader,
             num_epochs=100,
-            learning_rate=5e-5,  # Reduced from 1e-4
-            weight_decay=0.1,
-            warmup_steps=4000,
+            learning_rate=1e-5,  # Reduced from 5e-5
+            weight_decay=0.01,   # Reduced from 0.1
+            warmup_steps=8000,   # Increased from 4000
             device=device,
-            patience=3,
-            min_lr=1e-5,
-            gradient_accumulation_steps=8,  # Increased from 4
+            patience=5,          # Reduced from 8
+            min_lr=5e-6,        # Reduced from 1e-5
+            gradient_accumulation_steps=16,  # Increased from 8
             use_mixed_precision=True
         )
         
@@ -534,16 +568,16 @@ def main():
     print("\nGenerating example texts with different temperatures:")
     prompt = "The movie was"
     
-    print("\nConservative sampling (temperature=0.6):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.6, max_length=200)
+    print("\nConservative sampling (temperature=0.7):")  # Increased from 0.6
+    generated = generate_text(model, tokenizer, prompt, temperature=0.7, max_length=200)
     print(generated)
     
-    print("\nBalanced sampling (temperature=0.8):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.8, max_length=200)
+    print("\nBalanced sampling (temperature=0.9):")  # Increased from 0.8
+    generated = generate_text(model, tokenizer, prompt, temperature=0.9, max_length=200)
     print(generated)
     
-    print("\nCreative sampling (temperature=1.0):")
-    generated = generate_text(model, tokenizer, prompt, temperature=1.0, max_length=200)
+    print("\nCreative sampling (temperature=1.2):")  # Increased from 1.0
+    generated = generate_text(model, tokenizer, prompt, temperature=1.2, max_length=200)
     print(generated)
     
     # Interactive generation
@@ -553,7 +587,7 @@ def main():
         if prompt.lower() == 'exit':
             break
             
-        temp = float(input("Temperature (0.1-1.0): "))
+        temp = float(input("Temperature (0.1-1.2): "))  # Increased max temp
         length = int(input("Maximum length: "))
         
         generated = generate_text(
