@@ -1,7 +1,3 @@
-"""
-Training script for the SparseByteTransformer model on Enwik8 dataset.
-"""
-
 import os
 import math
 import time
@@ -11,6 +7,9 @@ import gc
 from torch.cuda.amp import GradScaler, autocast
 from byte_dataset import create_dataloaders
 from sparse_byte_transformer import SparseByteTransformer
+import matplotlib.pyplot as plt
+from contextlib import nullcontext
+from stable_char_transformer import ByteTokenizer
 
 
 def clear_gpu_memory():
@@ -186,141 +185,388 @@ def evaluate(model, val_loader, device):
     return avg_loss, avg_bpb
 
 
-def main():
-    # Clear memory before starting
-    clear_gpu_memory()
+def visualize_loss(train_losses, val_losses=None, output_file='sparse_model_loss.png'):
+    """Visualize training and validation losses"""
+    plt.figure(figsize=(12, 6))
     
-    # Model configuration
-    config = {
-        # Smaller model configuration to reduce memory usage
-        "model_dim": 384,          # Reduced from 512
-        "num_heads": 6,           # Reduced from 8
-        "num_layers": 8,          # Reduced from 12
-        "ffn_dim": 1536,         # Reduced from 2048
-        "dropout": 0.1,
-        "attention_dropout": 0.1,
-        "token_dropout": 0.1,     # Added token dropout
-        "batch_size": 4,          # Further reduced from 8
-        "seq_length": 1024,       # Further reduced from 2048
-        "learning_rate": 5e-5,    # Reduced from 1e-4 for more stability
-        "warmup_steps": 8000,     # Increased from 4000
-        "grad_clip": 0.5          # Reduced from 1.0
-    }
+    # Plot training loss
+    plt.plot(train_losses, label='Training Loss', marker='o', markersize=4, linestyle='-', linewidth=1)
     
-    # Set device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
+    # Plot validation loss if available
+    if val_losses:
+        plt.plot(val_losses, label='Validation Loss', marker='s', markersize=4, linestyle='-', linewidth=1)
+        
+        # Plot best validation loss point
+        best_epoch = val_losses.index(min(val_losses))
+        best_loss = val_losses[best_epoch]
+        plt.plot(best_epoch, best_loss, 'r*', markersize=10, label=f'Best Val Loss: {best_loss:.4f}')
     
-    if torch.cuda.is_available():
-        # Print GPU info
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
-        print(f"Total GPU memory: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
-        print(f"Available GPU memory: {torch.cuda.mem_get_info()[0] / 1024**3:.1f} GB")
+    plt.title('Sparse Transformer Training History', fontsize=14)
+    plt.xlabel('Epoch', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
     
-    # Create model
-    model = SparseByteTransformer(
-        d_model=config["model_dim"],
-        nhead=config["num_heads"],
-        num_layers=config["num_layers"],
-        dim_feedforward=config["ffn_dim"],
-        dropout=config["dropout"],
-        attention_dropout=config["attention_dropout"],
-        token_dropout=config["token_dropout"],
-        max_len=config["seq_length"]
-    ).to(device)
+    # Add bits-per-byte as secondary y-axis
+    ax1 = plt.gca()
+    ax2 = ax1.twinx()
     
-    # Create dataloaders
-    train_loader, val_loader = create_dataloaders(
-        train_path=os.path.join("data", "enwik8_splits", "train.bin"),
-        val_path=os.path.join("data", "enwik8_splits", "val.bin"),
-        seq_length=config["seq_length"],
-        batch_size=config["batch_size"],
-        num_workers=4
-    )
+    # Create BPB ticks based on loss values
+    loss_ticks = ax1.get_yticks()
+    bpb_ticks = [x / math.log(2) for x in loss_ticks if x > 0]
+    ax2.set_yticks(bpb_ticks)
+    ax2.set_yticklabels([f'{x:.2f}' for x in bpb_ticks])
+    ax2.set_ylabel('Bits per Byte', fontsize=12)
     
-    # Create checkpoint directory
-    checkpoint_dir = os.path.join("bachelor_thesis", "models", "sparse_transformer")
-    os.makedirs(checkpoint_dir, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    plt.close()
     
-    # Optimizer and scheduler
+    # Print statistics
+    print("\nTraining Statistics:")
+    print(f"Initial Loss: {train_losses[0]:.4f}")
+    print(f"Final Loss: {train_losses[-1]:.4f}")
+    print(f"Best Loss: {min(train_losses):.4f}")
+    
+    if val_losses:
+        print("\nValidation Statistics:")
+        print(f"Initial Loss: {val_losses[0]:.4f}")
+        print(f"Final Loss: {val_losses[-1]:.4f}")
+        print(f"Best Loss: {min(val_losses):.4f}")
+
+
+def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, top_k=50, top_p=0.9, device='cuda'):
+    """Generate text using the trained sparse transformer"""
+    model.eval()
+    
+    # Encode the prompt
+    input_ids = tokenizer.encode(prompt)
+    input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0).to(device)
+    generated = input_tensor
+    
+    # Generate text token by token
+    with torch.no_grad():
+        for _ in range(max_length):
+            # Get model predictions
+            with autocast():
+                logits = model(generated)
+                next_token_logits = logits[0, -1, :]
+            
+            # Apply temperature
+            next_token_logits = next_token_logits / temperature
+            
+            # Apply top-k filtering
+            if top_k > 0:
+                indices_to_remove = next_token_logits < torch.topk(next_token_logits, top_k)[0][..., -1, None]
+                next_token_logits[indices_to_remove] = float('-inf')
+            
+            # Apply top-p (nucleus) filtering
+            if top_p < 1.0:
+                sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+                cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
+                sorted_indices_to_remove = cumulative_probs > top_p
+                sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                sorted_indices_to_remove[..., 0] = 0
+                indices_to_remove = sorted_indices[sorted_indices_to_remove]
+                next_token_logits[indices_to_remove] = float('-inf')
+            
+            # Sample next token
+            probs = torch.softmax(next_token_logits, dim=-1)
+            next_token = torch.multinomial(probs, num_samples=1)
+            
+            # Append to generated sequence
+            generated = torch.cat([generated, next_token.unsqueeze(0)], dim=1)
+            
+            # Stop if we generate a newline (optional)
+            if next_token.item() == 10:  # ASCII newline
+                break
+    
+    # Decode and return the generated text
+    return tokenizer.decode(generated[0].tolist())
+
+
+def train_model(model, train_batches, val_batches=None, num_epochs=100,
+                learning_rate=1e-4, weight_decay=0.1, warmup_steps=4000,
+                device='cuda', patience=8, min_lr=1e-5,
+                gradient_accumulation_steps=4, use_mixed_precision=True):
+    """Train the sparse transformer model with advanced training techniques"""
+    
+    # Setup optimizer with stable settings
     optimizer = torch.optim.AdamW(
         model.parameters(),
-        lr=config["learning_rate"],
+        lr=learning_rate,
+        weight_decay=weight_decay,
         betas=(0.9, 0.98),
-        eps=1e-8,  # Changed from 1e-9 for more stability
-        weight_decay=0.01
+        eps=1e-8
     )
     
-    scheduler = torch.optim.lr_scheduler.LambdaLR(
-        optimizer,
-        lambda step: min((step + 1) / config["warmup_steps"], 1.0)
-    )
+    # Learning rate scheduler with warmup
+    def get_lr(step):
+        if step < warmup_steps:
+            return learning_rate * (step / warmup_steps)
+        return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * (step - warmup_steps) / (num_epochs * len(train_batches)))))
     
-    # Gradient scaler for mixed precision with more conservative settings
+    # Setup mixed precision training
     scaler = GradScaler(
         init_scale=2**10,
-        growth_factor=1.5,     # More conservative growth (from 2.0)
+        growth_factor=1.5,
         backoff_factor=0.5,
-        growth_interval=2000   # Longer interval between scaling updates
-    )
+        growth_interval=2000
+    ) if use_mixed_precision else None
     
-    # Training loop
+    # Training metrics
     best_val_loss = float('inf')
-    print("\nStarting training...")
-    print('-' * 89)
+    patience_counter = 0
+    train_losses = []
+    val_losses = []
+    global_step = 0
     
-    try:
-        for epoch in range(1, 51):  # 50 epochs
-            epoch_start_time = time.time()
+    for epoch in range(num_epochs):
+        model.train()
+        total_train_loss = 0
+        num_batches = 0
+        
+        # Training phase
+        for batch_idx, (data, target) in enumerate(train_batches):
+            try:
+                # Update learning rate
+                if batch_idx == 0 or (batch_idx + 1) % gradient_accumulation_steps == 0:
+                    current_lr = get_lr(global_step)
+                    for param_group in optimizer.param_groups:
+                        param_group['lr'] = current_lr
+                
+                # Move data to device
+                data = data.to(device)
+                target = target.to(device)
+                
+                # Forward pass with mixed precision
+                with autocast() if use_mixed_precision else nullcontext():
+                    output = model(data)
+                    loss = nn.functional.cross_entropy(
+                        output.view(-1, 256),
+                        target.view(-1),
+                        label_smoothing=0.1
+                    )
+                    loss = loss / gradient_accumulation_steps
+                
+                # Backward pass
+                if use_mixed_precision:
+                    scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+                
+                # Optimization step after accumulation
+                if (batch_idx + 1) % gradient_accumulation_steps == 0 or batch_idx == len(train_batches) - 1:
+                    if use_mixed_precision:
+                        scaler.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                        scaler.step(optimizer)
+                        scaler.update()
+                    else:
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
+                        optimizer.step()
+                    
+                    optimizer.zero_grad(set_to_none=True)
+                    global_step += 1
+                
+                # Update metrics
+                total_train_loss += loss.item() * gradient_accumulation_steps
+                num_batches += 1
+                
+                # Progress logging
+                if batch_idx % 100 == 0:
+                    print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_batches)} | "
+                          f"Loss: {loss.item() * gradient_accumulation_steps:.4f} | LR: {current_lr:.6f}")
             
-            # Train
-            train_loss = train_epoch(
-                model=model,
-                train_loader=train_loader,
-                optimizer=optimizer,
-                scheduler=scheduler,
-                scaler=scaler,
-                device=device,
-                epoch=epoch,
-                grad_clip=config["grad_clip"]
-            )
+            except RuntimeError as e:
+                if "out of memory" in str(e):
+                    print("WARNING: out of memory, skipping batch")
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    optimizer.zero_grad(set_to_none=True)
+                    continue
+                else:
+                    raise e
+        
+        # Calculate average training loss
+        avg_train_loss = total_train_loss / num_batches
+        train_losses.append(avg_train_loss)
+        
+        # Validation phase
+        if val_batches:
+            model.eval()
+            total_val_loss = 0
+            num_val_batches = 0
             
-            # Clear memory before evaluation
-            clear_gpu_memory()
+            with torch.no_grad():
+                for data, target in val_batches:
+                    try:
+                        data = data.to(device)
+                        target = target.to(device)
+                        
+                        with autocast() if use_mixed_precision else nullcontext():
+                            output = model(data)
+                            loss = nn.functional.cross_entropy(
+                                output.view(-1, 256),
+                                target.view(-1)
+                            )
+                        
+                        total_val_loss += loss.item()
+                        num_val_batches += 1
+                        
+                    except RuntimeError as e:
+                        if "out of memory" in str(e):
+                            print("WARNING: out of memory during validation, skipping batch")
+                            if torch.cuda.is_available():
+                                torch.cuda.empty_cache()
+                            continue
+                        else:
+                            raise e
             
-            # Evaluate
-            val_loss, val_bpb = evaluate(model, val_loader, device)
+            avg_val_loss = total_val_loss / num_val_batches
+            val_losses.append(avg_val_loss)
             
-            # Print metrics
-            print('-' * 89)
-            print(f'| end of epoch {epoch:3d} | time: {time.time() - epoch_start_time:5.2f}s | '
-                  f'valid loss {val_loss:5.2f} | valid bpb {val_bpb:5.2f}')
-            print('-' * 89)
-            
-            # Save checkpoint if best validation loss
-            if val_loss < best_val_loss:
-                best_val_loss = val_loss
-                checkpoint = {
+            # Early stopping check
+            if avg_val_loss < best_val_loss:
+                best_val_loss = avg_val_loss
+                patience_counter = 0
+                # Save best model
+                torch.save({
                     'epoch': epoch,
                     'model_state_dict': model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
-                    'scheduler_state_dict': scheduler.state_dict(),
-                    'scaler_state_dict': scaler.state_dict(),
-                    'val_loss': val_loss,
-                    'val_bpb': val_bpb,
-                    'config': config
-                }
-                checkpoint_path = os.path.join(checkpoint_dir, 'best_model.pt')
-                torch.save(checkpoint, checkpoint_path)
-                print(f'| saved checkpoint with val_loss {val_loss:5.2f}')
-            
-            # Clear memory after each epoch
-            clear_gpu_memory()
-            
-    except KeyboardInterrupt:
-        print('-' * 89)
-        print('Exiting from training early')
+                    'train_loss': avg_train_loss,
+                    'val_loss': avg_val_loss,
+                }, 'models/best_sparse_transformer.pt')
+            else:
+                patience_counter += 1
+                if patience_counter >= patience:
+                    print(f"Early stopping triggered after {epoch + 1} epochs")
+                    break
+        
+        # Print epoch statistics
+        print(f"\nEpoch {epoch+1}/{num_epochs} Summary:")
+        print(f"Average Training Loss: {avg_train_loss:.4f}")
+        if val_batches:
+            print(f"Average Validation Loss: {avg_val_loss:.4f}")
+            print(f"Best Validation Loss: {best_val_loss:.4f}")
+        print(f"Learning Rate: {current_lr:.6f}")
+        
+        # Clear memory at end of epoch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    
+    return model, (train_losses, val_losses)
 
 
-if __name__ == '__main__':
+def main():
+    # Model configuration
+    config = {
+        'vocab_size': 256,
+        'd_model': 512,
+        'nhead': 8,
+        'num_layers': 12,
+        'dim_feedforward': 2048,
+        'dropout': 0.1,
+        'attention_dropout': 0.1,
+        'token_dropout': 0.05,
+        'max_len': 1024
+    }
+    
+    # Setup device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+    
+    # Create model instance
+    model = SparseByteTransformer(**config)
+    model = model.to(device)
+    
+    # Create tokenizer
+    tokenizer = ByteTokenizer()
+    
+    # Check if model exists
+    model_path = 'models/sparse_byte_transformer.pt'
+    if os.path.exists(model_path):
+        print(f"Loading existing model from {model_path}")
+        checkpoint = torch.load(model_path)
+        model.load_state_dict(checkpoint['model_state_dict'])
+    else:
+        # Create dataloaders
+        train_loader, val_loader = create_dataloaders(
+            train_path=os.path.join("data", "enwik8_splits", "train.bin"),
+            val_path=os.path.join("data", "enwik8_splits", "val.bin"),
+            seq_length=config['max_len'],
+            batch_size=32,
+            num_workers=4
+        )
+        
+        # Train model
+        print("Training model...")
+        model, (train_losses, val_losses) = train_model(
+            model=model,
+            train_batches=train_loader,
+            val_batches=val_loader,
+            num_epochs=100,
+            learning_rate=1e-4,
+            weight_decay=0.1,
+            warmup_steps=4000,
+            device=device,
+            patience=3,
+            min_lr=1e-5,
+            gradient_accumulation_steps=4,
+            use_mixed_precision=True
+        )
+        
+        # Save model and loss history
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        print(f"Saving model to {model_path}")
+        torch.save({
+            'model_state_dict': model.state_dict(),
+            'train_losses': train_losses,
+            'val_losses': val_losses,
+            'config': config
+        }, model_path)
+        
+        # Visualize training history
+        print("Generating loss plot...")
+        visualize_loss(train_losses, val_losses, 'sparse_model_training_loss.png')
+    
+    # Generate some example text
+    print("\nGenerating example texts with different temperatures:")
+    prompt = "The movie was"
+    
+    print("\nConservative sampling (temperature=0.6):")
+    generated = generate_text(model, tokenizer, prompt, temperature=0.6, max_length=200)
+    print(generated)
+    
+    print("\nBalanced sampling (temperature=0.8):")
+    generated = generate_text(model, tokenizer, prompt, temperature=0.8, max_length=200)
+    print(generated)
+    
+    print("\nCreative sampling (temperature=1.0):")
+    generated = generate_text(model, tokenizer, prompt, temperature=1.0, max_length=200)
+    print(generated)
+    
+    # Interactive generation
+    print("\nEnter prompts for text generation (type 'exit' to quit):")
+    while True:
+        prompt = input("\nPrompt: ")
+        if prompt.lower() == 'exit':
+            break
+            
+        temp = float(input("Temperature (0.1-1.0): "))
+        length = int(input("Maximum length: "))
+        
+        generated = generate_text(
+            model, 
+            tokenizer, 
+            prompt, 
+            temperature=temp,
+            max_length=length
+        )
+        print("\nGenerated text:")
+        print(generated)
+
+
+if __name__ == "__main__":
     main() 
