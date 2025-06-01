@@ -462,7 +462,6 @@ def train_model(model, train_batches, val_batches=None, num_epochs=100,
 def main():
     # Model configuration
     config = {
-        'vocab_size': 256,
         'd_model': 512,
         'nhead': 8,
         'num_layers': 12,
