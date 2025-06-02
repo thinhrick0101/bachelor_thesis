@@ -23,6 +23,8 @@ def compute_block_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor,
     """JIT-optimized block attention computation"""
     scores = torch.matmul(q, k.transpose(-2, -1))
     if mask is not None:
+        # Ensure mask is boolean type regardless of input dtype
+        mask = mask.to(torch.bool)
         scores = scores.masked_fill(~mask, float('-inf'))
     attn_probs = F.softmax(scores, dim=-1)
     return torch.matmul(attn_probs, v)
@@ -94,6 +96,12 @@ class SparseMultiHeadAttention(nn.Module):
         k = self.k_proj(key).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         v = self.v_proj(value).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
+        # Convert masks to boolean if provided
+        if attn_mask is not None:
+            attn_mask = attn_mask.to(torch.bool)
+        if attn_padding_mask is not None:
+            attn_padding_mask = attn_padding_mask.to(torch.bool)
+
         if XFORMERS_AVAILABLE:
             # Use xformers if available
             attn_output = xops.memory_efficient_attention(
@@ -132,9 +140,12 @@ class SparseMultiHeadAttention(nn.Module):
                             k_block = k[:, start_head:end_head, j:end_j]
                             v_block = v[:, start_head:end_head, j:end_j]
                             
-                            block_mask = pattern_mask[i:end_i, j:end_j]
+                            # Combine masks ensuring boolean type
+                            block_mask = pattern_mask[i:end_i, j:end_j].clone()
                             if attn_mask is not None:
-                                block_mask = block_mask & attn_mask[i:end_i, j:end_j]
+                                block_mask &= attn_mask[i:end_i, j:end_j]
+                            if attn_padding_mask is not None:
+                                block_mask &= attn_padding_mask.view(bsz, 1, 1, -1)[:, :, :, j:end_j]
                             
                             block_output = compute_block_attention(
                                 q_block, k_block, v_block, block_mask
