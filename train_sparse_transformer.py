@@ -234,41 +234,67 @@ def main():
         print("Generating loss plot...")
         visualize_loss(train_losses, val_losses, 'sparse_model_training_loss.png')
     
-    # Generate some example text
+    # Generate example texts with different temperatures
     print("\nGenerating example texts with different temperatures:")
-    prompt = "The movie was"
+    example_prompts = [
+        "The movie was",
+        "In the beginning",
+        "She looked at",
+        "The system could",
+        "Deep learning is"
+    ]
     
-    print("\nConservative sampling (temperature=0.6):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.6, max_length=200)
-    print(generated)
+    temperatures = [0.6, 0.8, 1.0]
+    max_length = 200
     
-    print("\nBalanced sampling (temperature=0.8):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.8, max_length=200)
-    print(generated)
+    print("\nGenerating samples with different temperatures:")
+    for prompt in example_prompts:
+        print(f"\nPrompt: {prompt}")
+        for temp in temperatures:
+            print(f"\nTemperature {temp}:")
+            try:
+                generated = generate_text(
+                    model, 
+                    tokenizer, 
+                    prompt, 
+                    temperature=temp,
+                    max_length=max_length
+                )
+                print(generated)
+            except Exception as e:
+                print(f"Error generating text: {str(e)}")
     
-    print("\nCreative sampling (temperature=1.0):")
-    generated = generate_text(model, tokenizer, prompt, temperature=1.0, max_length=200)
-    print(generated)
-    
-    # Interactive generation
-    print("\nEnter prompts for text generation (type 'exit' to quit):")
-    while True:
-        prompt = input("\nPrompt: ")
-        if prompt.lower() == 'exit':
-            break
-            
-        temp = float(input("Temperature (0.1-1.0): "))
-        length = int(input("Maximum length: "))
-        
-        generated = generate_text(
-            model, 
-            tokenizer, 
-            prompt, 
-            temperature=temp,
-            max_length=length
-        )
-        print("\nGenerated text:")
-        print(generated)
+    # Check if we're in an interactive environment
+    import sys
+    if sys.stdin.isatty():
+        print("\nEntering interactive mode (Ctrl+C to exit)")
+        try:
+            while True:
+                try:
+                    prompt = input("\nPrompt: ")
+                    temp = float(input("Temperature (0.1-1.0): "))
+                    length = int(input("Maximum length: "))
+                    
+                    generated = generate_text(
+                        model, 
+                        tokenizer, 
+                        prompt, 
+                        temperature=temp,
+                        max_length=length
+                    )
+                    print("\nGenerated text:")
+                    print(generated)
+                except (KeyboardInterrupt, EOFError):
+                    print("\nExiting interactive mode...")
+                    break
+                except ValueError as e:
+                    print(f"Invalid input: {str(e)}")
+                except Exception as e:
+                    print(f"Error: {str(e)}")
+        except KeyboardInterrupt:
+            print("\nExiting...")
+    else:
+        print("\nRunning in non-interactive mode, skipping interactive prompt")
 
 if __name__ == "__main__":
     main()
