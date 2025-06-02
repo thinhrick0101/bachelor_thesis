@@ -244,8 +244,9 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
     input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0).to(device)
     generated = input_tensor
     
-    # Track generated tokens for repetition penalty
-    generated_tokens = set()
+    # Track recent tokens for repetition detection
+    recent_tokens = []
+    token_counts = {}
     
     # Generate text token by token
     with torch.no_grad():
@@ -258,14 +259,17 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
             # Apply temperature
             next_token_logits = next_token_logits / temperature
             
-            # Apply repetition penalty
-            for token in generated_tokens:
-                next_token_logits[token] /= 1.2  # Penalize repeated tokens
+            # Dynamic repetition penalty based on recent usage
+            for token in set(recent_tokens):
+                count = recent_tokens.count(token)
+                penalty = 1.0 + (count * 0.5)  # Increased penalty for frequency
+                next_token_logits[token] /= penalty
             
             # Apply top-k filtering
             if top_k > 0:
-                indices_to_remove = next_token_logits < torch.topk(next_token_logits, top_k)[0][..., -1, None]
-                next_token_logits[indices_to_remove] = float('-inf')
+                values, _ = torch.topk(next_token_logits, top_k)
+                min_value = values[-1]
+                next_token_logits[next_token_logits < min_value] = float('-inf')
             
             # Apply top-p (nucleus) filtering
             if top_p < 1.0:
@@ -277,25 +281,41 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
                 indices_to_remove = sorted_indices[sorted_indices_to_remove]
                 next_token_logits[indices_to_remove] = float('-inf')
             
-            # Sample next token with temperature
+            # Sample next token
             probs = torch.softmax(next_token_logits, dim=-1)
             next_token = torch.multinomial(probs, num_samples=1)
+            token_id = next_token.item()
             
-            # Add to generated tokens set
-            generated_tokens.add(next_token.item())
+            # Update tracking
+            recent_tokens.append(token_id)
+            if len(recent_tokens) > 20:  # Track last 20 tokens
+                recent_tokens.pop(0)
+            
+            token_counts[token_id] = token_counts.get(token_id, 0) + 1
             
             # Append to generated sequence
             generated = torch.cat([generated, next_token.unsqueeze(0)], dim=1)
             
-            # Stop if we generate a newline or end token
-            if next_token.item() in [10, 0]:  # newline or end token
+            # Stop conditions
+            if token_id in [10, 0]:  # newline or end token
                 break
-            
-            # Stop if we detect repetitive pattern
-            if len(generated) > 10:
-                last_tokens = generated[0, -10:].tolist()
-                if len(set(last_tokens)) <= 2:  # If using only 1-2 tokens repeatedly
+                
+            # Check for repetitive patterns
+            if len(recent_tokens) >= 5:
+                # Check for immediate repetition
+                if len(set(recent_tokens[-5:])) == 1:
                     break
+                    
+                # Check for bi-gram repetition
+                if len(recent_tokens) >= 10:
+                    last_bigrams = [tuple(recent_tokens[i:i+2]) for i in range(len(recent_tokens)-2)]
+                    if len(set(last_bigrams)) <= 2:
+                        break
+            
+            # Check for overuse of any token
+            max_count = max(token_counts.values()) if token_counts else 0
+            if max_count > len(generated[0]) * 0.3:  # No token should be >30% of generation
+                break
     
     # Decode and return the generated text
     return tokenizer.decode(generated[0].tolist())
@@ -324,21 +344,31 @@ def train_model(model, train_batches, val_batches=None, num_epochs=30,
         progress = (step - warmup_steps) / (num_epochs * len(train_batches))
         return max(min_lr, learning_rate * 0.5 * (1 + math.cos(math.pi * progress)))
     
-    # Loss function with token-level entropy regularization
+    # Loss function with proper entropy regularization
     def compute_loss(output, target, reduction='mean'):
-        # Standard cross entropy
+        """Compute loss with entropy regularization and proper scaling"""
+        # Standard cross entropy with proper shape handling
+        logits = output.view(-1, 256)
+        targets = target.view(-1)
         ce_loss = nn.functional.cross_entropy(
-            output.view(-1, 256),
-            target.view(-1),
+            logits,
+            targets,
             reduction=reduction
         )
         
-        # Add entropy regularization to prevent mode collapse
-        probs = torch.softmax(output.view(-1, 256), dim=-1)
-        entropy = -(probs * torch.log(probs + 1e-10)).sum(dim=-1).mean()
+        # Entropy regularization with proper scaling and non-negative guarantee
+        probs = torch.softmax(logits, dim=-1)
+        entropy = -(probs * torch.log(probs + 1e-10)).sum(dim=-1)
+        if reduction == 'mean':
+            entropy = entropy.mean()
+        elif reduction == 'sum':
+            entropy = entropy.sum()
         
-        # Combine losses with entropy encouragement
-        return ce_loss - 0.1 * entropy  # Encourage diversity
+        # Scale entropy term to be much smaller than CE loss
+        entropy_scale = 0.01  # Reduced from 0.1
+        final_loss = ce_loss - entropy_scale * torch.clamp(entropy, min=0.0, max=ce_loss.item() * 0.1)
+        
+        return final_loss
     
     # Setup mixed precision training
     scaler = GradScaler(
