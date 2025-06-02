@@ -12,7 +12,7 @@ import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
-
+from sparse_attention import SparseAttention
 
 def load_data(data_path, data_url=None):
     """
@@ -580,6 +580,281 @@ class EnhancedCharTransformer(nn.Module):
             print(f"Error during decoding: {e}")
             # Return raw bytes as a fallback
             return bytes(generated[0].clamp(0, 255).tolist())
+
+class SparseTransformer(nn.Module):
+    def __init__(self, vocab_size, d_model, nhead, num_layers, dim_feedforward,
+                 dropout=0.1, attention_dropout=0.1, activation_dropout=0.1,
+                 token_dropout=0.05, use_checkpoint=True, stochastic_depth_prob=0.1,
+                 attention_class=None, attention_kwargs=None):
+        super(SparseTransformer, self).__init__()
+        
+        self.embedding = nn.Embedding(vocab_size, d_model)
+        
+        self.embed_scale = math.sqrt(d_model)
+        
+        self.pos_encoder = ImprovedPositionalEncoding(d_model, dropout=dropout)
+        
+        self.transformer_blocks = nn.ModuleList()
+        
+        for i in range(num_layers):
+            # Gradually increase dropout in deeper layers
+            layer_dropout = dropout * (1.0 + i * 0.1)
+            layer_dropout = min(layer_dropout, 0.5)  # Cap at 0.5
+
+            # Gradually increase attention dropout in deeper layers
+            layer_attn_dropout = attention_dropout * (1.0 + i * 0.05)
+            layer_attn_dropout = min(layer_attn_dropout, 0.4)
+            
+            attention = SparseAttention(
+                d_model,
+                nhead,
+                dropout=layer_attn_dropout,
+                bias= True)
+            
+            self.transformer_blocks.append(
+                EnhancedTransformerBlock(
+                    d_model=d_model,
+                    nhead=nhead,
+                    dim_feedforward=dim_feedforward,
+                    dropout=layer_dropout,
+                    attention_dropout=layer_attn_dropout,
+                    activation_dropout=activation_dropout,
+                    use_checkpoint=use_checkpoint,
+                    attention_module=attention
+                )
+            )
+            self.norm = nn.LayerNorm(d_model, eps=1e-6)
+
+        # Output projection (weight tied with embedding)
+        self.output = nn.Linear(d_model, vocab_size)
+
+        # Dropout
+        self.dropout = nn.Dropout(dropout)
+
+        # Token-level dropout for better generalization
+        self.token_dropout = token_dropout
+
+        # Stochastic depth probability
+        self.stochastic_depth_prob = stochastic_depth_prob
+
+        # Initialize parameters
+        self._init_parameters()
+
+        # Tie weights between embedding and output projection
+        self.output.weight = self.embedding.weight
+
+    def _init_parameters(self):
+        """Initialize model parameters with improved techniques"""
+        # Initialize embeddings
+        nn.init.normal_(self.embedding.weight, mean=0, std=0.02)
+
+        # Initialize output projection bias
+        if self.output.bias is not None:
+            nn.init.zeros_(self.output.bias)
+
+    def _generate_square_subsequent_mask(self, sz):
+        """Generate a square mask for the sequence"""
+        mask = (torch.triu(torch.ones(sz, sz)) == 1).transpose(0, 1)
+        return ~mask  # Return boolean mask where True means masked positions
+
+    def forward(self, src, mask=None):
+        """
+        Args:
+            src: Input tensor of shape [batch_size, seq_length]
+            mask: Optional mask for self-attention
+
+        Returns:
+            Output tensor of shape [batch_size, seq_length, vocab_size]
+        """
+        # Create causal mask if not provided
+        if mask is None:
+            mask = self._generate_square_subsequent_mask(src.size(1)).to(src.device)
+
+        # Apply token-level dropout during training
+        if self.training and self.token_dropout > 0:
+            # Create a random mask for token dropout
+            token_mask = torch.bernoulli(
+                torch.full_like(src, 1 - self.token_dropout, dtype=torch.float)
+            ).bool()
+
+            # Replace dropped tokens with a special token (0 for simplicity)
+            # This simulates missing or corrupted tokens
+            src = torch.where(token_mask, src, torch.zeros_like(src))
+
+        # Embed tokens and scale
+        # [batch_size, seq_length] -> [batch_size, seq_length, d_model]
+        x = self.embedding(src) * self.embed_scale
+
+        # Add positional encoding
+        x = self.pos_encoder(x)
+
+        # Apply dropout
+        x = self.dropout(x)
+
+        # Pass through transformer blocks
+        for i, block in enumerate(self.transformer_blocks):
+            # Apply stochastic depth (higher probability of skipping later layers)
+            if self.training and i > 0:
+                skip_prob = self.stochastic_depth_prob * (i / len(self.transformer_blocks))
+                if random.random() < skip_prob:
+                    continue
+
+            x = block(x, src_mask=mask)
+
+        # Apply final layer normalization
+        x = self.norm(x)
+
+        # Apply output projection
+        output = self.output(x)
+
+        return output
+
+    def generate(self, prompt, max_length, temperature=0.7, top_k=20, top_p=0.9,
+                repetition_penalty=1.2, tokenizer=None, device='cpu'):
+        """
+        Generate text from a prompt using byte-level sampling
+        """
+        self.eval()  # Set model to evaluation mode
+
+        # Convert prompt to tensor if needed
+        if isinstance(prompt, str) or isinstance(prompt, bytes):
+            if tokenizer is None:
+                raise ValueError("Tokenizer is required when prompt is a string or bytes")
+            prompt_ids = tokenizer.encode(prompt)
+            prompt_tensor = torch.tensor(prompt_ids, dtype=torch.long).unsqueeze(0).to(device)
+        else:
+            prompt_tensor = prompt
+
+        # Generate text
+        generated = prompt_tensor.clone()
+
+        # Keep track of past tokens for repetition penalty
+        past_tokens = set()
+        for token in generated[0].tolist():
+            past_tokens.add(token)
+
+        with torch.no_grad():
+            for _ in range(max_length):
+                try:
+                    # Get predictions for the last token
+                    # Use a sliding window approach for long sequences to save memory
+                    if generated.size(1) > 1024:
+                        # Use only the last 1024 tokens for context
+                        context = generated[:, -1024:]
+                    else:
+                        context = generated
+
+                    outputs = self(context)
+
+                    # Apply temperature scaling with a safety check
+                    next_token_logits = outputs[:, -1, :].clone()
+
+                    # Ensure logits are valid for all 256 bytes
+                    if next_token_logits.size(-1) != 256:
+                        print(f"Warning: Expected 256 logits but got {next_token_logits.size(-1)}. Padding with -inf.")
+                        padded_logits = torch.full((next_token_logits.size(0), 256), float('-inf'), device=device)
+                        padded_logits[:, :next_token_logits.size(-1)] = next_token_logits
+                        next_token_logits = padded_logits
+
+                    # Check for NaN or infinite values
+                    if torch.isnan(next_token_logits).any() or torch.isinf(next_token_logits).any():
+                        print("Warning: NaN or infinite values detected in logits. Using uniform sampling.")
+                        next_token = torch.randint(0, 256, (1, 1), device=device)
+                    else:
+                        # Apply repetition penalty
+                        if repetition_penalty > 1.0:
+                            for token_id in past_tokens:
+                                if token_id < next_token_logits.size(-1):
+                                    next_token_logits[:, token_id] /= repetition_penalty
+
+                        # Apply temperature with a safety check
+                        next_token_logits = next_token_logits / max(0.1, temperature)  # Prevent division by zero
+
+                        # Apply top-k filtering
+                        if top_k > 0:
+                            top_k_values, _ = torch.topk(next_token_logits, min(top_k, next_token_logits.size(-1)))
+                            min_value = top_k_values[:, -1].unsqueeze(-1)
+                            next_token_logits = torch.where(
+                                next_token_logits < min_value,
+                                torch.ones_like(next_token_logits) * float('-inf'),
+                                next_token_logits
+                            )
+
+                        # Apply top-p (nucleus) filtering with safety checks
+                        if top_p < 1.0:
+                            # Sort logits in descending order
+                            sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+
+                            # Apply softmax with a safety check
+                            sorted_probs = F.softmax(sorted_logits, dim=-1)
+
+                            # Check for NaN values
+                            if torch.isnan(sorted_probs).any():
+                                print("Warning: NaN values detected in probabilities. Using uniform sampling.")
+                                next_token = torch.randint(0, 256, (1, 1), device=device)
+                                continue
+
+                            # Calculate cumulative probabilities
+                            cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
+
+                            # Create mask for tokens to remove
+                            sorted_indices_to_remove = cumulative_probs > top_p
+
+                            # Keep at least one token
+                            if sorted_indices_to_remove.all():
+                                sorted_indices_to_remove[..., 0] = False
+
+                            # Shift indices to keep the first token above threshold
+                            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                            sorted_indices_to_remove[..., 0] = False
+
+                            # Apply the mask to the sorted indices
+                            indices_to_remove = torch.zeros_like(next_token_logits, dtype=torch.bool).scatter_(
+                                -1, sorted_indices, sorted_indices_to_remove
+                            )
+
+                            # Set removed indices to -inf
+                            next_token_logits = next_token_logits.masked_fill(indices_to_remove, float('-inf'))
+
+                        # Apply softmax to get probabilities with a safety check
+                        probs = F.softmax(next_token_logits, dim=-1)
+
+                        # Check for NaN values or invalid probabilities
+                        if torch.isnan(probs).any() or (probs < 0).any() or (probs > 1).any():
+                            print("Warning: Invalid probability values. Using uniform sampling.")
+                            next_token = torch.randint(0, 256, (1, 1), device=device)
+                        else:
+                            # Sample from the distribution
+                            next_token = torch.multinomial(probs, num_samples=1)
+
+                    # Ensure the token is within valid byte range
+                    next_token = next_token % 256
+
+                    # Add the new token to past tokens for repetition penalty
+                    past_tokens.add(next_token.item())
+
+                    # Append the next token to the generated sequence
+                    generated = torch.cat((generated, next_token), dim=1)
+
+                except Exception as e:
+                    print(f"Error during generation: {e}")
+                    # Fall back to a safe token
+                    next_token = torch.randint(0, 256, (1, 1), device=device)
+                    generated = torch.cat((generated, next_token), dim=1)
+
+        # Decode the generated text
+        try:
+            if tokenizer is not None:
+                # First ensure all tokens are valid bytes
+                valid_bytes = generated[0].clamp(0, 255)
+                return tokenizer.decode(valid_bytes.tolist())
+            else:
+                return generated
+        except Exception as e:
+            print(f"Error during decoding: {e}")
+            # Return raw bytes as a fallback
+            return bytes(generated[0].clamp(0, 255).tolist())
+        
 
 def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, last_epoch=-1):
     """
