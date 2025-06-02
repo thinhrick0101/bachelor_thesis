@@ -21,14 +21,28 @@ except ImportError:
 def compute_block_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, 
                           mask: Optional[torch.Tensor] = None) -> torch.Tensor:
     """JIT-optimized block attention computation"""
-    scores = torch.matmul(q, k.transpose(-2, -1))
+    # Ensure inputs are 3D: [batch_size * num_heads, seq_len, head_dim]
+    batch_dim = q.size(0)
+    q_len = q.size(1)
+    k_len = k.size(1)
+    
+    # Compute attention scores
+    scores = torch.matmul(q, k.transpose(-2, -1))  # [batch_size * num_heads, q_len, k_len]
+    
     if mask is not None:
-        # Handle mask in a type-safe way for mixed precision
+        # Expand mask to match scores dimensions
+        if mask.dim() == 2:
+            mask = mask.unsqueeze(0).expand(batch_dim, -1, -1)
         scores = scores.masked_fill(~mask.to(torch.bool), -10000.0)
+    
+    # Compute attention probabilities
     attn_probs = F.softmax(scores, dim=-1, dtype=torch.float32)
-    # Cast back to original dtype for mixed precision compatibility
     attn_probs = attn_probs.to(dtype=scores.dtype)
-    return torch.matmul(attn_probs, v)
+    if attn_probs.size(-1) != v.size(1):
+        raise RuntimeError(f"Attention weights dim {attn_probs.size(-1)} does not match value dim {v.size(1)}")
+    
+    # Apply attention to values
+    return torch.matmul(attn_probs, v)  # [batch_size * num_heads, q_len, head_dim]
 
 @torch.jit.script
 def create_pattern_mask(seq_len: int, window: int, stride: int, 
@@ -93,12 +107,14 @@ class SparseMultiHeadAttention(nn.Module):
         
         # Add attention mask if provided
         if attn_mask is not None:
-            combined_mask &= attn_mask[i:end_i, j:end_j].to(torch.bool)
+            mask_block = attn_mask[i:end_i, j:end_j].to(torch.bool)
+            combined_mask &= mask_block
             
         # Add padding mask if provided
         if padding_mask is not None:
             pad_mask = padding_mask.view(padding_mask.size(0), 1, 1, -1)
-            combined_mask &= pad_mask[..., j:end_j].to(torch.bool)
+            pad_block = pad_mask[..., j:end_j].to(torch.bool)
+            combined_mask = combined_mask.unsqueeze(0) & pad_block
             
         return combined_mask
 
@@ -151,9 +167,10 @@ class SparseMultiHeadAttention(nn.Module):
                         end_j = min(j + self.block_size, seq_len)
                         
                         if pattern_mask[i:end_i, j:end_j].any():
-                            q_block = q[:, start_head:end_head, i:end_i]
-                            k_block = k[:, start_head:end_head, j:end_j]
-                            v_block = v[:, start_head:end_head, j:end_j]
+                            # Reshape blocks for batch computation
+                            q_block = q[:, start_head:end_head, i:end_i].contiguous()
+                            k_block = k[:, start_head:end_head, j:end_j].contiguous()
+                            v_block = v[:, start_head:end_head, j:end_j].contiguous()
                             
                             # Combine masks safely for mixed precision
                             block_mask = self._combine_masks(
@@ -161,9 +178,16 @@ class SparseMultiHeadAttention(nn.Module):
                                 i, end_i, j, end_j
                             )
                             
-                            block_output = compute_block_attention(
-                                q_block, k_block, v_block, block_mask
-                            )
+                            # Reshape for efficient computation
+                            head_count = end_head - start_head
+                            q_block = q_block.view(bsz * head_count, end_i - i, self.head_dim)
+                            k_block = k_block.view(bsz * head_count, end_j - j, self.head_dim)
+                            v_block = v_block.view(bsz * head_count, end_j - j, self.head_dim)
+                            
+                            # Compute attention and reshape back
+                            block_output = compute_block_attention(q_block, k_block, v_block, block_mask)
+                            block_output = block_output.view(bsz, head_count, end_i - i, self.head_dim)
+                            
                             attn_output[:, start_head:end_head, i:end_i] = block_output
 
             # Apply dropout
