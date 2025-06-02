@@ -137,7 +137,7 @@ def main():
             model=model,
             train_batches=train_batches,
             val_batches=val_batches,
-            num_epochs=100,  # Full training run
+            num_epochs=5,  # Full training run
             learning_rate=1e-4,
             weight_decay=0.1,
             warmup_steps=1000,
