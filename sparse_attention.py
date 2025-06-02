@@ -23,10 +23,11 @@ def compute_block_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor,
     """JIT-optimized block attention computation"""
     scores = torch.matmul(q, k.transpose(-2, -1))
     if mask is not None:
-        # Ensure mask is boolean type regardless of input dtype
-        mask = mask.to(torch.bool)
-        scores = scores.masked_fill(~mask, float('-inf'))
-    attn_probs = F.softmax(scores, dim=-1)
+        # Handle mask in a type-safe way for mixed precision
+        scores = scores.masked_fill(~mask.to(torch.bool), -10000.0)
+    attn_probs = F.softmax(scores, dim=-1, dtype=torch.float32)
+    # Cast back to original dtype for mixed precision compatibility
+    attn_probs = attn_probs.to(dtype=scores.dtype)
     return torch.matmul(attn_probs, v)
 
 @torch.jit.script
@@ -81,6 +82,26 @@ class SparseMultiHeadAttention(nn.Module):
         # Cache for pattern masks
         self._mask_cache = {}
 
+    def _combine_masks(self, pattern_mask: torch.Tensor, 
+                      attn_mask: Optional[torch.Tensor] = None,
+                      padding_mask: Optional[torch.Tensor] = None,
+                      i: int = 0, end_i: int = 0, 
+                      j: int = 0, end_j: int = 0) -> torch.Tensor:
+        """Safely combine masks for mixed precision compatibility"""
+        # Start with pattern mask (always bool)
+        combined_mask = pattern_mask[i:end_i, j:end_j].clone()
+        
+        # Add attention mask if provided
+        if attn_mask is not None:
+            combined_mask &= attn_mask[i:end_i, j:end_j].to(torch.bool)
+            
+        # Add padding mask if provided
+        if padding_mask is not None:
+            pad_mask = padding_mask.view(padding_mask.size(0), 1, 1, -1)
+            combined_mask &= pad_mask[..., j:end_j].to(torch.bool)
+            
+        return combined_mask
+
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
                attn_mask: Optional[torch.Tensor] = None,
                need_weights: bool = False,
@@ -96,17 +117,11 @@ class SparseMultiHeadAttention(nn.Module):
         k = self.k_proj(key).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         v = self.v_proj(value).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
-        # Convert masks to boolean if provided
-        if attn_mask is not None:
-            attn_mask = attn_mask.to(torch.bool)
-        if attn_padding_mask is not None:
-            attn_padding_mask = attn_padding_mask.to(torch.bool)
-
         if XFORMERS_AVAILABLE:
             # Use xformers if available
             attn_output = xops.memory_efficient_attention(
                 q, k, v,
-                attn_bias=xops.LowerTriangularMask() if attn_mask is None else attn_mask,
+                attn_bias=xops.LowerTriangularMask() if attn_mask is None else attn_mask.to(torch.bool),
                 p=self.dropout if self.training else 0.0
             )
         else:
@@ -140,12 +155,11 @@ class SparseMultiHeadAttention(nn.Module):
                             k_block = k[:, start_head:end_head, j:end_j]
                             v_block = v[:, start_head:end_head, j:end_j]
                             
-                            # Combine masks ensuring boolean type
-                            block_mask = pattern_mask[i:end_i, j:end_j].clone()
-                            if attn_mask is not None:
-                                block_mask &= attn_mask[i:end_i, j:end_j]
-                            if attn_padding_mask is not None:
-                                block_mask &= attn_padding_mask.view(bsz, 1, 1, -1)[:, :, :, j:end_j]
+                            # Combine masks safely for mixed precision
+                            block_mask = self._combine_masks(
+                                pattern_mask, attn_mask, attn_padding_mask,
+                                i, end_i, j, end_j
+                            )
                             
                             block_output = compute_block_attention(
                                 q_block, k_block, v_block, block_mask
