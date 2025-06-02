@@ -1,120 +1,104 @@
 """
-Sparse attention implementation with efficient masking and caching.
+Optimized sparse attention implementation with block-sparse patterns and efficient memory usage.
 """
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
+from typing import Optional, Tuple
+import warnings
 
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import math
+try:
+    import xformers.ops as xops
+    XFORMERS_AVAILABLE = True
+except ImportError:
+    XFORMERS_AVAILABLE = False
+    warnings.warn("xformers not available. Falling back to standard implementation.")
 
 class SparseMultiHeadAttention(nn.Module):
-    """
-    Multi‐head attention with four distinct sparse patterns (clusters).
-    Cluster 0: narrow local window ±8
-    Cluster 1: local window ±16 + strided every 8th
-    Cluster 2: no local window, only global anchors {0, L//2, L-1} + strided every 32nd
-    Cluster 3: wide local window ±16
-    """
-
     def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
         super().__init__()
         self.embedding_dim = embedding_dim
-        self.num_heads     = num_heads
-        self.dropout       = dropout
-        self.head_dim      = embedding_dim // num_heads
+        self.num_heads = num_heads
+        self.dropout = dropout
+        self.head_dim = embedding_dim // num_heads
+        self.scale = math.sqrt(self.head_dim)
 
-        assert self.head_dim * num_heads == embedding_dim, \
-            "embedding_dim must be divisible by num_heads"
-        assert num_heads % 4 == 0, \
-            "num_heads must be divisible by 4 (we divide heads into 4 clusters)"
+        assert self.head_dim * num_heads == embedding_dim, "embedding_dim must be divisible by num_heads"
+        assert num_heads % 4 == 0, "num_heads must be divisible by 4 (we divide heads into 4 clusters)"
 
         self.heads_per_cluster = num_heads // 4
 
-        # Q/K/V projections + final output projection
-        self.q_proj   = nn.Linear(embedding_dim, embedding_dim, bias=bias)
-        self.k_proj   = nn.Linear(embedding_dim, embedding_dim, bias=bias)
-        self.v_proj   = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        # Q/K/V projections for all heads at once
+        self.q_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        self.k_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
+        self.v_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
         self.out_proj = nn.Linear(embedding_dim, embedding_dim, bias=bias)
 
-        self.scale = math.sqrt(self.head_dim)
-
-        # Cache masks directly on GPU to avoid CPU->GPU transfer
-        self._mask_cache = {}
+        # Initialize sparse attention blocks configuration
+        self._init_sparse_config()
         
-        # Pre-compute cluster configurations
-        self.cluster_configs = {
-            0: {'window': 8,  'stride': 1,  'global': False},  # narrow local
-            1: {'window': 32, 'stride': 8,  'global': False},  # local + strided
-            2: {'window': 0,  'stride': 32, 'global': True},   # global + strided
-            3: {'window': 32, 'stride': 1,  'global': False}   # wide local
+        # Cache for block-sparse masks
+        self._mask_cache = {}
+
+    def _init_sparse_config(self):
+        """Initialize block-sparse attention configuration"""
+        self.block_size = 32  # Optimize for GPU memory access
+        self.sparsity_config = {
+            0: {'window': 8, 'stride': 0},    # Local narrow
+            1: {'window': 32, 'stride': 8},   # Local wide + strided
+            2: {'window': 0, 'stride': 32},   # Global + strided
+            3: {'window': 32, 'stride': 0}    # Local wide
         }
 
-    def _shape(self, tensor, seq_len, bsz):
-        return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
-
-    def _create_sparse_mask(self, seq_len: int, device: torch.device) -> torch.Tensor:
+    def _create_block_sparse_layout(self, seq_len: int, device: torch.device) -> torch.Tensor:
         """
-        Create all sparse attention masks at once for better parallelization.
-        Returns a tensor of shape [num_heads, seq_len, seq_len]
+        Create block-sparse attention layout optimized for GPU computation
+        Returns a boolean tensor of shape [num_heads, num_blocks, num_blocks]
         """
-        # Initialize full mask for all heads
-        full_mask = torch.zeros(self.num_heads, seq_len, seq_len, 
-                              dtype=torch.bool, device=device)
+        num_blocks = (seq_len + self.block_size - 1) // self.block_size
+        layout = torch.zeros(self.num_heads, num_blocks, num_blocks, dtype=torch.bool, device=device)
         
-        # Create masks for all heads in parallel
-        pos = torch.arange(seq_len, device=device)
-        
-        # Process each cluster type
-        heads_per_cluster = self.num_heads // 4
         for cluster_idx in range(4):
-            start_h = cluster_idx * heads_per_cluster
-            end_h = (cluster_idx + 1) * heads_per_cluster
+            start_h = cluster_idx * self.heads_per_cluster
+            end_h = (cluster_idx + 1) * self.heads_per_cluster
+            config = self.sparsity_config[cluster_idx]
             
-            if cluster_idx == 0:  # Narrow local window (±8)
-                window = 8
-                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
-                window_mask = (dist.abs() <= window // 2)
-                full_mask[start_h:end_h] |= window_mask
+            # Convert token-level parameters to block-level
+            window_blocks = config['window'] // self.block_size if config['window'] > 0 else 0
+            stride_blocks = max(1, config['stride'] // self.block_size) if config['stride'] > 0 else 0
+            
+            for i in range(num_blocks):
+                # Local window attention
+                if window_blocks > 0:
+                    start_block = max(0, i - window_blocks)
+                    end_block = min(num_blocks, i + window_blocks + 1)
+                    layout[start_h:end_h, i, start_block:end_block] = True
                 
-            elif cluster_idx == 1:  # Local + strided (±16 + every 8th)
-                window = 32
-                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
-                window_mask = (dist.abs() <= window // 2)
-                stride_pos = torch.arange(0, seq_len, 8, device=device)
-                stride_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
-                stride_mask[:, stride_pos] = True
-                full_mask[start_h:end_h] |= (window_mask | stride_mask)
+                # Strided attention
+                if stride_blocks > 0:
+                    strided_blocks = torch.arange(0, num_blocks, stride_blocks, device=device)
+                    layout[start_h:end_h, i, strided_blocks] = True
                 
-            elif cluster_idx == 2:  # Global anchors + strided (every 32nd)
-                global_pos = torch.tensor([0, seq_len//2, seq_len-1], device=device)
-                global_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
-                global_mask[:, global_pos] = True
-                stride_pos = torch.arange(0, seq_len, 32, device=device)
-                stride_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
-                stride_mask[:, stride_pos] = True
-                full_mask[start_h:end_h] |= (global_mask | stride_mask)
-                
-            else:  # Wide local window (±16)
-                window = 32
-                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
-                window_mask = (dist.abs() <= window // 2)
-                full_mask[start_h:end_h] |= window_mask
+                # Global attention (first, middle, last blocks)
+                if config['window'] == 0:
+                    global_blocks = torch.tensor([0, num_blocks//2, num_blocks-1], device=device)
+                    layout[start_h:end_h, i, global_blocks] = True
         
-        # Apply causal masking
-        causal_mask = torch.triu(torch.ones(seq_len, seq_len, dtype=torch.bool, device=device), diagonal=1)
-        full_mask &= ~causal_mask.unsqueeze(0)
-        
-        return full_mask
+        return layout
 
-    def forward(self, query, key, value, attn_mask=None, need_weights=False, attn_padding_mask=None):
+    def forward(
+        self,
+        query: torch.Tensor,
+        key: torch.Tensor,
+        value: torch.Tensor,
+        attn_mask: Optional[torch.Tensor] = None,
+        need_weights: bool = False,
+        attn_padding_mask: Optional[torch.Tensor] = None
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
         """
-        Optimized sparse multi-head attention implementation.
+        Compute block-sparse multi-head attention with optimized memory access
         """
         bsz, seq_len, _ = query.size()
         device = query.device
@@ -124,51 +108,71 @@ class SparseMultiHeadAttention(nn.Module):
         k = self.k_proj(key)
         v = self.v_proj(value)
 
-        # 2) Reshape to [B, H, L, D] in parallel
-        q = self._shape(q, seq_len, bsz)
-        k = self._shape(k, seq_len, bsz)
-        v = self._shape(v, seq_len, bsz)
+        # 2) Reshape to [B, H, L, D]
+        q = q.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        k = k.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        v = v.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
-        # 3) Compute attention scores
-        attn_scores = torch.matmul(q, k.transpose(-2, -1)) / self.scale
+        # 3) Scale query
+        q = q / self.scale
 
-        # 4) Apply sparse attention masks (cached and parallelized)
-        cache_key = f"sparse_mask_{seq_len}"
-        if cache_key not in self._mask_cache:
-            self._mask_cache[cache_key] = self._create_sparse_mask(seq_len, device)
-        
-        sparse_mask = self._mask_cache[cache_key]
-        fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
-        attn_scores = attn_scores.masked_fill(~sparse_mask.unsqueeze(0), fill_val)
+        # 4) Compute attention with memory-efficient implementation
+        if XFORMERS_AVAILABLE:
+            # Use xformers memory-efficient attention if available
+            attn_output = xops.memory_efficient_attention(
+                q, k, v,
+                attn_bias=xops.LowerTriangularMask() if attn_mask is None else attn_mask,
+                p=self.dropout if self.training else 0.0,
+                scale=None  # Already scaled q
+            )
+        else:
+            # Get or create block-sparse layout
+            cache_key = f"block_layout_{seq_len}"
+            if cache_key not in self._mask_cache:
+                self._mask_cache[cache_key] = self._create_block_sparse_layout(seq_len, device)
+            layout = self._mask_cache[cache_key]
 
-        # 5) Apply attention mask if provided
-        if attn_mask is not None:
-            if attn_mask.dim() == 2:
-                attn_mask = attn_mask.unsqueeze(0)
-            attn_scores = attn_scores.masked_fill(~attn_mask.unsqueeze(1), fill_val)
+            # Compute attention scores efficiently
+            attn_weights = torch.zeros(bsz, self.num_heads, seq_len, seq_len, 
+                                    dtype=q.dtype, device=device)
+            
+            # Only compute attention for non-masked blocks
+            block_indices = layout.nonzero(as_tuple=True)
+            for h_idx, i, j in zip(*block_indices):
+                start_i = i * self.block_size
+                end_i = min(start_i + self.block_size, seq_len)
+                start_j = j * self.block_size
+                end_j = min(start_j + self.block_size, seq_len)
+                
+                scores = torch.matmul(
+                    q[:, h_idx:h_idx+1, start_i:end_i, :],
+                    k[:, h_idx:h_idx+1, start_j:end_j, :].transpose(-2, -1)
+                )
+                attn_weights[:, h_idx:h_idx+1, start_i:end_i, start_j:end_j] = scores
 
-        # 6) Apply padding mask if provided
-        if attn_padding_mask is not None:
-            pad_mask = ~attn_padding_mask.view(bsz, 1, 1, seq_len)
-            attn_scores = attn_scores.masked_fill(pad_mask, fill_val)
+            # Apply attention mask if provided
+            if attn_mask is not None:
+                attn_weights = attn_weights.masked_fill(~attn_mask.unsqueeze(0), float('-inf'))
 
-        # 7) Compute attention probabilities with optimized memory access
-        attn_probs = F.softmax(attn_scores, dim=-1, dtype=torch.float32)
-        if attn_scores.dtype == torch.float16:
-            attn_probs = attn_probs.to(torch.float16)
-        attn_probs = F.dropout(attn_probs, p=self.dropout, training=self.training)
+            # Apply padding mask if provided
+            if attn_padding_mask is not None:
+                attn_weights = attn_weights.masked_fill(
+                    ~attn_padding_mask.view(bsz, 1, 1, seq_len), float('-inf'))
 
-        # 8) Compute output with parallel matrix multiplication
-        context = torch.matmul(attn_probs, v)
-        context = context.transpose(1, 2).reshape(bsz, seq_len, self.embedding_dim)
-        output = self.out_proj(context)
+            # Compute attention probabilities
+            attn_probs = F.softmax(attn_weights, dim=-1)
+            attn_probs = F.dropout(attn_probs, p=self.dropout, training=self.training)
+
+            # Apply attention to values
+            attn_output = torch.matmul(attn_probs, v)
+
+        # 5) Reshape and project output
+        attn_output = attn_output.transpose(1, 2).contiguous().view(bsz, seq_len, self.embedding_dim)
+        output = self.out_proj(attn_output)
 
         if need_weights:
-            return output, attn_probs
-
-        return output
-
-
+            return output, attn_weights if not XFORMERS_AVAILABLE else None
+        return output, None
 
 class SparseTransformerLayer(nn.Module):
     def __init__(self, embedding_dim, num_heads, ffn_dim, dropout=0.0, attention_dropout=0.0):
