@@ -177,7 +177,13 @@ def main():
     model_path = 'bachelor_thesis/models/sparse_byte_transformer.pt'
     if os.path.exists(model_path):
         print(f"Loading existing model from {model_path}")
-        model.load_state_dict(torch.load(model_path))
+        checkpoint = torch.load(model_path)
+        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
+            model.load_state_dict(checkpoint['model_state_dict'])
+            print("Loaded model checkpoint with training history")
+        else:
+            model.load_state_dict(checkpoint)
+            print("Loaded model weights only")
     else:
         # Load training data
         print("Loading training data...")
@@ -215,11 +221,14 @@ def main():
         # Save model and loss history
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
         print(f"Saving model to {model_path}")
+        torch.save(model.state_dict(), model_path)
+        
+        # Save training history separately
+        history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt'
         torch.save({
-            'model_state_dict': model.state_dict(),
             'train_losses': train_losses,
             'val_losses': val_losses
-        }, model_path)
+        }, history_path)
         
         # Visualize training history
         print("Generating loss plot...")
