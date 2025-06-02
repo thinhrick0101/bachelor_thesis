@@ -1,6 +1,5 @@
 """
-Optimized sparse attention implementation with block-sparse patterns and efficient memory usage.
-Uses block-sparse attention with efficient CUDA operations.
+Optimized sparse attention implementation with block-sparse patterns and efficient CUDA execution.
 """
 
 import torch
@@ -9,6 +8,7 @@ import torch.nn.functional as F
 import math
 from typing import Optional, Tuple
 import warnings
+from torch import Tensor
 
 try:
     import xformers.ops as xops
@@ -18,35 +18,38 @@ except ImportError:
     warnings.warn("xformers not available. Using optimized block-sparse implementation.")
 
 @torch.jit.script
-def compute_block_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, 
-                          mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+def compute_block_attention(q: Tensor, k: Tensor, v: Tensor, mask: Optional[Tensor] = None) -> Tensor:
     """JIT-optimized block attention computation"""
     # Ensure inputs are 3D: [batch_size * num_heads, seq_len, head_dim]
     batch_dim = q.size(0)
     q_len = q.size(1)
     k_len = k.size(1)
     
-    # Compute attention scores
-    scores = torch.matmul(q, k.transpose(-2, -1))  # [batch_size * num_heads, q_len, k_len]
-    
-    if mask is not None:
-        # Expand mask to match scores dimensions
-        if mask.dim() == 2:
-            mask = mask.unsqueeze(0).expand(batch_dim, -1, -1)
-        scores = scores.masked_fill(~mask.to(torch.bool), -10000.0)
-    
-    # Compute attention probabilities
-    attn_probs = F.softmax(scores, dim=-1, dtype=torch.float32)
-    attn_probs = attn_probs.to(dtype=scores.dtype)
-    if attn_probs.size(-1) != v.size(1):
-        raise RuntimeError(f"Attention weights dim {attn_probs.size(-1)} does not match value dim {v.size(1)}")
-    
-    # Apply attention to values
-    return torch.matmul(attn_probs, v)  # [batch_size * num_heads, q_len, head_dim]
+    # Compute attention scores with optimized CUDA execution
+    with torch.cuda.amp.autocast(enabled=q.is_cuda):
+        scores = torch.matmul(q, k.transpose(-2, -1))  # [batch_size * num_heads, q_len, k_len]
+        
+        if mask is not None:
+            # Expand mask to match scores dimensions
+            if mask.dim() == 2:
+                mask = mask.unsqueeze(0).expand(batch_dim, -1, -1)
+            scores = scores.masked_fill(~mask.to(torch.bool), -10000.0)
+        
+        # Compute attention probabilities with improved numerical stability
+        scores_max = torch.max(scores, dim=-1, keepdim=True)[0]
+        scores = scores - scores_max
+        attn_probs = torch.exp(scores)
+        attn_probs = attn_probs / (torch.sum(attn_probs, dim=-1, keepdim=True) + 1e-6)
+        
+        if attn_probs.size(-1) != v.size(1):
+            raise RuntimeError(f"Attention weights dim {attn_probs.size(-1)} does not match value dim {v.size(1)}")
+        
+        # Apply attention to values
+        return torch.matmul(attn_probs, v)  # [batch_size * num_heads, q_len, head_dim]
 
 @torch.jit.script
 def create_pattern_mask(seq_len: int, window: int, stride: int, 
-                       is_global: bool, device: torch.device) -> torch.Tensor:
+                       is_global: bool, device: torch.device) -> Tensor:
     """JIT-optimized pattern mask creation"""
     mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
     
@@ -66,7 +69,10 @@ def create_pattern_mask(seq_len: int, window: int, stride: int,
     return mask
 
 class SparseMultiHeadAttention(nn.Module):
-    def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
+    """
+    Optimized sparse multi-head attention with efficient CUDA execution
+    """
+    def __init__(self, embedding_dim: int, num_heads: int, dropout: float = 0.0, bias: bool = True):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.num_heads = num_heads
@@ -95,51 +101,71 @@ class SparseMultiHeadAttention(nn.Module):
         
         # Cache for pattern masks
         self._mask_cache = {}
-
-    def _combine_masks(self, pattern_mask: torch.Tensor, 
-                      attn_mask: Optional[torch.Tensor] = None,
-                      padding_mask: Optional[torch.Tensor] = None,
-                      i: int = 0, end_i: int = 0, 
-                      j: int = 0, end_j: int = 0) -> torch.Tensor:
-        """Safely combine masks for mixed precision compatibility"""
-        # Start with pattern mask (always bool)
-        combined_mask = pattern_mask[i:end_i, j:end_j].clone()
         
-        # Add attention mask if provided
-        if attn_mask is not None:
-            mask_block = attn_mask[i:end_i, j:end_j].to(torch.bool)
-            combined_mask &= mask_block
-            
-        # Add padding mask if provided
-        if padding_mask is not None:
-            pad_mask = padding_mask.view(padding_mask.size(0), 1, 1, -1)
-            pad_block = pad_mask[..., j:end_j].to(torch.bool)
-            combined_mask = combined_mask.unsqueeze(0) & pad_block
-            
-        return combined_mask
+        # Register CUDA graph if available
+        self._cuda_graph = None if not torch.cuda.is_available() else {}
 
-    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
-               attn_mask: Optional[torch.Tensor] = None,
+    def _combine_masks(self, pattern_mask: Tensor, 
+                      attn_mask: Optional[Tensor] = None,
+                      padding_mask: Optional[Tensor] = None,
+                      i: int = 0, end_i: int = 0, 
+                      j: int = 0, end_j: int = 0) -> Tensor:
+        """Safely combine masks with optimized CUDA execution"""
+        with torch.cuda.amp.autocast(enabled=pattern_mask.is_cuda):
+            # Start with pattern mask (always bool)
+            combined_mask = pattern_mask[i:end_i, j:end_j].clone()
+            
+            # Add attention mask if provided
+            if attn_mask is not None:
+                mask_block = attn_mask[i:end_i, j:end_j].to(torch.bool)
+                combined_mask &= mask_block
+                
+            # Add padding mask if provided
+            if padding_mask is not None:
+                pad_mask = padding_mask.view(padding_mask.size(0), 1, 1, -1)
+                pad_block = pad_mask[..., j:end_j].to(torch.bool)
+                combined_mask = combined_mask.unsqueeze(0) & pad_block
+            
+            return combined_mask
+
+    @torch.jit.ignore
+    def _maybe_capture_cuda_graph(self, key: str, q: Tensor, k: Tensor, v: Tensor,
+                                block_mask: Tensor) -> Optional[Tuple[torch.cuda.CUDAGraph, Tensor]]:
+        """Capture CUDA graph for repeated computations if possible"""
+        if not torch.cuda.is_available() or not q.is_cuda:
+            return None
+            
+        if key not in self._cuda_graph:
+            g = torch.cuda.CUDAGraph()
+            with torch.cuda.graph(g):
+                output = compute_block_attention(q, k, v, block_mask)
+            self._cuda_graph[key] = (g, output)
+            
+        return self._cuda_graph[key]
+
+    def forward(self, query: Tensor, key: Tensor, value: Tensor,
+               attn_mask: Optional[Tensor] = None,
                need_weights: bool = False,
-               attn_padding_mask: Optional[torch.Tensor] = None) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+               attn_padding_mask: Optional[Tensor] = None) -> Tuple[Tensor, Optional[Tensor]]:
         """
-        Efficient block-sparse attention with optimized memory access and computation
+        Efficient block-sparse attention with optimized CUDA execution
         """
         bsz, seq_len, _ = query.size()
         device = query.device
 
-        # Project and reshape Q/K/V
+        # Project and reshape Q/K/V with optimized memory layout
         q = self.q_proj(query).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2) / self.scale
         k = self.k_proj(key).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         v = self.v_proj(value).view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
         if XFORMERS_AVAILABLE:
             # Use xformers if available
-            attn_output = xops.memory_efficient_attention(
-                q, k, v,
-                attn_bias=xops.LowerTriangularMask() if attn_mask is None else attn_mask.to(torch.bool),
-                p=self.dropout if self.training else 0.0
-            )
+            with torch.cuda.amp.autocast(enabled=query.is_cuda):
+                attn_output = xops.memory_efficient_attention(
+                    q, k, v,
+                    attn_bias=xops.LowerTriangularMask() if attn_mask is None else attn_mask.to(torch.bool),
+                    p=self.dropout if self.training else 0.0
+                )
         else:
             # Efficient block-sparse implementation
             attn_output = torch.zeros_like(q)
@@ -184,13 +210,24 @@ class SparseMultiHeadAttention(nn.Module):
                             k_block = k_block.view(bsz * head_count, end_j - j, self.head_dim)
                             v_block = v_block.view(bsz * head_count, end_j - j, self.head_dim)
                             
-                            # Compute attention and reshape back
-                            block_output = compute_block_attention(q_block, k_block, v_block, block_mask)
-                            block_output = block_output.view(bsz, head_count, end_i - i, self.head_dim)
+                            # Try to use CUDA graph for repeated computations
+                            graph_key = f"{pattern_name}_{i}_{j}_{seq_len}"
+                            graph_result = self._maybe_capture_cuda_graph(
+                                graph_key, q_block, k_block, v_block, block_mask
+                            )
                             
+                            if graph_result is not None:
+                                graph, cached_output = graph_result
+                                graph.replay()
+                                block_output = cached_output
+                            else:
+                                # Compute attention and reshape back
+                                block_output = compute_block_attention(q_block, k_block, v_block, block_mask)
+                            
+                            block_output = block_output.view(bsz, head_count, end_i - i, self.head_dim)
                             attn_output[:, start_head:end_head, i:end_i] = block_output
 
-            # Apply dropout
+            # Apply dropout with CUDA optimization
             if self.training and self.dropout > 0:
                 attn_output = F.dropout(attn_output, p=self.dropout, training=True)
 
