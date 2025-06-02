@@ -12,7 +12,7 @@ import urllib.request
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
-from sparse_attention import SparseAttention
+from sparse_attention import SparseMultiHeadAttention
 
 def load_data(data_path, data_url=None):
     """
@@ -605,7 +605,7 @@ class SparseTransformer(nn.Module):
             layer_attn_dropout = attention_dropout * (1.0 + i * 0.05)
             layer_attn_dropout = min(layer_attn_dropout, 0.4)
             
-            attention = SparseAttention(
+            attention = SparseMultiHeadAttention(
                 d_model,
                 nhead,
                 dropout=layer_attn_dropout,
