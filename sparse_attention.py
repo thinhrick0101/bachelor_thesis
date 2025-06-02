@@ -53,9 +53,9 @@ class SparseMultiHeadAttention(nn.Module):
         #   cluster 2: window_size=0 (no local), stride=32, plus anchors
         #   cluster 3: ±16 → window_size=32, stride=1
         self.window_sizes = {
-            0: 16,   # cluster 0 = ±8
+            0: 8,   # cluster 0 = ±8
             1: 32,   # cluster 1 = ±16
-            2: 0,    # cluster 2 = no local window
+            2: 64,    # cluster 2 = no local window
             3: 32    # cluster 3 = ±16
         }
         self.strides = {
@@ -101,7 +101,7 @@ class SparseMultiHeadAttention(nn.Module):
                 # attend to the middle token
                 mid = seq_len // 2
                 mask[i, mid] = True
-
+        mask = mask.tril()
         return mask  # CPU boolean tensor [L, L]
 
     def forward(self, x, attn_padding_mask=None, return_attention=False):
