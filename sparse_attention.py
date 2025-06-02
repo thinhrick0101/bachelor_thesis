@@ -44,157 +44,118 @@ class SparseMultiHeadAttention(nn.Module):
 
         self.scale = math.sqrt(self.head_dim)
 
-        # We will cache CPU masks in self._mask_cache[ (cluster_idx, seq_len) ] = boolean_tensor [L, L]
+        # Cache masks directly on GPU to avoid CPU->GPU transfer
         self._mask_cache = {}
-
-        # Exactly match the "±8 / ±16 / global / ±16" spec:
-        #   cluster 0: ±8 → window_size=16
-        #   cluster 1: ±16 → window_size=32, plus stride=8
-        #   cluster 2: window_size=0 (no local), stride=32, plus anchors
-        #   cluster 3: ±16 → window_size=32, stride=1
-        self.window_sizes = {
-            0: 8,   # cluster 0 = ±8
-            1: 32,   # cluster 1 = ±16
-            2: 64,    # cluster 2 = no local window
-            3: 32    # cluster 3 = ±16
-        }
-        self.strides = {
-            0: 1,    # cluster 0: no stride
-            1: 8,    # cluster 1: stride every 8th
-            2: 32,   # cluster 2: stride every 32nd
-            3: 1     # cluster 3: no stride
+        
+        # Pre-compute cluster configurations
+        self.cluster_configs = {
+            0: {'window': 8,  'stride': 1,  'global': False},  # narrow local
+            1: {'window': 32, 'stride': 8,  'global': False},  # local + strided
+            2: {'window': 0,  'stride': 32, 'global': True},   # global + strided
+            3: {'window': 32, 'stride': 1,  'global': False}   # wide local
         }
 
     def _shape(self, tensor, seq_len, bsz):
-        # After linear, we have [B, L, E]. 
-        # Reshape → [B, L, heads, head_dim], then transpose → [B, heads, L, head_dim].
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
-    def _create_cluster_mask(self, seq_len, cluster_idx):
+    @torch.jit.script_method  # JIT optimization
+    def _create_sparse_mask(self, seq_len: int, device: torch.device) -> torch.Tensor:
         """
-        Build a CPU‐side boolean mask [L, L] for cluster_idx.
-        True means "allowed to attend," False means "mask out."
+        Create all sparse attention masks at once for better parallelization.
+        Returns a tensor of shape [num_heads, seq_len, seq_len]
         """
-        mask = torch.zeros(seq_len, seq_len, dtype=torch.bool)  # on CPU
-
-        window_size = self.window_sizes[cluster_idx]
-        stride      = self.strides[cluster_idx]
-
-        for i in range(seq_len):
-            # 1) local window if window_size > 0
-            if window_size > 0:
-                half = window_size // 2
-                start = max(0, i - half)
-                end   = min(seq_len, i + half + 1)
-                mask[i, start:end] = True
-
-            # 2) strided attention if stride > 1
-            if stride > 1:
-                strided_indices = torch.arange(0, seq_len, stride)
-                mask[i, strided_indices] = True
-
-            # 3) cluster 2 global anchors only
-            if cluster_idx == 2:
-                # always attend to first token (0) and last token (L-1)
-                mask[i, 0]       = True
-                mask[i, seq_len-1] = True
-                # attend to the middle token
-                mid = seq_len // 2
-                mask[i, mid] = True
+        # Initialize full mask for all heads
+        full_mask = torch.zeros(self.num_heads, seq_len, seq_len, 
+                              dtype=torch.bool, device=device)
         
-        mask = mask.tril()  # Make causal
-        return mask  # CPU boolean tensor [L, L]
+        # Create masks for all heads in parallel
+        pos = torch.arange(seq_len, device=device)
+        for cluster_idx, config in self.cluster_configs.items():
+            start_h = cluster_idx * self.heads_per_cluster
+            end_h = (cluster_idx + 1) * self.heads_per_cluster
+            
+            # Local window attention
+            if config['window'] > 0:
+                half = config['window'] // 2
+                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
+                window_mask = (dist.abs() <= half)
+                full_mask[start_h:end_h] |= window_mask
+            
+            # Strided attention
+            if config['stride'] > 1:
+                stride_pos = torch.arange(0, seq_len, config['stride'], device=device)
+                stride_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
+                stride_mask[:, stride_pos] = True
+                full_mask[start_h:end_h] |= stride_mask
+            
+            # Global attention (first, middle, last tokens)
+            if config['global']:
+                global_pos = torch.tensor([0, seq_len//2, seq_len-1], device=device)
+                global_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
+                global_mask[:, global_pos] = True
+                full_mask[start_h:end_h] |= global_mask
+        
+        # Apply causal masking
+        causal_mask = torch.triu(torch.ones(seq_len, seq_len, dtype=torch.bool, device=device), diagonal=1)
+        full_mask &= ~causal_mask.unsqueeze(0)
+        
+        return full_mask
 
     def forward(self, query, key, value, attn_mask=None, need_weights=False, attn_padding_mask=None):
         """
-        Standard multi-head attention interface.
-        
-        Args:
-            query: [B, L, E]
-            key: [B, L, E]  
-            value: [B, L, E]
-            attn_mask: Combined causal+padding mask [B, L, L] or [L, L]
-            need_weights: If True, return attention probabilities
-            attn_padding_mask: Optional padding mask [B, L]
-        
-        Returns:
-            if need_weights=False:  → [B, L, E]
-            if need_weights=True:   → ([B, L, E], [B, H, L, L])
+        Optimized sparse multi-head attention implementation.
         """
         bsz, seq_len, _ = query.size()
         device = query.device
 
-        # 1) compute Q/K/V
-        q = self.q_proj(query)  # [B, L, E]
+        # 1) Compute Q/K/V with parallel projections
+        q = self.q_proj(query)
         k = self.k_proj(key)
         v = self.v_proj(value)
 
-        # 2) reshape → [B, H, L, head_dim]
+        # 2) Reshape to [B, H, L, D] in parallel
         q = self._shape(q, seq_len, bsz)
         k = self._shape(k, seq_len, bsz)
         v = self._shape(v, seq_len, bsz)
 
-        # 3) raw dot‐product scores: [B, H, L, L]
+        # 3) Compute attention scores
         attn_scores = torch.matmul(q, k.transpose(-2, -1)) / self.scale
 
-        # 4) apply cluster masks head‐by‐head
-        for cluster_idx in range(4):
-            start_h = cluster_idx * self.heads_per_cluster
-            end_h   = (cluster_idx + 1) * self.heads_per_cluster
-            cache_key = (cluster_idx, seq_len)
+        # 4) Apply sparse attention masks (cached and parallelized)
+        cache_key = f"sparse_mask_{seq_len}"
+        if cache_key not in self._mask_cache:
+            self._mask_cache[cache_key] = self._create_sparse_mask(seq_len, device)
+        
+        sparse_mask = self._mask_cache[cache_key]
+        fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
+        attn_scores = attn_scores.masked_fill(~sparse_mask.unsqueeze(0), fill_val)
 
-            if cache_key not in self._mask_cache:
-                # build on CPU once
-                cpu_mask = self._create_cluster_mask(seq_len, cluster_idx)  # [L, L] on CPU
-                self._mask_cache[cache_key] = cpu_mask
-
-            # move to GPU if needed
-            cluster_mask = self._mask_cache[cache_key].to(device)  # [L, L]
-
-            # invert to mask out
-            inv = ~cluster_mask  # [L, L] bool
-
-            # choose large negative fill
-            fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
-
-            attn_scores[:, start_h:end_h] = attn_scores[:, start_h:end_h].masked_fill(
-                inv.unsqueeze(0).unsqueeze(0),  # → [1, 1, L, L]
-                fill_val
-            )
-
-        # 5) apply attention mask if provided
+        # 5) Apply attention mask if provided
         if attn_mask is not None:
-            # Handle both [B, L, L] and [L, L] masks
             if attn_mask.dim() == 2:
                 attn_mask = attn_mask.unsqueeze(0)
-            
-            fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
             attn_scores = attn_scores.masked_fill(~attn_mask.unsqueeze(1), fill_val)
 
-        # 6) apply padding mask if provided
+        # 6) Apply padding mask if provided
         if attn_padding_mask is not None:
-            # [B, L] → [B, 1, 1, L]
             pad_mask = ~attn_padding_mask.view(bsz, 1, 1, seq_len)
-            fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
             attn_scores = attn_scores.masked_fill(pad_mask, fill_val)
 
-        # 7) softmax + dropout → attention_probs
-        attn_probs = F.softmax(attn_scores, dim=-1)  # [B, H, L, L]
+        # 7) Compute attention probabilities with optimized memory access
+        attn_probs = F.softmax(attn_scores, dim=-1, dtype=torch.float32)
+        if attn_scores.dtype == torch.float16:
+            attn_probs = attn_probs.to(torch.float16)
         attn_probs = F.dropout(attn_probs, p=self.dropout, training=self.training)
 
-        # 8) weighted sum → [B, H, L, head_dim]
+        # 8) Compute output with parallel matrix multiplication
         context = torch.matmul(attn_probs, v)
-
-        # 9) restore → [B, L, E]
         context = context.transpose(1, 2).reshape(bsz, seq_len, self.embedding_dim)
-
-        # 10) final linear
-        out = self.out_proj(context)  # [B, L, E]
+        output = self.out_proj(context)
 
         if need_weights:
-            return out, attn_probs
+            return output, attn_probs
 
-        return out
+        return output
 
 
 
