@@ -58,7 +58,6 @@ class SparseMultiHeadAttention(nn.Module):
     def _shape(self, tensor, seq_len, bsz):
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
-    @torch.jit.script_method  # JIT optimization
     def _create_sparse_mask(self, seq_len: int, device: torch.device) -> torch.Tensor:
         """
         Create all sparse attention masks at once for better parallelization.
@@ -70,30 +69,42 @@ class SparseMultiHeadAttention(nn.Module):
         
         # Create masks for all heads in parallel
         pos = torch.arange(seq_len, device=device)
-        for cluster_idx, config in self.cluster_configs.items():
-            start_h = cluster_idx * self.heads_per_cluster
-            end_h = (cluster_idx + 1) * self.heads_per_cluster
+        
+        # Process each cluster type
+        heads_per_cluster = self.num_heads // 4
+        for cluster_idx in range(4):
+            start_h = cluster_idx * heads_per_cluster
+            end_h = (cluster_idx + 1) * heads_per_cluster
             
-            # Local window attention
-            if config['window'] > 0:
-                half = config['window'] // 2
+            if cluster_idx == 0:  # Narrow local window (±8)
+                window = 8
                 dist = pos.unsqueeze(1) - pos.unsqueeze(0)
-                window_mask = (dist.abs() <= half)
+                window_mask = (dist.abs() <= window // 2)
                 full_mask[start_h:end_h] |= window_mask
-            
-            # Strided attention
-            if config['stride'] > 1:
-                stride_pos = torch.arange(0, seq_len, config['stride'], device=device)
+                
+            elif cluster_idx == 1:  # Local + strided (±16 + every 8th)
+                window = 32
+                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
+                window_mask = (dist.abs() <= window // 2)
+                stride_pos = torch.arange(0, seq_len, 8, device=device)
                 stride_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
                 stride_mask[:, stride_pos] = True
-                full_mask[start_h:end_h] |= stride_mask
-            
-            # Global attention (first, middle, last tokens)
-            if config['global']:
+                full_mask[start_h:end_h] |= (window_mask | stride_mask)
+                
+            elif cluster_idx == 2:  # Global anchors + strided (every 32nd)
                 global_pos = torch.tensor([0, seq_len//2, seq_len-1], device=device)
                 global_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
                 global_mask[:, global_pos] = True
-                full_mask[start_h:end_h] |= global_mask
+                stride_pos = torch.arange(0, seq_len, 32, device=device)
+                stride_mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
+                stride_mask[:, stride_pos] = True
+                full_mask[start_h:end_h] |= (global_mask | stride_mask)
+                
+            else:  # Wide local window (±16)
+                window = 32
+                dist = pos.unsqueeze(1) - pos.unsqueeze(0)
+                window_mask = (dist.abs() <= window // 2)
+                full_mask[start_h:end_h] |= window_mask
         
         # Apply causal masking
         causal_mask = torch.triu(torch.ones(seq_len, seq_len, dtype=torch.bool, device=device), diagonal=1)
