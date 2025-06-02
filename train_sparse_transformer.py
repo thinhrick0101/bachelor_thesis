@@ -10,6 +10,7 @@ from stable_char_transformer import (
     load_data,
     train_model
 )
+from torch.cuda.amp import autocast
 
 def visualize_loss(train_losses, val_losses=None, output_file='sparse_model_loss.png'):
     """Visualize training and validation losses"""
@@ -61,27 +62,89 @@ def visualize_loss(train_losses, val_losses=None, output_file='sparse_model_loss
         print(f"Best Loss: {min(val_losses):.4f}")
 
 def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, top_k=50, top_p=0.9, device='cuda'):
-    """Generate text using the trained model"""
+    """Generate text using the trained sparse transformer with improved sampling"""
     model.eval()
     
     # Encode the prompt
     input_ids = tokenizer.encode(prompt)
-    input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0).to(device)
+    input_tensor = torch.tensor(input_ids, dtype=torch.long, device=device).unsqueeze(0)
+    generated = input_tensor
     
-    # Generate text
+    # Track recent tokens for repetition detection
+    recent_tokens = []
+    token_counts = {}
+    
+    # Generate text token by token
     with torch.no_grad():
-        output = model.generate(
-            prompt=input_tensor,
-            max_length=max_length,
-            temperature=temperature,
-            top_k=top_k,
-            top_p=top_p,
-            tokenizer=tokenizer,
-            device=device
-        )
+        for _ in range(max_length):
+            # Get model predictions
+            with autocast():
+                logits = model(generated)
+                next_token_logits = logits[0, -1, :]
+            
+            # Apply temperature
+            next_token_logits = next_token_logits / temperature
+            
+            # Dynamic repetition penalty based on recent usage
+            for token in set(recent_tokens):
+                count = recent_tokens.count(token)
+                penalty = 1.0 + (count * 0.5)  # Increased penalty for frequency
+                next_token_logits[token] /= penalty
+            
+            # Apply top-k filtering
+            if top_k > 0:
+                indices_to_remove = next_token_logits < torch.topk(next_token_logits, top_k)[0][..., -1, None]
+                next_token_logits[indices_to_remove] = float('-inf')
+            
+            # Apply top-p (nucleus) filtering
+            if top_p < 1.0:
+                sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+                cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
+                sorted_indices_to_remove = cumulative_probs > top_p
+                sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                sorted_indices_to_remove[..., 0] = 0
+                indices_to_remove = sorted_indices[sorted_indices_to_remove]
+                next_token_logits[indices_to_remove] = float('-inf')
+            
+            # Sample next token
+            probs = torch.softmax(next_token_logits, dim=-1)
+            next_token = torch.multinomial(probs, num_samples=1)
+            token_id = next_token.item()
+            
+            # Update tracking
+            recent_tokens.append(token_id)
+            if len(recent_tokens) > 20:  # Track last 20 tokens
+                recent_tokens.pop(0)
+            
+            token_counts[token_id] = token_counts.get(token_id, 0) + 1
+            
+            # Append to generated sequence
+            generated = torch.cat([generated, next_token.unsqueeze(0)], dim=1)
+            
+            # Stop conditions
+            if token_id in [10, 0]:  # newline or end token
+                break
+                
+            # Check for repetitive patterns
+            if len(recent_tokens) >= 5:
+                # Check for immediate repetition
+                if len(set(recent_tokens[-5:])) == 1:
+                    break
+                    
+                # Check for bi-gram repetition
+                if len(recent_tokens) >= 10:
+                    last_bigrams = [tuple(recent_tokens[i:i+2]) for i in range(len(recent_tokens)-2)]
+                    if len(set(last_bigrams)) <= 2:
+                        break
+            
+            # Check for overuse of any token
+            max_count = max(token_counts.values()) if token_counts else 0
+            if max_count > len(generated[0]) * 0.3:  # No token should be >30% of generation
+                break
     
     # Decode and return the generated text
-    return tokenizer.decode(output[0].tolist())
+    generated_ids = generated[0].tolist()
+    return tokenizer.decode(generated_ids)
 
 def main():
     # Model configuration
