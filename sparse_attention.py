@@ -15,12 +15,11 @@ import math
 
 class SparseMultiHeadAttention(nn.Module):
     """
-    Multi‐head attention with empirically optimized sparse patterns (clusters).
-    Distribution based on cluster analysis:
-    Cluster 0: focused local (19% of heads) - narrow window ±4
-    Cluster 3: wider local (41% of heads) - medium window ±16
-    Cluster 1: diffuse/strided (28% of heads) - wide window ±32 + stride
-    Cluster 2: global/sparse (12% of heads) - strategic global attention
+    Multi‐head attention with optimized sparse patterns to approximate dense attention:
+    - Cluster 0: focused local (±8) for fine-grained local context
+    - Cluster 3: wider local (±16) for medium-range dependencies
+    - Cluster 1: strided attention (±32, stride=8) for efficient long-range coverage
+    - Cluster 2: global attention with strategic anchor points for end-to-end flow
     """
 
     def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
@@ -35,12 +34,12 @@ class SparseMultiHeadAttention(nn.Module):
         assert num_heads == 8, \
             "This implementation assumes 8 heads for optimal distribution"
 
-        # Empirically derived head distribution
+        # Redistribute heads to favor wider local context
         self.cluster_head_counts = {
-            0: 2,  # 19% ≈ 2 heads - focused local
-            3: 3,  # 41% ≈ 3 heads - wider local
-            1: 2,  # 28% ≈ 2 heads - diffuse/strided
-            2: 1   # 12% ≈ 1 head  - global/sparse
+            0: 2,  # 2 heads focused local ±8
+            3: 4,  # 4 heads wider local ±16 (increased from 3→4)
+            1: 1,  # 1 head diffuse (reduced from 2→1)
+            2: 1   # 1 head global (unchanged)
         }
 
         # Q/K/V projections + final output projection
@@ -54,58 +53,69 @@ class SparseMultiHeadAttention(nn.Module):
         # Cache for CPU masks
         self._mask_cache = {}
 
-        # Window sizes adjusted based on entropy analysis
+        # Window sizes increased for better context coverage
         self.window_sizes = {
-            0: 4,    # Cluster 0: focused local (lowest entropy)
-            3: 16,   # Cluster 3: wider local (medium entropy)
-            1: 32,   # Cluster 1: diffuse (high entropy)
-            2: 64    # Cluster 2: global (highest entropy)
+            0: 8,     # Cluster 0: ±8 (increased from ±4)
+            3: 16,    # Cluster 3: ±16 (unchanged but more heads)
+            1: 32,    # Cluster 1: ±32 (unchanged)
+            2: 16     # Cluster 2: ±16 for global + anchors
         }
 
-        # Stride sizes optimized for each pattern
+        # Reduced strides for denser sampling
         self.strides = {
-            0: 1,    # No stride for focused local
-            3: 1,    # No stride for wider local
-            1: 16,   # Medium stride for diffuse
-            2: 32    # Large stride for global
+            0: 1,     # No stride for focused local
+            3: 1,     # No stride for wider local
+            1: 8,     # Reduced from 16→8 for denser coverage
+            2: 16     # Reduced from 32→16 for global head
         }
 
-        # Global anchor ratios (percentage points in sequence)
-        self.global_anchors = [0, 0.25, 0.5, 0.75, 1.0]  # More strategic anchor points
+        # More strategic global anchor points
+        self.global_anchors = [
+            0.0,      # Start
+            0.25,     # Quarter
+            0.382,    # Golden ratio point (better for natural sequences)
+            0.5,      # Middle
+            0.618,    # Inverse golden ratio
+            0.75,     # Three quarters
+            1.0       # End
+        ]
 
     def _shape(self, tensor, seq_len, bsz):
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
     def _create_cluster_mask(self, seq_len, cluster_idx):
         """
-        Build a CPU‐side boolean mask [L, L] for cluster_idx.
-        True means "allowed to attend," False means "mask out."
+        Build attention mask for each cluster:
+        - Clusters 0,3: Pure local attention with different windows
+        - Cluster 1: Strided attention for efficient long-range coverage
+        - Cluster 2: Global attention with strategic anchor points
         """
-        mask = torch.zeros(seq_len, seq_len, dtype=torch.bool)  # on CPU
+        mask = torch.zeros(seq_len, seq_len, dtype=torch.bool)
 
         window_size = self.window_sizes[cluster_idx]
         stride = self.strides[cluster_idx]
 
         for i in range(seq_len):
-            # 1) Local window if window_size > 0
+            # 1) Local window with appropriate size
             if window_size > 0:
                 half = window_size // 2
                 start = max(0, i - half)
                 end = min(seq_len, i + half + 1)
                 mask[i, start:end] = True
 
-            # 2) Strided attention if stride > 1
+            # 2) Strided attention (for clusters 1 and 2)
             if stride > 1:
                 strided_indices = torch.arange(0, seq_len, stride)
                 mask[i, strided_indices] = True
 
-            # 3) Global anchors for cluster 2 (more strategic points)
+            # 3) Global anchors (only for cluster 2)
             if cluster_idx == 2:
                 for ratio in self.global_anchors:
                     idx = min(seq_len - 1, int(ratio * seq_len))
                     mask[i, idx] = True
 
-        mask = mask.tril()  # Make causal
+        # Make causal (lower triangular)
+        mask = mask.tril()
         return mask
 
     def forward(self, query, key, value, attn_mask=None, need_weights=False, attn_padding_mask=None):
