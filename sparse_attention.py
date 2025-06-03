@@ -50,7 +50,7 @@ class SparseMultiHeadAttention(nn.Module):
 
         self.scale = math.sqrt(self.head_dim)
 
-        # Cache for CPU masks
+        # Cache for masks (stores them on the device they were created for)
         self._mask_cache = {}
 
         # Increased window sizes for better coverage
@@ -87,14 +87,14 @@ class SparseMultiHeadAttention(nn.Module):
     def _shape(self, tensor, seq_len, bsz):
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
 
-    def _create_cluster_mask(self, seq_len, cluster_idx):
+    def _create_cluster_mask(self, seq_len, cluster_idx, device):
         """
         Build attention mask for each cluster:
         - Clusters 0,3: Pure local attention with different windows
         - Cluster 1: Strided attention for efficient long-range coverage
         - Cluster 2: Global attention with strategic anchor points
         """
-        mask = torch.zeros(seq_len, seq_len, dtype=torch.bool)
+        mask = torch.zeros(seq_len, seq_len, dtype=torch.bool, device=device)
 
         window_size = self.window_sizes[cluster_idx]
         stride = self.strides[cluster_idx]
@@ -109,7 +109,7 @@ class SparseMultiHeadAttention(nn.Module):
 
             # 2) Strided attention (for clusters 1 and 2)
             if stride > 1:
-                strided_indices = torch.arange(0, seq_len, stride)
+                strided_indices = torch.arange(0, seq_len, stride, device=device)
                 mask[i, strided_indices] = True
 
             # 3) Global anchors (only for cluster 2)
@@ -160,12 +160,13 @@ class SparseMultiHeadAttention(nn.Module):
             num_heads = self.cluster_head_counts[cluster_idx]
             end_head = current_head + num_heads
             
-            cache_key = (cluster_idx, seq_len)
+            cache_key = (cluster_idx, seq_len, device) # Add device to cache key
             if cache_key not in self._mask_cache:
-                cpu_mask = self._create_cluster_mask(seq_len, cluster_idx)
-                self._mask_cache[cache_key] = cpu_mask
+                # Create mask directly on the target device
+                device_mask = self._create_cluster_mask(seq_len, cluster_idx, device)
+                self._mask_cache[cache_key] = device_mask
 
-            cluster_mask = self._mask_cache[cache_key].to(device)
+            cluster_mask = self._mask_cache[cache_key] # Already on the correct device
             inv = ~cluster_mask
 
             fill_val = -65504.0 if attn_scores.dtype == torch.float16 else -1e9
