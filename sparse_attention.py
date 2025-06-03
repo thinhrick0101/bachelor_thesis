@@ -15,11 +15,11 @@ import math
 
 class SparseMultiHeadAttention(nn.Module):
     """
-    Multi‐head attention with optimized sparse patterns to approximate dense attention:
-    - Cluster 0: focused local (±8) for fine-grained local context
-    - Cluster 3: wider local (±16) for medium-range dependencies
-    - Cluster 1: strided attention (±32, stride=8) for efficient long-range coverage
-    - Cluster 2: global attention with strategic anchor points for end-to-end flow
+    Multi‐head attention with aggressive sparse patterns to speed up learning:
+    - Cluster 0: focused local (±16) for essential local context
+    - Cluster 3: diffuse attention (±32, stride=4) for medium-range
+    - Cluster 1: strided attention (±64, stride=8) for long-range
+    - Cluster 2: global attention with dense anchor points
     """
 
     def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
@@ -34,12 +34,12 @@ class SparseMultiHeadAttention(nn.Module):
         assert num_heads == 8, \
             "This implementation assumes 8 heads for optimal distribution"
 
-        # Redistribute heads to favor wider local context
+        # More aggressive head distribution favoring global/diffuse attention
         self.cluster_head_counts = {
-            0: 2,  # 2 heads focused local ±8
-            3: 4,  # 4 heads wider local ±16 (increased from 3→4)
-            1: 1,  # 1 head diffuse (reduced from 2→1)
-            2: 1   # 1 head global (unchanged)
+            0: 1,  # 1 head focused local (reduced from 2)
+            3: 2,  # 2 heads diffuse medium-range (reduced from 4)
+            1: 3,  # 3 heads strided long-range (increased from 1)
+            2: 2   # 2 heads global (increased from 1)
         }
 
         # Q/K/V projections + final output projection
@@ -53,30 +53,34 @@ class SparseMultiHeadAttention(nn.Module):
         # Cache for CPU masks
         self._mask_cache = {}
 
-        # Window sizes increased for better context coverage
+        # Increased window sizes for better coverage
         self.window_sizes = {
-            0: 8,     # Cluster 0: ±8 (increased from ±4)
-            3: 16,    # Cluster 3: ±16 (unchanged but more heads)
-            1: 32,    # Cluster 1: ±32 (unchanged)
-            2: 16     # Cluster 2: ±16 for global + anchors
+            0: 16,    # Local: increased to ±16 for better local context
+            3: 32,    # Medium: increased to ±32 for diffuse coverage
+            1: 64,    # Long-range: increased to ±64 for broader context
+            2: 128    # Global: maximum context with anchor points
         }
 
-        # Reduced strides for denser sampling
+        # More aggressive stride patterns
         self.strides = {
             0: 1,     # No stride for focused local
-            3: 1,     # No stride for wider local
-            1: 8,     # Reduced from 16→8 for denser coverage
-            2: 16     # Reduced from 32→16 for global head
+            3: 4,     # Small stride for diffuse (reduced from 8)
+            1: 8,     # Medium stride for long-range
+            2: 16     # Large stride for global coverage
         }
 
-        # More strategic global anchor points
+        # Denser global anchor points for faster information flow
         self.global_anchors = [
             0.0,      # Start
-            0.25,     # Quarter
-            0.382,    # Golden ratio point (better for natural sequences)
+            0.1,      # Early context
+            0.2,      # Early-mid
+            0.3,      # Early-mid
+            0.382,    # Golden ratio point
             0.5,      # Middle
             0.618,    # Inverse golden ratio
-            0.75,     # Three quarters
+            0.7,      # Late-mid
+            0.8,      # Late-mid
+            0.9,      # Late context
             1.0       # End
         ]
 
