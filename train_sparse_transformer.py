@@ -206,12 +206,12 @@ def main():
             model=model,
             train_batches=train_batches,
             val_batches=val_batches,
-            num_epochs=5,  # Full training run
+            num_epochs=40,  # Full training run
             learning_rate=1e-4,
             weight_decay=0.1,
             warmup_steps=1000,
             device=device,
-            patience=8,  # Increased patience for longer training
+            patience=5,  # Increased patience for longer training
             min_lr=1e-5,  # Minimum learning rate
             gradient_accumulation_steps=4,  # Gradient accumulation for stability
             use_mixed_precision=True,  # Use mixed precision training
