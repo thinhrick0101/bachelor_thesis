@@ -149,6 +149,8 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
     return tokenizer.decode(generated_ids)
 
 def main():
+    os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:256'
+
     # Model configuration
     config_dict = {
         'vocab_size': 256,  # Keep at 256 for byte-level tokenization
