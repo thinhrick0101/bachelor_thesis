@@ -7,8 +7,27 @@ patterns derived from cluster analysis of dense attention heads.
 import torch
 import torch.nn as nn
 import math
-from sparse_attention import SparseMultiHeadAttention, SparseTransformerLayer
-from stable_char_transformer import ImprovedPositionalEncoding
+import torch.nn.functional as F
+from sparse_attention import SparseTransformerLayer
+
+
+class ImprovedPositionalEncoding(nn.Module):
+    def __init__(self, d_model, dropout=0.1, max_len=5000):
+        super(ImprovedPositionalEncoding, self).__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        pe = torch.zeros(max_len, d_model)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        pe = pe.unsqueeze(0) # changed from pe.unsqueeze(0).transpose(0,1) to be [1, max_len, d_model]
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        # x shape: [B, L, E]
+        x = x + self.pe[:, :x.size(1), :]
+        return self.dropout(x)
 
 
 class SparseByteTransformer(nn.Module):
@@ -25,149 +44,68 @@ class SparseByteTransformer(nn.Module):
     - Weight-tied output projection
     """
     
-    def __init__(
-        self,
-        d_model=512,
-        nhead=8,
-        num_layers=12,
-        dim_feedforward=2048,
-        dropout=0.1,
-        attention_dropout=0.1,
-        token_dropout=0.0,
-        max_len=5000
-    ):
-        """
-        Initialize the transformer model.
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.vocab_size = config.vocab_size # Should be 256 for byte-level
+        self.d_model = config.d_model
+
+        self.token_embedding = nn.Embedding(self.vocab_size, self.d_model)
+        self.pos_encoder = ImprovedPositionalEncoding(self.d_model, config.dropout, config.seq_length)
         
-        Args:
-            d_model: Dimension of the model
-            nhead: Number of attention heads
-            num_layers: Number of transformer layers
-            dim_feedforward: Dimension of the feedforward network
-            dropout: Dropout rate
-            attention_dropout: Dropout rate for attention weights
-            token_dropout: Probability of dropping entire token embeddings
-            max_len: Maximum sequence length for positional encoding
-        """
-        super(SparseByteTransformer, self).__init__()
-        
-        # Model dimensions
-        self.vocab_size = 256  # Fixed for byte-level modeling
-        self.d_model = d_model
-        self.token_dropout = token_dropout
-        
-        # Token embedding with scaling
-        self.embedding = nn.Embedding(self.vocab_size, d_model)
-        self.embed_scale = math.sqrt(d_model)
-        
-        # Positional encoding
-        self.pos_encoder = ImprovedPositionalEncoding(
-            d_model=d_model,
-            max_len=max_len,
-            dropout=dropout
-        )
-        
-        # Dropout layers
-        self.embedding_dropout = nn.Dropout(dropout)
-        
-        # Stack of transformer layers
-        self.layers = nn.ModuleList([
+        # Transformer Encoder Layers
+        self.transformer_encoder = nn.ModuleList([
             SparseTransformerLayer(
-                embedding_dim=d_model,
-                num_heads=nhead,
-                ffn_dim=dim_feedforward,
-                dropout=dropout,
-                attention_dropout=attention_dropout
-            )
-            for _ in range(num_layers)
+                d_model=self.d_model,
+                nhead=config.nhead,
+                dim_feedforward=config.ffn_dim,
+                dropout=config.dropout
+            ) for _ in range(config.num_layers)
         ])
+
+        self.output_projection = nn.Linear(self.d_model, self.vocab_size)
         
-        # Final layer norm
-        self.norm = nn.LayerNorm(d_model)
+        # Weight tying
+        if config.get('tie_weights', True):
+            self.output_projection.weight = self.token_embedding.weight
+
+        self.embed_scale = math.sqrt(self.d_model) if config.get('scale_embeddings', True) else 1.0
+        self.token_dropout_p = config.get('token_dropout', 0.0)
+
+    def forward(self, src_tokens, padding_mask=None):
+        # src_tokens: [B, L] (integer token ids)
+        # padding_mask: [B, L] (boolean, True if NOT padded, False if padded) - OPTIONAL
+
+        # Embedding and positional encoding
+        x = self.token_embedding(src_tokens) * self.embed_scale # [B, L, E]
         
-        # Output projection to vocabulary (tied with embedding)
-        self.output_projection = nn.Linear(self.vocab_size, d_model, bias=False)
-        self.output_projection.weight = self.embedding.weight
-        
-        # Initialize weights
-        self._init_weights()
-    
-    def _init_weights(self):
-        """Initialize the embedding weights with normal distribution."""
-        nn.init.normal_(self.embedding.weight, mean=0, std=0.02)
-        # Output projection weights are tied to embedding
-    
-    def _apply_token_dropout(self, x, training=True):
-        """
-        Randomly mask out entire token embeddings with probability token_dropout.
-        
-        Args:
-            x: Input tensor of shape [batch_size, seq_length, d_model]
-            training: Whether the model is in training mode
-        
-        Returns:
-            x: Tensor with randomly masked token embeddings
-        """
-        if training and self.token_dropout > 0:
-            mask = torch.bernoulli(
-                torch.full(x.shape[:2], 1 - self.token_dropout, device=x.device)
-            ).unsqueeze(-1)
-            x = x * mask
-        return x
-    
-    def forward(self, x, return_attention=False):
-        """
-        Forward pass of the model.
-        
-        Args:
-            x: Input tensor of shape [batch_size, seq_length]
-            return_attention: Whether to return attention maps for visualization
-        
-        Returns:
-            logits: Output logits of shape [batch_size, seq_length, vocab_size]
-            attention_maps: Optional list of attention maps from each layer
-        """
-        batch_size, seq_length = x.size()
-        
-        # Create causal mask for autoregressive modeling
-        causal_mask = torch.triu(
-            torch.ones(seq_length, seq_length, device=x.device),
-            diagonal=1
-        ).bool()
-        causal_mask = causal_mask.unsqueeze(0).unsqueeze(0)  # [1, 1, L, L]
-        
-        # 1. Token embedding with scaling
-        x = self.embedding(x) * self.embed_scale  # [B, L, d_model]
-        
-        # 2. Add positional encoding
-        x = self.pos_encoder(x)
-        
-        # 3. Apply embedding dropout
-        x = self.embedding_dropout(x)
-        
-        # 4. Apply token dropout if enabled
-        x = self._apply_token_dropout(x, self.training)
-        
-        attention_maps = []
-        
-        # 5. Pass through transformer layers
-        for layer in self.layers:
-            if return_attention:
-                x, attn = layer(x, mask=~causal_mask, return_attention=True)
-                attention_maps.append(attn)
-            else:
-                x = layer(x, mask=~causal_mask)
-        
-        # 6. Final layer norm
-        x = self.norm(x)
-        
-        # 7. Project to vocabulary size
-        logits = self.output_projection(x)
-        
-        if return_attention:
-            return logits, attention_maps
+        if self.training and self.token_dropout_p > 0:
+            # Apply token dropout (set entire embedding vector to zero)
+            mask = torch.rand_like(x[:,:,0]) < self.token_dropout_p # [B,L]
+            x[mask] = 0.0
+
+        x = self.pos_encoder(x) # [B, L, E]
+
+        # Prepare src_key_padding_mask for SparseTransformerLayer
+        # It expects True for PADDED tokens.
+        # Our input `padding_mask` is True for NON-PADDED tokens.
+        src_key_padding_mask_for_layers = None
+        if padding_mask is not None:
+            src_key_padding_mask_for_layers = ~padding_mask # Invert: True means PADDED
+
+        # Transformer layers
+        for layer in self.transformer_encoder:
+            # Layers no longer take attn_mask for causality
+            x = layer(x, src_key_padding_mask=src_key_padding_mask_for_layers) 
+            # x shape: [B, L, E]
+
+        # Output projection
+        logits = self.output_projection(x) # [B, L, vocab_size]
         return logits
-    
+
+    def count_parameters(self):
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
     def generate(self, prefix_tokens, max_new_tokens, temperature=1.0):
         """
         Generate new tokens autoregressively given a prefix.
