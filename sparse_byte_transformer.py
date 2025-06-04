@@ -66,11 +66,11 @@ class SparseByteTransformer(nn.Module):
         self.output_projection = nn.Linear(self.d_model, self.vocab_size)
         
         # Weight tying
-        if config.get('tie_weights', True):
+        if getattr(self.config, 'tie_weights', True):
             self.output_projection.weight = self.token_embedding.weight
 
-        self.embed_scale = math.sqrt(self.d_model) if config.get('scale_embeddings', True) else 1.0
-        self.token_dropout_p = config.get('token_dropout', 0.0)
+        self.embed_scale = math.sqrt(self.d_model) if getattr(self.config, 'scale_embeddings', True) else 1.0
+        self.token_dropout_p = getattr(self.config, 'token_dropout', 0.0)
 
     def forward(self, src_tokens, padding_mask=None):
         # src_tokens: [B, L] (integer token ids)
