@@ -204,7 +204,7 @@ def main():
         
         # Create batches
         batch_size = 32
-        seq_length = 1024
+        seq_length = 512
         train_batches = create_batches(train_data, batch_size, seq_length)
         val_batches = create_batches(val_data, batch_size, seq_length)
         
