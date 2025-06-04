@@ -3,6 +3,7 @@ import torch.nn as nn
 import os
 import matplotlib.pyplot as plt
 import math
+import argparse
 from stable_char_transformer import (
     SparseTransformer, 
     ByteTokenizer, 
@@ -149,40 +150,30 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
 
 def main():
     # Model configuration
-    # config = {
-    #     'vocab_size': 256,  # Keep at 256 for byte-level tokenization
-    #     'd_model': 512,     # Keep at 512 for our analysis
-    #     'nhead': 8,
-    #     'num_layers': 12,   # Keep at 12 for our analysis
-    #     'dim_feedforward': 2048,
-    #     'dropout': 0.1,
-    #     'attention_dropout': 0.1,
-    #     'activation_dropout': 0.1,
-    #     'token_dropout': 0.05,
-    #     'use_checkpoint': True,
-    #     'stochastic_depth_prob': 0.1
-    # }
-    config = {
-        'vocab_size': 256,
-        'd_model': 384, # Reduced from 512
-        'nhead': 6,     # Reduced from 8
-        'num_layers': 8, # Reduced from 12
-        'ffn_dim': 1536, # Reduced from 2048
+    config_dict = {
+        'vocab_size': 256,  # Keep at 256 for byte-level tokenization
+        'd_model': 512,     # Keep at 512 for our analysis
+        'nhead': 8,
+        'num_layers': 12,   # Keep at 12 for our analysis
+        'dim_feedforward': 2048,
         'dropout': 0.1,
         'attention_dropout': 0.1,
         'activation_dropout': 0.1,
         'token_dropout': 0.05,
         'use_checkpoint': True,
         'stochastic_depth_prob': 0.1,
-        'seq_length':2048
+        'seq_length': 1024  # Added: SparseByteTransformer needs this for PositionalEncoding
     }
     
+    # Convert dict to Namespace for attribute access in the model
+    model_config = argparse.Namespace(**config_dict)
+
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     #model = SparseTransformer(**config)
     # Create model instance
-    model = SparseByteTransformer(**config)
+    model = SparseByteTransformer(model_config)
     model = model.to(device)
     
     # Create tokenizer
