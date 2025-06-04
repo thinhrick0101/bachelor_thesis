@@ -1071,15 +1071,23 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
             # Print batch progress every 10 batches
             if (batch_idx + 1) % 10 == 0:
+                current_batch_loss = loss.item() * gradient_accumulation_steps
+                if torch.isnan(torch.tensor(current_batch_loss)) or torch.isinf(torch.tensor(current_batch_loss)):
+                    print(f"ERROR: NaN or Inf detected in current_batch_loss: {current_batch_loss}")
                 print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
-                      f"Loss: {loss.item() * gradient_accumulation_steps:.4f}")
+                      f"Loss: {current_batch_loss:.4f}")
 
         # Calculate average loss for the epoch
         avg_loss = total_loss / num_batches
         train_losses.append(avg_loss)
 
         # Calculate perplexity
-        perplexity = math.exp(avg_loss)
+        print(f"DEBUG: avg_loss before math.exp: {avg_loss}") # Added debug print
+        if torch.isnan(torch.tensor(avg_loss)) or torch.isinf(torch.tensor(avg_loss)) or avg_loss > 700: # Prevent overflow
+            print(f"Warning: avg_loss is problematic ({avg_loss}), perplexity will be very high or error.")
+            perplexity = float('inf') # Assign inf if loss is too high for math.exp
+        else:
+            perplexity = math.exp(avg_loss)
 
         # Evaluate on validation set if provided
         if val_batches is not None:
