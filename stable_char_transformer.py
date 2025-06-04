@@ -1028,12 +1028,12 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                     scaler.step(optimizer)
                     scaler.update()
 
-                    # Zero gradients after update
-                    optimizer.zero_grad()
-
-                    # Update learning rate with warmup scheduler
-                    if warmup_steps > 0:
+                    # Update learning rate AFTER optimizer step for per-step schedulers
+                    if warmup_steps > 0: # Check if it's a per-step scheduler
                         scheduler.step()
+                    
+                    optimizer.zero_grad() # Zero gradients after update and scheduler step
+
             else:
                 # Standard precision training
                 # Forward pass
@@ -1058,13 +1058,12 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
                     # Update weights
                     optimizer.step()
-
-                    # Zero gradients after update
-                    optimizer.zero_grad()
-
-                    # Update learning rate with warmup scheduler
-                    if warmup_steps > 0:
+                    # Update learning rate AFTER optimizer step for per-step schedulers
+                    if warmup_steps > 0: # Check if it's a per-step scheduler
                         scheduler.step()
+
+                    # Zero gradients after update and scheduler step
+                    optimizer.zero_grad()
 
             # Track loss (use the unscaled loss for logging)
             total_loss += loss.item() * gradient_accumulation_steps
