@@ -51,16 +51,16 @@ class SparseByteTransformer(nn.Module):
         self.d_model = config.d_model
 
         self.token_embedding = nn.Embedding(self.vocab_size, self.d_model)
-        self.pos_encoder = ImprovedPositionalEncoding(self.d_model, config.dropout, config.seq_length)
+        self.pos_encoder = ImprovedPositionalEncoding(self.d_model, self.config.dropout, self.config.seq_length)
         
         # Transformer Encoder Layers
         self.transformer_encoder = nn.ModuleList([
             SparseTransformerLayer(
                 d_model=self.d_model,
-                nhead=config.nhead,
-                dim_feedforward=config.ffn_dim,
-                dropout=config.dropout
-            ) for _ in range(config.num_layers)
+                nhead=self.config.nhead,
+                dim_feedforward=self.config.dim_feedforward,
+                dropout=self.config.dropout
+            ) for _ in range(self.config.num_layers)
         ])
 
         self.output_projection = nn.Linear(self.d_model, self.vocab_size)
