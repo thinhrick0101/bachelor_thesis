@@ -160,6 +160,10 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
 def main():
     os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:256'
 
+    # Initialize loss lists
+    train_losses = []
+    val_losses = []
+
     # Model configuration
     config_dict = {
         'vocab_size': 256,  # Keep at 256 for byte-level tokenization
@@ -190,17 +194,38 @@ def main():
     # Create tokenizer
     tokenizer = ByteTokenizer()
     
-    # Check if model exists
+    # Paths
     model_path = 'bachelor_thesis/models/sparse_byte_transformer.pt'
+    history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt'
+
     if os.path.exists(model_path):
         print(f"Loading existing model from {model_path}")
-        checkpoint = torch.load(model_path)
-        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
+        checkpoint = torch.load(model_path, map_location=device) # Ensure loading to the correct device
+        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint: # Backward compatibility for older save format
             model.load_state_dict(checkpoint['model_state_dict'])
-            print("Loaded model checkpoint with training history")
+            print("Loaded model checkpoint (potentially with full history in checkpoint - legacy)")
+            # Try to get losses if they were part of an old checkpoint format (less likely now)
+            if 'train_losses' in checkpoint:
+                 train_losses = checkpoint['train_losses']
+            if 'val_losses' in checkpoint:
+                 val_losses = checkpoint['val_losses']
         else:
             model.load_state_dict(checkpoint)
-            print("Loaded model weights only")
+            print("Loaded model weights only.")
+
+        # Attempt to load separate history file if model weights were loaded
+        if os.path.exists(history_path):
+            print(f"Loading training history from {history_path}")
+            history_checkpoint = torch.load(history_path, map_location=device)
+            train_losses = history_checkpoint.get('train_losses', [])
+            val_losses = history_checkpoint.get('val_losses', [])
+            if train_losses or val_losses:
+                print("Successfully loaded training history.")
+            else:
+                print("History file found, but no loss data within.")
+        else:
+            print(f"No separate history file found at {history_path}. Plot may be empty if model was not trained now.")
+
     else:
         # Load training data
         print("Loading training data...")
@@ -241,15 +266,19 @@ def main():
         torch.save(model.state_dict(), model_path)
         
         # Save training history separately
-        history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt'
+        # history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt' # Defined earlier
         torch.save({
             'train_losses': train_losses,
             'val_losses': val_losses
         }, history_path)
         
-        # Visualize training history
-        print("Generating loss plot...")
-        visualize_loss(train_losses, val_losses, 'sparse_model_training_loss.png')
+        # Visualize training history (Moved here to run always if losses are available)
+        if train_losses: # Only plot if there's training loss data
+            print("Generating loss plot...")
+            visualize_loss(train_losses, val_losses if val_losses else None, 'sparse_model_training_loss.png')
+            print(f"Loss plot saved to sparse_model_training_loss.png")
+        else:
+            print("No training loss data available to generate a plot.")
     
     # Generate example texts with different temperatures
     print("\nGenerating example texts with different temperatures:")
