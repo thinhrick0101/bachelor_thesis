@@ -1,0 +1,81 @@
+Using device: cuda
+Loading existing model from bachelor_thesis/models/sparse_byte_transformer.pt
+Loaded model weights only.
+Loading training history from bachelor_thesis/models/sparse_byte_transformer_history.pt
+Successfully loaded training history.
+
+Generating example texts with different temperatures:
+
+Generating samples with different temperatures:
+
+Prompt: The movie was
+
+Temperature 0.6:
+The movie was formed.
+
+
+Temperature 0.8:
+The movie was once again.
+
+
+Temperature 1.0:
+The movie was editor, Mary's Stephanus.
+
+
+Prompt: In the beginning
+
+Temperature 0.6:
+In the beginning of their success.
+
+
+Temperature 0.8:
+In the beginning of their class,
+
+
+Temperature 1.0:
+In the beginning of their slave,
+
+
+Prompt: She looked at
+
+Temperature 0.6:
+She looked at their son,
+
+
+Temperature 0.8:
+She looked at [[Saden]], white.
+
+
+Temperature 1.0:
+She looked at any duck-hight.
+
+
+Prompt: The system could
+
+Temperature 0.6:
+The system could become.
+
+
+Temperature 0.8:
+The system could argue.
+
+
+Temperature 1.0:
+The system could believ.
+
+
+Prompt: Deep learning is
+
+Temperature 0.6:
+Deep learning is thanked by
+
+
+Temperature 0.8:
+Deep learning is the last from.
+
+
+Temperature 1.0:
+Deep learning is the main.
+
+
+Running in non-interactive mode, skipping interactive prompt
