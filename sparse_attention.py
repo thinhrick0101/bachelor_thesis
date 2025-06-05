@@ -389,8 +389,5 @@ class SparseTransformerLayer(nn.Module):
         src = src + self.dropout2(src2)
         return src
 
-# ... (Positional Encoding if it was here)
-# ... (SparseTransformer for classification if it was here)
-# ... (Other helper classes or functions if they were here)
 
 

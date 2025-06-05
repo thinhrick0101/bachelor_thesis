@@ -42,9 +42,18 @@ def visualize_loss(train_losses, val_losses=None, output_file='sparse_model_loss
     
     # Create perplexity ticks based on loss values
     loss_ticks = ax1.get_yticks()
-    perplexity_ticks = [math.exp(x) for x in loss_ticks if x > 0]
+    perplexity_ticks = []
+    for x_tick in loss_ticks:
+        if x_tick > 0:
+            try:
+                perplexity_ticks.append(math.exp(x_tick))
+            except OverflowError:
+                perplexity_ticks.append(float('inf'))
+        # else: # if x_tick <= 0, decide how to handle or skip
+            # pass # or append a specific value if needed for plotting
+
     ax2.set_yticks(perplexity_ticks)
-    ax2.set_yticklabels([f'{x:.1f}' for x in perplexity_ticks])
+    ax2.set_yticklabels([f'{px:.1f}' if px != float('inf') else '>1e300' for px in perplexity_ticks])
     ax2.set_ylabel('Perplexity', fontsize=12)
     
     plt.tight_layout()
