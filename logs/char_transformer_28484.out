@@ -1,0 +1,79 @@
+Using device: cuda
+Loading existing model from bachelor_thesis/models/sparse_byte_transformer.pt
+Loaded model checkpoint with training history
+
+Generating example texts with different temperatures:
+
+Generating samples with different temperatures:
+
+Prompt: The movie was
+
+Temperature 0.6:
+The movie waselathicuof lstpem.ongd fiatherluclies,.o bm/s.fathomunerl A iaece//p:
+
+
+Temperature 0.8:
+The movie wasaiaevof th.oll w chhtouueavis/raffins 
+
+
+Temperature 1.0:
+The movie wasaufileamuolivesqw L m]..fisoharalancteph/d .
+
+
+Prompt: In the beginning
+
+Temperature 0.6:
+In the beginningane ities.alerchioofancun ties. bletphramofus//wiendo. et;tharlsf.
+
+
+Temperature 0.8:
+In the beginningitenfufod.iabecre/mblgh  nipuctodae..afrie/dgn chaliophtm n.foiurrne, c.alghedipt///w.gsoficauin  eretmlidu//.gorcatuaf.che p;fildsext//r/w.onchag ptcl,
+
+
+Temperature 1.0:
+In the beginningte. em.gcanurlit.bifdt &oulof rcigew/ om.
+
+
+Prompt: She looked at
+
+Temperature 0.6:
+She looked ath lauontrewicesutanobe humlid lficharer.otp:/uas.bg tiffeleonhh.ckiaraotp d//mselynfoghierac.ted /deriss.alompofungh//wwetin =
+
+
+Temperature 0.8:
+She looked ateeatt divand florklbb.eubluthiaml/wstponed ll.
+
+
+Temperature 1.0:
+She looked ath.weouchta.frces/il &gdmanur thfonev.quuimp:/aancu/h&su le.  orisemll, frthuadanimp/rs &qoceved
+
+
+Prompt: The system could
+
+Temperature 0.6:
+The system couldate omins.cur athlely.s fofintrmumbachales.
+
+
+Temperature 0.8:
+The system couldueeialofubusqqbl d,
+
+
+Temperature 1.0:
+The system couldethe nerfosiuilffaocydcat fh hasfheueridil,.om/  ucaltphoff/tweld.brdi.u wmcetofr//arvhnas.du ti.cleu/wor/e,m/ddgs rnncail.sfh
+
+
+Prompt: Deep learning is
+
+Temperature 0.6:
+Deep learning isieff olamulusstheval.
+
+
+Temperature 0.8:
+Deep learning isioffented gachfmocsualiappstirneds. fom..uehual psind=
+
+
+Temperature 1.0:
+Deep learning ised.c rio bareflllvbicu.gmisattdchtmo fievenequf
+
+
+Running in non-interactive mode, skipping interactive prompt

@@ -1,0 +1,17 @@
+Using device: cuda
+Loading existing model from models/sparse_byte_transformer.pt
+
+Generating example texts with different temperatures:
+
+Conservative sampling (temperature=0.7):
+The movie wasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+Balanced sampling (temperature=0.9):
+The movie wasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+Creative sampling (temperature=1.2):
+The movie wasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+Enter prompts for text generation (type 'exit' to quit):
+
+Prompt: 

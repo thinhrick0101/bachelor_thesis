@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 306, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 176, in main
+    model = SparseByteTransformer(model_config)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_byte_transformer.py", line 57, in __init__
+    self.transformer_encoder = nn.ModuleList([
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_byte_transformer.py", line 61, in <listcomp>
+    dim_feedforward=config.ffn_dim,
+AttributeError: 'Namespace' object has no attribute 'ffn_dim'

@@ -1,0 +1,21 @@
+/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py:18: UserWarning: xformers not available. Using optimized block-sparse implementation.
+  warnings.warn("xformers not available. Using optimized block-sparse implementation.")
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 6, in <module>
+    from stable_char_transformer import (
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 15, in <module>
+    from sparse_attention import SparseMultiHeadAttention
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 20, in <module>
+    class BlockSparseAttention:
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 38, in BlockSparseAttention
+    def _process_block(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor,
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/jit/_script.py", line 1343, in script
+    fn = torch._C._jit_script_compile(
+RuntimeError: 
+'Tensor (inferred)' object has no attribute or method '_compute_block_attention'.:
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 44
+        k_block = k[..., start_j:end_j, :]
+        v_block = v[..., start_j:end_j, :]
+        return self._compute_block_attention(q_block, k_block, v_block)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ <--- HERE
+

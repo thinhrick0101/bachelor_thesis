@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 315, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 185, in main
+    model = SparseByteTransformer(**config)
+TypeError: SparseByteTransformer.__init__() got an unexpected keyword argument 'vocab_size'

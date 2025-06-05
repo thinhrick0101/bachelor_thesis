@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 308, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 213, in main
+    model, (train_losses, val_losses) = train_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1005, in train_model
+    outputs = model(inputs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_byte_transformer.py", line 99, in forward
+    x = layer(x, src_key_padding_mask=src_key_padding_mask_for_layers) 
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 382, in forward
+    src2 = self.self_attn(norm_src, norm_src, norm_src, key_padding_mask=src_key_padding_mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 349, in forward
+    attn_probs = F.dropout(attn_probs, p=self.dropout, training=self.training)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/functional.py", line 1252, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+RuntimeError: CUDA out of memory. Tried to allocate 256.00 MiB (GPU 0; 10.57 GiB total capacity; 9.50 GiB already allocated; 234.00 MiB free; 9.50 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

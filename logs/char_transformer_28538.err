@@ -1,0 +1,45 @@
+/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py:18: UserWarning: xformers not available. Using optimized block-sparse implementation.
+  warnings.warn("xformers not available. Using optimized block-sparse implementation.")
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 300, in <module>
+    main()
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 205, in main
+    model, (train_losses, val_losses) = train_model(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 1005, in train_model
+    outputs = model(inputs)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 702, in forward
+    x = block(x, src_mask=mask)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 269, in forward
+    src = src + checkpoint(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 237, in checkpoint
+    return _checkpoint_without_reentrant(
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 383, in _checkpoint_without_reentrant
+    output = function(*args)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 270, in <lambda>
+    lambda x, mask: self._attention_block(x, mask),
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 248, in _attention_block
+    src2, attn_weights = self.self_attn(src2, src2, src2, attn_mask=src_mask, need_weights=True)
+  File "/var/scratch/tng204/anaconda3/envs/mltrain/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 224, in forward
+    graph_result = self._maybe_capture_cuda_graph(
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 149, in _maybe_capture_cuda_graph
+    output = compute_block_attention_cuda(q, k, v, block_mask)
+RuntimeError: The following operation failed in the TorchScript interpreter.
+Traceback of TorchScript (most recent call last):
+RuntimeError: The following operation failed in the TorchScript interpreter.
+Traceback of TorchScript (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py", line 23, in <forward op>
+def compute_block_attention_cuda(q: Tensor, k: Tensor, v: Tensor, mask: Optional[Tensor] = None) -> Tensor:
+    """JIT-optimized block attention computation for CUDA tensors"""
+    scores = torch.matmul(q, k.transpose(-2, -1))
+             ~~~~~~~~~~~~ <--- HERE
+    
+    if mask is not None:
+RuntimeError: CUDA out of memory. Tried to allocate 2.00 MiB (GPU 0; 10.57 GiB total capacity; 1.85 GiB already allocated; 2.00 MiB free; 9.04 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+
+

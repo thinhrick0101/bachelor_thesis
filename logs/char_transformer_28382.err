@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 6, in <module>
+    from stable_char_transformer import (
+  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 15, in <module>
+    from sparse_attention import SparseAttention
+ImportError: cannot import name 'SparseAttention' from 'sparse_attention' (/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py)
