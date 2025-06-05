@@ -171,10 +171,10 @@ def main():
         'nhead': 8,
         'num_layers': 12,   # Keep at 12 for our analysis
         'dim_feedforward': 2048,
-        'dropout': 0.1,
+        'dropout': 0.05,
         'attention_dropout': 0.1,
-        'activation_dropout': 0.1,
-        'token_dropout': 0.05,
+        'activation_dropout': 0.05,
+        'token_dropout': 0.02,
         'use_checkpoint': True,
         'stochastic_depth_prob': 0.1,
         'seq_length': 1024  # Added: SparseByteTransformer needs this for PositionalEncoding
@@ -248,16 +248,16 @@ def main():
             model=model,
             train_batches=train_batches,
             val_batches=val_batches,
-            num_epochs=40,  # Full training run
-            learning_rate=1e-4,
+            num_epochs=100,
+            learning_rate=3e-5,
             weight_decay=0.1,
-            warmup_steps=1000,
+            warmup_steps=400,
             device=device,
-            patience=5,  # Increased patience for longer training
-            min_lr=1e-5,  # Minimum learning rate
-            gradient_accumulation_steps=4,  # Gradient accumulation for stability
-            use_mixed_precision=True,  # Use mixed precision training
-            use_cosine_schedule=True  # Use cosine learning rate schedule
+            patience=8,
+            min_lr=1e-5,
+            gradient_accumulation_steps=4,
+            use_mixed_precision=True,
+            use_cosine_schedule=True
         )
         
         # Save model and loss history
