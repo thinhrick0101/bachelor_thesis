@@ -186,7 +186,8 @@ def main():
     wandb.init(
         project="sparse-transformer-training",
         config=config_dict,
-        name=f"run_{int(time.time())}"  # Unique name for each run
+        name=f"run_{int(time.time())}",  # Unique name for each run
+        dir='wandb_logs' # Set logging directory
     )
     
     # Convert dict to Namespace for attribute access in the model

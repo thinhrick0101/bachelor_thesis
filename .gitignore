@@ -1,3 +1,4 @@
 wandb/
 _pycache_/
 .gitignore
+wandb_logs/ 
