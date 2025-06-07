@@ -1,2 +1,3 @@
-yes
-yes.pub
+wandb/
+_pycache_/
+.gitignore
