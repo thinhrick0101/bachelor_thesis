@@ -1081,6 +1081,8 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                     print(f"ERROR: NaN or Inf detected in current_batch_loss: {current_batch_loss}")
                 print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
                       f"Loss: {current_batch_loss:.4f}")
+                if use_wandb:
+                    wandb.log({"batch_loss": current_batch_loss, "lr": optimizer.param_groups[0]['lr']})
 
         # Calculate average loss for the epoch
         avg_loss = total_loss / num_batches
@@ -1152,8 +1154,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                     "train_loss": avg_loss,
                     "train_perplexity": perplexity,
                     "val_loss": val_avg_loss,
-                    "val_perplexity": val_perplexity,
-                    "lr": optimizer.param_groups[0]['lr']
+                    "val_perplexity": val_perplexity
                 })
 
             # Check for early stopping
@@ -1179,8 +1180,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                 wandb.log({
                     "epoch": epoch,
                     "train_loss": avg_loss,
-                    "train_perplexity": perplexity,
-                    "lr": optimizer.param_groups[0]['lr']
+                    "train_perplexity": perplexity
                 })
 
     # Load best model state if early stopping was used
