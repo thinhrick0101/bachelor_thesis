@@ -999,6 +999,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
 
         # Process each batch
         for batch_idx, (inputs, targets) in enumerate(train_batches):
+            batch_start_time = time.time()
             # Move tensors to device
             inputs = inputs.to(device)
             targets = targets.to(device)
@@ -1007,7 +1008,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
             if use_amp:
                 with autocast():
                     # Forward pass
+                    forward_pass_start_time = time.time()
                     outputs = model(inputs)
+                    forward_pass_end_time = time.time()
 
                     # Reshape for loss calculation
                     outputs = outputs.reshape(-1, outputs.size(-1))
@@ -1042,7 +1045,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
             else:
                 # Standard precision training
                 # Forward pass
+                forward_pass_start_time = time.time()
                 outputs = model(inputs)
+                forward_pass_end_time = time.time()
 
                 # Reshape for loss calculation
                 outputs = outputs.reshape(-1, outputs.size(-1))
@@ -1079,10 +1084,28 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
                 current_batch_loss = loss.item() * gradient_accumulation_steps
                 if torch.isnan(torch.tensor(current_batch_loss)) or torch.isinf(torch.tensor(current_batch_loss)):
                     print(f"ERROR: NaN or Inf detected in current_batch_loss: {current_batch_loss}")
+
+                # --- Calculate and log metrics ---
+                forward_pass_latency = (forward_pass_end_time - forward_pass_start_time) * 1000 # in ms
+                batch_time = time.time() - batch_start_time
+                num_samples = inputs.size(0) # batch_size
+                throughput = num_samples / batch_time if batch_time > 0 else 0
+                
+                try:
+                    batch_perplexity = math.exp(current_batch_loss)
+                except (OverflowError, ValueError):
+                    batch_perplexity = float('inf')
+
                 print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
-                      f"Loss: {current_batch_loss:.4f}")
+                      f"Loss: {current_batch_loss:.4f}, PPL: {batch_perplexity:.2f}")
                 if use_wandb:
-                    wandb.log({"batch_loss": current_batch_loss, "lr": optimizer.param_groups[0]['lr']})
+                    wandb.log({
+                        "batch_loss": current_batch_loss,
+                        "lr": optimizer.param_groups[0]['lr'],
+                        "batch_perplexity": batch_perplexity,
+                        "forward_pass_latency_ms": forward_pass_latency,
+                        "throughput_samples_per_sec": throughput
+                    })
 
         # Calculate average loss for the epoch
         avg_loss = total_loss / num_batches
