@@ -4,6 +4,8 @@ import os
 import matplotlib.pyplot as plt
 import math
 import argparse
+import wandb
+import time
 from stable_char_transformer import (
     SparseTransformer, 
     ByteTokenizer, 
@@ -180,6 +182,13 @@ def main():
         'seq_length': 1024  # Added: SparseByteTransformer needs this for PositionalEncoding
     }
     
+    # Initialize wandb
+    wandb.init(
+        project="sparse-transformer-training",
+        config=config_dict,
+        name=f"run_{int(time.time())}"  # Unique name for each run
+    )
+    
     # Convert dict to Namespace for attribute access in the model
     model_config = argparse.Namespace(**config_dict)
 
@@ -257,7 +266,8 @@ def main():
             min_lr=1e-5,
             gradient_accumulation_steps=4,
             use_mixed_precision=True,
-            use_cosine_schedule=True
+            use_cosine_schedule=True,
+            use_wandb=True  # Enable wandb logging
         )
         
         # Save model and loss history
@@ -341,6 +351,8 @@ def main():
             print("\nExiting...")
     else:
         print("\nRunning in non-interactive mode, skipping interactive prompt")
+
+    wandb.finish()
 
 if __name__ == "__main__":
     main()

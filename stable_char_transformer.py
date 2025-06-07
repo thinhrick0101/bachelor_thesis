@@ -9,6 +9,7 @@ import random
 import os
 import gzip
 import urllib.request
+import wandb
 from torch.cuda.amp import autocast, GradScaler  # For mixed precision training
 from torch.utils.checkpoint import checkpoint  # For gradient checkpointing
 from tokenizers import Tokenizer  # For loading the BPE tokenizer
@@ -888,7 +889,7 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_rate=0.0001,
                 weight_decay=0.01, warmup_steps=0, min_lr=0.0, device=None, patience=3, 
                 label_smoothing=0.0, gradient_accumulation_steps=1, use_mixed_precision=True,
-                use_cosine_schedule=False):
+                use_cosine_schedule=False, use_wandb=False):
     """
     Train the model and evaluate on validation set with mixed precision and gradient accumulation
 
@@ -907,6 +908,7 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
         gradient_accumulation_steps: Number of steps to accumulate gradients before updating weights
         use_mixed_precision: Whether to use mixed precision training (FP16)
         use_cosine_schedule: Whether to use cosine learning rate schedule
+        use_wandb: Whether to log metrics to Weights & Biases
 
     Returns:
         Trained model and training metrics
@@ -918,6 +920,9 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
     # Move model to device
     model = model.to(device)
     print(f"Training on device: {device}")
+
+    if use_wandb:
+        wandb.watch(model, log='all', log_freq=100)
 
     # Initialize mixed precision training if available and requested
     use_amp = use_mixed_precision and device.type == 'cuda'
@@ -1128,45 +1133,66 @@ def train_model(model, train_batches, val_batches=None, num_epochs=5, learning_r
             # Calculate average validation loss
             val_avg_loss = val_total_loss / val_num_batches
             val_losses.append(val_avg_loss)
-
+            
             # Calculate validation perplexity
-            val_perplexity = math.exp(val_avg_loss)
+            if torch.isnan(torch.tensor(val_avg_loss)) or torch.isinf(torch.tensor(val_avg_loss)) or val_avg_loss > 700:
+                val_perplexity = float('inf')
+            else:
+                val_perplexity = math.exp(val_avg_loss)
 
-            # Update learning rate with ReduceLROnPlateau scheduler
-            if warmup_steps == 0:
-                scheduler.step(val_avg_loss)
+            # Print epoch summary
+            end_time = time.time()
+            epoch_duration = end_time - start_time
+            print(f"Epoch {epoch+1}/{num_epochs} | Train Loss: {avg_loss:.4f} | Train PPL: {perplexity:.2f} | "
+                  f"Val Loss: {val_avg_loss:.4f} | Val PPL: {val_perplexity:.2f} | Time: {epoch_duration:.2f}s")
+            
+            if use_wandb:
+                wandb.log({
+                    "epoch": epoch,
+                    "train_loss": avg_loss,
+                    "train_perplexity": perplexity,
+                    "val_loss": val_avg_loss,
+                    "val_perplexity": val_perplexity,
+                    "lr": optimizer.param_groups[0]['lr']
+                })
 
-            # Save best model
+            # Check for early stopping
             if val_avg_loss < best_val_loss:
                 best_val_loss = val_avg_loss
                 best_model_state = model.state_dict().copy()
                 no_improvement_count = 0
-                print(f"New best model with validation loss: {best_val_loss:.4f}, perplexity: {math.exp(best_val_loss):.2f}")
             else:
                 no_improvement_count += 1
 
-            # Early stopping
+            # Early stopping if no improvement
             if no_improvement_count >= patience:
-                print(f"No improvement for {patience} epochs. Early stopping.")
+                print(f"Early stopping at epoch {epoch+1} due to no improvement in validation loss.")
                 break
-
-            # Print epoch statistics
-            epoch_time = time.time() - start_time
-            print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}, Perplexity: {perplexity:.2f}, '
-                  f'Val Loss: {val_avg_loss:.4f}, Val Perplexity: {val_perplexity:.2f}, '
-                  f'Time: {epoch_time:.2f}s')
         else:
-            # Print epoch statistics without validation
-            epoch_time = time.time() - start_time
-            print(f'Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}, Perplexity: {perplexity:.2f}, '
-                  f'Time: {epoch_time:.2f}s')
+            # Print epoch summary without validation
+            end_time = time.time()
+            epoch_duration = end_time - start_time
+            print(f"Epoch {epoch+1}/{num_epochs} | Train Loss: {avg_loss:.4f} | Train PPL: {perplexity:.2f} | "
+                  f"Time: {epoch_duration:.2f}s")
+            
+            if use_wandb:
+                wandb.log({
+                    "epoch": epoch,
+                    "train_loss": avg_loss,
+                    "train_perplexity": perplexity,
+                    "lr": optimizer.param_groups[0]['lr']
+                })
 
-    # Load best model if validation was used
-    if val_batches is not None and best_model_state is not None:
+    # Load best model state if early stopping was used
+    if best_model_state:
         model.load_state_dict(best_model_state)
-        print(f"Loaded best model with validation loss: {best_val_loss:.4f}, perplexity: {math.exp(best_val_loss):.2f}")
+        print("Loaded best model state from early stopping.")
 
-    return model, (train_losses, val_losses)
+    # Return trained model and history
+    if val_losses:
+        return model, (train_losses, val_losses)
+    else:
+        return model, (train_losses, [])
 
 def visualize_results(train_losses, val_losses=None, filename='enhanced_char_transformer_loss.png'):
     """
@@ -1330,7 +1356,8 @@ def main():
         label_smoothing=label_smoothing,
         gradient_accumulation_steps=gradient_accumulation_steps,
         use_mixed_precision=use_mixed_precision,
-        use_cosine_schedule=True  # Added cosine schedule
+        use_cosine_schedule=True,  # Added cosine schedule
+        use_wandb=True  # Added wandb logging
     )
 
     # Visualize results

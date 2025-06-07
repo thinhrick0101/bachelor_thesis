@@ -1,0 +1,71 @@
+Using device: cuda
+Loading existing model from bachelor_thesis/models/sparse_byte_transformer.pt
+Loaded model weights only.
+Loading training history from bachelor_thesis/models/sparse_byte_transformer_history.pt
+Successfully loaded training history.
+
+Generating example texts with different temperatures:
+
+Generating samples with different temperatures:
+
+Prompt: The movie was
+
+Temperature 0.6:
+/mnt/d/thesisvu/bachelor_thesis/train_sparse_transformer.py:83: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  input_tensor = torch.tensor(input_ids, dtype=torch.long, device=device).unsqueeze(0)
+/mnt/d/thesisvu/bachelor_thesis/train_sparse_transformer.py:94: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+The movie wassssss
+
+Temperature 0.8:
+The movie wassssss
+
+Temperature 1.0:
+The movie wassssss
+
+Prompt: In the beginning
+
+Temperature 0.6:
+In the beginningrinsssss
+
+Temperature 0.8:
+In the beginningrpengwllllsssss
+
+Temperature 1.0:
+In the beginningngh/FMDS-isssss
+
+Prompt: She looked at
+
+Temperature 0.6:
+She looked attrpl  eDLS'''sssmubodgatck TKkitek!DKTrthongusadov THeikitwhtrungulaskocodeytumikakwhiv'NATrbl Hetodutakwishykung't HerdolkabucthvishdngamteworkalmuyctHisheddv'OKowkakomuntulthiscerdimawhevogdokutasin
+
+Temperature 0.8:
+She looked attouenncsssss
+
+Temperature 1.0:
+She looked attsssuu�L SEammip3-br///eldusk So -Est,
+
+
+Prompt: The system could
+
+Temperature 0.6:
+The system coulduerrchsClbaaiipt lyOodeungehryemacinexlybodupsthinger caphelymadoxustingercl sphenymadoxdutigagrclbisphemydoxinutucagrtl sphemidydosinucagrtoxphaelumidyschenagr stopsilumidexydhecagratopsiscluminexdyd
+
+Temperature 0.8:
+The system couldaaaacshOIXMoprmetiii��u daleyhauspozachlirácdimugykentovabhlishulorimdecukatynedrigispoblmathscufinedhretspoxyalgovam dinuchiterspoxysolambdinuchidemtra psschoxeblatuidodima krschyngextsumbopidalaprc
+
+Temperature 1.0:
+The system couldherroumAlaapiiintsehscyaro drhuläczilmeahyuntofegrodlvusscimahltinhybercodvopulumasyltichn trefdopebumasthvliamoghyldrcentubstroxzamiuhegdnlchepism trobaminupdydchexisthlgylumarosvedniczithldrymuspbo
+
+Prompt: Deep learning is
+
+Temperature 0.6:
+Deep learning issssipd D'''''
+
+Temperature 0.8:
+Deep learning issssindurttt]]]]]
+
+Temperature 1.0:
+Deep learning issssiptrkal'''''
+
+Entering interactive mode (Ctrl+C to exit)
