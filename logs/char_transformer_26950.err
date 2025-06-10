@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 367, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 325, in main
-    print("Training sparse transformer model...")
-OSError: [Errno 116] Stale file handle

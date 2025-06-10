@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 350, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 286, in main
-    model = SparseCharTransformer(**config)
-TypeError: SparseCharTransformer.__init__() got an unexpected keyword argument 'layer_norm_eps'

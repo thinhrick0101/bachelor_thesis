@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 219, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 174, in main
-    sparse_model = EnhancedCharTransformer(**sparse_config)
-  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 319, in __init__
-    attention = attention_class(
-TypeError: CustomSparseAttention.__init__() got an unexpected keyword argument 'local_window_size'

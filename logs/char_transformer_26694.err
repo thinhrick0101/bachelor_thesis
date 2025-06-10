@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 287, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 246, in main
-    train_losses, val_losses = train_sparse_model(
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 24, in train_sparse_model
-    scaler = torch.amp.GradScaler('cuda') if use_mixed_precision else None
-AttributeError: module 'torch.amp' has no attribute 'GradScaler'

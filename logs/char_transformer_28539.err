@@ -1,3 +1,0 @@
-/var/scratch/tng204/thesis/bachelor_thesis/sparse_attention.py:14: UserWarning: xformers not available. Using optimized block-sparse implementation.
-  warnings.warn("xformers not available. Using optimized block-sparse implementation.")
-slurmstepd-node078: error: *** JOB 28539 ON node078 CANCELLED AT 2025-06-03T08:25:52 ***
