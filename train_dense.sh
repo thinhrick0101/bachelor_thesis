@@ -18,6 +18,12 @@ conda activate mltrain
 # Go to your code directory
 cd /var/scratch/$USER/thesis/bachelor_thesis
 
+# Set up Weights & Biases for remote execution
+export WANDB_API_KEY="a0fcc743e67a1bed3ff2a929f609b2521ca3a154"  # <-- IMPORTANT: REPLACE WITH YOUR KEY
+
+# Uncomment the following line if your server has no internet access
+# export WANDB_MODE=offline
+
 # Clear CUDA cache before running
 python -c "import torch; torch.cuda.empty_cache()"
 

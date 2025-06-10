@@ -3,6 +3,8 @@ import torch.nn as nn
 import os
 import matplotlib.pyplot as plt
 import math
+import time
+import wandb
 from stable_char_transformer import (
     EnhancedCharTransformer, 
     ByteTokenizer, 
@@ -99,6 +101,14 @@ def main():
         'stochastic_depth_prob': 0.1
     }
     
+    # Initialize wandb
+    wandb.init(
+        project="dense-transformer-training",
+        config=config,
+        name=f"dense_run_{int(time.time())}",
+        dir='wandb_logs' # Set logging directory
+    )
+    
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
@@ -146,7 +156,8 @@ def main():
             min_lr=1e-5,  # Minimum learning rate
             gradient_accumulation_steps=4,  # Gradient accumulation for stability
             use_mixed_precision=True,  # Use mixed precision training
-            use_cosine_schedule=True  # Use cosine learning rate schedule
+            use_cosine_schedule=True,  # Use cosine learning rate schedule
+            use_wandb=True # Enable wandb logging
         )
         
         # Save model and loss history
@@ -197,6 +208,8 @@ def main():
         )
         print("\nGenerated text:")
         print(generated)
+
+    wandb.finish()
 
 if __name__ == "__main__":
     main()
