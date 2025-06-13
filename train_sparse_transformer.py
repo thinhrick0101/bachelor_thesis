@@ -6,6 +6,8 @@ import math
 import argparse
 import wandb
 import time
+import numpy as np
+import random
 from stable_char_transformer import (
     SparseTransformer, 
     ByteTokenizer, 
@@ -160,6 +162,23 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
     return tokenizer.decode(generated_ids)
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Train Sparse Character Transformer')
+    parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
+    parser.add_argument('--num_epochs', type=int, default=20, help='Number of training epochs')
+    parser.add_argument('--wandb_run_name', type=str, default=None, help='WandB run name')
+    parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
+    parser.add_argument('--seq_length', type=int, default=1024, help='Sequence length')
+    parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate')
+    args = parser.parse_args()
+    
+    # Set seeds for reproducibility
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
+    
     os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:256'
 
     # Initialize loss lists
@@ -179,14 +198,17 @@ def main():
         'token_dropout': 0.02,
         'use_checkpoint': True,
         'stochastic_depth_prob': 0.1,
-        'seq_length': 1024  # Added: SparseByteTransformer needs this for PositionalEncoding
+        'seq_length': 1024,  # Added: SparseByteTransformer needs this for PositionalEncoding
+        'seed': args.seed,
+        'num_epochs': args.num_epochs
     }
     
     # Initialize wandb
+    run_name = args.wandb_run_name or f"sparse_seed_{args.seed}"
     wandb.init(
         project="sparse-transformer-training",
         config=config_dict,
-        name=f"run_{int(time.time())}",  # Unique name for each run
+        name=run_name,
         dir='wandb_logs' # Set logging directory
     )
     
@@ -196,7 +218,8 @@ def main():
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
-    #model = SparseTransformer(**config)
+    print(f"Using seed: {args.seed}")
+    
     # Create model instance
     model = SparseByteTransformer(model_config)
     model = model.to(device)
@@ -204,155 +227,82 @@ def main():
     # Create tokenizer
     tokenizer = ByteTokenizer()
     
-    # Paths
-    model_path = 'bachelor_thesis/models/sparse_byte_transformer.pt'
-    history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt'
-
-    if os.path.exists(model_path):
-        print(f"Loading existing model from {model_path}")
-        checkpoint = torch.load(model_path, map_location=device) # Ensure loading to the correct device
-        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint: # Backward compatibility for older save format
-            model.load_state_dict(checkpoint['model_state_dict'])
-            print("Loaded model checkpoint (potentially with full history in checkpoint - legacy)")
-            # Try to get losses if they were part of an old checkpoint format (less likely now)
-            if 'train_losses' in checkpoint:
-                 train_losses = checkpoint['train_losses']
-            if 'val_losses' in checkpoint:
-                 val_losses = checkpoint['val_losses']
-        else:
-            model.load_state_dict(checkpoint)
-            print("Loaded model weights only.")
-
-        # Attempt to load separate history file if model weights were loaded
-        if os.path.exists(history_path):
-            print(f"Loading training history from {history_path}")
-            history_checkpoint = torch.load(history_path, map_location=device)
-            train_losses = history_checkpoint.get('train_losses', [])
-            val_losses = history_checkpoint.get('val_losses', [])
-            if train_losses or val_losses:
-                print("Successfully loaded training history.")
-            else:
-                print("History file found, but no loss data within.")
-        else:
-            print(f"No separate history file found at {history_path}. Plot may be empty if model was not trained now.")
-
-    else:
-        # Load training data
-        print("Loading training data...")
-        train_text = load_data('data/enwik8')
-        
-        # Split into train/val
-        split_idx = int(len(train_text) * 0.9)
-        train_data = tokenizer.encode(train_text[:split_idx])
-        val_data = tokenizer.encode(train_text[split_idx:])
-        
-        # Create batches
-        batch_size = 16
-        seq_length = 512
-        train_batches = create_batches(train_data, batch_size, seq_length)
-        val_batches = create_batches(val_data, batch_size, seq_length)
-        
-        # Train model
-        print("Training model...")
-        model, (train_losses, val_losses) = train_model(
-            model=model,
-            train_batches=train_batches,
-            val_batches=val_batches,
-            num_epochs=100,
-            learning_rate=3e-5,
-            weight_decay=0.1,
-            warmup_steps=400,
-            device=device,
-            patience=8,
-            min_lr=1e-5,
-            gradient_accumulation_steps=4,
-            use_mixed_precision=True,
-            use_cosine_schedule=True,
-            use_wandb=True  # Enable wandb logging
-        )
-        
-        # Save model and loss history
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        print(f"Saving model to {model_path}")
-        torch.save(model.state_dict(), model_path)
-        
-        # Save training history separately
-        # history_path = 'bachelor_thesis/models/sparse_byte_transformer_history.pt' # Defined earlier
-        torch.save({
-            'train_losses': train_losses,
-            'val_losses': val_losses
-        }, history_path)
-        
-        # Visualize training history (Moved here to run always if losses are available)
-        if train_losses: # Only plot if there's training loss data
-            print("Generating loss plot...")
-            visualize_loss(train_losses, val_losses if val_losses else None, 'sparse_model_training_loss.png')
-            print(f"Loss plot saved to sparse_model_training_loss.png")
-        else:
-            print("No training loss data available to generate a plot.")
+    # Load training data (always train for the statistical analysis)
+    print("Loading training data...")
+    train_text = load_data('data/enwik8')
     
-    # Generate example texts with different temperatures
-    print("\nGenerating example texts with different temperatures:")
-    example_prompts = [
-        "The movie was",
-        "In the beginning",
-        "She looked at",
-        "The system could",
-        "Deep learning is"
-    ]
+    # Split into train/val
+    split_idx = int(len(train_text) * 0.9)
+    train_data = tokenizer.encode(train_text[:split_idx])
+    val_data = tokenizer.encode(train_text[split_idx:])
     
-    temperatures = [0.6, 0.8, 1.0]
-    max_length = 200
+    # Create batches
+    train_batches = create_batches(train_data, args.batch_size, args.seq_length)
+    val_batches = create_batches(val_data, args.batch_size, args.seq_length)
     
-    print("\nGenerating samples with different temperatures:")
-    for prompt in example_prompts:
-        print(f"\nPrompt: {prompt}")
-        for temp in temperatures:
-            print(f"\nTemperature {temp}:")
-            try:
-                generated = generate_text(
-                    model, 
-                    tokenizer, 
-                    prompt, 
-                    temperature=temp,
-                    max_length=max_length
-                )
-                print(generated)
-            except Exception as e:
-                print(f"Error generating text: {str(e)}")
+    # Train model
+    print("Training model...")
+    start_training_time = time.time()
     
-    # Check if we're in an interactive environment
-    import sys
-    if sys.stdin.isatty():
-        print("\nEntering interactive mode (Ctrl+C to exit)")
-        try:
-            while True:
-                try:
-                    prompt = input("\nPrompt: ")
-                    temp = float(input("Temperature (0.1-1.0): "))
-                    length = int(input("Maximum length: "))
-                    
-                    generated = generate_text(
-                        model, 
-                        tokenizer, 
-                        prompt, 
-                        temperature=temp,
-                        max_length=length
-                    )
-                    print("\nGenerated text:")
-                    print(generated)
-                except (KeyboardInterrupt, EOFError):
-                    print("\nExiting interactive mode...")
-                    break
-                except ValueError as e:
-                    print(f"Invalid input: {str(e)}")
-                except Exception as e:
-                    print(f"Error: {str(e)}")
-        except KeyboardInterrupt:
-            print("\nExiting...")
-    else:
-        print("\nRunning in non-interactive mode, skipping interactive prompt")
-
+    model, (train_losses, val_losses) = train_model(
+        model=model,
+        train_batches=train_batches,
+        val_batches=val_batches,
+        num_epochs=args.num_epochs,
+        learning_rate=args.learning_rate,
+        weight_decay=0.1,
+        warmup_steps=1000,
+        device=device,
+        patience=8,  # Increased patience for longer training
+        min_lr=1e-5,  # Minimum learning rate
+        gradient_accumulation_steps=4,  # Gradient accumulation for stability
+        use_mixed_precision=True,  # Use mixed precision training
+        use_cosine_schedule=True,  # Use cosine learning rate schedule
+        use_wandb=True # Enable wandb logging
+    )
+    
+    end_training_time = time.time()
+    total_training_time = end_training_time - start_training_time
+    
+    # Calculate final metrics
+    final_val_loss = val_losses[-1] if val_losses else train_losses[-1]
+    final_val_ppl = math.exp(final_val_loss) if final_val_loss < 700 else float('inf')
+    
+    # Calculate tokens per second (approximate)
+    total_tokens = len(train_data) * args.num_epochs
+    tokens_per_sec = total_tokens / total_training_time
+    
+    # Get peak GPU memory
+    peak_gpu_mem_MB = torch.cuda.max_memory_allocated() / 1e6 if torch.cuda.is_available() else 0
+    
+    # Log final metrics to wandb
+    wandb.run.summary["final_val_loss"] = final_val_loss
+    wandb.run.summary["final_val_ppl"] = final_val_ppl
+    wandb.run.summary["tokens_per_sec"] = tokens_per_sec
+    wandb.run.summary["peak_gpu_mem_MB"] = peak_gpu_mem_MB
+    
+    print(f"Training completed!")
+    print(f"Final validation loss: {final_val_loss:.4f}")
+    print(f"Final validation perplexity: {final_val_ppl:.2f}")
+    print(f"Tokens per second: {tokens_per_sec:.0f}")
+    print(f"Peak GPU memory: {peak_gpu_mem_MB:.1f} MB")
+    
+    # Save model
+    model_path = f'bachelor_thesis/models/sparse_seed_{args.seed}.pt'
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    print(f"Saving model to {model_path}")
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'train_losses': train_losses,
+        'val_losses': val_losses,
+        'config': config_dict,
+        'seed': args.seed
+    }, model_path)
+    
+    # Visualize training history
+    print("Generating loss plot...")
+    visualize_loss(train_losses, val_losses, f'sparse_seed_{args.seed}_training_loss.png')
+    
     wandb.finish()
 
 if __name__ == "__main__":

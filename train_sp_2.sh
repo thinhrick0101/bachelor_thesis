@@ -19,7 +19,8 @@ conda activate mltrain
 cd /var/scratch/$USER/thesis/bachelor_thesis
 
 # Set up Weights & Biases for remote execution
-export WANDB_API_KEY="a0fcc743e67a1bed3ff2a929f609b2521ca3a154"  # <-- IMPORTANT: REPLACE WITH YOUR KEY
+export WANDB_API_KEY="YOUR_API_KEY"  # <-- IMPORTANT: REPLACE WITH YOUR KEY
+export WANDB_CACHE_DIR=$(pwd)/wandb_logs/.cache  # Store cache in project dir
 
 # Uncomment the following line if your server has no internet access
 # export WANDB_MODE=offline

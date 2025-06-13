@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import math
 import time
 import wandb
+import argparse
+import numpy as np
+import random
 from stable_char_transformer import (
     EnhancedCharTransformer, 
     ByteTokenizer, 
@@ -86,6 +89,23 @@ def generate_text(model, tokenizer, prompt, max_length=1000, temperature=0.7, to
     return tokenizer.decode(output[0].tolist())
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Train Dense Character Transformer')
+    parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
+    parser.add_argument('--num_epochs', type=int, default=20, help='Number of training epochs')
+    parser.add_argument('--wandb_run_name', type=str, default=None, help='WandB run name')
+    parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
+    parser.add_argument('--seq_length', type=int, default=1024, help='Sequence length')
+    parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate')
+    args = parser.parse_args()
+    
+    # Set seeds for reproducibility
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
+    
     # Model configuration
     config = {
         'vocab_size': 256,  # Keep at 256 for byte-level tokenization
@@ -98,20 +118,24 @@ def main():
         'activation_dropout': 0.1,
         'token_dropout': 0.05,
         'use_checkpoint': True,
-        'stochastic_depth_prob': 0.1
+        'stochastic_depth_prob': 0.1,
+        'seed': args.seed,
+        'num_epochs': args.num_epochs
     }
     
     # Initialize wandb
+    run_name = args.wandb_run_name or f"dense_seed_{args.seed}"
     wandb.init(
         project="dense-transformer-training",
         config=config,
-        name=f"dense_run_{int(time.time())}",
+        name=run_name,
         dir='wandb_logs' # Set logging directory
     )
     
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+    print(f"Using seed: {args.seed}")
     
     # Create model instance
     model = EnhancedCharTransformer(**config)
@@ -120,95 +144,82 @@ def main():
     # Create tokenizer
     tokenizer = ByteTokenizer()
     
-    # Check if model exists
-    model_path = 'bachelor_thesis/models/dense_byte_transformer.pt'
-    if os.path.exists(model_path):
-        print(f"Loading existing model from {model_path}")
-        model.load_state_dict(torch.load(model_path))
-    else:
-        # Load training data
-        print("Loading training data...")
-        train_text = load_data('data/enwik8')
-        
-        # Split into train/val
-        split_idx = int(len(train_text) * 0.9)
-        train_data = tokenizer.encode(train_text[:split_idx])
-        val_data = tokenizer.encode(train_text[split_idx:])
-        
-        # Create batches
-        batch_size = 32
-        seq_length = 1024
-        train_batches = create_batches(train_data, batch_size, seq_length)
-        val_batches = create_batches(val_data, batch_size, seq_length)
-        
-        # Train model
-        print("Training model...")
-        model, (train_losses, val_losses) = train_model(
-            model=model,
-            train_batches=train_batches,
-            val_batches=val_batches,
-            num_epochs=100,  # Full training run
-            learning_rate=1e-4,
-            weight_decay=0.1,
-            warmup_steps=1000,
-            device=device,
-            patience=8,  # Increased patience for longer training
-            min_lr=1e-5,  # Minimum learning rate
-            gradient_accumulation_steps=4,  # Gradient accumulation for stability
-            use_mixed_precision=True,  # Use mixed precision training
-            use_cosine_schedule=True,  # Use cosine learning rate schedule
-            use_wandb=True # Enable wandb logging
-        )
-        
-        # Save model and loss history
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        print(f"Saving model to {model_path}")
-        torch.save({
-            'model_state_dict': model.state_dict(),
-            'train_losses': train_losses,
-            'val_losses': val_losses
-        }, model_path)
-        
-        # Visualize training history
-        print("Generating loss plot...")
-        visualize_loss(train_losses, val_losses, 'dense_model_training_loss.png')
+    # Load training data (always train for the statistical analysis)
+    print("Loading training data...")
+    train_text = load_data('data/enwik8')
     
-    # Generate some example text
-    print("\nGenerating example texts with different temperatures:")
-    prompt = "The quick brown fox"
+    # Split into train/val
+    split_idx = int(len(train_text) * 0.9)
+    train_data = tokenizer.encode(train_text[:split_idx])
+    val_data = tokenizer.encode(train_text[split_idx:])
     
-    print("\nConservative sampling (temperature=0.6):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.6, max_length=200)
-    print(generated)
+    # Create batches
+    train_batches = create_batches(train_data, args.batch_size, args.seq_length)
+    val_batches = create_batches(val_data, args.batch_size, args.seq_length)
     
-    print("\nBalanced sampling (temperature=0.8):")
-    generated = generate_text(model, tokenizer, prompt, temperature=0.8, max_length=200)
-    print(generated)
+    # Train model
+    print("Training model...")
+    start_training_time = time.time()
     
-    print("\nCreative sampling (temperature=1.0):")
-    generated = generate_text(model, tokenizer, prompt, temperature=1.0, max_length=200)
-    print(generated)
+    model, (train_losses, val_losses) = train_model(
+        model=model,
+        train_batches=train_batches,
+        val_batches=val_batches,
+        num_epochs=args.num_epochs,
+        learning_rate=args.learning_rate,
+        weight_decay=0.1,
+        warmup_steps=1000,
+        device=device,
+        patience=8,  # Increased patience for longer training
+        min_lr=1e-5,  # Minimum learning rate
+        gradient_accumulation_steps=4,  # Gradient accumulation for stability
+        use_mixed_precision=True,  # Use mixed precision training
+        use_cosine_schedule=True,  # Use cosine learning rate schedule
+        use_wandb=True # Enable wandb logging
+    )
     
-    # Interactive generation
-    print("\nEnter prompts for text generation (type 'exit' to quit):")
-    while True:
-        prompt = input("\nPrompt: ")
-        if prompt.lower() == 'exit':
-            break
-            
-        temp = float(input("Temperature (0.1-1.0): "))
-        length = int(input("Maximum length: "))
-        
-        generated = generate_text(
-            model, 
-            tokenizer, 
-            prompt, 
-            temperature=temp,
-            max_length=length
-        )
-        print("\nGenerated text:")
-        print(generated)
-
+    end_training_time = time.time()
+    total_training_time = end_training_time - start_training_time
+    
+    # Calculate final metrics
+    final_val_loss = val_losses[-1] if val_losses else train_losses[-1]
+    final_val_ppl = math.exp(final_val_loss) if final_val_loss < 700 else float('inf')
+    
+    # Calculate tokens per second (approximate)
+    total_tokens = len(train_data) * args.num_epochs
+    tokens_per_sec = total_tokens / total_training_time
+    
+    # Get peak GPU memory
+    peak_gpu_mem_MB = torch.cuda.max_memory_allocated() / 1e6 if torch.cuda.is_available() else 0
+    
+    # Log final metrics to wandb
+    wandb.run.summary["final_val_loss"] = final_val_loss
+    wandb.run.summary["final_val_ppl"] = final_val_ppl
+    wandb.run.summary["tokens_per_sec"] = tokens_per_sec
+    wandb.run.summary["peak_gpu_mem_MB"] = peak_gpu_mem_MB
+    
+    print(f"Training completed!")
+    print(f"Final validation loss: {final_val_loss:.4f}")
+    print(f"Final validation perplexity: {final_val_ppl:.2f}")
+    print(f"Tokens per second: {tokens_per_sec:.0f}")
+    print(f"Peak GPU memory: {peak_gpu_mem_MB:.1f} MB")
+    
+    # Save model
+    model_path = f'bachelor_thesis/models/dense_seed_{args.seed}.pt'
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    print(f"Saving model to {model_path}")
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'train_losses': train_losses,
+        'val_losses': val_losses,
+        'config': config,
+        'seed': args.seed
+    }, model_path)
+    
+    # Visualize training history
+    print("Generating loss plot...")
+    visualize_loss(train_losses, val_losses, f'dense_seed_{args.seed}_training_loss.png')
+    
     wandb.finish()
 
 if __name__ == "__main__":
