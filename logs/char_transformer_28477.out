@@ -1,7 +1,0 @@
-Using device: cuda
-Loading existing model from bachelor_thesis/models/sparse_byte_transformer.pt
-Loaded model checkpoint with training history
-
-Generating example texts with different temperatures:
-
-Conservative sampling (temperature=0.6):

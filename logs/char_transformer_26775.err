@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_dense_model.py", line 202, in <module>
-    main()
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_dense_model.py", line 136, in main
-    model, (train_losses, val_losses) = train_model(
-  File "/var/scratch/tng204/thesis/bachelor_thesis/stable_char_transformer.py", line 795, in train_model
-    print(f"Epoch {epoch+1}/{num_epochs}, Batch {batch_idx+1}/{len(train_batches)}, "
-OSError: [Errno 116] Stale file handle

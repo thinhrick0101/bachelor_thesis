@@ -1,8 +1,0 @@
-/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py:244: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
-  input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0).to(device)
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 635, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 616, in main
-    prompt = input("\nPrompt: ")
-EOFError: EOF when reading a line

@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 306, in <module>
-    main()
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_transformer.py", line 176, in main
-    model = SparseByteTransformer(model_config)
-  File "/var/scratch/tng204/thesis/bachelor_thesis/sparse_byte_transformer.py", line 69, in __init__
-    if config.get('tie_weights', True):
-AttributeError: 'Namespace' object has no attribute 'get'

@@ -1,9 +1,0 @@
-Using device: cuda
-Loading training data...
-Loading data from data/enwik8
-Training sparse transformer model...
-Initial learning rate: 0.000001
-Target learning rate: 0.000100
-Warmup steps: 4000
-Epoch 1/100 | Batch 0/7324 | Loss: 5.5599 | LR: 0.000000
-WARNING: Large gradient norm 5.8384

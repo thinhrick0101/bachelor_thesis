@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 336, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 295, in main
-    train_losses, val_losses = train_sparse_model(
-  File "/var/scratch/tng204/thesis/bachelor_thesis/train_sparse_model.py", line 130, in train_sparse_model
-    f"Loss: {loss.item() * gradient_accumulation_steps:.4f} | LR: {current_lr:.6f}")
-UnboundLocalError: local variable 'current_lr' referenced before assignment

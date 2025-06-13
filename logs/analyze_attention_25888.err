@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 214, in <module>
-    main() 
-  File "/var/scratch/tng204/thesis/bachelor_thesis/analyze_attention.py", line 138, in main
-    sample_seq = test_batches[0][0].to(device)  # Use first batch input
-IndexError: list index out of range
