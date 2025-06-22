@@ -1,39 +1,39 @@
 
-Cluster 0:
-- Characteristics: focused, uniform
-- Average attention: 0.005
-- Entropy: 1.821
-- Max attention: 0.000
-- Sparsity (90%): 0.041
-- Primarily found in early layers
-- Number of heads: 424
+    Cluster 0:
+    - Characteristics: focused, uniform
+    - Average attention: 0.005
+    - Entropy: 1.821
+    - Max attention: 0.000
+    - Sparsity (90%): 0.041
+    - Primarily found in early layers
+    - Number of heads: 424
 
 
-Cluster 3:
-- Characteristics: focused, uniform
-- Average attention: 0.005
-- Entropy: 2.894
-- Max attention: 0.000
-- Sparsity (90%): 0.136
-- Primarily found in early layers
-- Number of heads: 927
+    Cluster 3:
+    - Characteristics: focused, uniform
+    - Average attention: 0.005
+    - Entropy: 2.894
+    - Max attention: 0.000
+    - Sparsity (90%): 0.136
+    - Primarily found in early layers
+    - Number of heads: 927
 
 
-Cluster 1:
-- Characteristics: diffuse, sparse
-- Average attention: 0.005
-- Entropy: 3.800
-- Max attention: 0.000
-- Sparsity (90%): 0.316
-- Primarily found in early layers
-- Number of heads: 615
+    Cluster 1:
+    - Characteristics: diffuse, sparse
+    - Average attention: 0.005
+    - Entropy: 3.800
+    - Max attention: 0.000
+    - Sparsity (90%): 0.316
+    - Primarily found in early layers
+    - Number of heads: 615
 
 
-Cluster 2:
-- Characteristics: diffuse, sparse
-- Average attention: 0.005
-- Entropy: 4.598
-- Max attention: 0.000
-- Sparsity (90%): 0.562
-- Primarily found in early layers
-- Number of heads: 266
+    Cluster 2:
+    - Characteristics: diffuse, sparse
+    - Average attention: 0.005
+    - Entropy: 4.598
+    - Max attention: 0.000
+    - Sparsity (90%): 0.562
+    - Primarily found in early layers
+    - Number of heads: 266

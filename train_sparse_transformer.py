@@ -170,6 +170,8 @@ def main():
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
     parser.add_argument('--seq_length', type=int, default=1024, help='Sequence length')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate')
+    parser.add_argument('--wandb_project', type=str, default='sparse-transformer-training', help='WandB project name')
+    parser.add_argument('--mask_subset', type=str, default='0123', help='String listing which cluster IDs to activate (e.g., "0", "03", "123")')
     args = parser.parse_args()
     
     # Set seeds for reproducibility
@@ -200,13 +202,14 @@ def main():
         'stochastic_depth_prob': 0.1,
         'seq_length': 1024,  # Added: SparseByteTransformer needs this for PositionalEncoding
         'seed': args.seed,
-        'num_epochs': args.num_epochs
+        'num_epochs': args.num_epochs,
+        'mask_subset': args.mask_subset  # Added: For ablation study
     }
     
     # Initialize wandb
     run_name = args.wandb_run_name or f"sparse_seed_{args.seed}"
     wandb.init(
-        project="sparse-transformer-training",
+        project=args.wandb_project,
         config=config_dict,
         name=run_name,
         dir='wandb_logs' # Set logging directory

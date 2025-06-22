@@ -54,12 +54,14 @@ class SparseByteTransformer(nn.Module):
         self.pos_encoder = ImprovedPositionalEncoding(self.d_model, self.config.dropout, self.config.seq_length)
         
         # Transformer Encoder Layers
+        mask_subset = getattr(self.config, 'mask_subset', '0123')  # Default to all clusters
         self.transformer_encoder = nn.ModuleList([
             SparseTransformerLayer(
                 d_model=self.d_model,
                 nhead=self.config.nhead,
                 dim_feedforward=self.config.dim_feedforward,
-                dropout=self.config.dropout
+                dropout=self.config.dropout,
+                mask_subset=mask_subset
             ) for _ in range(self.config.num_layers)
         ])
 

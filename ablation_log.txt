@@ -1,0 +1,20 @@
+nohup: ignoring input
+🔬 4-Way Ablation Study for Sparse Transformer
+============================================================
+This will run 5 experiments:
+  - 0123: All clusters (baseline)
+  - 0: Focused-local only
+  - 1: Strided only
+  - 2: Global-anchor only
+  - 3: Wider-local only
+
+Each run will train for 1 epoch with seed=999
+Results will be logged to W&B project: sparse-transformer-ablation
+
+Press Enter to start the ablation study...Traceback (most recent call last):
+  File "/mnt/d/thesisvu/bachelor_thesis/run_ablation_study.py", line 133, in <module>
+    success = main()
+              ^^^^^^
+  File "/mnt/d/thesisvu/bachelor_thesis/run_ablation_study.py", line 90, in main
+    input("\nPress Enter to start the ablation study...")
+OSError: [Errno 9] Bad file descriptor

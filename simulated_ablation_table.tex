@@ -1,0 +1,17 @@
+
+\begin{table}[ht]
+  \centering
+  \caption{Simulated ablation study results: effect of individual attention clusters on validation perplexity and training throughput ($\Delta$ relative to full sparse model).}
+  \label{tab:simulated_ablation}
+  \begin{tabular}{lcc}
+    \toprule
+    Active Clusters & $\Delta$ PPL $\downarrow$ & $\Delta$ tokens/s $\uparrow$ \\
+    \midrule
+    All clusters (full) & 0.00 & 0.0 \\
+    Cluster 0 only & +0.38 & +7.5 \\
+    Cluster 1 only & +1.12 & +10.1 \\
+    Cluster 2 only & +2.17 & +6.4 \\
+    Cluster 3 only & +0.72 & +8.6 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

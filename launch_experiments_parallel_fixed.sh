@@ -4,12 +4,15 @@
 echo "Starting statistical analysis experiments on SLURM cluster..."
 echo "This will submit 6 SLURM jobs (3 dense + 3 sparse) with different seeds"
 
-# Configuration
+# Configuration - SAME FOR BOTH MODELS (scientific validity)
 SEEDS="111 222 333"
 NUM_EPOCHS=50
-BATCH_SIZE=32
-SEQ_LENGTH=1024
+BATCH_SIZE=16          # Same for both dense and sparse
+SEQ_LENGTH=512         # Same for both dense and sparse  
 LEARNING_RATE=1e-4
+
+# Memory optimization: Use gradient accumulation instead o   different batch sizes
+GRADIENT_ACCUMULATION_STEPS=2  # Effective batch size = 16 * 2 = 32
 
 # Create necessary directories
 mkdir -p bachelor_thesis/models
@@ -79,7 +82,8 @@ if python -u train_dense_model.py \\
     --wandb_run_name "dense_seed_${seed}" \\
     --batch_size ${BATCH_SIZE} \\
     --seq_length ${SEQ_LENGTH} \\
-    --learning_rate ${LEARNING_RATE}; then
+    --learning_rate ${LEARNING_RATE} \\
+    --gradient_accumulation_steps ${GRADIENT_ACCUMULATION_STEPS}; then
     echo "✅ Dense model seed ${seed} completed successfully"
 else
     echo "❌ Dense model seed ${seed} failed with exit code \$?"
@@ -145,15 +149,20 @@ export WANDB_CACHE_DIR=\$(pwd)/wandb_logs/.cache
 # Clear CUDA cache before running
 python -c "import torch; torch.cuda.empty_cache()"
 
-# Run sparse model training with error handling
-echo "Starting sparse model with seed ${seed}..."
+# Set memory optimization environment variables
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+export CUDA_LAUNCH_BLOCKING=1
+
+# Run sparse model training with memory optimization
+echo "Starting sparse model with seed ${seed} (same hyperparams as dense, memory optimized)..."
 if python -u train_sparse_transformer.py \\
     --seed ${seed} \\
     --num_epochs ${NUM_EPOCHS} \\
     --wandb_run_name "sparse_seed_${seed}" \\
     --batch_size ${BATCH_SIZE} \\
     --seq_length ${SEQ_LENGTH} \\
-    --learning_rate ${LEARNING_RATE}; then
+    --learning_rate ${LEARNING_RATE} \\
+    --gradient_accumulation_steps ${GRADIENT_ACCUMULATION_STEPS}; then
     echo "✅ Sparse model seed ${seed} completed successfully"
 else
     echo "❌ Sparse model seed ${seed} failed with exit code \$?"

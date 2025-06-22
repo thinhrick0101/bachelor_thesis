@@ -1,0 +1,21 @@
+
+MANUAL TABLE CREATION IN WORD:
+==============================
+
+1. Create a table with 3 rows × 7 columns in Word
+2. Fill in the data as follows:
+
+Row 1 (Header):
+Mode | Tokens/s ↑ | Peak MB ↓ | Time (s) ↓ | Speed Δ% | Memory Δ% | Time Δ%
+
+Row 2 (Baseline):
+Baseline (manual) | 14648 | 43 | 0.350 | — | — | —
+
+Row 3 (SDPA):
+SDPA (fused) | 302531 | 24 | 0.017 | +1965% | +43% | +95%
+
+FORMATTING TIPS:
+- Make header row bold
+- Center-align numerical columns
+- Use table style "Grid Table 4 - Accent 1" for professional look
+- Add table caption: "Table X. Kernel-level profiling comparison on validation batches (seq=256, batch=4)."

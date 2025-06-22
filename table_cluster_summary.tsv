@@ -1,0 +1,5 @@
+	entropy_mean	entropy_std	sparsity_mean	sparsity_std	distance_mean	distance_std
+Cluster 0 (Focused-Local)	3.276	0.4	0.942	0.021	6.458	2.677
+Cluster 1 (Strided)	3.813	0.227	0.909	0.021	167.502	0.9
+Cluster 2 (Global-Anchor)	1.931	0.356	0.98	0.005	1.398	0.517
+Cluster 3 (Wider-Local)	2.66	0.262	0.97	0.008	118.703	9.416

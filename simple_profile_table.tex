@@ -1,0 +1,16 @@
+
+\begin{table}[ht]
+  \centering
+  \caption{Kernel-level profiling comparison on validation batches (seq=256, batch=4).}
+  \label{tab:kernel_profile}
+  \begin{tabular}{lrrr}
+    \toprule
+    Mode & Tokens/s $\uparrow$ & Peak MB $\downarrow$ & Time (s) $\downarrow$ \\
+    \midrule
+    Baseline (manual) & 14648 & 43 & 0.350 \\
+    SDPA (fused)      & 302531 & 24 & 0.017 \\
+    \midrule
+    Improvement       & +1965.4\% & +42.9\% & +95.2\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}

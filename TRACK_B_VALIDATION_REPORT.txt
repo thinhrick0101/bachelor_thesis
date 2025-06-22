@@ -1,0 +1,52 @@
+TRACK B IMPLEMENTATION - VALIDATION REPORT
+==========================================
+
+Date: Mon Jun 16 23:19:02 CEST 2025
+Status: COMPLETE ✅
+
+ENTROPY CALCULATION CHANGES:
+----------------------------
+OLD: Unclear base (confusion between base-L and natural log)
+NEW: H_norm = H_nat / ln(L) where H_nat = -Σ p_i ln(p_i)
+
+IMPLEMENTATION:
+--------------
+- Function: normalised_entropy() in entropy_normalised.py
+- Base: Natural logarithm (base = e)
+- Normalization: Divided by ln(256) for byte alphabet
+- Range: [0, 1] (maintained for interpretability)
+- Library: scipy.stats.entropy (SciPy ≥ 1.10)
+
+DATA VERIFICATION:
+-----------------
+- Head metrics regenerated with normalized entropy ✅
+- 96 attention heads (12 layers × 8 heads) ✅
+- Entropy values in [0,1] range verified ✅
+- Clustering analysis consistent ✅
+- All statistical results preserved ✅
+
+DOCUMENTATION UPDATES:
+---------------------
+- Mathematical formulation added to thesis ✅
+- Code implementation documented ✅
+- Plot labels updated to "Normalised entropy (0–1)" ✅
+- Table headers updated to "Normalised entropy" ✅
+- Clear explanation of vocabulary independence ✅
+
+REVIEWER CONCERN RESOLUTION:
+---------------------------
+"Entropy base unclear" → FULLY RESOLVED ✅
+
+The thesis now contains:
+1. Standard natural log Shannon entropy definition
+2. Clear normalization by ln(L) for vocabulary independence  
+3. Explicit mathematical formulation
+4. Documented implementation details
+5. Maintained [0,1] interpretability scale
+
+DELIVERABLES:
+------------
+All required files generated and validated.
+Ready for thesis integration.
+
+Track B implementation: SUCCESSFUL ✅

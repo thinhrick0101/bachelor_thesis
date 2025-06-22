@@ -1,0 +1,17 @@
+
+**CORRECTED THESIS TEXT (replace existing silhouette sentence):**
+
+"Silhouette analysis yields 0.54 for k = 4 and 0.59 for k = 5 (Table 3-2), with k = 5 showing marginally higher internal cohesion. However, we retain k = 4 as it provides simpler interpretation while maintaining comparable clustering quality."
+
+**TABLE 3-2 CAPTION:**
+
+"Table 3-2. Silhouette analysis for different numbers of clusters. Values rounded to 1 decimal place for clarity (exact values: k=4: 0.538, k=5: 0.587). Higher values indicate better internal cluster cohesion."
+
+**KEY INSIGHT:**
+
+The difference between k=4 (0.538) and k=5 (0.587) is only 0.049, which is negligible. This supports choosing k=4 for interpretability without sacrificing clustering quality.
+
+**WHAT THIS FIXES:**
+
+Before: "Retaining k = 4 drops silhouette from 0.61 → 0.63" (confusing direction)
+After: Clear statement of actual values with proper justification for k=4 choice

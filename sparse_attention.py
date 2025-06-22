@@ -23,48 +23,76 @@ class SparseMultiHeadAttention(nn.Module):
     - Cluster 2: global attention with anchor points
     """
 
-    def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True):
+    def __init__(self, embedding_dim, num_heads, dropout=0.0, bias=True, mask_subset="0123"):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.num_heads     = num_heads
         self.dropout       = dropout
         self.head_dim      = embedding_dim // num_heads
+        self.mask_subset   = mask_subset  # For ablation study
+        self.use_sdpa      = True  # Can be toggled for profiling comparison
+        
+        # Parse active clusters for ablation
+        self.active_clusters = set(int(c) for c in mask_subset)
 
         assert self.head_dim * num_heads == embedding_dim, \
             "embedding_dim must be divisible by num_heads"
 
+        # Filter cluster assignments based on active clusters for ablation
         if num_heads == 8:
-            self.cluster_head_counts = {0: 1, 3: 2, 1: 3, 2: 2} # Original aggressive
+            full_counts = {0: 1, 3: 2, 1: 3, 2: 2} # Original aggressive
         elif num_heads == 6:
-            self.cluster_head_counts = {0: 1, 3: 1, 1: 2, 2: 2} # Adapted for 6 heads
+            full_counts = {0: 1, 3: 1, 1: 2, 2: 2} # Adapted for 6 heads
         elif num_heads == 4:
-            self.cluster_head_counts = {0: 1, 3: 1, 1: 1, 2: 1}
+            full_counts = {0: 1, 3: 1, 1: 1, 2: 1}
         elif num_heads == 2:
-            self.cluster_head_counts = {0:1, 1:1} # Minimal: local and one sparse type
+            full_counts = {0:1, 1:1} # Minimal: local and one sparse type
         elif num_heads == 1:
-            self.cluster_head_counts = {0:1} # Purely local
+            full_counts = {0:1} # Purely local
         else:
             # Fallback: distribute as evenly as possible, prioritizing defined types
-            counts = {0:0, 1:0, 2:0, 3:0}
+            full_counts = {0:0, 1:0, 2:0, 3:0}
             order_of_preference = [0, 1, 2, 3] # Prioritize local, then sparse types
             
             # Ensure each defined cluster type gets at least one head if num_heads allows
-            active_clusters = [c for c in order_of_preference if c in self.window_sizes or c in self.strides or c == 2]
+            active_clusters_for_fallback = [c for c in order_of_preference if c in self.window_sizes or c in self.strides or c == 2]
 
             heads_to_assign = num_heads
-            for cluster_type in active_clusters:
+            for cluster_type in active_clusters_for_fallback:
                 if heads_to_assign > 0:
-                    counts[cluster_type] = 1
+                    full_counts[cluster_type] = 1
                     heads_to_assign -=1
             
             # Distribute remaining heads according to preference
             cluster_idx_ptr = 0
             while heads_to_assign > 0:
-                target_cluster = active_clusters[cluster_idx_ptr % len(active_clusters)]
-                counts[target_cluster] +=1
+                target_cluster = active_clusters_for_fallback[cluster_idx_ptr % len(active_clusters_for_fallback)]
+                full_counts[target_cluster] +=1
                 heads_to_assign -=1
                 cluster_idx_ptr +=1
-            self.cluster_head_counts = counts
+        
+        # Filter based on active clusters for ablation study
+        self.cluster_head_counts = {}
+        total_active_heads = 0
+        
+        for cluster_id, count in full_counts.items():
+            if cluster_id in self.active_clusters:
+                self.cluster_head_counts[cluster_id] = count
+                total_active_heads += count
+        
+        # If no active clusters match, default to cluster 0 (focused-local)
+        if not self.cluster_head_counts:
+            self.cluster_head_counts = {0: num_heads}
+            total_active_heads = num_heads
+        
+        # Redistribute heads if we have fewer than num_heads due to filtering
+        if total_active_heads < num_heads:
+            remaining_heads = num_heads - total_active_heads
+            # Distribute remaining heads among active clusters
+            active_cluster_list = list(self.cluster_head_counts.keys())
+            for i in range(remaining_heads):
+                cluster_to_add = active_cluster_list[i % len(active_cluster_list)]
+                self.cluster_head_counts[cluster_to_add] += 1
         
         if sum(self.cluster_head_counts.values()) != num_heads:
             # This can happen if num_heads < number of primary cluster types we want to assign 1 to.
@@ -213,8 +241,9 @@ class SparseMultiHeadAttention(nn.Module):
         k = self._shape(k, seq_len_kv, bsz) # [B, H, Lkv, Dk]
         v = self._shape(v, seq_len_kv, bsz) # [B, H, Lkv, Dv]
 
-        # Use F.scaled_dot_product_attention if available and not needing weights
-        use_sdpa = hasattr(F, 'scaled_dot_product_attention') and not need_weights
+        # Use F.scaled_dot_product_attention if available, enabled, and not needing weights
+        use_sdpa = (hasattr(F, 'scaled_dot_product_attention') and 
+                   self.use_sdpa and not need_weights)
 
         if use_sdpa:
             # 1. Create static sparse masks (allowed, non-causal) per head: [H, Lq, Lkv]
@@ -360,9 +389,9 @@ class SparseMultiHeadAttention(nn.Module):
         return out
 
 class SparseTransformerLayer(nn.Module):
-    def __init__(self, d_model, nhead, dim_feedforward, dropout=0.1):
+    def __init__(self, d_model, nhead, dim_feedforward, dropout=0.1, mask_subset="0123"):
         super().__init__()
-        self.self_attn = SparseMultiHeadAttention(d_model, nhead, dropout=dropout)
+        self.self_attn = SparseMultiHeadAttention(d_model, nhead, dropout=dropout, mask_subset=mask_subset)
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(dim_feedforward, d_model)

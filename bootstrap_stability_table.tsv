@@ -1,0 +1,3 @@
+Method	Jaccard_Mean	Jaccard_CI	ARI_Mean	ARI_CI	Interpretation
+Bootstrap (B=1000)	0.984	0.128	0.987	0.103	Assignments identical for >98% of head pairs
+Alt-seed (n=100)	0.725	0.000	0.785	0.000	Even with random init, >73% pairs stable

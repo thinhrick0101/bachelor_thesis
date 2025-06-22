@@ -1,0 +1,14 @@
+
+\begin{table}[ht]
+  \centering
+  \caption{Kernel-level profile on validation batches (seq=512, batch=8, RTX/CUDA).}
+  \label{tab:profile}
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Mode & Tok/s $\uparrow$ & Peak MB $\downarrow$ & TFLOPs & $\Delta$ Speed \% & $\Delta$ Mem \% \\
+    \midrule
+    Baseline (matmul+softmax) & 30074.4 & 208 & 0.00 & – & – \\
+    SDPA (fused) & 198994.5 & 62 & 0.00 & +562 & -70 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

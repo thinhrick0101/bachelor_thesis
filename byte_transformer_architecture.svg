@@ -1,0 +1,62 @@
+<!-- Byte‑Level Transformer Architecture Diagram (SVG) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="450" viewBox="0 0 1600 450" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .block      { fill:#A9D0F5; stroke:#1B2631; stroke-width:2; rx:8; ry:8; }
+    .attention  { fill:#FAD7A0; }
+    .ffn        { fill:#58D68D; }
+    .output     { fill:#D7BDE2; }
+    .title      { font-size:28px; font-weight:bold; }
+    .label      { font-size:16px; font-weight:bold; fill:#1B2631; }
+    .sublabel   { font-size:14px; }
+    .arrow      { stroke:#1B2631; stroke-width:4; marker-end:url(#arrowhead); }
+  </style>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#1B2631"/>
+    </marker>
+  </defs>
+
+  <!-- Diagram Title -->
+  <text x="800" y="40" text-anchor="middle" class="title">Byte‑Level Transformer Architecture Overview</text>
+
+  <!-- Blocks -->
+  <!-- Input Bytes -->
+  <rect x="40"  y="140" width="200" height="160" class="block"/>
+  <text x="140" y="205" text-anchor="middle" class="label">Input Bytes</text>
+  <text x="140" y="230" text-anchor="middle" class="sublabel">(256 vocab)</text>
+
+  <!-- Embedding + Pos Enc -->
+  <rect x="300" y="140" width="240" height="160" class="block"/>
+  <text x="420" y="195" text-anchor="middle" class="label">Embedding</text>
+  <text x="420" y="220" text-anchor="middle" class="label">+ Pos. Encoding</text>
+  <text x="420" y="245" text-anchor="middle" class="sublabel">(512‑dim)</text>
+
+  <!-- Encoder Stack container -->
+  <rect x="600" y="90" width="370" height="260" class="block" fill-opacity="0"/>
+  <text x="785" y="110" text-anchor="middle" class="label">× 12 Encoder Blocks</text>
+  <!-- MHA -->
+  <rect x="620" y="140" width="330" height="100" class="block attention"/>
+  <text x="785" y="190" text-anchor="middle" class="label">Multi‑Head Self‑Attention</text>
+  <text x="785" y="215" text-anchor="middle" class="sublabel">(8 heads)</text>
+  <!-- FFN -->
+  <rect x="620" y="260" width="330" height="70" class="block ffn"/>
+  <text x="785" y="300" text-anchor="middle" class="label">Feed‑Forward Network</text>
+  <text x="785" y="325" text-anchor="middle" class="sublabel">(2048 → 512)</text>
+
+  <!-- LayerNorm + Linear -->
+  <rect x="1010" y="140" width="240" height="160" class="block"/>
+  <text x="1130" y="205" text-anchor="middle" class="label">LayerNorm + Linear</text>
+
+  <!-- Softmax -->
+  <rect x="1300" y="140" width="200" height="160" class="block output"/>
+  <text x="1400" y="200" text-anchor="middle" class="label">Softmax</text>
+  <text x="1400" y="225" text-anchor="middle" class="sublabel">(256 classes)</text>
+
+  <!-- Arrows -->
+  <line x1="240"  y1="220" x2="300"  y2="220" class="arrow"/>
+  <line x1="540"  y1="220" x2="600"  y2="220" class="arrow"/>
+  <line x1="970"  y1="220" x2="1010" y2="220" class="arrow"/>
+  <line x1="1250" y1="220" x2="1300" y2="220" class="arrow"/>
+</svg> 

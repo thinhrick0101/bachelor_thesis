@@ -1,0 +1,3 @@
+Model	Loss ↓	PPL ↓	Speed (samples/sec) ↑	Runtime (sec)
+Dense	0.872	2.393	21.920	195,304
+Sparse	1.005	2.731	85.304	163,252
